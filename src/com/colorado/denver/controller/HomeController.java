@@ -17,7 +17,7 @@ public class HomeController {
 
 	@RequestMapping(DenverConstants.FORWARD_SLASH + Home.HOME)
 	public Home homeMessage(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return new Home(counter.incrementAndGet(),
-				String.format(template, name));
+		return new Home(counter.incrementAndGet() + "", String.format(template, name));
 	}
+	// counter.incrementAndGet()
 }
