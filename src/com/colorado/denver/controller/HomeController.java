@@ -24,21 +24,36 @@ public class HomeController {
 	private static final String template = "Hello, %s!";
 	//private final AtomicLong counter = new AtomicLong();
 
+	public class Target {
+		public String hello(String name) {
+			return "Hello " + name + "!";
+		}
+	}
+
+	public static final String sampleCode = "execute(int n) {for (int i = 0; i < n; i++) {n++;}System.out.println(n);}";
+
 	@RequestMapping(DenverConstants.FORWARD_SLASH + Home.HOME)
 	public Home homeMessage(@RequestParam(value = "name", defaultValue = "World") String name) {
 		return new Home(//counter.incrementAndGet(),
 				String.format(template, name));
 	}
+
+	public static void execute(int n) {
+		for (int i = 0; i < n; i++) {
+			n++;
+		}
+		System.out.println("The Result is: " + n);
+	}
 	
 	/* Method to CREATE a Home in the database */
-	   public Long addHome(String content){
+	   public String addHome(String content){
 	      Session session = DenverApplication.factory.openSession();
 	      Transaction tx = null;
-	      Long homeID = null;
+	      String homeID = null;
 	      try{
 	         tx = session.beginTransaction();
 	         Home home = new Home(content);
-	         homeID = (Long) session.save(home); 
+	         homeID = (String) session.save(home); 
 	         tx.commit();
 	      }catch (HibernateException e) {
 	         if (tx!=null) tx.rollback();
@@ -72,7 +87,7 @@ public class HomeController {
 	   }
 	   
 	   /* Method to UPDATE content of a home */
-	   public void updateHome(Long homeID, String content ){
+	   public void updateHome(String homeID, String content ){
 	      Session session = DenverApplication.factory.openSession();
 	      Transaction tx = null;
 	      try{
@@ -90,7 +105,7 @@ public class HomeController {
 	   }
 	   
 	   /* Method to DELETE a home from the records */
-	   public void deleteHome(Long homeID){
+	   public void deleteHome(String homeID){
 	      Session session = DenverApplication.factory.openSession();
 	      Transaction tx = null;
 	      try{

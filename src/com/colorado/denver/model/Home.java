@@ -2,18 +2,23 @@ package com.colorado.denver.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.GenericGenerator;
  
 @Entity
-public class Home {
+public class Home extends BaseEntity {
 	public static final String HOME = "home";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	@GenericGenerator(name = "custom_id", strategy = "com.colorado.denver.idGenerators.HomeIdGenerator")
+	@GeneratedValue(generator = "custom_id")
+	@Column(name = "id")
+	private String id;
 	
 	private String content;
 
@@ -25,11 +30,11 @@ public class Home {
 		this.content = content;
 	}
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 	
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

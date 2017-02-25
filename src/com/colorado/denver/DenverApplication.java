@@ -30,21 +30,8 @@ public class DenverApplication {
 		  homectrl.addHome("Home2");
 		  homectrl.addHome("Home3");
 
-	      /* List down all the employees */
+	      /* List down all the homes */
 		  homectrl.listHomes();
-		  
-		  homectrl.updateHome(2L, "BetterContent1");
-		  
-		  homectrl.deleteHome(3L);
-
-	      /* Update employee's records */
-	      //updateHomes(empID1, 5000);
-
-	      /* Delete an employee from the database */
-	      //deleteHomes(empID2);
-
-	      /* List down new list of the employees */
-	      //listHomes();
 	}
 	
 	public static void createSessionFactory() {
