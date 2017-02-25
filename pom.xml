@@ -25,6 +25,7 @@
 		<m2eclipse.wtp.contextRoot>/</m2eclipse.wtp.contextRoot>
     <!-- The main class to start by executing java -jar -->
     <start-class>com.colorado.denver.DenverApplication</start-class>
+    <hibernate.version>4.2.15.Final</hibernate.version>
 	</properties>
 	<dependencies>
 		<!-- Compile -->
@@ -67,6 +68,18 @@
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>1.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+ 
+		<dependency>
+		    <groupId>org.postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <version>9.4.1212</version>
 		</dependency>
 	</dependencies>
 
