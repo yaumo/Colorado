@@ -24,4 +24,9 @@ public class Task extends BaseEntity {
 		this.description = description;
 	}
 
+	@Override
+	public String getPrefix() {
+		return TASK;
+	}
+
 }

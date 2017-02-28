@@ -55,4 +55,6 @@ public abstract class BaseEntity {
 	public void setHasBeenModified(boolean hasBeenModified) {
 		this.hasBeenModified = hasBeenModified;
 	}
+
+	public abstract String getPrefix();
 }
