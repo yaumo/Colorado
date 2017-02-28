@@ -1,4 +1,4 @@
-package com.colorado.denver;
+package com.colorado.denver.tools;
 
 public final class DenverConstants {
 	public static final String APPLICATION_NAME = "Denver";

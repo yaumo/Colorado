@@ -15,8 +15,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import com.colorado.denver.DenverApplication;
-import com.colorado.denver.DenverConstants;
 import com.colorado.denver.model.Home;
+import com.colorado.denver.tools.DenverConstants;
 
 @RestController
 public class HomeController {

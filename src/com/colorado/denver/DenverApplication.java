@@ -20,6 +20,7 @@ public class DenverApplication {
 		System.out.println("Running app!");
 		// Use log4j
 		SpringApplication.run(DenverApplication.class, args);
+
 		createSessionFactory();
 
 		/* Add few home records in database */

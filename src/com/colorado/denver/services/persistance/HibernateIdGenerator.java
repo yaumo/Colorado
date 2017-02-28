@@ -10,8 +10,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
-import com.colorado.denver.DenverConstants;
 import com.colorado.denver.model.BaseEntity;
+import com.colorado.denver.tools.DenverConstants;
 
 public class HibernateIdGenerator implements IdentifierGenerator {
 
