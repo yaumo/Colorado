@@ -5,4 +5,5 @@ public final class DenverConstants {
 	public static final String GROUP_NAME = "Colorado";
 	public static final String FORWARD_SLASH = "/";
 	public static final String UNDERSCORE = "_";
+	public static final String COLORADO_PACKAGE = "com.colorado";
 }
