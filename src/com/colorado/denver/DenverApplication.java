@@ -2,6 +2,8 @@ package com.colorado.denver;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.hibernate.SessionFactory;
@@ -12,7 +14,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.controller.HomeController;
+import com.colorado.denver.model.Home;
 import com.colorado.denver.services.javabytecoder.Executor;
 
 @EnableWebMvc
@@ -33,14 +37,35 @@ public class DenverApplication {
 		Executor.addFile(filePath + "\\Test.class");
 		System.out.println("I DID SOME CRAZY SHIT AND IT DIDN'T CRASH");
 		createSessionFactory();
-		/* Add few home records in database */
-		HomeController homectrl = new HomeController();
-		homectrl.addHome("Home1");
-		homectrl.addHome("Home2");
-		homectrl.addHome("Home3");
-
-		/* List down all the homes */
-		homectrl.listHomes();
+		
+		//			    					//
+		//		   Hibernate Usage			//
+		//				    				//
+		HibernateController hibCtrl = new HibernateController();
+		/* Add few home records in database */		
+		Home home1 = new Home("Home1","content1");
+		hibCtrl.addEntity(home1);
+		hibCtrl.addEntity(new Home("Home2","content2"));
+		
+		//Entity Update Example
+		home1.setContent("updated3");
+		home1.setAnotherContent("anotherUpdate1");
+		hibCtrl.updateEntity(home1);
+		home1.setContent("stillTheSame?");
+		hibCtrl.deleteEntity(home1);
+		
+		//get Entity from table
+		Home returnedHome = (Home)hibCtrl.getEntity("home00002", Home.class);
+		System.out.println(returnedHome.getAnotherContent());
+		
+		//get List of Entities from table
+		List<Home> homes = (List<Home>)(List<?>)hibCtrl.getEntityList(Home.class);//if(weFail){system.crashAndBurn();}
+		 for (Iterator iterator = 
+        		 homes.iterator(); iterator.hasNext();){
+            Home home = (Home) iterator.next(); 
+            System.out.println("ID: " + home.getId()); 
+            System.out.println("Content: " + home.getContent()); 
+         }
 	}
 
 	public static void createSessionFactory() {
