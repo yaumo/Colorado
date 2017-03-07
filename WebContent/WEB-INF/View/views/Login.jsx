@@ -25,7 +25,7 @@ function handleClick(e) {
 	browserHistory.push('./Exercise')
   }
 	
-class App extends React.Component {
+class Login extends React.Component {
   render() {
     return (
       <div>
@@ -90,4 +90,4 @@ class Content extends React.Component {
   }
 }
 
-export default App;
+export default Login;
