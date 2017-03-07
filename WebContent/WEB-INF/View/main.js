@@ -7,4 +7,4 @@ import NavBar from './views/components/NavBar.jsx';
 import Solution from './views/components/Solution.jsx';
 
 //ReactDOM.render(<App />, document.getElementById('app'));
-ReactDOM.render(<Exercise />, document.getElementById('app'));
+ReactDOM.render(<Login />, document.getElementById('app'));

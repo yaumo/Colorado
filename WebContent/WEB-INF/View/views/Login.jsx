@@ -8,8 +8,10 @@ import AppBar from 'material-ui/AppBar';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import TextField from 'material-ui/TextField';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import FlatButton from 'material-ui/FlatButton';
-import browserHistory from 'react-router'
+import RaisedButton from 'material-ui/RaisedButton';
+import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import browserHistory from 'react-router';
+import Divider from 'material-ui/Divider';
 //import Background from './images/Unbenannt.PNG';
 
 injectTapEventPlugin();
@@ -64,26 +66,28 @@ class Content extends React.Component {
   render() { 
     return (
 	<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-		<div id="content" style={{'marginLeft': '35%', 'marginTop': '10%'}}>
-			<div>
-				<Table style={{'border': 'solid', 'width': '600px'}}>
-					<TableBody>
-						<TableRow >
-							<TableRowColumn style={{'width': '150px'}}>User:</TableRowColumn>
-							<TableRowColumn><TextField id="user_field" defaultValue=""/></TableRowColumn>
-						</TableRow>
-						<TableRow>
-							<TableRowColumn style={{'width': '150px'}}>Password:</TableRowColumn>
-							<TableRowColumn><TextField id="password_field" defaultValue=""/></TableRowColumn>
-						</TableRow>
-						<TableRow>
-							<TableRowColumn style={{'width': '150px'}}></TableRowColumn>
-							<TableRowColumn><FlatButton label="Login" onClick={handleClick} /></TableRowColumn> //onClick={this.handleClick}
-						</TableRow>
-					</TableBody>
-				</Table>
-			</div>
-
+		<div id="content" style={{'marginLeft': '35%', 'marginRight': '35%', 'marginTop': '10%'}}>
+      <Card>
+        <CardHeader
+          title="Login"
+        />
+        <Divider />
+        <CardText>
+        <div>
+          <TextField
+            floatingLabelText="Username"
+          />
+          <br/>
+          <TextField
+            floatingLabelText="Password"
+            type="password"
+          />
+          <br/>
+          <br/>
+          <RaisedButton label="Login" />
+          </div>
+        </CardText>
+        </Card>
 		</div>
 	</MuiThemeProvider>
     );
