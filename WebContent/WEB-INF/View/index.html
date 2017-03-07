@@ -13,9 +13,14 @@
     margin-bottom: 0px;
     ">
       <div id = "app"></div>
-      <script src = "index.js"></script>
+      <script src = "./node_modules/highlight.js/lib/highlight.js"></script>
+      <script src = "./node_modules/codemirror/lib/codemirror.js"></script>
       <link rel="stylesheet" type="text/css" href="./fonts">
-      <link rel="stylesheet" type="text/css" href="./main.css">
+      <link rel="stylesheet" type="text/css" href="./node_modules/highlight.js/styles/atom-one-light.css">
+      <link rel="stylesheet" type="text/css" href="./styles/app.css">
+      <script>hljs.initHighlightingOnLoad();</script>
+      <link href="./node_modules/codemirror/lib/codemirror.css" rel="stylesheet">
+      <script src = "index.js"></script>     
    </body>
 
 </html>
