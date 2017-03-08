@@ -47,6 +47,7 @@ class NavBar extends React.Component {
                             <MenuItem>Exercise 1</MenuItem>
                             <Divider />
                             <MenuItem>Exercise 2</MenuItem>
+                            <Divider />
                         </Drawer>
                     </div>
                 </MuiThemeProvider>
