@@ -1,12 +1,16 @@
 package com.colorado.denver.model;
 
-public class Task extends BaseEntity {
-	public static final String TASK = "task";
+public class Excercise extends BaseEntity {
+	public static final String EXCERCISE = "excercise";
 	public static final String TITLE = "title";
 	public static final String DESCRIPTION = "description";
 
 	public String title;
 	public String description;
+
+	public Excercise(String title) {
+		this.title = title;
+	}
 
 	public String getTitle() {
 		return title;
@@ -26,7 +30,7 @@ public class Task extends BaseEntity {
 
 	@Override
 	public String getPrefix() {
-		return TASK;
+		return EXCERCISE;
 	}
 
 }

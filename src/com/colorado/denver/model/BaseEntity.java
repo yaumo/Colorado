@@ -2,6 +2,12 @@ package com.colorado.denver.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import org.hibernate.annotations.GenericGenerator;
+
 //There should be NO instance of this entity! Create children of this entity instead!
 public abstract class BaseEntity {
 	public static final String ID = "id";
@@ -10,11 +16,16 @@ public abstract class BaseEntity {
 	public static final String CREATION_DATE = "creationDate";
 	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
 
-	public String id;
 	public String objectClass;
 	public String creator; // TODO: use User Object provided by Security!
 	public Date creationDate;
 	public boolean hasBeenModified;
+
+	@Id
+	@GenericGenerator(name = "custom_id", strategy = "com.colorado.denver.services.persistance.HibernateIdGenerator")
+	@GeneratedValue(generator = "custom_id")
+	@Column(name = "id")
+	private String id;
 
 	public String getId() {
 		return id;

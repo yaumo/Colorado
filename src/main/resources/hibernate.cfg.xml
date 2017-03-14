@@ -9,7 +9,7 @@
         <!-- Connection settings -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
         <property name="hibernate.connection.url">jdbc:postgresql://localhost/denver</property>
-        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.username">postgress</property>
         <property name="hibernate.connection.password">password</property>
  
         <!-- SQL dialect -->

@@ -1,28 +1,15 @@
 package com.colorado.denver.controller;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import org.hibernate.HibernateException; 
-import org.hibernate.Session; 
-import org.hibernate.Transaction;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-
-import com.colorado.denver.DenverApplication;
 import com.colorado.denver.model.Home;
 import com.colorado.denver.tools.DenverConstants;
 
-@RestController
 public class HomeController {
 
 	private static final String template = "Hello, %s!";
-	//private final AtomicLong counter = new AtomicLong();
+	// private final AtomicLong counter = new AtomicLong();
 
 	public class Target {
 		public String hello(String name) {
@@ -34,7 +21,7 @@ public class HomeController {
 
 	@RequestMapping(DenverConstants.FORWARD_SLASH + Home.HOME)
 	public Home homeMessage(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return new Home(//counter.incrementAndGet(),
+		return new Home(// counter.incrementAndGet(),
 				String.format(template, name));
 	}
 
