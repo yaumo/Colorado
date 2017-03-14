@@ -8,6 +8,7 @@ import Solution from './components/Solution.jsx';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import Slider from 'material-ui/Slider';
 import ExercisesTab from './components/ExercisesTab.jsx';
+import AssignExercisesTab from './components/AssignExercisesTab.jsx';
 import OverviewTab from './components/OverviewTab.jsx';
 
 class Docent extends React.Component {
@@ -30,6 +31,9 @@ class Content extends React.Component {
                         <Tabs>
                             <Tab label="Exercises" >
                                 <ExercisesTab />
+                            </Tab>
+                            <Tab label="Assign Exercises" >
+                                <AssignExercisesTab />
                             </Tab>
                             <Tab label="Overview" >
                                 <OverviewTab />

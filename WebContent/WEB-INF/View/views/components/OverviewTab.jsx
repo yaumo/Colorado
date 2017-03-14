@@ -4,6 +4,7 @@ import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'm
 import Divider from 'material-ui/Divider';
 import { Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn }
     from 'material-ui/Table';
+import Paper from 'material-ui/Paper';
 
 
 const tableData = [
@@ -47,6 +48,7 @@ class OverviewTab extends React.Component {
                         />
                     <Divider />
                     <CardText>
+                    <Paper zDepth={4}>
                         <Table
                             >
                             <TableHeader>
@@ -71,6 +73,7 @@ class OverviewTab extends React.Component {
                                 ))}
                             </TableBody>
                         </Table>
+                        </Paper>
                     </CardText>
                 </Card>
             </div>

@@ -11,6 +11,7 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 
 
 function handleChange(event, index, value){
+    console.log("click");
     this.setState({value});
 };
 

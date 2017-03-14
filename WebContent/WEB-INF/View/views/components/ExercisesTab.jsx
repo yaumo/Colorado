@@ -7,10 +7,12 @@ import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
+import Paper from 'material-ui/Paper';
 
 
-function handleChange(event, index, value){
-    this.setState({value});
+function handleClick(e){
+    console.log("click", e);
 };
 
 class ExercisesTab extends React.Component {
@@ -40,26 +42,76 @@ class ExercisesTab extends React.Component {
                                 multiLine={true}
                                 rows={3}
                                 fullWidth={true}
-                        /><br />
-                        <br />
-                        <h4>Solution:</h4>
-                        <Solution />
-                    </CardText>
-                </Card>
-                <br />
-                <Card>
-                    <CardHeader
-                        title="Append Exercises to Course"
                         />
-                    <Divider />
-                    <CardText>
-                     <DropDownMenu value={this.state.value} onChange={this.handleChange}>
-                                <MenuItem value={1} primaryText="Webprogrammierung" />
-                                <MenuItem value={2} primaryText="Datenbanken" />
-                                <MenuItem value={3} primaryText="Programmieren 1" />
-                            </DropDownMenu>
-                        <DatePicker floatingLabelText="Deadline" container="inline" mode="landscape" />
+                        
                         <br />
+                        <br />
+                        <h4>Template</h4>
+                        <Paper zDepth={4}>
+                        <Solution />
+                        </Paper>
+                        <br/>
+                        <Paper zDepth={4}>
+                        <h4>Testcases</h4>
+                        <Divider />
+                        <div>
+                            Case 1
+                            <TextField
+                                floatingLabelText="Input 1"
+                                fullWidth={false}
+                                multiLine={true}
+                                rows={3}
+                            />
+                            &nbsp;
+                            &nbsp;
+                            <TextField
+                                floatingLabelText="Output 1"
+                                fullWidth={false}
+                                multiLine={true}
+                                rows={3}
+                            />
+                        </div>
+                        <Divider />
+                        <div>
+                        Case 2
+                            <TextField
+                                floatingLabelText="Input 2"
+                                fullWidth={false}
+                                multiLine={true}
+                                rows={3}
+                            />
+                            &nbsp;
+                            &nbsp;
+                            <TextField
+                                floatingLabelText="Output 2"
+                                fullWidth={false}
+                                multiLine={true}
+                                rows={3}
+                            />
+                        </div>
+                        <Divider />
+                        <div>
+                        Case 3
+                            <TextField
+                                floatingLabelText="Input 3"
+                                fullWidth={false}
+                                multiLine={true}
+                                rows={3}
+                                className="abcName"
+                            />
+                            &nbsp;
+                            &nbsp;
+                            <TextField
+                                floatingLabelText="Output 3"
+                                fullWidth={false}
+                                multiLine={true}
+                                rows={3}
+                            />
+                        </div>
+                        <Divider />
+                        </Paper>
+                        <br/>
+                        <RaisedButton label="Create" onClick={handleClick} />
                     </CardText>
                 </Card>
             </div>
