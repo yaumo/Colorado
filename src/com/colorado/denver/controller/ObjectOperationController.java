@@ -6,6 +6,7 @@ import javax.management.ReflectionException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.impl.Log4JLogger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +19,8 @@ import com.colorado.denver.tools.GenericTools;
 
 @RestController
 public class ObjectOperationController {
+	private static final Log4JLogger LOGGER = new Log4JLogger();
+
 	public static void handleRequest(String id, int crud, Class<?> clazz) {
 
 	}
@@ -27,29 +30,26 @@ public class ObjectOperationController {
 	public Excercise handleExcercise(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException {
 
-		Class<? extends BaseEntity> c = request.getP.getObjectClass();
-		Objects.requireNonNull(c, "Object class must be provided!");
-
-		String id = request.getParameter("id");
-		String crud = request.getParameter("crud");
-		String objectClass = request.getParameter("objectClass");
+		Class<? extends BaseEntity> clazz = GenericTools.getClassForName(request.getParameter(BaseEntity.CLASS));
+		Objects.requireNonNull(clazz, "Object class must be provided!");
+		LOGGER.debug("ObjectClass is: " + clazz.getSimpleName());
+		String id = request.getParameter(BaseEntity.ID);
+		int crud = Integer.parseInt(request.getParameter(DenverConstants.CRUD));
 		String title = request.getParameter("title");
-		Class<?> clazz = GenericTools.getClassForName(objectClass);
 
-		handleRequest(id, Integer.parseInt(crud), clazz);
+		handleRequest(id, crud, clazz);
 		// get user via session
 		// do security check
 		Excercise excercise = null;
 
-		int intCrud = Integer.parseInt(crud);
 		HibernateController hibCtrl = new HibernateController();
-		switch (intCrud) {
+		switch (crud) {
 		case 1:
 			String createdId = hibCtrl.addEntity(new Excercise(title));
-			excercise = (Excercise) hibCtrl.getEntity(createdId, Excercise.class);
+			excercise = (Excercise) hibCtrl.getEntity(createdId, clazz);
 			break;
 		case 2:
-			excercise = (Excercise) hibCtrl.getEntity(id, Excercise.class);
+			excercise = (Excercise) hibCtrl.getEntity(id, clazz);
 			break;
 		case 3:
 
