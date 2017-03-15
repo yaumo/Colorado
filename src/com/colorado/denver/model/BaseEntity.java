@@ -5,10 +5,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
 import org.hibernate.annotations.GenericGenerator;
 
 //There should be NO instance of this entity! Create children of this entity instead!
+@MappedSuperclass
 public abstract class BaseEntity {
 	public static final String ID = "id";
 	public static final String OBJECT_CLASS = "objectClass";

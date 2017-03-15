@@ -48,15 +48,15 @@ public class ObjectOperationController {
 		handleRequest(id, crud, clazz);
 		// get user via session
 		// do security check
-		Exercise excercise = null;
+		Exercise exercise = null;
 		HibernateController hibCtrl = new HibernateController();
 		switch (crud) {
 		case 1:
 			String createdId = hibCtrl.addEntity(new Exercise("HardCodedTest"));
-			excercise = (Exercise) hibCtrl.getEntity(createdId, clazz);
+			exercise = (Exercise) hibCtrl.getEntity(createdId, clazz);
 			break;
 		case 2:
-			excercise = (Exercise) hibCtrl.getEntity(id, clazz);
+			exercise = (Exercise) hibCtrl.getEntity(id, clazz);
 			break;
 		case 3:
 
@@ -69,13 +69,14 @@ public class ObjectOperationController {
 			break;
 		}
 
-		return excercise;
+		return exercise;
 	}
 
 	@SuppressWarnings("null")
 	public static List<String> extractAllRequestPostParameters(HttpServletRequest req) throws IOException {
 		Enumeration<String> parameterNames = req.getParameterNames();
 		List<String> paramValues = null;
+
 		while (parameterNames.hasMoreElements()) {
 			paramValues.add(req.getParameter(parameterNames.nextElement()));
 		}
