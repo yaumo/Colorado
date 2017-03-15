@@ -1,14 +1,17 @@
 package com.colorado.denver.model;
 
-public class Excercise extends BaseEntity {
-	public static final String EXCERCISE = "excercise";
+import javax.persistence.Entity;
+
+@Entity
+public class Exercise extends BaseEntity {
+	public static final String EXERCISE = "exercise";
 	public static final String TITLE = "title";
 	public static final String DESCRIPTION = "description";
 
 	public String title;
 	public String description;
 
-	public Excercise(String title) {
+	public Exercise(String title) {
 		this.title = title;
 	}
 
@@ -30,7 +33,7 @@ public class Excercise extends BaseEntity {
 
 	@Override
 	public String getPrefix() {
-		return EXCERCISE;
+		return EXERCISE;
 	}
 
 }

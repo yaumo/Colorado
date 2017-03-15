@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.model.BaseEntity;
-import com.colorado.denver.model.Excercise;
+import com.colorado.denver.model.Exercise;
 import com.colorado.denver.tools.DenverConstants;
 import com.colorado.denver.tools.GenericTools;
 
@@ -27,9 +27,9 @@ public class ObjectOperationController {
 
 	}
 
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Excercise.EXCERCISE, method = RequestMethod.POST)
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Exercise.EXERCISE, method = RequestMethod.POST)
 	@ResponseBody
-	public Excercise handleExcercise(HttpServletRequest request,
+	public Exercise handleExercise(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
 
 		Class<? extends BaseEntity> clazz = GenericTools.getClassForName(request.getParameter(BaseEntity.CLASS));
@@ -47,15 +47,15 @@ public class ObjectOperationController {
 		handleRequest(id, crud, clazz);
 		// get user via session
 		// do security check
-		Excercise excercise = null;
+		Exercise excercise = null;
 		HibernateController hibCtrl = new HibernateController();
 		switch (crud) {
 		case 1:
-			String createdId = hibCtrl.addEntity(new Excercise("HardCodedTest"));
-			excercise = (Excercise) hibCtrl.getEntity(createdId, clazz);
+			String createdId = hibCtrl.addEntity(new Exercise("HardCodedTest"));
+			excercise = (Exercise) hibCtrl.getEntity(createdId, clazz);
 			break;
 		case 2:
-			excercise = (Excercise) hibCtrl.getEntity(id, clazz);
+			excercise = (Exercise) hibCtrl.getEntity(id, clazz);
 			break;
 		case 3:
 

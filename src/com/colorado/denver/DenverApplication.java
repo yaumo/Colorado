@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.colorado.denver.controller.HibernateController;
-import com.colorado.denver.model.Excercise;
+import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Home;
 
 @EnableWebMvc
@@ -48,7 +48,7 @@ public class DenverApplication {
 		hibCtrl.addEntity(home1);
 		hibCtrl.addEntity(new Home("Home2", "content2"));
 
-		Excercise exc = new Excercise("Excercise123");
+		Exercise exc = new Exercise("Excercise123");
 		String ecxId = hibCtrl.addEntity(exc);
 
 		// Entity Update Example
@@ -62,7 +62,7 @@ public class DenverApplication {
 		Home returnedHome = (Home) hibCtrl.getEntity("home00002", Home.class);
 		System.out.println(returnedHome.getAnotherContent());
 
-		Excercise returnedExcercise = (Excercise) hibCtrl.getEntity(ecxId, Excercise.class);
+		Exercise returnedExcercise = (Exercise) hibCtrl.getEntity(ecxId, Exercise.class);
 		LOGGER.error("The title of excercise is: " + returnedExcercise.getTitle());
 		LOGGER.error("The is of excercise is: " + returnedExcercise.getId());
 
