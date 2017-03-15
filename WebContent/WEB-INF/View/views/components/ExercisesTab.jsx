@@ -14,7 +14,7 @@ import Fetch from 'react-fetch';
 
 function handleClick(e) {
     fetch('http://localhost:8080/Exercise', {
-        method: 'post'
+        method: 'get'
     }).then(function (response) {
 
     }).catch(function (err) {
