@@ -30,20 +30,11 @@ public class ObjectOperationController {
 	public Excercise handleExcercise(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException {
 
-<<<<<<< HEAD
-		//Class<? extends BaseEntity> c = request.getObjectClass();
-		//Objects.requireNonNull(c, "Object class must be provided!");
-
-		String id = request.getParameter("id");
-		String crud = request.getParameter("crud");
-		String objectClass = request.getParameter("objectClass");
-=======
 		Class<? extends BaseEntity> clazz = GenericTools.getClassForName(request.getParameter(BaseEntity.CLASS));
 		Objects.requireNonNull(clazz, "Object class must be provided!");
 		LOGGER.debug("ObjectClass is: " + clazz.getSimpleName());
 		String id = request.getParameter(BaseEntity.ID);
 		int crud = Integer.parseInt(request.getParameter(DenverConstants.CRUD));
->>>>>>> 2095a9d6faf8374ded27a854b73955075ccaa5bd
 		String title = request.getParameter("title");
 
 		handleRequest(id, crud, clazz);
