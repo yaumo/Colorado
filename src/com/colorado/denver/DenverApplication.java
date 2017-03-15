@@ -5,10 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.impl.Log4JLogger;
+import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -22,11 +24,11 @@ import com.colorado.denver.model.Home;
 public class DenverApplication {
 	public static SessionFactory factory;
 	private static ServiceRegistry serviceRegistry;
-	private static final Log4JLogger LOGGER = new Log4JLogger();
-
+	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverApplication.class);
+	
+	
 	public static void main(String[] args) throws IOException {
-		System.out.println("Running app!");
-		// Use log4j
+		LOGGER.info("Starting app!");
 		SpringApplication.run(DenverApplication.class, args);
 
 		System.out.println("Creating session factory..");
@@ -38,17 +40,19 @@ public class DenverApplication {
 			SpringApplication.exit(null, null);
 		}
 
-		System.out.println("Done Creating session factory.");
+		LOGGER.info("Done Creating session factory.");
 		// //
 		// Hibernate Usage //
 		// //
+		LOGGER.info("Starting with Hibernate experiments..");
 		HibernateController hibCtrl = new HibernateController();
 		/* Add few home records in database */
 		Home home1 = new Home("Home1", "content1");
 		hibCtrl.addEntity(home1);
 		hibCtrl.addEntity(new Home("Home2", "content2"));
 
-		Exercise exc = new Exercise("Excercise123");
+		Exercise exc = new Exercise();
+		exc.setTitle("Hello");
 		String ecxId = hibCtrl.addEntity(exc);
 
 		// Entity Update Example

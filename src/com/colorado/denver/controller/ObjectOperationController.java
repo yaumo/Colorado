@@ -52,7 +52,7 @@ public class ObjectOperationController {
 		HibernateController hibCtrl = new HibernateController();
 		switch (crud) {
 		case 1:
-			String createdId = hibCtrl.addEntity(new Exercise("HardCodedTest"));
+			String createdId = hibCtrl.addEntity(new Exercise());
 			exercise = (Exercise) hibCtrl.getEntity(createdId, clazz);
 			break;
 		case 2:

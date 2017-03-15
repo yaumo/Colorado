@@ -11,8 +11,7 @@ public class Exercise extends BaseEntity {
 	public String title;
 	public String description;
 
-	public Exercise(String title) {
-		this.title = title;
+	public Exercise() {
 	}
 
 	public String getTitle() {
