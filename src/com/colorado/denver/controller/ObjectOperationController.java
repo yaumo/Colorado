@@ -1,5 +1,7 @@
 package com.colorado.denver.controller;
 
+import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Objects;
 
 import javax.management.ReflectionException;
@@ -28,24 +30,28 @@ public class ObjectOperationController {
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Excercise.EXCERCISE, method = RequestMethod.POST)
 	@ResponseBody
 	public Excercise handleExcercise(HttpServletRequest request,
-			HttpServletResponse response) throws ReflectionException {
+			HttpServletResponse response) throws ReflectionException, IOException {
 
 		Class<? extends BaseEntity> clazz = GenericTools.getClassForName(request.getParameter(BaseEntity.CLASS));
 		Objects.requireNonNull(clazz, "Object class must be provided!");
+
 		LOGGER.debug("ObjectClass is: " + clazz.getSimpleName());
 		String id = request.getParameter(BaseEntity.ID);
 		int crud = Integer.parseInt(request.getParameter(DenverConstants.CRUD));
-		String title = request.getParameter("title");
+		String[] requestParams = extractAllRequestPostParameters(request);
+
+		for (int i = 0; i < requestParams.length; i++) {
+			System.out.println("Value at " + i + " : " + requestParams[i]);
+		}
 
 		handleRequest(id, crud, clazz);
 		// get user via session
 		// do security check
 		Excercise excercise = null;
-
 		HibernateController hibCtrl = new HibernateController();
 		switch (crud) {
 		case 1:
-			String createdId = hibCtrl.addEntity(new Excercise(title));
+			String createdId = hibCtrl.addEntity(new Excercise("HardCodedTest"));
 			excercise = (Excercise) hibCtrl.getEntity(createdId, clazz);
 			break;
 		case 2:
@@ -63,5 +69,14 @@ public class ObjectOperationController {
 		}
 
 		return excercise;
+	}
+
+	public static String[] extractAllRequestPostParameters(HttpServletRequest req) throws IOException {
+		Enumeration<String> parameterNames = req.getParameterNames();
+		String paramName = null;
+		while (parameterNames.hasMoreElements()) {
+			paramName = parameterNames.nextElement();
+		}
+		return req.getParameterValues(paramName);
 	}
 }

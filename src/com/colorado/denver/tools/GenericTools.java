@@ -9,6 +9,8 @@ import java.util.stream.Stream;
 import javax.management.ReflectionException;
 
 import org.apache.commons.logging.impl.Log4JLogger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.reflections.Reflections;
 
 import com.colorado.denver.model.BaseEntity;
@@ -16,6 +18,8 @@ import com.colorado.denver.model.BaseEntity;
 public class GenericTools {
 	private static final Reflections reflections = new Reflections(DenverConstants.COLORADO_PACKAGE);
 	private static final Log4JLogger LOGGER = new Log4JLogger();
+	private SessionFactory sessionFactory;
+
 	private Class<? extends BaseEntity> objectClass;
 
 	public static Reflections getReflections() {
@@ -80,5 +84,26 @@ public class GenericTools {
 			throw new ReflectionException(e, "Unable to instantiate " + clazz);
 		}
 	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	public Session getSession() {
+		Session session;
+
+		if (!sessionFactory.getCurrentSession().isOpen()) {
+			LOGGER.info("Opening new session");
+			session = sessionFactory.openSession();
+		} else {
+			session = sessionFactory.getCurrentSession();
+		}
+		if (!session.getTransaction().isActive()) {
+			session.beginTransaction();
+			LOGGER.debug("Initialized transaction.");
+		}
+
+		return sessionFactory.getCurrentSession();
+	} // initTransAction
 
 }
