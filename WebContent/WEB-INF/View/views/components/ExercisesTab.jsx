@@ -9,10 +9,17 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
+import Fetch from 'react-fetch';
 
 
-function handleClick(e){
-    console.log("click", e);
+function handleClick(e) {
+    fetch('http://localhost:8080/Exercise', {
+        method: 'post'
+    }).then(function (response) {
+
+    }).catch(function (err) {
+        consol.log(err)
+    });
 };
 
 class ExercisesTab extends React.Component {
@@ -36,81 +43,81 @@ class ExercisesTab extends React.Component {
                         <TextField
                             floatingLabelText="Title"
                             fullWidth={false}
-                        />
+                            />
                         <TextField
-                                floatingLabelText="Exercise"
-                                multiLine={true}
-                                rows={3}
-                                fullWidth={true}
-                        />
-                        
+                            floatingLabelText="Exercise"
+                            multiLine={true}
+                            rows={3}
+                            fullWidth={true}
+                            />
+
                         <br />
                         <br />
                         <h4>Template</h4>
                         <Paper zDepth={4}>
-                        <Solution />
+                            <Solution />
                         </Paper>
-                        <br/>
+                        <br />
                         <Paper zDepth={4}>
-                        <h4>Testcases</h4>
-                        <Divider />
-                        <div>
-                            Case 1
+                            <h4>Testcases</h4>
+                            <Divider />
+                            <div>
+                                Case 1
                             <TextField
-                                floatingLabelText="Input 1"
-                                fullWidth={false}
-                                multiLine={true}
-                                rows={3}
-                            />
-                            &nbsp;
-                            &nbsp;
-                            <TextField
-                                floatingLabelText="Output 1"
-                                fullWidth={false}
-                                multiLine={true}
-                                rows={3}
-                            />
-                        </div>
-                        <Divider />
-                        <div>
-                        Case 2
-                            <TextField
-                                floatingLabelText="Input 2"
-                                fullWidth={false}
-                                multiLine={true}
-                                rows={3}
-                            />
-                            &nbsp;
+                                    floatingLabelText="Input 1"
+                                    fullWidth={false}
+                                    multiLine={true}
+                                    rows={3}
+                                    />
+                                &nbsp;
                             &nbsp;
                             <TextField
-                                floatingLabelText="Output 2"
-                                fullWidth={false}
-                                multiLine={true}
-                                rows={3}
-                            />
-                        </div>
-                        <Divider />
-                        <div>
-                        Case 3
+                                    floatingLabelText="Output 1"
+                                    fullWidth={false}
+                                    multiLine={true}
+                                    rows={3}
+                                    />
+                            </div>
+                            <Divider />
+                            <div>
+                                Case 2
                             <TextField
-                                floatingLabelText="Input 3"
-                                fullWidth={false}
-                                multiLine={true}
-                                rows={3}
-                                className="abcName"
-                            />
-                            &nbsp;
+                                    floatingLabelText="Input 2"
+                                    fullWidth={false}
+                                    multiLine={true}
+                                    rows={3}
+                                    />
+                                &nbsp;
                             &nbsp;
                             <TextField
-                                floatingLabelText="Output 3"
-                                fullWidth={false}
-                                multiLine={true}
-                                rows={3}
-                            />
-                        </div>
-                        <Divider />
+                                    floatingLabelText="Output 2"
+                                    fullWidth={false}
+                                    multiLine={true}
+                                    rows={3}
+                                    />
+                            </div>
+                            <Divider />
+                            <div>
+                                Case 3
+                            <TextField
+                                    floatingLabelText="Input 3"
+                                    fullWidth={false}
+                                    multiLine={true}
+                                    rows={3}
+                                    className="abcName"
+                                    />
+                                &nbsp;
+                            &nbsp;
+                            <TextField
+                                    floatingLabelText="Output 3"
+                                    fullWidth={false}
+                                    multiLine={true}
+                                    rows={3}
+                                    />
+                            </div>
+                            <Divider />
                         </Paper>
-                        <br/>
+                        <br />
                         <RaisedButton label="Create" onClick={handleClick} />
                     </CardText>
                 </Card>
