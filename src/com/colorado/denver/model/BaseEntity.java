@@ -15,6 +15,7 @@ public abstract class BaseEntity {
 	public static final String CREATOR = "creator";
 	public static final String CREATION_DATE = "creationDate";
 	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
+	public static final String CLASS = "objectClass";
 
 	public String objectClass;
 	public String creator; // TODO: use User Object provided by Security!

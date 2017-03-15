@@ -1,5 +1,7 @@
 package com.colorado.denver.controller;
 
+import java.util.Objects;
+
 import javax.management.ReflectionException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,13 +11,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.colorado.denver.model.BaseEntity;
 import com.colorado.denver.model.Excercise;
 import com.colorado.denver.tools.DenverConstants;
 import com.colorado.denver.tools.GenericTools;
 
 @RestController
 public class ObjectOperationController {
-	public static void handleRequest(String id, int crud, Class clazz) {
+	public static void handleRequest(String id, int crud, Class<?> clazz) {
 
 	}
 
@@ -23,11 +26,15 @@ public class ObjectOperationController {
 	@ResponseBody
 	public Excercise handleExcercise(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException {
+
+		Class<? extends BaseEntity> c = request.getP.getObjectClass();
+		Objects.requireNonNull(c, "Object class must be provided!");
+
 		String id = request.getParameter("id");
 		String crud = request.getParameter("crud");
 		String objectClass = request.getParameter("objectClass");
 		String title = request.getParameter("title");
-		Class clazz = GenericTools.getClassForName(objectClass);
+		Class<?> clazz = GenericTools.getClassForName(objectClass);
 
 		handleRequest(id, Integer.parseInt(crud), clazz);
 		// get user via session

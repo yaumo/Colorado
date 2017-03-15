@@ -11,9 +11,12 @@ import javax.management.ReflectionException;
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.reflections.Reflections;
 
+import com.colorado.denver.model.BaseEntity;
+
 public class GenericTools {
 	private static final Reflections reflections = new Reflections(DenverConstants.COLORADO_PACKAGE);
 	private static final Log4JLogger LOGGER = new Log4JLogger();
+	private Class<? extends BaseEntity> objectClass;
 
 	public static Reflections getReflections() {
 		return reflections;
@@ -24,6 +27,11 @@ public class GenericTools {
 		final Set<Class<? extends T>> classes = getReflections().getSubTypesOf(clazz);
 
 		return classes;
+	}
+
+	@SuppressWarnings("unchecked") // cast is safe as only databaseentities are allowed
+	public <T extends BaseEntity> Class<T> getObjectClass() {
+		return (Class<T>) objectClass;
 	}
 
 	@SuppressWarnings("unchecked")
