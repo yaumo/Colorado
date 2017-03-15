@@ -25,6 +25,7 @@
         <mapping class="com.colorado.denver.model.Home"/>
         <mapping class="com.colorado.denver.model.Exercise"/>
         <mapping class="com.colorado.denver.model.Lecture"/>
+        <mapping class="com.colorado.denver.model.Course"/>
         <mapping class="com.colorado.denver.model.Solution"/>
         <mapping class="com.colorado.denver.model.User"/>
         

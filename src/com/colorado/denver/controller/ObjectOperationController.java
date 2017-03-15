@@ -2,6 +2,7 @@ package com.colorado.denver.controller;
 
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Objects;
 
 import javax.management.ReflectionException;
@@ -38,10 +39,10 @@ public class ObjectOperationController {
 		LOGGER.debug("ObjectClass is: " + clazz.getSimpleName());
 		String id = request.getParameter(BaseEntity.ID);
 		int crud = Integer.parseInt(request.getParameter(DenverConstants.CRUD));
-		String[] requestParams = extractAllRequestPostParameters(request);
+		List<String> requestParamValues = extractAllRequestPostParameters(request);
 
-		for (int i = 0; i < requestParams.length; i++) {
-			System.out.println("Value at " + i + " : " + requestParams[i]);
+		for (int i = 0; i < requestParamValues.size(); i++) {
+			System.out.println("Value at " + i + " : " + requestParamValues.get(i));
 		}
 
 		handleRequest(id, crud, clazz);
@@ -71,12 +72,13 @@ public class ObjectOperationController {
 		return excercise;
 	}
 
-	public static String[] extractAllRequestPostParameters(HttpServletRequest req) throws IOException {
+	@SuppressWarnings("null")
+	public static List<String> extractAllRequestPostParameters(HttpServletRequest req) throws IOException {
 		Enumeration<String> parameterNames = req.getParameterNames();
-		String paramName = null;
+		List<String> paramValues = null;
 		while (parameterNames.hasMoreElements()) {
-			paramName = parameterNames.nextElement();
+			paramValues.add(req.getParameter(parameterNames.nextElement()));
 		}
-		return req.getParameterValues(paramName);
+		return paramValues;
 	}
 }
