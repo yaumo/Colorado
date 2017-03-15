@@ -1,8 +1,12 @@
 package com.colorado.denver.model;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Solution extends BaseEntity {
-	//Klasse für die Lösung von Aufgaben, Refernz zu der Aufgabe und dem User
+	// Klasse für die Lösung von Aufgaben, Refernz zu der Aufgabe und dem User
 	public static final String SOLUTION = "solution";
+
 	@Override
 	public String getPrefix() {
 		return SOLUTION;

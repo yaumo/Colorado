@@ -1,7 +1,10 @@
 package com.colorado.denver.model;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Lecture extends BaseEntity {
-	//Vorlesung, Referenz auf den Kurs(Class) und eine Liste an Referenzen aller Klassen+ Dozenten
+	// Vorlesung, Referenz auf den Kurs(Class) und eine Liste an Referenzen aller Klassen+ Dozenten
 	public static final String LECTURE = "lecture";
 
 	@Override
