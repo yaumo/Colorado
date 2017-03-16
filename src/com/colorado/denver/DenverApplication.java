@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.impl.Log4JLogger;
+import org.apache.commons.logging.impl.SLF4JLog;
+import org.apache.commons.logging.impl.SLF4JLogFactory;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -51,8 +53,8 @@ public class DenverApplication {
 		hibCtrl.addEntity(home1);
 		hibCtrl.addEntity(new Home("Home2", "content2"));
 
-		Exercise exc = new Exercise();
-		exc.setTitle("Hello");
+		Exercise exc = new Exercise("Exercise1","Des of exercise1");
+		exc.setTitle("Hello i should have overriden exervise 1");
 		String ecxId = hibCtrl.addEntity(exc);
 
 		// Entity Update Example
@@ -74,9 +76,11 @@ public class DenverApplication {
 		List<Home> homes = (List<Home>) (List<?>) hibCtrl.getEntityList(Home.class);// if(weFail){system.crashAndBurn();}
 		for (Iterator iterator = homes.iterator(); iterator.hasNext();) {
 			Home home = (Home) iterator.next();
-			System.out.println("ID: " + home.getId());
-			System.out.println("Content: " + home.getContent());
+			LOGGER.info("ID: " + home.getId());
+			LOGGER.info("Content: " + home.getContent());
+			LOGGER.info("ObjectClass: " + home.getObjectClass());
 		}
+		LOGGER.info("--------------END OF HIBERNATE EXPERIMENTS------------------");
 	}
 
 	public static void createSessionFactory() {
