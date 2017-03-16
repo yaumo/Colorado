@@ -57,16 +57,6 @@ public class DenverApplication {
 		exc.setTitle("Hello i should have overriden exervise 1");
 		String ecxId = hibCtrl.addEntity(exc);
 
-		// Entity Update Example
-		home1.setContent("updated3");
-		home1.setAnotherContent("anotherUpdate1");
-		hibCtrl.updateEntity(home1);
-		home1.setContent("stillTheSame?");
-		hibCtrl.deleteEntity(home1);
-
-		// get Entity from table
-		Home returnedHome = (Home) hibCtrl.getEntity("home00002", Home.class);
-		System.out.println(returnedHome.getAnotherContent());
 
 		Exercise returnedExcercise = (Exercise) hibCtrl.getEntity(ecxId, Exercise.class);
 		LOGGER.error("The title of excercise is: " + returnedExcercise.getTitle());
@@ -87,11 +77,20 @@ public class DenverApplication {
 		try {
 			Configuration configuration = new Configuration();
 			configuration.configure();
+			if(configuration.getProperty("hibernate.hbm2ddl.auto").equals("create")){
+				LOGGER.info("");
+				LOGGER.info("======================================================");
+				LOGGER.info("");
+				LOGGER.info("HIBERNATE >CREATE< MODE! ALL DATA WILL BE DROPPED!!!!!");
+				LOGGER.info("");
+				LOGGER.info("======================================================");
+				LOGGER.info("");
+				}
 			serviceRegistry = new ServiceRegistryBuilder().applySettings(
 					configuration.getProperties()).buildServiceRegistry();
 			factory = configuration.buildSessionFactory(serviceRegistry);
 		} catch (Throwable ex) {
-			System.err.println("Failed to create sessionFactory object." + ex);
+			LOGGER.error("Failed to create sessionFactory object." + ex);
 			throw new ExceptionInInitializerError(ex);
 		}
 	}

@@ -46,7 +46,7 @@ public class HibernateIdGenerator implements IdentifierGenerator {
 			if (resultSet.next()) {
 				int nextValue = resultSet.getInt(1);
 				String suffix = String.format("%05d", nextValue + 1);
-				result = prefix.concat(suffix);
+				result = prefix.concat(DenverConstants.UNDERSCORE.concat(suffix)); //className_identifier
 				System.out.println("Custom generated Sequence value : " + result);
 			}
 		} catch (SQLException e) {
