@@ -7,13 +7,14 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.LoggerFactory;
 
 import com.colorado.denver.DenverApplication;
 import com.colorado.denver.model.BaseEntity;
 import com.colorado.denver.model.Home;
 
 public class HibernateController {
-
+	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HibernateController.class);
 		/* Method to CREATE an entity in the database */
 	   public String addEntity(BaseEntity entity){
 	      Session session = DenverApplication.factory.openSession();
@@ -21,6 +22,7 @@ public class HibernateController {
 	      String entityID = null;
 	      try{
 	         tx = session.beginTransaction();
+	         LOGGER.info("Saving entity: " + entity.getClass().getName());
 	         entityID = (String) session.save(entity); 
 	         tx.commit();
 	      }catch (HibernateException e) {

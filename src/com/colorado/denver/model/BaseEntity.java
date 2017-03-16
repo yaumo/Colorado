@@ -1,5 +1,6 @@
 package com.colorado.denver.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,7 +12,11 @@ import org.hibernate.annotations.GenericGenerator;
 
 //There should be NO instance of this entity! Create children of this entity instead!
 @MappedSuperclass
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable, Cloneable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2741548100143780881L;
 	public static final String ID = "id";
 	public static final String OBJECT_CLASS = "objectClass";
 	public static final String CREATOR = "creator";

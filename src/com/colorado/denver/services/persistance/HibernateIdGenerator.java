@@ -6,15 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.id.IdentifierGenerator;
+import org.slf4j.LoggerFactory;
 
+import com.colorado.denver.controller.ObjectOperationController;
 import com.colorado.denver.model.BaseEntity;
 import com.colorado.denver.tools.DenverConstants;
 
 public class HibernateIdGenerator implements IdentifierGenerator {
-
+	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HibernateIdGenerator.class);
+	
 	@Override
 	public Serializable generate(SessionImplementor sessionImpl, Object obj)
 			throws HibernateException {
@@ -25,12 +29,18 @@ public class HibernateIdGenerator implements IdentifierGenerator {
 
 		try {
 			BaseEntity clazz = (BaseEntity) obj;
+			
+			String className = clazz.getObjectClass();
+			className.toLowerCase();
+			LOGGER.info("Generating ID for class: " + className);
+			
+			
 			String prefix = clazz.getPrefix();
 			String sequence = prefix + DenverConstants.UNDERSCORE + "sequence";
 			connection = sessionImpl.connection();
 			statement = connection.createStatement();
 			statement.execute(
-					"DO\n$$\nBEGIN\nCREATE SEQUENCE public.home_sequence minvalue 0 start with 0;\nEXCEPTION WHEN duplicate_table THEN\nEND\n$$ LANGUAGE plpgsql;");
+					"DO\n$$\nBEGIN\nCREATE SEQUENCE public." + className + "_sequence minvalue 0 start with 0;\nEXCEPTION WHEN duplicate_table THEN\nEND\n$$ LANGUAGE plpgsql;");
 			resultSet = statement.executeQuery("SELECT  NEXTVAL('" + sequence + "')");
 
 			if (resultSet.next()) {
