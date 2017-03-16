@@ -10,13 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.impl.Log4JLogger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.colorado.denver.DenverApplication;
 import com.colorado.denver.model.BaseEntity;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.tools.DenverConstants;
@@ -24,7 +22,7 @@ import com.colorado.denver.tools.GenericTools;
 
 @RestController
 public class ObjectOperationController {
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ObjectOperationController.class);
+	private static final Log4JLogger LOGGER = new Log4JLogger();
 
 	public static void handleRequest(String id, int crud, Class<?> clazz) {
 
@@ -54,7 +52,7 @@ public class ObjectOperationController {
 		HibernateController hibCtrl = new HibernateController();
 		switch (crud) {
 		case 1:
-			String createdId = hibCtrl.addEntity(new Exercise("Exercise Hard coded from controller","empty"));
+			String createdId = hibCtrl.addEntity(new Exercise());
 			exercise = (Exercise) hibCtrl.getEntity(createdId, clazz);
 			break;
 		case 2:

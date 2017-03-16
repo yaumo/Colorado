@@ -1,16 +1,9 @@
 package com.colorado.denver.model;
 
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "Home")
 public class Home extends BaseEntity {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3587905596126634562L;
-
 	public static final String HOME = "home";
 
 	private String content;
@@ -19,13 +12,16 @@ public class Home extends BaseEntity {
 
 	// no-argument constructor that is visible with at least protected scope is needed for hibernate
 	public Home() {
-		this.objectClass = this.getClass().getSimpleName();
+
+	}
+
+	public Home(String content) {
+		this.content = content;
 	}
 
 	public Home(String content, String anotherContent) {
 		this.content = content;
 		this.anotherContent = anotherContent;
-		this.objectClass = this.getClass().getSimpleName();
 	}
 
 	public String getContent() {
