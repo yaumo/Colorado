@@ -20,12 +20,16 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Home;
+import com.colorado.denver.services.persistance.SessionTools;
+
+/*
+ * Keep this class clean! only main method and temporary experiments!
+ */
 
 @EnableWebMvc
 @SpringBootApplication
 public class DenverApplication {
-	public static SessionFactory factory;
-	private static ServiceRegistry serviceRegistry;
+
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverApplication.class);
 	
 	
@@ -33,9 +37,9 @@ public class DenverApplication {
 		LOGGER.info("Starting app!");
 		SpringApplication.run(DenverApplication.class, args);
 
-		System.out.println("Creating session factory..");
+		LOGGER.info("Creating session factory..");
 		try {
-			createSessionFactory();
+			SessionTools.createSessionFactory();
 		} catch (Exception e) {
 			LOGGER.error("DB Setup and / or connection failed!");
 			e.printStackTrace();
@@ -73,26 +77,6 @@ public class DenverApplication {
 		LOGGER.info("--------------END OF HIBERNATE EXPERIMENTS------------------");
 	}
 
-	public static void createSessionFactory() {
-		try {
-			Configuration configuration = new Configuration();
-			configuration.configure();
-			if(configuration.getProperty("hibernate.hbm2ddl.auto").equals("create")){
-				LOGGER.info("");
-				LOGGER.info("======================================================");
-				LOGGER.info("");
-				LOGGER.info("HIBERNATE >CREATE< MODE! ALL DATA WILL BE DROPPED!!!!!");
-				LOGGER.info("");
-				LOGGER.info("======================================================");
-				LOGGER.info("");
-				}
-			serviceRegistry = new ServiceRegistryBuilder().applySettings(
-					configuration.getProperties()).buildServiceRegistry();
-			factory = configuration.buildSessionFactory(serviceRegistry);
-		} catch (Throwable ex) {
-			LOGGER.error("Failed to create sessionFactory object." + ex);
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
+
 
 }
