@@ -13,7 +13,7 @@ import NavBar from './components/NavBar.jsx';
 import Solution from './components/Solution.jsx';
 
 
-class Exercise extends React.Component {
+export class Exercise extends React.Component {
     render() {
         return (
             <div>

@@ -10,7 +10,7 @@ import TextField from 'material-ui/TextField';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import browserHistory from 'react-router';
+import { browserHistory } from 'react-router';
 import Divider from 'material-ui/Divider';
 //import Background from './images/Unbenannt.PNG';
 
@@ -21,13 +21,13 @@ injectTapEventPlugin();
 };*/
 // style={ sectionStyle }
 
-function handleClick(e) {
+/*function handleClick(e) {
     e.preventDefault();
     console.log('The link was clicked.');
-	browserHistory.push('./Exercise')
-  }
+	browserHistory.push('/exercise')
+  }*/
 	
-class Login extends React.Component {
+export class Login extends React.Component {
   render() {
     return (
       <div>
@@ -62,7 +62,29 @@ class Header extends React.Component {
   }
 }
 
-class Content extends React.Component {
+class Content extends React.Component{
+  constructor(props) {
+    super(props);
+	this.state={value: ''};
+	this.handleClick = this.handleClick.bind(this);
+	this.handleChange = this.handleChange.bind(this);
+  }
+  handleClick(e) {
+    e.preventDefault();
+    console.log('The link was clicked.');
+	if(this.state.value === 's12345'){
+		browserHistory.push('/exercise');
+	}
+	else if(this.state.value === 'd12345'){
+		browserHistory.push('/docent');
+	}
+	else{
+		alert("Username does not exist!");
+	}
+  }
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
   render() { 
     return (
 	<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
@@ -76,15 +98,20 @@ class Content extends React.Component {
         <div>
           <TextField
             floatingLabelText="Username"
+			type='text'
+			id="username"
+			value={this.state.value}
+			onChange={this.handleChange}
           />
           <br/>
           <TextField
             floatingLabelText="Password"
             type="password"
+			id="password"
           />
           <br/>
           <br/>
-          <RaisedButton label="Login" />
+          <RaisedButton label="Login" onClick={this.handleClick}/>
           </div>
         </CardText>
         </Card>

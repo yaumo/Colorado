@@ -11,7 +11,7 @@ import ExercisesTab from './components/ExercisesTab.jsx';
 import AssignExercisesTab from './components/AssignExercisesTab.jsx';
 import OverviewTab from './components/OverviewTab.jsx';
 
-class Docent extends React.Component {
+export class Docent extends React.Component {
     render() {
         return (
             <div>
