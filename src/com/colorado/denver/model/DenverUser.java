@@ -4,17 +4,17 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "User")
-public class User extends BaseEntity {
+@Table(name = "DenverUser")
+public class DenverUser extends BaseEntity {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -960714782698396108L;
-	public static final String USER = "user";
+	public static final String DENVER_USER = "DenverUser";
 
 	@Override
 	public String getPrefix() {
-		return USER;
+		return DENVER_USER;
 	}
 
 }

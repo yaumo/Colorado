@@ -27,7 +27,7 @@
         <mapping class="com.colorado.denver.model.Lecture"/>
         <mapping class="com.colorado.denver.model.Course"/>
         <mapping class="com.colorado.denver.model.Solution"/>
-        <mapping class="com.colorado.denver.model.User"/>
+        <mapping class="com.colorado.denver.model.DenverUser"/>
         
         
     </session-factory>
