@@ -11,7 +11,7 @@ public class DenverUser extends BaseEntity {
 	 */
 	
 	public void Denveruser(){
-		
+		this.objectClass = this.getClass().getSimpleName();
 	}
 	
 	private static final long serialVersionUID = -960714782698396108L;

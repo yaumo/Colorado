@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.DenverApplication;
 import com.colorado.denver.controller.HibernateController;
+import com.colorado.denver.model.DenverUser;
 import com.colorado.denver.services.persistance.HibernateGeneralTools;
 import com.colorado.denver.services.persistance.SessionTools;
 
@@ -27,6 +28,10 @@ public class DenverDBSetupTest {
 		
 		//Creating system user
 		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
+		DenverUser usr = new DenverUser();
 		
+		
+		
+		hibCtrl.addEntity(usr);
 	}
 }
