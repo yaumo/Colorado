@@ -23,12 +23,15 @@ public abstract class BaseEntity implements Serializable, Cloneable {
 	public static final String CREATION_DATE = "creationDate";
 	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
 	public static final String CLASS = "Class";
+	
 
-	public String objectClass;
 	public String creator; // TODO: use User Object provided by Security!
 	public Date creationDate;
 	public boolean hasBeenModified;
 
+	public String objectClass;
+	
+	
 	@Id
 	@GenericGenerator(name = "custom_id", strategy = "com.colorado.denver.services.persistance.HibernateIdGenerator")
 	@GeneratedValue(generator = "custom_id")
@@ -42,7 +45,8 @@ public abstract class BaseEntity implements Serializable, Cloneable {
 	public void setId(String id) {
 		this.id = id;
 	}
-
+	
+	
 	public String getObjectClass() {
 		return objectClass;
 	}

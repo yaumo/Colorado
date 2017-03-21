@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.LoggerFactory;
@@ -17,8 +18,11 @@ import com.colorado.denver.services.persistance.SessionTools;
 public class HibernateController {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HibernateController.class);
 		/* Method to CREATE an entity in the database */
+	
+	
 	   public String addEntity(BaseEntity entity){
-	      Session session = SessionTools.factory.openSession();
+		   
+		      Session session = SessionTools.sessionFactory.openSession();
 	      Transaction tx = null;
 	      String entityID = null;
 	      try{
@@ -37,7 +41,7 @@ public class HibernateController {
 	
 	   /* Method to UPDATE an entity */
 	   public void updateEntity(BaseEntity entity){
-	      Session session = SessionTools.factory.openSession();
+	      Session session = SessionTools.sessionFactory.openSession();
 	      Transaction tx = null;
 	      try{
 	         tx = session.beginTransaction();
@@ -57,7 +61,7 @@ public class HibernateController {
 	   
 	   /* Method to DELETE an entity from the records */
 	   public void deleteEntity(BaseEntity entity){
-	      Session session = SessionTools.factory.openSession();
+	      Session session = SessionTools.sessionFactory.openSession();
 	      Transaction tx = null;
 	      try{
 	         tx = session.beginTransaction();
@@ -74,7 +78,7 @@ public class HibernateController {
 	   /* Method to GET an entity from the records */
 	   public BaseEntity getEntity(String id, Class c){
 		  BaseEntity entity = null; 
-	      Session session = SessionTools.factory.openSession();
+	      Session session = SessionTools.sessionFactory.openSession();
 	      Transaction tx = null;
 	      try{
 	         tx = session.beginTransaction();
@@ -94,7 +98,7 @@ public class HibernateController {
 	   /* Method to GET a list of entities from the records */
 	   public List<BaseEntity> getEntityList(Class c){
 		  List<BaseEntity> entityList = null; 
-	      Session session = SessionTools.factory.openSession();
+	      Session session = SessionTools.sessionFactory.openSession();
 	      Transaction tx = null;
 	      try{
 	         tx = session.beginTransaction();

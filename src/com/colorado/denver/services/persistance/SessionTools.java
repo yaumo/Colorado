@@ -10,10 +10,12 @@ import com.colorado.denver.DenverApplication;
 
 public class SessionTools {
 	
-	public static SessionFactory factory;
+	public static SessionFactory sessionFactory;
 	private static ServiceRegistry serviceRegistry;
 	
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SessionTools.class);
+	
+
 	
 	public static void createSessionFactory() {
 		try {
@@ -30,9 +32,9 @@ public class SessionTools {
 				}
 			serviceRegistry = new ServiceRegistryBuilder().applySettings(
 					configuration.getProperties()).buildServiceRegistry();
-			factory = configuration.buildSessionFactory(serviceRegistry);
+			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		} catch (Throwable ex) {
-			LOGGER.error("Failed to create sessionFactory object." + ex);
+			LOGGER.error("Failed to create sessionFactory" + ex);
 			throw new ExceptionInInitializerError(ex);
 		}
 	}

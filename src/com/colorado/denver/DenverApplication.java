@@ -37,16 +37,7 @@ public class DenverApplication {
 		LOGGER.info("Starting app!");
 		SpringApplication.run(DenverApplication.class, args);
 
-		LOGGER.info("Creating session factory..");
-		try {
-			SessionTools.createSessionFactory();
-		} catch (Exception e) {
-			LOGGER.error("DB Setup and / or connection failed!");
-			e.printStackTrace();
-			SpringApplication.exit(null, null);
-		}
 
-		LOGGER.info("Done Creating session factory.");
 		// //
 		// Hibernate Usage //
 		// //

@@ -9,6 +9,11 @@ public class DenverUser extends BaseEntity {
 	/**
 	 * 
 	 */
+	
+	public void Denveruser(){
+		
+	}
+	
 	private static final long serialVersionUID = -960714782698396108L;
 	public static final String DENVER_USER = "DenverUser";
 
