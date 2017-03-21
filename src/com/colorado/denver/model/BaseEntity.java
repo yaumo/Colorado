@@ -12,7 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 //There should be NO instance of this entity! Create children of this entity instead!
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable, Cloneable{
+public abstract class BaseEntity implements Serializable, Cloneable {
 	/**
 	 * 
 	 */
@@ -22,7 +22,7 @@ public abstract class BaseEntity implements Serializable, Cloneable{
 	public static final String CREATOR = "creator";
 	public static final String CREATION_DATE = "creationDate";
 	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
-	public static final String CLASS = "objectClass";
+	public static final String CLASS = "Class";
 
 	public String objectClass;
 	public String creator; // TODO: use User Object provided by Security!
