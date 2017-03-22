@@ -4,14 +4,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.logging.impl.Log4JLogger;
-import org.apache.commons.logging.impl.SLF4JLog;
-import org.apache.commons.logging.impl.SLF4JLogFactory;
-import org.apache.log4j.Logger;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Home;
-import com.colorado.denver.services.persistance.SessionTools;
 
 /*
  * Keep this class clean! only main method and temporary experiments!
@@ -31,12 +22,10 @@ import com.colorado.denver.services.persistance.SessionTools;
 public class DenverApplication {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverApplication.class);
-	
-	
+
 	public static void main(String[] args) throws IOException {
 		LOGGER.info("Starting app!");
 		SpringApplication.run(DenverApplication.class, args);
-
 
 		// //
 		// Hibernate Usage //
@@ -44,14 +33,12 @@ public class DenverApplication {
 		LOGGER.info("Starting with Hibernate experiments..");
 		HibernateController hibCtrl = new HibernateController();
 		/* Add few home records in database */
-		Home home1 = new Home("Home1", "content1");
+		Home home1 = new Home();
 		hibCtrl.addEntity(home1);
-		hibCtrl.addEntity(new Home("Home2", "content2"));
 
-		Exercise exc = new Exercise("Exercise1","Des of exercise1");
+		Exercise exc = new Exercise();
 		exc.setTitle("Hello i should have overriden exervise 1");
 		String ecxId = hibCtrl.addEntity(exc);
-
 
 		Exercise returnedExcercise = (Exercise) hibCtrl.getEntity(ecxId, Exercise.class);
 		LOGGER.error("The title of excercise is: " + returnedExcercise.getTitle());
@@ -67,7 +54,5 @@ public class DenverApplication {
 		}
 		LOGGER.info("--------------END OF HIBERNATE EXPERIMENTS------------------");
 	}
-
-
 
 }

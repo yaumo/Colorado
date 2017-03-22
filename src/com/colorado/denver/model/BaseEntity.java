@@ -12,7 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 //There should be NO instance of this entity! Create children of this entity instead!
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable, Cloneable {
+public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	/**
 	 * 
 	 */
@@ -23,16 +23,14 @@ public abstract class BaseEntity implements Serializable, Cloneable {
 	public static final String CREATION_DATE = "creationDate";
 	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
 	public static final String CLASS = "Class";
-	
 
-	public String creator; // TODO: use User Object provided by Security!
+	public DenverUser creator; // TODO: use User Object provided by Security!
 	public Date creationDate;
 	public boolean hasBeenModified;
 
-	//@GenericGenerator(name = "objectClass", strategy = "com.colorado.denver.services.persistance.HibernateIdGenerator")
+	// @GenericGenerator(name = "objectClass", strategy = "com.colorado.denver.services.persistance.HibernateIdGenerator")
 	public String objectClass;
-	
-	
+
 	@Id
 	@GenericGenerator(name = "custom_id", strategy = "com.colorado.denver.services.persistance.HibernateIdGenerator")
 	@GeneratedValue(generator = "custom_id")
@@ -46,8 +44,7 @@ public abstract class BaseEntity implements Serializable, Cloneable {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	
+
 	public String getObjectClass() {
 		return objectClass;
 	}
@@ -56,11 +53,11 @@ public abstract class BaseEntity implements Serializable, Cloneable {
 		this.objectClass = objectClass;
 	}
 
-	public String getCreator() {
+	public DenverUser getCreator() {
 		return creator;
 	}
 
-	public void setCreator(String creator) {
+	public void setCreator(DenverUser creator) {
 		this.creator = creator;
 	}
 

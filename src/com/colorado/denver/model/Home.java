@@ -19,7 +19,6 @@ public class Home extends BaseEntity {
 
 	// no-argument constructor that is visible with at least protected scope is needed for hibernate
 	public Home() {
-		this.objectClass = this.getClass().getSimpleName();
 	}
 
 	public Home(String content, String anotherContent) {
