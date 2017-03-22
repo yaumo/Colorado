@@ -28,7 +28,7 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	public Date creationDate;
 	public boolean hasBeenModified;
 
-	// @GenericGenerator(name = "objectClass", strategy = "com.colorado.denver.services.persistance.HibernateIdGenerator")
+	//Important for identifying the used object. This property is set during Hibernate create
 	public String objectClass;
 
 	@Id

@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Home;
+import com.colorado.denver.services.persistance.SessionTools;
 
 /*
  * Keep this class clean! only main method and temporary experiments!
@@ -26,6 +27,7 @@ public class DenverApplication {
 	public static void main(String[] args) throws IOException {
 		LOGGER.info("Starting app!");
 		SpringApplication.run(DenverApplication.class, args);
+		SessionTools.createSessionFactory(false);
 
 		// //
 		// Hibernate Usage //

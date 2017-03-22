@@ -22,7 +22,7 @@ public class DenverDBSetupTest {
 	public void setupDatabase() {
 		// Using hibernate config file!
 		LOGGER.info("Creating session factory..");
-		SessionTools.createSessionFactory();
+		SessionTools.createSessionFactory(true);
 		LOGGER.info("Done Creating session factory.");
 
 		// Creating system user

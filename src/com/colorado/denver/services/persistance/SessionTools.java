@@ -6,8 +6,6 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 import org.slf4j.LoggerFactory;
 
-import com.colorado.denver.DenverApplication;
-
 public class SessionTools {
 	
 	public static SessionFactory sessionFactory;
@@ -16,12 +14,12 @@ public class SessionTools {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SessionTools.class);
 	
 
-	
-	public static void createSessionFactory() {
+	public static void createSessionFactory(boolean useHibernateConfigUpdateRoutine) {
 		try {
 			Configuration configuration = new Configuration();
 			configuration.configure();
-			if(configuration.getProperty("hibernate.hbm2ddl.auto").equals("create")){
+			if(useHibernateConfigUpdateRoutine){
+				if(configuration.getProperty("hibernate.hbm2ddl.auto").equals("create")){
 				LOGGER.info("");
 				LOGGER.info("======================================================");
 				LOGGER.info("");
@@ -30,6 +28,16 @@ public class SessionTools {
 				LOGGER.info("======================================================");
 				LOGGER.info("");
 				}
+			}else{
+				configuration.setProperty("hibernate.hbm2ddl.auto", "update");
+				LOGGER.info("");
+				LOGGER.info("======================================================");
+				LOGGER.info("");
+				LOGGER.info("          HIBERNATE >UPDATE< MODE!");
+				LOGGER.info("");
+				LOGGER.info("======================================================");
+				LOGGER.info("");
+			}
 			serviceRegistry = new ServiceRegistryBuilder().applySettings(
 					configuration.getProperties()).buildServiceRegistry();
 			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
