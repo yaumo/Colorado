@@ -2,6 +2,7 @@ package com.colorado.denver.tools;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -12,18 +13,35 @@ import org.apache.commons.logging.impl.Log4JLogger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.reflections.Reflections;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
 
 import com.colorado.denver.model.BaseEntity;
+import com.colorado.denver.services.security.SecurityService;
 
 public class GenericTools {
 	private static final Reflections reflections = new Reflections(DenverConstants.COLORADO_PACKAGE);
 	private static final Log4JLogger LOGGER = new Log4JLogger();
 	private SessionFactory sessionFactory;
 
+	/** The context. */
+	private static ApplicationContext context;
+
 	private Class<? extends BaseEntity> objectClass;
 
 	public static Reflections getReflections() {
 		return reflections;
+	}
+
+	public static <T extends BaseEntity<?>> SecurityService getSecurityService() {
+		return getBean(SecurityService.class);
+
+	}
+
+	public static ApplicationContext getApplicationContext() throws BeansException {
+		Objects.requireNonNull(context,
+				"Unable to get Spring Application!");
+		return context;
 	}
 
 	public static <T extends Object> Set<Class<? extends T>> getSubTypesOf(Class<T> clazz) {
@@ -36,6 +54,13 @@ public class GenericTools {
 	@SuppressWarnings("unchecked") // cast is safe as only databaseentities are allowed
 	public <T extends BaseEntity> Class<T> getObjectClass() {
 		return (Class<T>) objectClass;
+	}
+
+	public static <T> T getBean(Class<T> beanClass) {
+		LOGGER.debug("Getting bean for  " + beanClass);
+		T bean = context.getBean(beanClass);
+		LOGGER.debug("Returned bean: {} " + bean + " (Hash: {}" + bean.hashCode());
+		return bean;
 	}
 
 	@SuppressWarnings("unchecked")

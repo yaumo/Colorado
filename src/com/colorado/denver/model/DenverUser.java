@@ -1,7 +1,14 @@
 package com.colorado.denver.model;
 
+import java.util.Collection;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+
+import com.colorado.denver.services.persistance.HibernateGeneralTools;
+import com.colorado.denver.tools.GenericTools;
 
 @Entity
 @Table(name = "DenverUser")
@@ -56,6 +63,13 @@ public class DenverUser extends BaseEntity {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public Collection<GrantedAuthority> getAllAuthorities(BaseEntity<?> scope) {
+		if (scope != null) {
+			scope = HibernateGeneralTools.getInitializedEntity(scope);
+		}
+		return GenericTools.getSecurityService().getAllAuthorities(this, scope);
 	}
 
 	@Override

@@ -24,6 +24,11 @@ public class DenverUserAuthenticationToken extends AbstractAuthenticationToken {
 		this(auth.getAuthorities(), auth.getName());
 	}
 
+	// public DenverUserAuthenticationToken(DenverUser user) {
+	//
+	// this(user.getAllAuthorities()(), user.getUsername());
+	// }
+
 	@Override
 	public Object getCredentials() {
 		// TODO Auto-generated method stub
