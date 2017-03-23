@@ -20,7 +20,7 @@ public class SessionTools {
 			Configuration configuration = new Configuration();
 
 			// Pass hibernate configuration file
-			configuration.configure("hibernate.cfg.xml");
+			// configuration.configure("hibernate.cfg.xml");
 
 			// Since version 4.x, service registry is being used
 			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
@@ -40,9 +40,7 @@ public class SessionTools {
 
 			// Commit transaction
 			session.getTransaction().commit();
-
-			System.exit(0);
-
+			LOGGER.info("Session opened and committed!!");
 			/*
 			 * configuration.configure();
 			 * if (useHibernateConfigUpdateRoutine) {

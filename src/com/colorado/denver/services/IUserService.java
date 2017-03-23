@@ -1,7 +1,5 @@
 package com.colorado.denver.services;
 
-import java.util.List;
-
 import com.colorado.denver.model.User;
 
 public interface IUserService {
@@ -19,7 +17,5 @@ public interface IUserService {
 	void changeUserPassword(User user, String password);
 
 	boolean checkIfValidOldPassword(User user, String password);
-
-	List<String> getUsersFromSessionRegistry();
 
 }
