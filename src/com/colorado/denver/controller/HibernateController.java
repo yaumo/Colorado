@@ -12,23 +12,25 @@ import org.slf4j.LoggerFactory;
 
 import com.colorado.denver.manager.UserManager;
 import com.colorado.denver.model.BaseEntity;
-import com.colorado.denver.services.persistance.SessionTools;
+import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.tools.GenericTools;
 
 public class HibernateController {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HibernateController.class);
 	/* Method to CREATE an entity in the database */
 
 	public void setCreationInformation(BaseEntity<?> clazz) {
-		clazz.setObjectClass(calculateObjectClass());
+		clazz.setObjectClass(GenericTools.returnClassName(clazz).toLowerCase());
 		clazz.setCreationDate(new Date());
-		clazz.setCreator(UserManager.getCurrentUser());
 
-	}
+		if (UserManager.getCurrentUser() == null) {
+			LOGGER.info("Saved NULL CREATOR for entity: " + clazz.getObjectClass());
+			clazz.setCreator(null);// TODO: NOT CLEAN!!!
+		} else {
+			LOGGER.info("Trying to get User from Authentication: " + UserManager.getCurrentUser().getUsername());
+			clazz.setCreator(UserManager.getCurrentUser());
+		}
 
-	protected String calculateObjectClass() {
-
-		return "123";
-		// return JAFStringUtils.convertCamelizedStringToHumanString(JAFStringUtils.substringAfterLast(this.model.getClassType(), "."));
 	}
 
 	public String addEntity(BaseEntity<?> entity) {

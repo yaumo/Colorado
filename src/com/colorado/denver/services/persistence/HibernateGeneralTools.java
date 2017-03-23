@@ -1,4 +1,4 @@
-package com.colorado.denver.services.persistance;
+package com.colorado.denver.services.persistence;
 
 import java.util.Objects;
 

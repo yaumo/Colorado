@@ -2,6 +2,7 @@ package com.colorado.denver.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Home")
@@ -44,8 +45,15 @@ public class Home extends BaseEntity {
 	}
 
 	@Override
+	@Transient
 	public String getPrefix() {
 
 		return HOME;
+	}
+
+	@Override
+	@Transient
+	public String setPrefix() {
+		return getPrefix();
 	}
 }

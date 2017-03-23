@@ -6,13 +6,18 @@ import java.util.List;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Home;
-import com.colorado.denver.services.persistance.SessionTools;
+import com.colorado.denver.services.persistence.SessionTools;
 
 /*
  * Keep this class clean! only main method and temporary experiments!
@@ -20,18 +25,22 @@ import com.colorado.denver.services.persistance.SessionTools;
 
 @EnableWebMvc
 @SpringBootApplication
-public class DenverApplication {
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
+public class DenverApplication extends SpringBootServletInitializer {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverApplication.class);
 
 	public static void main(String[] args) throws IOException {
 		LOGGER.info("Starting app!");
 		SpringApplication.run(DenverApplication.class, args);
-		SessionTools.createSessionFactory(false);
 
 		// //
 		// Hibernate Usage //
 		// //
+		// false = Don't use hibernate mode property --> fallback to UPDATE
+		// If you want to rebuild the DB with CREATE use DenverDBSetupTest.java
+		SessionTools.createSessionFactory(false);
+
 		LOGGER.info("Starting with Hibernate experiments..");
 		HibernateController hibCtrl = new HibernateController();
 		/* Add few home records in database */
@@ -55,6 +64,11 @@ public class DenverApplication {
 			LOGGER.info("ObjectClass: " + home.getObjectClass());
 		}
 		LOGGER.info("--------------END OF HIBERNATE EXPERIMENTS------------------");
+	}
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(DenverApplication.class);
 	}
 
 }

@@ -1,7 +1,7 @@
 package com.colorado.denver.controller;
 
 import com.colorado.denver.model.Exercise;
-import com.colorado.denver.services.persistance.HibernateGeneralTools;
+import com.colorado.denver.services.persistence.HibernateGeneralTools;
 
 public class ExerciseController {
 	private static Exercise create(Exercise clazz) {

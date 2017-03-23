@@ -73,6 +73,10 @@ public class GenericTools {
 		}
 	}
 
+	public static String returnClassName(Object clazz) {
+		return clazz.getClass().getSimpleName();
+	}
+
 	public static <T> T newInstanceOf(String clazz) throws ReflectionException {
 		return newInstanceOf(getClassForName(clazz));
 	}

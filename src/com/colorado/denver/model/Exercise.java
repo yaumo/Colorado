@@ -2,6 +2,7 @@ package com.colorado.denver.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Exercise")
@@ -18,10 +19,9 @@ public class Exercise extends BaseEntity {
 	public String description;
 
 	public Exercise() {
-	
+
 	}
-	
-	
+
 	public Exercise(String title, String description) {
 		this.title = title;
 		this.description = description;
@@ -48,8 +48,15 @@ public class Exercise extends BaseEntity {
 	}
 
 	@Override
+	@Transient
 	public String getPrefix() {
 		return EXERCISE;
+	}
+
+	@Override
+	@Transient
+	public String setPrefix() {
+		return getPrefix();
 	}
 
 }

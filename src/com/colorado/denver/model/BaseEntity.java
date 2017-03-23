@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -24,15 +25,15 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
 	public static final String CLASS = "Class";
 
-	public DenverUser creator; // TODO: use User Object provided by Security!
+	public User creator; // TODO: use User Object provided by Security!
 	public Date creationDate;
 	public boolean hasBeenModified;
 
-	//Important for identifying the used object. This property is set during Hibernate create
+	// Important for identifying the used object. This property is set during Hibernate create
 	public String objectClass;
 
 	@Id
-	@GenericGenerator(name = "custom_id", strategy = "com.colorado.denver.services.persistance.HibernateIdGenerator")
+	@GenericGenerator(name = "custom_id", strategy = "com.colorado.denver.services.persistence.HibernateIdGenerator")
 	@GeneratedValue(generator = "custom_id")
 	@Column(name = "id")
 	private String id;
@@ -53,11 +54,11 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 		this.objectClass = objectClass;
 	}
 
-	public DenverUser getCreator() {
+	public User getCreator() {
 		return creator;
 	}
 
-	public void setCreator(DenverUser creator) {
+	public void setCreator(User creator) {
 		this.creator = creator;
 	}
 
@@ -77,5 +78,9 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 		this.hasBeenModified = hasBeenModified;
 	}
 
+	@Transient
 	public abstract String getPrefix();
+
+	@Transient
+	public abstract String setPrefix();
 }
