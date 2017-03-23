@@ -12,6 +12,7 @@ import javax.management.ReflectionException;
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.reflections.Reflections;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -127,7 +128,7 @@ public class GenericTools {
 		} else {
 			session = sessionFactory.getCurrentSession();
 		}
-		if (!session.getTransaction().isActive()) {
+		if (session.getTransaction().getStatus() != TransactionStatus.ACTIVE) {
 			session.beginTransaction();
 			LOGGER.debug("Initialized transaction.");
 		}
