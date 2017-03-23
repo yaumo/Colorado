@@ -1,22 +1,25 @@
-package com.colorado.denver.manager;
+package com.colorado.denver.services;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,14 +31,30 @@ import com.colorado.denver.services.persistence.dao.UserRepository;
 
 @Service
 @Transactional
-public class UserManager {
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserManager.class);
+public class UserService implements IUserService {
+	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+	public static final String ROLE_USER = "ROLE_USER";
+	public static final String ROLE_GLOBAL_ADMINISTRATOR = "ROLE_GLOBAL_ADMINISTRATOR";
 
 	@Autowired
-	@Qualifier("userRepository")
 	private UserRepository userRepository;
 	@Autowired
 	private RoleRepository roleRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private SessionRegistry sessionRegistry;
+
+	public String returnLoggedInUserName() {
+		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
+		if (userDetails instanceof UserDetails) {
+			return ((UserDetails) userDetails).getUsername();
+		}
+
+		return null;
+	}
 
 	public static User getCurrentUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -93,6 +112,51 @@ public class UserManager {
 		}
 
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+	}
+
+	@Override
+	public User registerNewUserAccount(User user) {
+
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setRoles(Arrays.asList(roleRepository.findByRoleName(ROLE_USER)));
+		return userRepository.save(user);
+	}
+
+	@Override
+	public void saveRegisteredUser(final User user) {
+		userRepository.save(user);
+	}
+
+	@Override
+	public void deleteUser(final User user) {
+		userRepository.delete(user);
+	}
+
+	@Override
+	public User findUserByUserName(final String userName) {
+		return userRepository.findByusername(userName);
+	}
+
+	@Override
+	public User getUserByID(final long id) {
+		return userRepository.findOne(id);
+	}
+
+	@Override
+	public void changeUserPassword(final User user, final String password) {
+		user.setPassword(passwordEncoder.encode(password));
+		userRepository.save(user);
+	}
+
+	@Override
+	public boolean checkIfValidOldPassword(final User user, final String oldPassword) {
+		return passwordEncoder.matches(oldPassword, user.getPassword());
+	}
+
+	@Override
+	public List<String> getUsersFromSessionRegistry() {
+		return sessionRegistry.getAllPrincipals().stream().filter((u) -> !sessionRegistry.getAllSessions(u, false).isEmpty()).map(Object::toString)
+				.collect(Collectors.toList());
 	}
 
 }

@@ -18,7 +18,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 
 import com.colorado.denver.model.BaseEntity;
-import com.colorado.denver.services.security.SecurityService;
 
 public class GenericTools {
 	private static final Reflections reflections = new Reflections(DenverConstants.COLORADO_PACKAGE);
@@ -32,11 +31,6 @@ public class GenericTools {
 
 	public static Reflections getReflections() {
 		return reflections;
-	}
-
-	public static <T extends BaseEntity<?>> SecurityService getSecurityService() {
-		return getBean(SecurityService.class);
-
 	}
 
 	public static ApplicationContext getApplicationContext() throws BeansException {

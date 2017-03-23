@@ -6,13 +6,13 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.colorado.denver.manager.UserManager;
 import com.colorado.denver.model.User;
+import com.colorado.denver.services.UserService;
 
 @Component
 public class UserValidator implements Validator {
 	@Autowired
-	private UserManager userManager;
+	private UserService userManager;
 
 	@Override
 	public boolean supports(Class<?> clazz) {

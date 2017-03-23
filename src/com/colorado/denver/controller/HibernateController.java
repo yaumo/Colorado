@@ -10,8 +10,8 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.LoggerFactory;
 
-import com.colorado.denver.manager.UserManager;
 import com.colorado.denver.model.BaseEntity;
+import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.GenericTools;
 
@@ -23,12 +23,12 @@ public class HibernateController {
 		clazz.setObjectClass(GenericTools.returnClassName(clazz).toLowerCase());
 		clazz.setCreationDate(new Date());
 
-		if (UserManager.getCurrentUser() == null) {
+		if (UserService.getCurrentUser() == null) {
 			LOGGER.info("Saved NULL CREATOR for entity: " + clazz.getObjectClass());
 			clazz.setCreator(null);// TODO: NOT CLEAN!!!
 		} else {
-			LOGGER.info("Trying to get User from Authentication: " + UserManager.getCurrentUser().getUsername());
-			clazz.setCreator(UserManager.getCurrentUser());
+			LOGGER.info("Trying to get User from Authentication: " + UserService.getCurrentUser().getUsername());
+			clazz.setCreator(UserService.getCurrentUser());
 		}
 
 	}

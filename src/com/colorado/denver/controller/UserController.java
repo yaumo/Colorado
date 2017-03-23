@@ -8,19 +8,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.colorado.denver.manager.UserManager;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
-import com.colorado.denver.services.security.SecurityService;
+import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.security.auth.UserValidator;
 
 @Controller
 public class UserController {
 	@Autowired
-	private UserManager userManager;
-
-	@Autowired
-	private SecurityService securityService;
+	private UserService userService;
 
 	@Autowired
 	private UserValidator userValidator;
@@ -40,9 +36,8 @@ public class UserController {
 			return "registration";
 		}
 		// Role role = calculateRoleBasedOnUser(userForm);
-		userManager.save(userForm);
-
-		securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
+		userService.save(userForm);
+		userService.registerNewUserAccount(userForm);
 
 		return "redirect:/welcome";
 	}
