@@ -30,18 +30,12 @@
 	
 	<session-config>
         <session-timeout>30</session-timeout>
-		
-		<!--http://blog.trifork.com/2014/02/28/session-timeout-and-concurrent-session-control-with-spring-security-and-spring-mvc/-->
-		<!-- https://github.com/spring-projects/spring-security/blob/master/core/src/main/java/org/springframework/security/core/session/SessionRegistry.java -->
-		<listener>	
-			<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
-		</listener>
-		<session-management>
-			<concurrency-control
-			max-sessions="-1"
-			expired-url="localhost:8080" />
-		</session-management>
     </session-config>
+    		<!--http://blog.trifork.com/2014/02/28/session-timeout-and-concurrent-session-control-with-spring-security-and-spring-mvc/-->
+		<!-- https://github.com/spring-projects/spring-security/blob/master/core/src/main/java/org/springframework/security/core/session/SessionRegistry.java -->
+	<listener>	
+		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+	</listener>
     
 <!-- Define a SSL Coyote HTTP/1.1 Connector on port 8443 -->
 	<!-- Connector port="443" maxHttpHeaderSize="8192" maxThreads="150" 
