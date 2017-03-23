@@ -6,7 +6,10 @@ import java.util.List;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -23,7 +26,7 @@ import com.colorado.denver.services.persistence.SessionTools;
 @EnableWebMvc
 @SpringBootApplication
 // @EnableAutoConfiguration(exclude = { HibernateJpaAutoConfiguration.class })
-// @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
 public class DenverApplication extends SpringBootServletInitializer {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverApplication.class);

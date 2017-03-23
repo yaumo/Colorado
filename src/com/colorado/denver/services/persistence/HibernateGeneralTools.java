@@ -3,10 +3,14 @@ package com.colorado.denver.services.persistence;
 import java.util.Objects;
 
 import javax.management.ReflectionException;
+import javax.sql.DataSource;
 
 import org.hibernate.Hibernate;
 import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.BaseEntity;
@@ -20,6 +24,16 @@ public class HibernateGeneralTools {
 
 	public static HibernateController getHibernateController() {
 		return hibCtrl;
+	}
+
+	@Primary
+	@Bean
+	public DataSource dataSource() {
+		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+		dataSourceBuilder.url("jdbc:postgresql://104.40.217.248:5432/Denver");
+		dataSourceBuilder.username("hibernateuser");
+		dataSourceBuilder.password("breckenridge");
+		return dataSourceBuilder.build();
 	}
 
 	public static <T extends BaseEntity> T getInitializedEntity(T entity) throws ReflectionException {
