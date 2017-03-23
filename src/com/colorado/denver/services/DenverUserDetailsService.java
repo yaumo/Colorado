@@ -1,4 +1,4 @@
-package com.colorado.denver.services.security;
+package com.colorado.denver.services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +19,7 @@ import com.colorado.denver.model.User;
 import com.colorado.denver.services.persistence.dao.RoleRepository;
 import com.colorado.denver.services.persistence.dao.UserRepository;
 
-@Service("userDetailsService")
+@Service
 public class DenverUserDetailsService implements UserDetailsService {
 
 	@Autowired

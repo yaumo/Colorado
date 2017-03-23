@@ -30,14 +30,10 @@
 	
 	<session-config>
         <session-timeout>30</session-timeout>
-        <cookie-config>
-            <http-only>true</http-only>
-            <secure>true</secure>
-        </cookie-config>
-        <tracking-mode>COOKIE</tracking-mode>
-		<listener>
+		
 		<!--http://blog.trifork.com/2014/02/28/session-timeout-and-concurrent-session-control-with-spring-security-and-spring-mvc/-->
 		<!-- https://github.com/spring-projects/spring-security/blob/master/core/src/main/java/org/springframework/security/core/session/SessionRegistry.java -->
+		<listener>	
 			<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 		</listener>
 		<session-management>

@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -15,13 +14,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
@@ -30,7 +27,6 @@ import com.colorado.denver.services.persistence.dao.RoleRepository;
 import com.colorado.denver.services.persistence.dao.UserRepository;
 
 @Service
-@Transactional
 public class UserService implements IUserService {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 	public static final String ROLE_USER = "ROLE_USER";
@@ -43,9 +39,6 @@ public class UserService implements IUserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	private SessionRegistry sessionRegistry;
 
 	public String returnLoggedInUserName() {
 		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
@@ -102,7 +95,6 @@ public class UserService implements IUserService {
 		return userRepository.findByusername(username);
 	}
 
-	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userRepository.findByusername(username);
 
@@ -151,12 +143,6 @@ public class UserService implements IUserService {
 	@Override
 	public boolean checkIfValidOldPassword(final User user, final String oldPassword) {
 		return passwordEncoder.matches(oldPassword, user.getPassword());
-	}
-
-	@Override
-	public List<String> getUsersFromSessionRegistry() {
-		return sessionRegistry.getAllPrincipals().stream().filter((u) -> !sessionRegistry.getAllSessions(u, false).isEmpty()).map(Object::toString)
-				.collect(Collectors.toList());
 	}
 
 }
