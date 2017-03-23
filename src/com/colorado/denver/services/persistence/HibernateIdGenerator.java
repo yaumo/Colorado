@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ public class HibernateIdGenerator implements IdentifierGenerator {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HibernateIdGenerator.class);
 
 	@Override
-	public Serializable generate(SessionImplementor sessionImpl, Object obj)
+	public Serializable generate(SharedSessionContractImplementor sessionImpl, Object obj)
 			throws HibernateException {
 		Serializable result = null;
 		Connection connection = null;

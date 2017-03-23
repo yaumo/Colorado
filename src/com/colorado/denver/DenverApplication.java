@@ -22,6 +22,7 @@ import com.colorado.denver.services.persistence.SessionTools;
 
 @EnableWebMvc
 @SpringBootApplication
+// @EnableAutoConfiguration(exclude = { HibernateJpaAutoConfiguration.class })
 // @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
 public class DenverApplication extends SpringBootServletInitializer {
 
