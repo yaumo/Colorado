@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,25 +17,25 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.persistence.SessionTools;
-import com.colorado.denver.services.security.auth.IRoleRepository;
-import com.colorado.denver.services.security.auth.IUserRepository;
+import com.colorado.denver.services.persistence.dao.RoleRepository;
+import com.colorado.denver.services.persistence.dao.UserRepository;
 
 @Service
-@Component
+@Transactional
 public class UserManager {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserManager.class);
 
 	@Autowired
-	private IUserRepository userRepository;
+	@Qualifier("userRepository")
+	private UserRepository userRepository;
 	@Autowired
-	private IRoleRepository roleRepository;
+	private RoleRepository roleRepository;
 
 	public static User getCurrentUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -79,12 +80,12 @@ public class UserManager {
 	}
 
 	public User findByUsername(String username) {
-		return userRepository.findByUsername(username);
+		return userRepository.findByusername(username);
 	}
 
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByUsername(username);
+		User user = userRepository.findByusername(username);
 
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 		for (Role role : user.getRoles()) {

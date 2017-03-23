@@ -12,6 +12,9 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.colorado.denver.controller.HibernateController;
@@ -25,6 +28,9 @@ import com.colorado.denver.services.persistence.SessionTools;
 
 @EnableWebMvc
 @SpringBootApplication
+@ComponentScan("com")
+@Configuration
+@EnableJpaRepositories(basePackages = "com.denver", entityManagerFactoryRef = "emf")
 @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
 public class DenverApplication extends SpringBootServletInitializer {
 
