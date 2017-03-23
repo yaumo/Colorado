@@ -12,8 +12,6 @@ xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.spring
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
 <context:component-scan base-package="com.colorado">
-    <context:exclude-filter type="annotation"
-        expression="org.springframework.stereotype.Controller" />
 </context:component-scan>
 
 <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
@@ -25,6 +23,8 @@ xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.spring
 
 
 </bean>
+
+
 <bean id="entityManagerFactory"
     class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
     <property name="packagesToScan" value="com.colorado" />

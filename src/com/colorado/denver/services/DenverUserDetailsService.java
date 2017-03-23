@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.colorado.denver.model.Role;
@@ -20,6 +21,7 @@ import com.colorado.denver.services.persistence.dao.RoleRepository;
 import com.colorado.denver.services.persistence.dao.UserRepository;
 
 @Service
+@Component
 public class DenverUserDetailsService implements UserDetailsService {
 
 	@Autowired
