@@ -1,53 +1,25 @@
 package com.colorado.denver.services;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.persistence.SessionTools;
-import com.colorado.denver.services.persistence.dao.RoleRepository;
-import com.colorado.denver.services.persistence.dao.UserRepository;
 
 @Service
-public class UserService implements IUserService {
+public class UserService {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 	public static final String ROLE_USER = "ROLE_USER";
 	public static final String ROLE_GLOBAL_ADMINISTRATOR = "ROLE_GLOBAL_ADMINISTRATOR";
-
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private RoleRepository roleRepository;
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	public String returnLoggedInUserName() {
-		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
-		if (userDetails instanceof UserDetails) {
-			return ((UserDetails) userDetails).getUsername();
-		}
-
-		return null;
-	}
 
 	public static User getCurrentUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -85,64 +57,11 @@ public class UserService implements IUserService {
 		LOGGER.info("Security Save for user: " + user.getUsername() + " and password: " + user.getPassword());
 		BCryptPasswordEncoder passWordEncoder = new BCryptPasswordEncoder();
 		user.setPassword(passWordEncoder.encode(user.getPassword()));
-		user.setRoles(new HashSet<>(roleRepository.findAll()));// TODO: Not clean!
+		user.setRoles(new HashSet<>());// TODO: Not
+										// clean!
 
-		userRepository.save(user);
+		// Hibernate save for user!
 		LOGGER.info("Security Save for user: " + user.getUsername() + "sucessful! newPassword: " + user.getPassword());
-	}
-
-	public User findByUsername(String username) {
-		return userRepository.findByusername(username);
-	}
-
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByusername(username);
-
-		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-		for (Role role : user.getRoles()) {
-			grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-		}
-
-		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
-	}
-
-	@Override
-	public User registerNewUserAccount(User user) {
-
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		user.setRoles(Arrays.asList(roleRepository.findByRoleName(ROLE_USER)));
-		return userRepository.save(user);
-	}
-
-	@Override
-	public void saveRegisteredUser(final User user) {
-		userRepository.save(user);
-	}
-
-	@Override
-	public void deleteUser(final User user) {
-		userRepository.delete(user);
-	}
-
-	@Override
-	public User findUserByUserName(final String userName) {
-		return userRepository.findByusername(userName);
-	}
-
-	@Override
-	public User getUserByID(final long id) {
-		return userRepository.findOne(id);
-	}
-
-	@Override
-	public void changeUserPassword(final User user, final String password) {
-		user.setPassword(passwordEncoder.encode(password));
-		userRepository.save(user);
-	}
-
-	@Override
-	public boolean checkIfValidOldPassword(final User user, final String oldPassword) {
-		return passwordEncoder.matches(oldPassword, user.getPassword());
 	}
 
 }

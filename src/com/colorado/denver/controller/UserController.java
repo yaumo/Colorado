@@ -11,15 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
-import com.colorado.denver.services.security.auth.UserValidator;
 
 @Controller
 public class UserController {
 	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private UserValidator userValidator;
 
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)
 	public String registration(Model model) {
@@ -30,14 +26,15 @@ public class UserController {
 
 	@RequestMapping(value = "/registration", method = RequestMethod.POST)
 	public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
-		userValidator.validate(userForm, bindingResult);
+		// TODO: simple validation userValidator.validate(userForm,
+		// bindingResult);
 
 		if (bindingResult.hasErrors()) {
 			return "registration";
 		}
 		// Role role = calculateRoleBasedOnUser(userForm);
 		userService.save(userForm);
-		userService.registerNewUserAccount(userForm);
+		// userService.registerNewUserAccount(userForm);
 
 		return "redirect:/welcome";
 	}

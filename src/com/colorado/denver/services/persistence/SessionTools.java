@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 public class SessionTools {
 
-	public static SessionFactory sessionFactory;
+	public static SessionFactory sessionFactory;// SINGLETON!
 	private static ServiceRegistry serviceRegistry;
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SessionTools.class);
@@ -20,16 +20,18 @@ public class SessionTools {
 			Configuration configuration = new Configuration();
 
 			// Pass hibernate configuration file
-			// configuration.configure("hibernate.cfg.xml");
+			configuration.configure("hibernate.cfg.xml");
 
 			// Since version 4.x, service registry is being used
-			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+					.applySettings(configuration.getProperties()).build();
 
+			LOGGER.info("Creating session factory instance!");
 			// Create session factory instance
-			SessionFactory factory = configuration.buildSessionFactory(serviceRegistry);
-
+			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+			LOGGER.info("Created session factory instance!");
 			// Get current session
-			Session session = factory.getCurrentSession();
+			Session session = sessionFactory.getCurrentSession();
 
 			// Begin transaction
 			session.getTransaction().begin();
@@ -42,30 +44,27 @@ public class SessionTools {
 			session.getTransaction().commit();
 			LOGGER.info("Session opened and committed!!");
 			/*
-			 * configuration.configure();
-			 * if (useHibernateConfigUpdateRoutine) {
-			 * if (configuration.getProperty("hibernate.hbm2ddl.auto").equals("create")) {
-			 * LOGGER.info("");
-			 * LOGGER.info("======================================================");
-			 * LOGGER.info("");
-			 * LOGGER.info("HIBERNATE >CREATE< MODE! ALL DATA WILL BE DROPPED!!!!!");
-			 * LOGGER.info("");
-			 * LOGGER.info("======================================================");
-			 * LOGGER.info("");
-			 * }
-			 * } else {
+			 * configuration.configure(); if (useHibernateConfigUpdateRoutine) {
+			 * if (configuration.getProperty("hibernate.hbm2ddl.auto").equals(
+			 * "create")) { LOGGER.info(""); LOGGER.info(
+			 * "======================================================");
+			 * LOGGER.info(""); LOGGER.
+			 * info("HIBERNATE >CREATE< MODE! ALL DATA WILL BE DROPPED!!!!!");
+			 * LOGGER.info(""); LOGGER.info(
+			 * "======================================================");
+			 * LOGGER.info(""); } } else {
 			 * configuration.setProperty("hibernate.hbm2ddl.auto", "update");
-			 * LOGGER.info("");
-			 * LOGGER.info("======================================================");
+			 * LOGGER.info(""); LOGGER.info(
+			 * "======================================================");
 			 * LOGGER.info("");
 			 * LOGGER.info("          HIBERNATE >UPDATE< MODE!");
-			 * LOGGER.info("");
-			 * LOGGER.info("======================================================");
-			 * LOGGER.info("");
-			 * }
-			 * serviceRegistry = new ServiceRegistryBuilder().applySettings(
+			 * LOGGER.info(""); LOGGER.info(
+			 * "======================================================");
+			 * LOGGER.info(""); } serviceRegistry = new
+			 * ServiceRegistryBuilder().applySettings(
 			 * configuration.getProperties()).buildServiceRegistry();
-			 * sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+			 * sessionFactory =
+			 * configuration.buildSessionFactory(serviceRegistry);
 			 * 
 			 */
 		} catch (
