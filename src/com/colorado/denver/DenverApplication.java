@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Home;
+import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
 
 /*
@@ -45,16 +46,33 @@ public class DenverApplication extends SpringBootServletInitializer {
 		LOGGER.info("Starting with Hibernate experiments..");
 		HibernateController hibCtrl = new HibernateController();
 		/* Add few home records in database */
+
+		UserService.authorizeSystemuser();
 		Home home1 = new Home();
+		home1.setContent("Home1");
 		hibCtrl.addEntity(home1);
+		Home home2 = new Home();
+		home1.setContent("Home2");
+		hibCtrl.addEntity(home2);
+		home1.setContent("Home3");
+		Home home3 = new Home();
+		hibCtrl.addEntity(home3);
+
+		// Delete test
+		hibCtrl.deleteEntity(home2);
+
+		home3.setContent("Home3MODIFIED");
+		hibCtrl.updateEntity(home3);
 
 		Exercise exc = new Exercise();
 		exc.setTitle("Hello i should have overriden exervise 1");
 		String ecxId = hibCtrl.addEntity(exc);
 
 		Exercise returnedExcercise = (Exercise) hibCtrl.getEntity(ecxId, Exercise.class);
-		LOGGER.error("The title of excercise is: " + returnedExcercise.getTitle());
-		LOGGER.error("The is of excercise is: " + returnedExcercise.getId());
+		LOGGER.info("The title of excercise is: " + returnedExcercise.getTitle());
+		LOGGER.info("The id of excercise is: " + returnedExcercise.getId());
+		LOGGER.info("The creator of excercise is: " + returnedExcercise.getCreator().getUsername());
+		LOGGER.info("The ObjectClass Of exercise is: " + returnedExcercise.getObjectClass());
 
 		// get List of Entities from table
 		List<Home> homes = (List<Home>) (List<?>) hibCtrl.getEntityList(Home.class);// if(weFail){system.crashAndBurn();}
@@ -62,6 +80,7 @@ public class DenverApplication extends SpringBootServletInitializer {
 			Home home = (Home) iterator.next();
 			LOGGER.info("ID: " + home.getId());
 			LOGGER.info("Content: " + home.getContent());
+			LOGGER.info("Creator: " + home.getCreator().getUsername());
 			LOGGER.info("ObjectClass: " + home.getObjectClass());
 		}
 		LOGGER.info("--------------END OF HIBERNATE EXPERIMENTS------------------");

@@ -1,5 +1,7 @@
 package com.colorado.denver.test;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,8 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.controller.HibernateController;
+import com.colorado.denver.controller.RoleController;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
+import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.DenverConstants;
@@ -33,8 +37,8 @@ public class DenverDBSetupTest {
 	@Test
 	public void setupDatabase() {
 
-		createRole("ROLE_ADMIN");
-		createRole("ROLE_USER");
+		createRole(UserService.ROLE_GLOBAL_ADMINISTRATOR);
+		createRole(UserService.ROLE_USER);
 		createSystemUser();
 	}
 
@@ -65,14 +69,15 @@ public class DenverDBSetupTest {
 		// assignToSelf. Bypasses generic Creator assignment
 		LOGGER.info("Created System User");
 
-		Role systemRole = new Role();
-		systemRole.setRoleName("ROLE_ADMIN");
-		systemRole.setUser(systemUser);
-		LOGGER.info("Created Role:" + systemRole.getRoleName()); // systemUser.getRoles().add(systemRole);
-
 		// Hib save HibernateController hibCtrl =
 		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
-		LOGGER.info("Sucessful controler obtained");
+
+		Role systemRole = RoleController.getRoleByName(UserService.ROLE_GLOBAL_ADMINISTRATOR);
+		LOGGER.info("Got Role:" + systemRole.getRoleName());
+		ArrayList<Role> systemRoles = new ArrayList<Role>(0);
+
+		systemRoles.add(systemRole);
+		systemUser.setRoles(systemRoles);
 		hibCtrl.addEntity(systemUser);
 		LOGGER.info("Sucessful systemuser Save(Database)");
 

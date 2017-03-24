@@ -8,10 +8,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.security.core.GrantedAuthority;
+
 @Entity
 @Table(name = "role")
-public class Role extends BaseEntity {
-
+public class Role extends BaseEntity<Role> implements GrantedAuthority {
 	/**
 	 * 
 	 */
@@ -75,6 +76,11 @@ public class Role extends BaseEntity {
 	@Transient
 	public String setPrefix() {
 		return getPrefix();
+	}
+
+	@Override
+	public String getAuthority() {
+		return this.getRoleName();
 	}
 
 }

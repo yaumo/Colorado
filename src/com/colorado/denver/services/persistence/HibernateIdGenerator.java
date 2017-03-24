@@ -38,7 +38,6 @@ public class HibernateIdGenerator implements IdentifierGenerator {
 			statement.execute("DO\n$$\nBEGIN\nCREATE SEQUENCE public." + className
 					+ "_sequence minvalue 0 start with 0;\nEXCEPTION WHEN duplicate_table THEN\nEND\n$$ LANGUAGE plpgsql;");
 			resultSet = statement.executeQuery("SELECT  NEXTVAL('" + sequence + "')");
-			System.out.println(resultSet.toString());
 			if (resultSet.next()) {
 				int nextValue = resultSet.getInt(1);
 				String suffix = String.format("%05d", nextValue + 1);
