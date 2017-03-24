@@ -18,8 +18,7 @@ public class HibernateIdGenerator implements IdentifierGenerator {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HibernateIdGenerator.class);
 
 	@Override
-	public Serializable generate(SessionImplementor sessionImpl, Object obj)
-			throws HibernateException {
+	public Serializable generate(SessionImplementor sessionImpl, Object obj) throws HibernateException {
 		Serializable result = null;
 		Connection connection = null;
 		Statement statement = null;
@@ -36,11 +35,10 @@ public class HibernateIdGenerator implements IdentifierGenerator {
 			String sequence = prefix + DenverConstants.UNDERSCORE + "sequence";
 			connection = sessionImpl.connection();
 			statement = connection.createStatement();
-			statement.execute(
-					"DO\n$$\nBEGIN\nCREATE SEQUENCE public." + className
-							+ "_sequence minvalue 0 start with 0;\nEXCEPTION WHEN duplicate_table THEN\nEND\n$$ LANGUAGE plpgsql;");
+			statement.execute("DO\n$$\nBEGIN\nCREATE SEQUENCE public." + className
+					+ "_sequence minvalue 0 start with 0;\nEXCEPTION WHEN duplicate_table THEN\nEND\n$$ LANGUAGE plpgsql;");
 			resultSet = statement.executeQuery("SELECT  NEXTVAL('" + sequence + "')");
-
+			System.out.println(resultSet.toString());
 			if (resultSet.next()) {
 				int nextValue = resultSet.getInt(1);
 				String suffix = String.format("%05d", nextValue + 1);

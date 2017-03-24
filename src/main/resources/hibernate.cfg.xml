@@ -8,31 +8,22 @@
  		<!-- 104.40.217.248:5432 -->
         <!-- Connection settings -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.dialect">org.postgresql.Drive</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="hibernate.connection.url">jdbc:postgresql://104.40.217.248:5432/Denver</property>
         <property name="hibernate.connection.username">hibernateuser</property>
         <property name="hibernate.connection.password">breckenridge</property>
  <!--104.40.217.248:5432 -->
-        <!-- SQL dialect -->
-        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
- 		<property name="hibernate.current_session_context_class">thread</property>
+
         <!-- Print executed SQL to stdout -->
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
 		<property name="use_sql_comments">true</property>
- 
+
+ 		<property name="hibernate.current_session_context_class">thread</property>
         <!-- Update all database on startup -->
-        <property name="hibernate.hbm2ddl.auto">create</property>
+  
  
-        <!-- Annotated entity classes -->
-        <mapping class="com.colorado.denver.model.Home"/>
-        <mapping class="com.colorado.denver.model.Exercise"/>
-        <mapping class="com.colorado.denver.model.Lecture"/>
-        <mapping class="com.colorado.denver.model.Course"/>
-        <mapping class="com.colorado.denver.model.Solution"/>
-        <mapping class="com.colorado.denver.model.User"/>
-        <mapping class="com.colorado.denver.model.Role"/>
-        
+
         
     </session-factory>
 </hibernate-configuration>

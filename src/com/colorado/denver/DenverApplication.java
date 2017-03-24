@@ -38,9 +38,9 @@ public class DenverApplication extends SpringBootServletInitializer {
 		// //
 		// Hibernate Usage //
 		// //
-		// false = Don't use hibernate mode property --> fallback to UPDATE
+		// True = Use the update routine
 		// If you want to rebuild the DB with CREATE use DenverDBSetupTest.java
-		SessionTools.createSessionFactory(false);
+		SessionTools.createSessionFactory(true);
 
 		LOGGER.info("Starting with Hibernate experiments..");
 		HibernateController hibCtrl = new HibernateController();

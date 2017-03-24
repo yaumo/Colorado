@@ -1,5 +1,7 @@
 package com.colorado.denver.services.persistence;
 
+import java.util.Properties;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -7,14 +9,23 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.slf4j.LoggerFactory;
 
+import com.colorado.denver.model.Course;
+import com.colorado.denver.model.Exercise;
+import com.colorado.denver.model.Home;
+import com.colorado.denver.model.Lecture;
+import com.colorado.denver.model.Role;
+import com.colorado.denver.model.Solution;
+import com.colorado.denver.model.User;
+
 public class SessionTools {
 
 	public static SessionFactory sessionFactory;// SINGLETON!
 	private static ServiceRegistry serviceRegistry;
+	public static Session session;
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SessionTools.class);
 
-	public static void createSessionFactory(boolean useHibernateConfigUpdateRoutine) {
+	public static void createSessionFactory(boolean useUpdateRoutine) {
 		try {
 			// Create configuration instance
 			Configuration configuration = new Configuration();
@@ -23,16 +34,28 @@ public class SessionTools {
 			configuration.configure("hibernate.cfg.xml");
 
 			// Since version 4.x, service registry is being used
-			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-					.applySettings(configuration.getProperties()).build();
-
+			serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
 			LOGGER.info("Creating session factory instance!");
+			LOGGER.info("Hibernate mode: " + configuration.getProperty("hibernate.hbm2ddl.auto"));
+			Properties prop = new Properties();
+
+			if (useUpdateRoutine) {
+				prop.setProperty("hibernate.hbm2ddl.auto", "create");
+			} else {
+				prop.setProperty("hibernate.hbm2ddl.auto", "update");
+			}
+			prop.setProperty("hibernate.hbm2ddl.auto", "create");
 			// Create session factory instance
-			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+			sessionFactory = configuration.addPackage("com.colorado").addProperties(prop).addAnnotatedClass(Role.class)
+					.addAnnotatedClass(User.class).addAnnotatedClass(Home.class).addAnnotatedClass(Exercise.class)
+					.addAnnotatedClass(Lecture.class).addAnnotatedClass(Course.class).addAnnotatedClass(Solution.class)
+					.buildSessionFactory(serviceRegistry);
+
+			// TODO: Drop sequences!
+
 			LOGGER.info("Created session factory instance!");
 			// Get current session
-			Session session = sessionFactory.getCurrentSession();
-
+			session = sessionFactory.getCurrentSession();
 			// Begin transaction
 			session.getTransaction().begin();
 

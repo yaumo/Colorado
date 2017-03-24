@@ -1,7 +1,5 @@
 package com.colorado.denver.test;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,8 +18,6 @@ import com.colorado.denver.tools.DenverConstants;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DenverDBSetupTest {
-	private SessionFactory sessionFactory;
-	private Session session = null;
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverDBSetupTest.class);
 
@@ -44,8 +40,8 @@ public class DenverDBSetupTest {
 
 	@After
 	public void after() {
-		session.close();
-		sessionFactory.close();
+		SessionTools.sessionFactory.close();
+
 	}
 
 	private Role createRole(String name) {
@@ -55,7 +51,6 @@ public class DenverDBSetupTest {
 		Role role = new Role();
 		role.setRoleName(name);
 		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
-		hibCtrl.addEntity(role);
 		hibCtrl.addEntity(role);
 
 		return role;
