@@ -28,9 +28,9 @@ public class DenverDBSetupTest {
 	@Before
 	public void before() {
 		// Using hibernate config file!
-
+		boolean useUpdate = false;
 		LOGGER.info("Creating session factory..");
-		SessionTools.createSessionFactory(true);
+		SessionTools.createSessionFactory(useUpdate);
 		LOGGER.info("Done Creating session factory.");
 	}
 

@@ -52,8 +52,10 @@ public class UserService {
 		session.beginTransaction();
 		u = session.createCriteria(User.class).setComment("getUser '" + loginName + "'")
 				.add(Restrictions.eq(User.USERNAME, loginName).ignoreCase()).list();
+		for (User user : u) {
+			LOGGER.info("Sucessfully received user from database: " + user.getUsername());
+		}
 
-		LOGGER.info("Sucessfully received user from database: " + u.get(0).getUsername());
 		return u.get(0);
 	}
 

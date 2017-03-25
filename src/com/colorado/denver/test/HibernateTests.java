@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
+import com.colorado.denver.services.persistence.SessionTools;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -20,6 +21,8 @@ public class HibernateTests {
 
 	@Before
 	public void prepareTest() {
+		// Activate Hibernate:
+		SessionTools.createSessionFactory(true);// TRUE due to UPDATE!!!
 		exc = new Exercise();
 		exc.setTitle("HibTest");
 		exc.setDescription("HibernateTests");

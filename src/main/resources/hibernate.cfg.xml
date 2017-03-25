@@ -9,9 +9,13 @@
         <!-- Connection settings -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://104.40.217.248:5432/Denver</property>
-        <property name="hibernate.connection.username">hibernateuser</property>
-        <property name="hibernate.connection.password">breckenridge</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost/Denver</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">password</property>
+         <property name="hibernate.hbm2ddl.auto">create</property>
+       
+  <!--hibernateuser -->
+   <!--breckenridge -->       
  <!--104.40.217.248:5432 -->
 
         <!-- Print executed SQL to stdout -->
