@@ -30,7 +30,7 @@ public class ObjectOperationController {
 
 		// then call depending on CRUD:
 		// 1: create: classXY = new ClassXY(); ---> THEN fire UPDATE(params)
-		// 2: read: Call all getters on entity. Pack into JSON. Then response.
+		// 2: read: Call all getters on entity. Pack into JSON. Then response. MAYBE USE MAP?
 		// 3: update: call all setters on entity. Get override existing values with params.
 		// 4: delete: FUCK IT UP
 
@@ -43,10 +43,10 @@ public class ObjectOperationController {
 	public void handleExercise(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
 
-		Class<? extends BaseEntity> clazz = GenericTools.getClassForName(request.getParameter(BaseEntity.CLASS));
+		Class<? extends BaseEntity> clazz = GenericTools.getClassForName(request.getParameter(BaseEntity.OBJECT_CLASS));
 		Objects.requireNonNull(clazz, "Object class must be provided!");
-
 		LOGGER.debug("ObjectClass is: " + clazz.getSimpleName());
+
 		String id = request.getParameter(BaseEntity.ID);
 		int crud = Integer.parseInt(request.getParameter(DenverConstants.CRUD));
 		List<String> requestParamValues = extractAllRequestPostParameters(request);
@@ -54,6 +54,7 @@ public class ObjectOperationController {
 		for (int i = 0; i < requestParamValues.size(); i++) {
 			System.out.println("Value at " + i + " : " + requestParamValues.get(i));
 		}
+
 		// get user via session
 		// do security check
 		/*

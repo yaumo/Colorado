@@ -1,5 +1,8 @@
 package com.colorado.denver.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.ArrayList;
 
 import org.junit.After;
@@ -8,6 +11,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.controller.HibernateController;
@@ -37,15 +42,31 @@ public class DenverDBSetupTest {
 	@Test
 	public void setupDatabase() {
 
-		createRole(UserService.ROLE_GLOBAL_ADMINISTRATOR);
-		createRole(UserService.ROLE_USER);
-		createSystemUser();
+		Role roleAdmin = createRole(UserService.ROLE_GLOBAL_ADMINISTRATOR);
+		Role roleUser = createRole(UserService.ROLE_USER);
+		User systemUser = createSystemUser();
+		updateRoles(roleAdmin, roleUser, systemUser);
 	}
 
 	@After
 	public void after() {
 		SessionTools.sessionFactory.close();
 
+	}
+
+	private boolean updateRoles(Role roleAdmin, Role roleUser, User systemUser) {
+
+		try {
+			HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
+			roleAdmin.setCreator(systemUser);
+			roleUser.setCreator(systemUser);
+			hibCtrl.updateEntity(roleAdmin);
+			hibCtrl.updateEntity(roleUser);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	private Role createRole(String name) {
@@ -60,7 +81,7 @@ public class DenverDBSetupTest {
 		return role;
 	}
 
-	private static void createSystemUser() { // Creating system user
+	private static User createSystemUser() { // Creating system user
 
 		User systemUser = new User();
 		systemUser.setUsername(DenverConstants.SYSTEM);
@@ -80,6 +101,13 @@ public class DenverDBSetupTest {
 		systemUser.setRoles(systemRoles);
 		hibCtrl.addEntity(systemUser);
 		LOGGER.info("Sucessful systemuser Save(Database)");
+		User returnedU = UserService.authorizeSystemuser();
+
+		// Make sure authorization worked
+		assertNotNull("Authorizitation of system user faield!", returnedU);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		assertEquals(returnedU.getUsername(), UserService.getLoginNameFromAuthentication(auth));
+		return returnedU;
 
 	}
 

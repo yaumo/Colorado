@@ -1,7 +1,10 @@
 package com.colorado.denver.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+import org.hibernate.Session;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,12 +20,15 @@ import com.colorado.denver.services.persistence.SessionTools;
 @SpringBootTest
 public class HibernateTests {
 
+	public HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 	Exercise exc;
+	Session hibSession;
 
 	@Before
 	public void prepareTest() {
 		// Activate Hibernate:
 		SessionTools.createSessionFactory(true);// TRUE due to UPDATE!!!
+		hibSession = SessionTools.sessionFactory.getCurrentSession();
 		exc = new Exercise();
 		exc.setTitle("HibTest");
 		exc.setDescription("HibernateTests");
@@ -31,8 +37,7 @@ public class HibernateTests {
 	@Test
 	public void testAddEntity() {
 		// Create Exercise Entity
-		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
-		hibCtrl.addEntity(exc);
+		assertNotNull("Entity creation FAILED!(Hibernate)", hibCtrl.addEntity(exc));
 	}
 
 	@Test
@@ -41,7 +46,6 @@ public class HibernateTests {
 		testAddEntity();
 		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 
-		hibCtrl.deleteEntity(exc);
 	}
 
 	@Test
@@ -55,6 +59,12 @@ public class HibernateTests {
 		Exercise exc2 = (Exercise) hibCtrl.getEntity(id, Exercise.class);
 		assertEquals("UPDATE Test Failed. Description not updated through DB!", exc.getDescription(), exc2.getDescription());
 
+	}
+
+	@After
+	public void rollback() {
+		hibSession.getTransaction().rollback();
+		hibSession.close();
 	}
 
 }

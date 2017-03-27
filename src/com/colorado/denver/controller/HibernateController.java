@@ -24,7 +24,7 @@ public class HibernateController {
 		clazz.setCreationDate(new Date());
 
 		if (UserService.getCurrentUser() == null) {
-			LOGGER.info("Saved NULL CREATOR for entity: " + clazz.getObjectClass());
+			LOGGER.error("Saved NULL CREATOR for entity: " + clazz.getObjectClass());
 			clazz.setCreator(null);// TODO: NOT CLEAN!!!
 		} else {
 			LOGGER.info("Trying to get User from Authentication: " + UserService.getCurrentUser().getUsername());
@@ -39,10 +39,11 @@ public class HibernateController {
 		Transaction tx = null;
 		String entityID = null;
 		try {
-			setCreationInformation(entity);
 			tx = session.beginTransaction();
+			setCreationInformation(entity);
 			LOGGER.info("Saving entity: " + entity.getClass().getName());
 			entityID = (String) session.save(entity);
+
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)

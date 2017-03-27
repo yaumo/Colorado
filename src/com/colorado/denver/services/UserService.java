@@ -23,12 +23,15 @@ public class UserService {
 	public static final String ROLE_GLOBAL_ADMINISTRATOR = "ROLE_GLOBAL_ADMINISTRATOR";
 
 	public static User getCurrentUser() {
+		// Find out username and retrieve the user from DB
+		// We do NOT use the user object returned by the Token!!!!s
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth == null) {
-			LOGGER.error("NO Authentifacation found!");
+			LOGGER.error("NO Authentification found!");
 			return null;
 		} else {
-			String name = getNameFromAuthentication(auth);
+
+			String name = getLoginNameFromAuthentication(auth);
 			LOGGER.info("Getting User from DB: " + name);
 			return getUserByLoginName(name);
 		}
@@ -59,8 +62,9 @@ public class UserService {
 		return u.get(0);
 	}
 
-	private static String getNameFromAuthentication(Authentication auth) {
-		return auth.getPrincipal().toString();
+	public static String getLoginNameFromAuthentication(Authentication auth) {
+		User user = (User) auth.getPrincipal();
+		return user.getUsername();
 	}
 
 	public void save(User user) {
