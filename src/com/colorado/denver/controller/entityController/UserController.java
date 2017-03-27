@@ -1,4 +1,4 @@
-package com.colorado.denver.controller;
+package com.colorado.denver.controller.entityController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

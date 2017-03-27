@@ -1,5 +1,6 @@
-package com.colorado.denver.controller;
+package com.colorado.denver.controller.entityController;
 
+import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 

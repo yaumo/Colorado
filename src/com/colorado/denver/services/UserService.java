@@ -39,7 +39,11 @@ public class UserService {
 	}
 
 	public static User authorizeSystemuser() {
-		User user = getUserByLoginName(DenverConstants.SYSTEM);
+		return authorizeUserByLoginName(DenverConstants.SYSTEM);
+	}
+
+	public static User authorizeUserByLoginName(String name) {
+		User user = getUserByLoginName(name);
 		Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 		// Authorize
 		SecurityContextHolder.getContext().setAuthentication(auth);

@@ -16,7 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.controller.HibernateController;
-import com.colorado.denver.controller.RoleController;
+import com.colorado.denver.controller.entityController.RoleController;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;

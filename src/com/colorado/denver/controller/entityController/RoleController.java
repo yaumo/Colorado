@@ -1,4 +1,4 @@
-package com.colorado.denver.controller;
+package com.colorado.denver.controller.entityController;
 
 import java.util.List;
 

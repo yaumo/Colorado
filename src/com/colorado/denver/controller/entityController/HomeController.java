@@ -1,4 +1,4 @@
-package com.colorado.denver.controller;
+package com.colorado.denver.controller.entityController;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
