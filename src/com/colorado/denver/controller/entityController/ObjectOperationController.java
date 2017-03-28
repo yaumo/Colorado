@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -33,7 +32,6 @@ public class ObjectOperationController extends HttpServlet {
 	public void handleRequest(HttpServletRequest request,
 			HttpServletResponse response, Object callerObj) throws ReflectionException, IOException {
 		// This Method should be generic!!
-
 		// init
 		JSONParser parser = new JSONParser();
 		String objectClass = DenverConstants.ERROR_NO_OBJECT_FROM_REQUEST;
@@ -57,7 +55,8 @@ public class ObjectOperationController extends HttpServlet {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
-		} catch (JSONException e) {
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

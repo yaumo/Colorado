@@ -19,6 +19,11 @@ import com.colorado.denver.tools.DenverConstants;
 @RestController
 public class ExerciseController extends ObjectOperationController {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6133518159703299316L;
+
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Exercise.EXERCISE, method = RequestMethod.POST)
 	@ResponseBody
 	public void handleRequest(HttpServletRequest request,

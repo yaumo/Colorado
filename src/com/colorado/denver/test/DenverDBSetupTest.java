@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -101,8 +102,8 @@ public class DenverDBSetupTest {
 		systemUser.setRoles(systemRoles);
 		hibCtrl.addEntity(systemUser);
 		LOGGER.info("Sucessful systemuser Save(Database)");
-		User returnedU = UserService.authorizeSystemuser();
-
+		UsernamePasswordAuthenticationToken returnedToken = UserService.authorizeSystemuser();
+		User returnedU = UserService.getUserByLoginName(returnedToken.getPrincipal().toString());
 		// Make sure authorization worked
 		assertNotNull("Authorizitation of system user faield!", returnedU);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -56,7 +56,7 @@ public class HibernateController {
 	}
 
 	/* Method to UPDATE an entity */
-	public String updateEntity(BaseEntity entity) {
+	public String updateEntity(BaseEntity<?> entity) {
 		Session session = SessionTools.sessionFactory.openSession();
 		Transaction tx = null;
 		String entityID = null;
@@ -79,7 +79,7 @@ public class HibernateController {
 	}
 
 	/* Method to DELETE an entity from the records */
-	public void deleteEntity(BaseEntity entity) {
+	public void deleteEntity(BaseEntity<?> entity) {
 		Session session = SessionTools.sessionFactory.openSession();
 		Transaction tx = null;
 		try {

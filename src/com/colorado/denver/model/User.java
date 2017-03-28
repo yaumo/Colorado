@@ -27,9 +27,7 @@ public class User extends BaseEntity {
 
 	private String username;
 	private String password;
-	private String salt;
 	protected boolean enabled;
-	private String passwordConfirm;
 
 	// @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	public Collection<Role> roles;
@@ -53,14 +51,6 @@ public class User extends BaseEntity {
 		this.password = password;
 	}
 
-	public String getSalt() {
-		return salt;
-	}
-
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
-
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -76,15 +66,6 @@ public class User extends BaseEntity {
 
 	public void setRoles(Collection<Role> roles) {
 		this.roles = roles;
-	}
-
-	@Transient
-	public String getPasswordConfirm() {
-		return passwordConfirm;
-	}
-
-	public void setPasswordConfirm(String passwordConfirm) {
-		this.passwordConfirm = passwordConfirm;
 	}
 
 	// public Collection<GrantedAuthority> getAuthorities() {

@@ -1,22 +1,32 @@
 package com.colorado.denver.services;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.DenverConstants;
 
 @Service
-public class UserService {
+public class UserService implements AuthenticationProvider {
+
+	BCryptPasswordEncoder passWordEncoder = new BCryptPasswordEncoder();
+
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 	public static final String ROLE_USER = "ROLE_USER";
 	public static final String ROLE_GLOBAL_ADMINISTRATOR = "ROLE_GLOBAL_ADMINISTRATOR";
@@ -37,19 +47,14 @@ public class UserService {
 
 	}
 
-	public static User authorizeSystemuser() {
-		return authorizeUserByLoginName(DenverConstants.SYSTEM);
+	public static UsernamePasswordAuthenticationToken authorizeSystemuser() {
+
+		Collection<Role> roles = null;
+		return authorizeUserByLoginName(DenverConstants.SYSTEM, "password", roles);
 	}
 
-	public static User authorizeUserByLoginName(String name) {
-		User user = getUserByLoginName(name);
-		LOGGER.error("AUTHORIZATION DISABLED! DUE TO BUG IN USER AUTHORITIES. USE SPRING SEC");
-
-		// Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-		// Authorize
-		// SecurityContextHolder.getContext().setAuthentication(auth);
-
-		return user;
+	public static UsernamePasswordAuthenticationToken authorizeUserByLoginName(String username, String password, Collection<Role> roles) {
+		return new UsernamePasswordAuthenticationToken(username, password, roles);
 	}
 
 	public static User getUserByLoginName(String loginName) {
@@ -72,15 +77,36 @@ public class UserService {
 		return user.getUsername();
 	}
 
+	@Override
+	public Authentication authenticate(Authentication auth) throws AuthenticationException {
+		User user = getUserByLoginName(auth.getName());
+		if (user != null) {
+			String encryptedPassword = passWordEncoder.encode(auth.getCredentials().toString());
+			if (passWordEncoder.matches(user.getPassword(), encryptedPassword)) {
+				return authorizeUserByLoginName(auth.getName(), user.getPassword(), user.getRoles());
+			} else {
+				throw new BadCredentialsException("invalid password!");
+			}
+		} else {
+			throw new UsernameNotFoundException("unknown username");
+		}
+	}
+
 	public void save(User user) {
 		LOGGER.info("Security Save for user: " + user.getUsername() + " and password: " + user.getPassword());
-		BCryptPasswordEncoder passWordEncoder = new BCryptPasswordEncoder();
 		user.setPassword(passWordEncoder.encode(user.getPassword()));
 		user.setRoles(new HashSet<>());// TODO: Not
 										// clean!
 
 		// Hibernate save for user!
 		LOGGER.info("Security Save for user: " + user.getUsername() + "sucessful! newPassword: " + user.getPassword());
+
+	}
+
+	@Override
+	public boolean supports(Class<?> arg0) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

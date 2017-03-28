@@ -15,8 +15,6 @@
 	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
 		lazy-init="default" primary="false" scope="singleton">
 	</bean>
-
-
 	
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
