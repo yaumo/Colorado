@@ -107,6 +107,7 @@ public class DenverDBSetupTest {
 		// Make sure authorization worked
 		assertNotNull("Authorizitation of system user faield!", returnedU);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		assertNotNull("Authentication is Null!", auth);
 		assertEquals(returnedU.getUsername(), UserService.getLoginNameFromAuthentication(auth));
 		return returnedU;
 

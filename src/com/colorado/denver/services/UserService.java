@@ -1,5 +1,8 @@
 package com.colorado.denver.services;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -12,11 +15,14 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.colorado.denver.controller.entityController.RoleController;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.persistence.SessionTools;
@@ -48,13 +54,25 @@ public class UserService implements AuthenticationProvider {
 	}
 
 	public static UsernamePasswordAuthenticationToken authorizeSystemuser() {
-
-		Collection<Role> roles = null;
+		Role role = RoleController.getRoleByName(ROLE_GLOBAL_ADMINISTRATOR);
+		assertNotNull("Returned role for System user is null! DB creation running correct?", role);
+		List<Role> roles = new ArrayList<>();
+		roles.add(role);
 		return authorizeUserByLoginName(DenverConstants.SYSTEM, "password", roles);
 	}
 
 	public static UsernamePasswordAuthenticationToken authorizeUserByLoginName(String username, String password, Collection<Role> roles) {
-		return new UsernamePasswordAuthenticationToken(username, password, roles);
+
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, roles);
+		SecurityContext secContext = createNewSecurityContext(authToken);
+		SecurityContextHolder.setContext(secContext);
+		return authToken;
+	}
+
+	public static SecurityContext createNewSecurityContext(UsernamePasswordAuthenticationToken auth) {
+		SecurityContext context = new SecurityContextImpl();
+		context.setAuthentication(auth);
+		return context;
 	}
 
 	public static User getUserByLoginName(String loginName) {
@@ -73,8 +91,7 @@ public class UserService implements AuthenticationProvider {
 	}
 
 	public static String getLoginNameFromAuthentication(Authentication auth) {
-		User user = (User) auth.getPrincipal();
-		return user.getUsername();
+		return auth.getPrincipal().toString();
 	}
 
 	@Override
