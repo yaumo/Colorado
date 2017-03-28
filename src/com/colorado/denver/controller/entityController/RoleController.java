@@ -1,5 +1,7 @@
 package com.colorado.denver.controller.entityController;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.List;
 
 import org.hibernate.Session;
@@ -14,9 +16,10 @@ public class RoleController extends ObjectOperationController {
 
 	public static Role getRoleByName(String roleName) {
 		Session session = SessionTools.sessionFactory.getCurrentSession();
-		session.beginTransaction();// WTF??
+		session.beginTransaction();
 		List<Role> role = session.createCriteria(Role.class).setComment("getRole '" + roleName + "'")
 				.add(Restrictions.eq(Role.ROLE_NAME, roleName).ignoreCase()).list();
+		assertNotNull(role);
 		return role.get(0);
 	}
 }

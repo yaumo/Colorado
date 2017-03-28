@@ -12,7 +12,6 @@
         <property name="hibernate.connection.url">jdbc:postgresql://localhost/Denver</property>
         <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.connection.password">password</property>
-        <property name="hibernate.hbm2ddl.auto">create</property>
     
   <!--hibernateuser -->
    <!--breckenridge -->       

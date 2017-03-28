@@ -33,19 +33,19 @@ public class SessionTools {
 			// Pass hibernate configuration file
 			configuration.configure("hibernate.cfg.xml");
 
+			Properties prop = new Properties();
+			if (useUpdateRoutine) {
+				prop.setProperty("hibernate.hbm2ddl.auto", "update");
+			} else {
+				prop.setProperty("hibernate.hbm2ddl.auto", "create");
+			}
+			configuration.addProperties(prop);
+			LOGGER.info("Try using UpdateRoutine: " + useUpdateRoutine);
+			LOGGER.info("Hibernate mode: " + configuration.getProperty("hibernate.hbm2ddl.auto"));
 			// Since version 4.x, service registry is being used
 			serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
 			LOGGER.info("Creating session factory instance!");
 
-			Properties prop = new Properties();
-
-			if (useUpdateRoutine) {
-				prop.setProperty("hibernate.hbm2ddl.auto", "create");
-				LOGGER.info("Hibernate mode: " + configuration.getProperty("hibernate.hbm2ddl.auto"));
-			} else {
-				prop.setProperty("hibernate.hbm2ddl.auto", "update");
-				LOGGER.info("Hibernate mode: " + configuration.getProperty("hibernate.hbm2ddl.auto"));
-			}
 			// Create session factory instance
 			sessionFactory = configuration.addPackage("com.colorado").addProperties(prop).addAnnotatedClass(Role.class)
 					.addAnnotatedClass(User.class).addAnnotatedClass(Home.class).addAnnotatedClass(Exercise.class)
