@@ -14,6 +14,10 @@ public class Solution extends BaseEntity {
 	// Klasse für die Lösung von Aufgaben, Refernz zu der Aufgabe und dem User
 	public static final String SOLUTION = "solution";
 
+	public Solution(){
+		
+	}
+	
 	@Override
 	@Transient
 	public String getPrefix() {

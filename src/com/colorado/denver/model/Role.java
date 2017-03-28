@@ -25,6 +25,10 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
 	// private String id;
 	private String roleName;
 
+	public Role(){
+		
+	}
+	
 	// @ManyToOne(cascade = CascadeType.ALL)
 	// @JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> users;
@@ -74,6 +78,7 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
 	}
 
 	@Override
+	@Transient
 	public String getAuthority() {
 		return this.getRoleName();
 	}

@@ -14,13 +14,17 @@ public class Course extends BaseEntity {
 	// Kurs
 	public static final String COURSE = "course";
 
+	public Course(){
+		
+	}
+	
 	@Override
+	@Transient
 	public String getPrefix() {
 		return COURSE;
 	}
 
-	@Override
-	@Transient
+	@Override	
 	public String setPrefix() {
 		return getPrefix();
 	}

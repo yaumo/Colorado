@@ -13,6 +13,10 @@ public class Lecture extends BaseEntity {
 	private static final long serialVersionUID = -3837760136840854153L;
 	public static final String LECTURE = "lecture";
 
+	public Lecture(){
+		
+	}
+	
 	@Override
 	@Transient
 	public String getPrefix() {

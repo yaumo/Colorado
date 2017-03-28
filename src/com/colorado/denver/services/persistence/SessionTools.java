@@ -95,6 +95,7 @@ public class SessionTools {
 
 		Throwable ex) {
 			LOGGER.error("Failed to create sessionFactory" + ex);
+			ex.printStackTrace();
 			throw new ExceptionInInitializerError(ex);
 		}
 

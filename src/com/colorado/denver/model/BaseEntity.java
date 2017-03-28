@@ -32,6 +32,10 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	public String objectClass;
 	private String id;
 
+	public BaseEntity(){
+		
+	}
+	
 	@Id
 	@GenericGenerator(name = "custom_id", strategy = "com.colorado.denver.services.persistence.HibernateIdGenerator")
 	@GeneratedValue(generator = "custom_id")
