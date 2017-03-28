@@ -1,18 +1,12 @@
 package com.colorado.denver.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.springframework.security.core.GrantedAuthority;
-
-import com.colorado.denver.services.UserService;
 
 @Entity
 @Table(name = "UserDenver")
@@ -37,7 +31,7 @@ public class User extends BaseEntity {
 	protected boolean enabled;
 	private String passwordConfirm;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	// @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	public Collection<Role> roles;
 
 	public User() {
@@ -75,6 +69,7 @@ public class User extends BaseEntity {
 		this.enabled = enabled;
 	}
 
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "users")
 	public Collection<Role> getRoles() {
 		return roles;
 	}
@@ -92,19 +87,19 @@ public class User extends BaseEntity {
 		this.passwordConfirm = passwordConfirm;
 	}
 
-	public Collection<GrantedAuthority> getAuthorities() {
-		// make everyone ROLE_GLOBAL_ADMINISTRATOR
-		Collection<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-		GrantedAuthority grantedAuthority = new GrantedAuthority() {
-			// anonymous inner type
-			@Override
-			public String getAuthority() {
-				return UserService.ROLE_GLOBAL_ADMINISTRATOR;
-			}
-		};
-		grantedAuthorities.add(grantedAuthority);
-		return grantedAuthorities;
-	}
+	// public Collection<GrantedAuthority> getAuthorities() {
+	// // make everyone ROLE_GLOBAL_ADMINISTRATOR
+	// Collection<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+	// GrantedAuthority grantedAuthority = new GrantedAuthority() {
+	// // anonymous inner type
+	// @Override
+	// public String getAuthority() {
+	// return UserService.ROLE_GLOBAL_ADMINISTRATOR;
+	// }
+	// };
+	// grantedAuthorities.add(grantedAuthority);
+	// return grantedAuthorities;
+	// }
 
 	// public Collection<GrantedAuthority> getAllAuthorities(BaseEntity<?>
 	// scope) {

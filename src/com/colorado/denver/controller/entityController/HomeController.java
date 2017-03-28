@@ -2,11 +2,13 @@ package com.colorado.denver.controller.entityController;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.model.Home;
 import com.colorado.denver.tools.DenverConstants;
 
-public class HomeController {
+@RestController
+public class HomeController extends ObjectOperationController {
 
 	private static final String template = "Hello, %s!";
 	// private final AtomicLong counter = new AtomicLong();

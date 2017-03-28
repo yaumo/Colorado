@@ -1,10 +1,11 @@
 package com.colorado.denver.model;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -24,9 +25,20 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
 	// private String id;
 	private String roleName;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-	private User user;
+	// @ManyToOne(cascade = CascadeType.ALL)
+	// @JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private Set<User> users;
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	// @ManyToOne(cascade = CascadeType.ALL)
+	// @JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	public Set<User> getUsers() {
+		return this.users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
+	}
 
 	// @Override
 	// @Id
@@ -48,28 +60,11 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
 		this.roleName = roleName;
 	}
 
-	// @ManyToMany
-	// public Set<User> getUsers() {
-	// return users;
-	// }
-	//
-	// public void setUsers(Set<User> users) {
-	// this.users = users;
-	// }
-
 	@Override
 	@Transient
 	public String getPrefix() {
 
 		return ROLE;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	@Override

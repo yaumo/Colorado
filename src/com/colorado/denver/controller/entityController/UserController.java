@@ -1,19 +1,19 @@
 package com.colorado.denver.controller.entityController;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
 
-@Controller
-public class UserController {
+@RestController
+public class UserController extends ObjectOperationController {
 	@Autowired
 	private UserService userService;
 

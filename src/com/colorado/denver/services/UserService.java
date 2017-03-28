@@ -6,7 +6,6 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,9 +43,11 @@ public class UserService {
 
 	public static User authorizeUserByLoginName(String name) {
 		User user = getUserByLoginName(name);
-		Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+		LOGGER.error("AUTHORIZATION DISABLED! DUE TO BUG IN USER AUTHORITIES. USE SPRING SEC");
+
+		// Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 		// Authorize
-		SecurityContextHolder.getContext().setAuthentication(auth);
+		// SecurityContextHolder.getContext().setAuthentication(auth);
 
 		return user;
 	}
