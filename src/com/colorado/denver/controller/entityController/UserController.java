@@ -1,11 +1,13 @@
 package com.colorado.denver.controller.entityController;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import javax.management.ReflectionException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -41,33 +43,34 @@ public class UserController extends ObjectOperationController {
 			HttpServletResponse response) throws ReflectionException, IOException {
 		JSONObject theObject = super.handleRequest(request, response, this);
 
+		String jsonReq = DenverConstants.ERROR;
 		int crud = 0;
-		String id = "ERROR";
+		String id = DenverConstants.ERROR;
 
 		try {
 			crud = theObject.getInt(BaseEntity.ID);
 			id = theObject.getString(BaseEntity.ID);
+			jsonReq = theObject.getString(DenverConstants.JSON);
+			theObject.remove(DenverConstants.JSON);
 		} catch (Exception e) {
 			LOGGER.error("Error extraxting the JSON: " + theObject.toString());
 			e.printStackTrace();
 		}
 
 		// Prepare for CRUD and response
-
+		User targetObject = new Gson().fromJson(jsonReq, User.class);
 		Gson gson = new Gson();
-		String json = null;
-
+		String respJson = "";
 		switch (crud) {
 		case 1:
 			// Create then get from DB for id then update with content
-			json = gson.toJson(update(read(create()), theObject));
+			respJson = gson.toJson(update(read(create()), targetObject));
 			break;
 		case 2:
-			json = gson.toJson(read(id));
+			respJson = gson.toJson(read(id));
 			break;
 		case 3:
-
-			json = gson.toJson(update(read(id), theObject));
+			respJson = gson.toJson(update(read(id), targetObject));
 			break;
 		case 4:
 			delete(id);
@@ -94,9 +97,9 @@ public class UserController extends ObjectOperationController {
 		return (User) hibCtrl.getEntity(id, User.class);
 	}
 
-	private User update(User usr, JSONObject theObject) {
+	private User update(User oldObject, User newObject) {
 
-		return usr;
+		return null;
 	}
 
 	private boolean delete(String id) {
@@ -111,28 +114,21 @@ public class UserController extends ObjectOperationController {
 		return jsonRoles;
 	}
 
-	private JSONObject updateTwoJson(JSONObject newObj, JSONObject oldObj) {
-		String key = "key1"; // whatever
+	private JSONObject updateTwoJson(JSONObject object1, JSONObject object2) throws JSONException {
+		JSONObject mergedObj = new JSONObject();
 
-		newObj.keys();
-		String val_newer;
-		try {
-			val_newer = newObj.getString(key);
-
-			String val_older = oldObj.getString(key);
-
-			// Compare values
-			if (!val_newer.equals(val_older)) {
-				// Update value in object
-				newObj.put(key, val_newer);
-			}
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Iterator i1 = object1.keys();
+		Iterator i2 = object2.keys();
+		String tmp_key;
+		while (i1.hasNext()) {
+			tmp_key = (String) i1.next();
+			mergedObj.put(tmp_key, object1.get(tmp_key));
 		}
-		return newObj;
-
+		while (i2.hasNext()) {
+			tmp_key = (String) i2.next();
+			mergedObj.put(tmp_key, object2.get(tmp_key));
+		}
+		return mergedObj;
 	}
 
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)

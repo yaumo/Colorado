@@ -40,12 +40,11 @@ public class ObjectOperationController extends HttpServlet {
 		JSONObject jsonObject = null;
 
 		try {
-			String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-			Object obj = parser.parse(test);
+			String jsonStr = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+			Object obj = parser.parse(jsonStr);
 
 			jsonObject = (JSONObject) obj;
-
-			;
+			jsonObject.put(DenverConstants.JSON, jsonStr);// we need this back
 
 			objectClass = jsonObject.getString(BaseEntity.OBJECT_CLASS);
 			crud = jsonObject.getInt(DenverConstants.CRUD);// Crud is not persisted. Therefore constant

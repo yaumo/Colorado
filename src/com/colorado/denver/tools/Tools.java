@@ -6,6 +6,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 public class Tools {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Tools.class);
@@ -26,5 +30,12 @@ public class Tools {
 		LOGGER.debug("=======PRINTING JSON========");
 		System.out.println(json);
 		LOGGER.debug("=======END OF JSON========");
+	}
+
+	public static JsonObject generateJsonObject(Object o) {
+		Gson gson = new Gson();
+		JsonElement element = gson.toJsonTree(o);
+		JsonObject object = element.getAsJsonObject();
+		return object;
 	}
 }
