@@ -5,40 +5,52 @@ import Divider from 'material-ui/Divider';
 import { Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn }
     from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 const tableData = [
     {
         name: 'John Smith',
-        status: 'Employed',
+        status: 'Done',
     },
     {
         name: 'Randal White',
-        status: 'Unemployed',
+        status: 'In Progress',
     },
     {
         name: 'Stephanie Sanders',
-        status: 'Employed',
+        status: 'In Progress',
     },
     {
         name: 'Steve Brown',
-        status: 'Employed',
+        status: 'In Progress',
     },
     {
         name: 'Joyce Whitten',
-        status: 'Employed',
+        status: 'In Progress',
     },
     {
         name: 'Samuel Roberts',
-        status: 'Employed',
+        status: 'Done',
     },
     {
         name: 'Adam Moore',
-        status: 'Employed',
+        status: 'Done',
     },
 ];
 
 class OverviewTab extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            open: true,
+            value: 1
+        };
+    }
+
+
     render() {
         return (
             <div>
@@ -48,31 +60,50 @@ class OverviewTab extends React.Component {
                         />
                     <Divider />
                     <CardText>
-                    <Paper zDepth={4}>
-                        <Table
-                            >
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHeaderColumn colSpan="3" style={{ textAlign: 'center' }}>
-                                        Super Header
-                                    </TableHeaderColumn>
-                                </TableRow>
-                                <TableRow>
-                                    <TableHeaderColumn>ID</TableHeaderColumn>
-                                    <TableHeaderColumn>Name</TableHeaderColumn>
-                                    <TableHeaderColumn>Status</TableHeaderColumn>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {tableData.map((row, index) => (
-                                    <TableRow key={index} selected={row.selected}>
-                                        <TableRowColumn>{index}</TableRowColumn>
-                                        <TableRowColumn>{row.name}</TableRowColumn>
-                                        <TableRowColumn>{row.status}</TableRowColumn>
+                        <Paper zDepth={4}>
+                            <Table selectable = {false}
+                                >
+                                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                                    <TableRow>
+                                        <TableHeaderColumn colSpan="4" style={{ textAlign: 'center' }}>
+                                            <DropDownMenu value={this.state.value} onChange={this.handleChange}>
+                                                <MenuItem value={1} primaryText="WWI14SEA" />
+                                                <MenuItem value={2} primaryText="WWI14AMA" />
+                                                <MenuItem value={3} primaryText="WWI16SEB" />
+                                            </DropDownMenu>
+                                            <DropDownMenu value={this.state.value} onChange={this.handleChange}>
+                                                <MenuItem value={1} primaryText="All Lectures" />
+                                                <MenuItem value={2} primaryText="Datenbanken" />
+                                                <MenuItem value={3} primaryText="Programmieren 1" />
+                                                <MenuItem value={4} primaryText="Webprogrammierung" />
+                                            </DropDownMenu>
+                                            <DropDownMenu value={this.state.value} onChange={this.handleChange}>
+                                                <MenuItem value={1} primaryText="All Exercises" />
+                                                <MenuItem value={2} primaryText="Sum" />
+                                                <MenuItem value={3} primaryText="Sub" />
+                                                <MenuItem value={3} primaryText="Fibonacci" />
+                                            </DropDownMenu>
+                                            <RaisedButton label="Apply" />
+                                        </TableHeaderColumn>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                    <TableRow>
+                                        <TableHeaderColumn>Course</TableHeaderColumn>
+                                        <TableHeaderColumn>Name</TableHeaderColumn>
+                                        <TableHeaderColumn>Status</TableHeaderColumn>
+                                        <TableHeaderColumn>View Code</TableHeaderColumn>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody displayRowCheckbox={false}>
+                                    {tableData.map((row, index) => (
+                                        <TableRow key={index} selected={row.selected}>
+                                            <TableRowColumn>{"WWI14SEA"}</TableRowColumn>
+                                            <TableRowColumn>{row.name}</TableRowColumn>
+                                            <TableRowColumn>{row.status}</TableRowColumn>
+                                            <TableRowColumn><RaisedButton label="?" /></TableRowColumn>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
                         </Paper>
                     </CardText>
                 </Card>

@@ -8,6 +8,7 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 function handleChange(event, index, value) {
@@ -32,50 +33,61 @@ class AssignExercisesTab extends React.Component {
                         />
                     <Divider />
                     <CardText>
-                    <Paper zDepth={4}>
+                    <h4>Step 1: Select Exercise(s)</h4>
+                    <Paper zDepth={2}>
                         <div>
-                        
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHeaderColumn>ID</TableHeaderColumn>
-                                        <TableHeaderColumn>Name</TableHeaderColumn>
-                                        <TableHeaderColumn>Status</TableHeaderColumn>
+                                        <TableHeaderColumn>Title</TableHeaderColumn>
+                                        <TableHeaderColumn>Language</TableHeaderColumn>
+                                        <TableHeaderColumn>Creation Date</TableHeaderColumn>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     <TableRow>
-                                        <TableRowColumn>1</TableRowColumn>
-                                        <TableRowColumn>John Smith</TableRowColumn>
-                                        <TableRowColumn>Employed</TableRowColumn>
+                                        <TableRowColumn>Fibonacci</TableRowColumn>
+                                        <TableRowColumn>Java</TableRowColumn>
+                                        <TableRowColumn>24.11.2011</TableRowColumn>
                                     </TableRow>
                                     <TableRow>
-                                        <TableRowColumn>2</TableRowColumn>
-                                        <TableRowColumn>Randal White</TableRowColumn>
-                                        <TableRowColumn>Unemployed</TableRowColumn>
+                                        <TableRowColumn>Division</TableRowColumn>
+                                        <TableRowColumn>JavaScript</TableRowColumn>
+                                        <TableRowColumn>24.11.2011</TableRowColumn>
                                     </TableRow>
                                     <TableRow>
-                                        <TableRowColumn>3</TableRowColumn>
-                                        <TableRowColumn>Stephanie Sanders</TableRowColumn>
-                                        <TableRowColumn>Employed</TableRowColumn>
+                                        <TableRowColumn>Sum</TableRowColumn>
+                                        <TableRowColumn>JavaScript</TableRowColumn>
+                                        <TableRowColumn>24.11.2011</TableRowColumn>
                                     </TableRow>
                                     <TableRow>
-                                        <TableRowColumn>4</TableRowColumn>
-                                        <TableRowColumn>Steve Brown</TableRowColumn>
-                                        <TableRowColumn>Employed</TableRowColumn>
+                                        <TableRowColumn>Sub</TableRowColumn>
+                                        <TableRowColumn>Java</TableRowColumn>
+                                        <TableRowColumn>24.11.2011</TableRowColumn>
                                     </TableRow>
                                 </TableBody>
                             </Table>
-                            
                         </div>
                         </Paper>
+
+                        <br/>
+                        <h4>Step 2: Select Lecture</h4>
+                        <Paper zDepth={2} style={{textAlign:"center"}}>
                         <DropDownMenu value={this.state.value} onChange={this.handleChange}>
                             <MenuItem value={1} primaryText="Webprogrammierung" />
                             <MenuItem value={2} primaryText="Datenbanken" />
                             <MenuItem value={3} primaryText="Programmieren 1" />
                         </DropDownMenu>
+                        </Paper>
+
+                        <br/>
+                        <h4>Step 3: Select Deadline</h4>
+                        <Paper zDepth={2} style={{textAlign:"center"}}>
                         <DatePicker floatingLabelText="Deadline" container="inline" mode="landscape" />
+                        </Paper>
+
                         <br />
+                        <RaisedButton label="Assign" />
                     </CardText>
                 </Card>
             </div>
