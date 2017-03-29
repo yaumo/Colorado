@@ -11,6 +11,8 @@ import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name = "role")
 public class Role extends BaseEntity<Role> implements GrantedAuthority {
@@ -25,13 +27,14 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
 	// private String id;
 	private String roleName;
 
-	public Role(){
-		
+	public Role() {
+
 	}
-	
+
 	// @ManyToOne(cascade = CascadeType.ALL)
 	// @JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-	private Set<User> users;
+	@Expose(serialize = false)
+	private transient Set<User> users;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// @ManyToOne(cascade = CascadeType.ALL)

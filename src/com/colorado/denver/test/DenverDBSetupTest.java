@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -95,15 +97,22 @@ public class DenverDBSetupTest {
 		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 
 		Role systemRole = RoleController.getRoleByName(UserService.ROLE_GLOBAL_ADMINISTRATOR);
+
 		LOGGER.info("Got Role:" + systemRole.getRoleName());
 		ArrayList<Role> systemRoles = new ArrayList<Role>(0);
+		Set<User> systemUsers = new HashSet<User>();
+		systemUsers.add(systemUser);
+		systemRole.setUsers(systemUsers);
 
 		systemRoles.add(systemRole);
 		systemUser.setRoles(systemRoles);
+
 		hibCtrl.addEntity(systemUser);
+		hibCtrl.updateEntity(systemRole);
 		LOGGER.info("Sucessful systemuser Save(Database)");
 		UsernamePasswordAuthenticationToken returnedToken = UserService.authorizeSystemuser();
 		User returnedU = UserService.getUserByLoginName(returnedToken.getPrincipal().toString());
+
 		// Make sure authorization worked
 		assertNotNull("Authorizitation of system user faield!", returnedU);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -25,17 +25,17 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	public static final String CREATION_DATE = "creationDate";
 
 	public User creator; // TODO: use User Object provided by Security!
-	public Date creationDate;
-	public boolean hasBeenModified;
+	public transient Date creationDate;
+	public transient boolean hasBeenModified;
 
 	// Important for identifying the used object. This property is set during Hibernate create
 	public String objectClass;
 	private String id;
 
-	public BaseEntity(){
-		
+	public BaseEntity() {
+
 	}
-	
+
 	@Id
 	@GenericGenerator(name = "custom_id", strategy = "com.colorado.denver.services.persistence.HibernateIdGenerator")
 	@GeneratedValue(generator = "custom_id")

@@ -29,7 +29,7 @@ public class ObjectOperationController extends HttpServlet {
 	private static final long serialVersionUID = -6726973624223302932L;
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ObjectOperationController.class);
 
-	public void handleRequest(HttpServletRequest request,
+	public JSONObject handleRequest(HttpServletRequest request,
 			HttpServletResponse response, Object callerObj) throws ReflectionException, IOException {
 		// This Method should be generic!!
 		// init
@@ -37,12 +37,16 @@ public class ObjectOperationController extends HttpServlet {
 		String objectClass = DenverConstants.ERROR_NO_OBJECT_FROM_REQUEST;
 		String id = DenverConstants.ERROR_NO_ID_FROM_REQUEST;
 		int crud = 0;// 0 is bad
+		JSONObject jsonObject = null;
+
 		try {
 			String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 			Object obj = parser.parse(test);
 
-			JSONObject jsonObject = (JSONObject) obj;
-			System.out.println(jsonObject);
+			jsonObject = (JSONObject) obj;
+
+			;
+
 			objectClass = jsonObject.getString(BaseEntity.OBJECT_CLASS);
 			crud = jsonObject.getInt(DenverConstants.CRUD);// Crud is not persisted. Therefore constant
 			if (crud == 1) {
@@ -67,6 +71,7 @@ public class ObjectOperationController extends HttpServlet {
 				|| objectClass.equals(null)
 				|| id.equals(null)) {
 			LOGGER.error("Something is wrong with the Request in OOC Validation! Exiting...");
+			jsonObject = null;// Invalidate the request for further handling
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
 
@@ -82,25 +87,7 @@ public class ObjectOperationController extends HttpServlet {
 		 * -Is the user allowed to use the CRUD operation in the request with the given Entity?
 		 */
 
-		// Controller experiments. Non productive code:...
-
-		switch (crud) {
-		case 1:
-
-			break;
-		case 2:
-
-			break;
-		case 3:
-
-			break;
-		case 4:
-
-			break;
-
-		default:
-			break;
-		}
+		return jsonObject;
 
 	}
 
@@ -110,7 +97,7 @@ public class ObjectOperationController extends HttpServlet {
 
 		// then call depending on CRUD:
 		// 1: create: classXY = new ClassXY(); ---> THEN fire UPDATE(params)
-		// 2: read: Call all getters on entity. Pack into JSON. Then response. MAYBE USE MAP?
+		// 2: read: Call all getters on entity. Pack into JSON. Then response. DONT'T USE MAP
 		// 3: update: call all setters on entity. Get override existing values with params.
 		// 4: delete: FUCK IT UP
 

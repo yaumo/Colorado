@@ -26,11 +26,13 @@ public class User extends BaseEntity {
 	public static final String ROLES = "roles";
 
 	private String username;
-	private String password;
-	protected boolean enabled;
+
+	private transient String password;
+
+	protected transient boolean enabled;
 
 	// @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	public Collection<Role> roles;
+	public transient Collection<Role> roles;
 
 	public User() {
 	}
@@ -59,7 +61,7 @@ public class User extends BaseEntity {
 		this.enabled = enabled;
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "users")
+	@ManyToMany(fetch = FetchType.LAZY)
 	public Collection<Role> getRoles() {
 		return roles;
 	}

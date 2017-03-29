@@ -1,7 +1,5 @@
 package com.colorado.denver.services;
 
-import static org.junit.Assert.assertNotNull;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -55,7 +53,6 @@ public class UserService implements AuthenticationProvider {
 
 	public static UsernamePasswordAuthenticationToken authorizeSystemuser() {
 		Role role = RoleController.getRoleByName(ROLE_GLOBAL_ADMINISTRATOR);
-		assertNotNull("Returned role for System user is null! DB creation running correct?", role);
 		List<Role> roles = new ArrayList<>();
 		roles.add(role);
 		return authorizeUserByLoginName(DenverConstants.SYSTEM, "password", roles);

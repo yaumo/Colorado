@@ -1,6 +1,8 @@
 package com.colorado.denver;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,8 +19,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Home;
+import com.colorado.denver.model.Role;
+import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.tools.Tools;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /*
  * Keep this class clean! only main method and temporary experiments!
@@ -84,11 +91,36 @@ public class DenverApplication extends SpringBootServletInitializer {
 			LOGGER.info("ObjectClass: " + home.getObjectClass());
 		}
 		LOGGER.info("--------------END OF HIBERNATE EXPERIMENTS------------------");
+
+		LOGGER.info("--------------BEGINNING JSON STUFF------------------");
+		User u = UserService.getCurrentUser();
+
+		Collection<Role> roles = new HashSet<Role>();;
+		roles = u.getRoles();
+		for (Iterator iterator = roles.iterator(); iterator.hasNext();) {
+			Role type = (Role) iterator.next();
+			System.out.println("Roles on User");
+			System.out.println(type.getRoleName());
+		}
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String jsonRoles = gson.toJson(roles);
+		String jsonUser = gson.toJson(u);
+
+		System.out.println();
+		Tools.printGson(jsonRoles);
+		Tools.printGson(jsonUser);
+		LOGGER.info("--------------END JSON STUFF------------------");
 	}
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(DenverApplication.class);
+	}
+
+	public static String toJson(String json) {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.create();
+		return json;
 	}
 
 }
