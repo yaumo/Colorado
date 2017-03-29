@@ -52,9 +52,9 @@ class Header extends React.Component {
     return (
 	
       <div style={{'margin': '0'}}>
-        <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
           <div>
-            <AppBar title="Colorado"/>
+            <AppBar title="Colorado-Login"/>
           </div>
         </MuiThemeProvider>
       </div>
@@ -87,7 +87,7 @@ class Content extends React.Component{
   }
   render() { 
     return (
-	<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+	<MuiThemeProvider muiTheme={getMuiTheme()}>
 		<div id="content" style={{'marginLeft': '35%', 'marginRight': '35%', 'marginTop': '10%'}}>
       <Card>
         <CardHeader

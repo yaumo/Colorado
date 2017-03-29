@@ -27,7 +27,7 @@ class NavBar extends React.Component {
     render() {
         return (
             <div style={{ 'margin': '0' }}>
-                <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
                     <div>
                         <AppBar title="Colorado" style={{ 'position': 'fixed'}} />
 
