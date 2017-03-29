@@ -55,7 +55,7 @@ class Header extends React.Component {
       <div style={{'margin': '0'}}>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <div>
-            <AppBar title="Colorado"/>
+            <AppBar title="Colorado-Login"/>
           </div>
         </MuiThemeProvider>
       </div>
