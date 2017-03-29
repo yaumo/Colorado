@@ -11,6 +11,8 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import {white, red500, black, green} from 'material-ui/styles/colors';
 import ActionPerson from 'material-ui/svg-icons/action/account-circle';
 import ActionCheck from 'material-ui/svg-icons/action/check-circle';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
 
 const personStyles = {
   marginRight: 24,
@@ -43,7 +45,18 @@ class NavBar extends React.Component {
                         <AppBar 
                             title="Colorado"
                             style={{ 'position': 'fixed'}} 
-                            iconElementRight={<ActionPerson style={personStyles} color={white} hoverColor={black}/>}
+                            iconElementRight={
+                                <IconMenu
+                                    iconButtonElement={<IconButton>
+                                                        <ActionPerson style={personStyles} color={white} hoverColor={black}/>
+                                                    </IconButton>}
+                                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                                    >
+                                    <MenuItem primaryText="Settings" />
+                                    <MenuItem primaryText="Sign out" />
+                                </IconMenu>      
+                                }
                             />
 
                         <Drawer

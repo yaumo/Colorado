@@ -95,6 +95,7 @@ class Content extends React.Component{
           <Avatar
             src="images/colorado.jpg"
             size={60}
+            
           />
         </CardHeader>
         />
