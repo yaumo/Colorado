@@ -54,66 +54,42 @@ class ExercisesTab extends React.Component {
 
                         <br />
                         <br />
-                        <h4>Template</h4>
+                        <h4>Pattern Solution</h4>
                         <Paper zDepth={4}>
                             <Solution />
                         </Paper>
-                        <br />
+                        <h4>Template</h4>
                         <Paper zDepth={4}>
+                            <Solution rows={3}/>
+                        </Paper>
+                        <br />
+
                             <h4>Testcases</h4>
-                            <Divider />
-                            <div>
+                            <Paper zDepth={4}>
+                            <div style={{padding: "5%"}}>
                                 Case 1
+                                <br/>
                             <TextField
                                     floatingLabelText="Input 1"
                                     fullWidth={false}
-                                    multiLine={true}
-                                    rows={3}
-                                    />
-                                &nbsp;
-                            &nbsp;
-                            <TextField
-                                    floatingLabelText="Output 1"
-                                    fullWidth={false}
-                                    multiLine={true}
-                                    rows={3}
                                     />
                             </div>
                             <Divider />
-                            <div>
+                            <div style={{padding: "5%"}}>
                                 Case 2
+                                <br/>
                             <TextField
                                     floatingLabelText="Input 2"
                                     fullWidth={false}
-                                    multiLine={true}
-                                    rows={3}
-                                    />
-                                &nbsp;
-                            &nbsp;
-                            <TextField
-                                    floatingLabelText="Output 2"
-                                    fullWidth={false}
-                                    multiLine={true}
-                                    rows={3}
                                     />
                             </div>
                             <Divider />
-                            <div>
+                            <div style={{padding: "5%"}}>
                                 Case 3
+                                <br/>
                             <TextField
                                     floatingLabelText="Input 3"
                                     fullWidth={false}
-                                    multiLine={true}
-                                    rows={3}
-                                    className="abcName"
-                                    />
-                                &nbsp;
-                            &nbsp;
-                            <TextField
-                                    floatingLabelText="Output 3"
-                                    fullWidth={false}
-                                    multiLine={true}
-                                    rows={3}
                                     />
                             </div>
                             <Divider />
