@@ -11,6 +11,7 @@ import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'm
 import CodeMirror from 'react-codemirror';
 import NavBar from './components/NavBar.jsx';
 import Solution from './components/Solution.jsx';
+import Paper from 'material-ui/Paper';
 
 
 export class Exercise extends React.Component {
@@ -43,7 +44,7 @@ class Content extends React.Component {
                                     Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
                                     Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
                                 </div>
-                                 <br/>
+                                <br/>
                                 <div>
                                     <iframe width="560" height="315" src="https://www.youtube.com/embed/Ztc6_elMg60" frameBorder="0" allowFullScreen></iframe>
                                 </div>
@@ -58,9 +59,12 @@ class Content extends React.Component {
                                     />
                                     <Divider />
                                 <CardText>
+                                    <Paper zDepth={4}>
                                     <Solution/>
+                                    </Paper> 
                                     <br />
                                     <RaisedButton label="Check"/>
+                                    
                                 </CardText>
                             </Card>
                         </div>

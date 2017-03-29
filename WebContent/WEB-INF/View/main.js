@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {render} from "react-dom";
 import { Router, Route, browserHistory} from 'react-router';
 import {Login} from './views/Login.jsx';
+import {User} from './views/User.jsx';
 import {Exercise} from './views/Exercise.jsx';
 import {Docent} from './views/Docent.jsx';
 import NavBar from './views/components/NavBar.jsx';
@@ -21,7 +22,8 @@ class App extends React.Component {
             <Router history={browserHistory}>
 				<Route path={"/"} component={Login} />
                 <Route path={"exercise"} component={Exercise} />
-				<Route path={"docent"} component={Docent} />	 
+				<Route path={"docent"} component={Docent} />
+                <Route path={"user"} component={User} />		 
             </Router>
         );
     }

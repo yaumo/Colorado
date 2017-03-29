@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Drawer from 'material-ui/Drawer';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
 import injectTapEventPlugin from 'react-tap-event-plugin';

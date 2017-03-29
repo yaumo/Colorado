@@ -13,6 +13,7 @@ import ActionPerson from 'material-ui/svg-icons/action/account-circle';
 import ActionCheck from 'material-ui/svg-icons/action/check-circle';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
+import { browserHistory } from 'react-router';
 
 const personStyles = {
   marginRight: 24,
@@ -36,6 +37,10 @@ class NavBar extends React.Component {
             value: 1
         };
     }
+    onClick(e){
+       e.preventDefault();
+       browserHistory.push('/user');
+    }
 
     render() {
         return (
@@ -53,7 +58,7 @@ class NavBar extends React.Component {
                                     targetOrigin={{horizontal: 'right', vertical: 'top'}}
                                     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                                     >
-                                    <MenuItem primaryText="Settings" />
+                                    <MenuItem primaryText="Settings" onClick={this.onClick} />
                                     <MenuItem primaryText="Sign out" />
                                 </IconMenu>      
                                 }
