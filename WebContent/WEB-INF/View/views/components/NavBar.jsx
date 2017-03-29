@@ -8,7 +8,18 @@ import AppBar from 'material-ui/AppBar';
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
+import {white, red500, black, green} from 'material-ui/styles/colors';
+import ActionPerson from 'material-ui/svg-icons/action/account-circle';
+import ActionCheck from 'material-ui/svg-icons/action/check-circle';
 
+const personStyles = {
+  marginRight: 24,
+  marginTop: 12,
+};
+
+const iconStyles = {
+  marginRight: 12,
+};
 
 function handleChange(event, index, value){
     console.log("click");
@@ -27,9 +38,13 @@ class NavBar extends React.Component {
     render() {
         return (
             <div style={{ 'margin': '0' }}>
-                <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
                     <div>
-                        <AppBar title="Colorado" style={{ 'position': 'fixed'}} />
+                        <AppBar 
+                            title="Colorado"
+                            style={{ 'position': 'fixed'}} 
+                            iconElementRight={<ActionPerson style={personStyles} color={white} hoverColor={black}/>}
+                            />
 
                         <Drawer
                             id="drawer"
@@ -45,10 +60,9 @@ class NavBar extends React.Component {
                                 <MenuItem value={3} primaryText="Programmieren 1" />
                             </DropDownMenu>
                             <Divider />
-                            <MenuItem>Exercise 1</MenuItem>
+                            <MenuItem><div><ActionCheck style={iconStyles} color={green}/>Exercise 1</div></MenuItem>
                             <Divider />
                             <MenuItem>Exercise 2</MenuItem>
-                            <Divider />
                         </Drawer>
                     </div>
                 </MuiThemeProvider>

@@ -12,6 +12,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { browserHistory } from 'react-router';
 import Divider from 'material-ui/Divider';
+import Avatar from 'material-ui/Avatar';
 //import Background from './images/Unbenannt.PNG';
 
 injectTapEventPlugin();
@@ -52,7 +53,7 @@ class Header extends React.Component {
     return (
 	
       <div style={{'margin': '0'}}>
-        <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
           <div>
             <AppBar title="Colorado"/>
           </div>
@@ -87,11 +88,15 @@ class Content extends React.Component{
   }
   render() { 
     return (
-	<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+	<MuiThemeProvider muiTheme={getMuiTheme()}>
 		<div id="content" style={{'marginLeft': '35%', 'marginRight': '35%', 'marginTop': '10%'}}>
-      <Card>
-        <CardHeader
-          title="Login"
+      <Card >
+        <CardHeader>
+          <Avatar
+            src="images/colorado.jpg"
+            size={60}
+          />
+        </CardHeader>
         />
         <Divider />
         <CardText>
