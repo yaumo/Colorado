@@ -36,7 +36,7 @@ class AssignExercisesTab extends React.Component {
                     <h4>Step 1: Select Exercise(s)</h4>
                     <Paper zDepth={2}>
                         <div>
-                            <Table>
+                            <Table multiSelectable={true}>
                                 <TableHeader>
                                     <TableRow>
                                         <TableHeaderColumn>Title</TableHeaderColumn>

@@ -10,6 +10,8 @@ import Slider from 'material-ui/Slider';
 import ExercisesTab from './components/ExercisesTab.jsx';
 import AssignExercisesTab from './components/AssignExercisesTab.jsx';
 import OverviewTab from './components/OverviewTab.jsx';
+import LecturesTab from './components/LecturesTab.jsx';
+
 
 export class Docent extends React.Component {
     render() {
@@ -39,15 +41,10 @@ class Content extends React.Component {
                                 <OverviewTab />
                             </Tab>
                             <Tab
-                                label="onActive"
+                                label="Lectures"
                                 data-route="/home"
                                 >
-                                <div>
-                                    <h2>Tab Three</h2>
-                                    <p>
-                                        This is a third example tab.
-                                    </p>
-                                </div>
+                                <LecturesTab />
                             </Tab>
                         </Tabs>
                     </div>

@@ -45,6 +45,11 @@ class ExercisesTab extends React.Component {
                             floatingLabelText="Title"
                             fullWidth={false}
                             />
+                        
+                        <TextField
+                            floatingLabelText="Youtube-Link"
+                            fullWidth={false}
+                            />
                         <TextField
                             floatingLabelText="Exercise"
                             multiLine={true}
@@ -66,7 +71,7 @@ class ExercisesTab extends React.Component {
 
                             <h4>Testcases</h4>
                             <Paper zDepth={4}>
-                            <div style={{padding: "5%"}}>
+                            <div style={{paddingLeft: "5%"}}>
                                 Case 1
                                 <br/>
                             <TextField
@@ -75,7 +80,7 @@ class ExercisesTab extends React.Component {
                                     />
                             </div>
                             <Divider />
-                            <div style={{padding: "5%"}}>
+                            <div style={{paddingLeft: "5%"}}>
                                 Case 2
                                 <br/>
                             <TextField
@@ -84,7 +89,7 @@ class ExercisesTab extends React.Component {
                                     />
                             </div>
                             <Divider />
-                            <div style={{padding: "5%"}}>
+                            <div style={{paddingLeft: "5%"}}>
                                 Case 3
                                 <br/>
                             <TextField
