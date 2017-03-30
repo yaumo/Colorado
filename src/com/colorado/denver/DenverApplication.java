@@ -22,6 +22,7 @@ import com.colorado.denver.model.Home;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
+import com.colorado.denver.services.javabytecoder.DummyClass;
 import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.Tools;
 import com.google.gson.Gson;
@@ -42,6 +43,8 @@ public class DenverApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) throws IOException {
 		LOGGER.info("Starting app!");
 		SpringApplication.run(DenverApplication.class, args);
+
+		DummyClass.byteBuddyTest();
 
 		// //
 		// Hibernate Usage //
