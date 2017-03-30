@@ -2,7 +2,10 @@ package com.colorado.denver.test;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Course;
@@ -12,6 +15,8 @@ import com.colorado.denver.model.Solution;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.services.persistence.SessionTools;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class PopulateDBWithTestData {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PopulateDBWithTestData.class);
@@ -37,7 +42,7 @@ public class PopulateDBWithTestData {
 
 	private Course createCourse(String course_name) {
 		Course course = new Course();
-		course.setCourse_title(course_name);
+		course.setTitle(course_name);
 		hibCtrl.addEntity(course);
 		return course;
 	}

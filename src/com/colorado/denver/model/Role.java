@@ -24,7 +24,6 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
 	public static final String ROLE = "role";
 	public static final String ROLE_NAME = "roleName";
 
-	// private String id;
 	private String roleName;
 
 	public Role() {

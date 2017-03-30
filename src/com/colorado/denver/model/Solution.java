@@ -19,8 +19,8 @@ public class Solution extends EducationEntity {
 	// ..... (╯°□°)╯︵ ┻━┻
 
 	public static final String SOLUTION = "solution";
-	public static final String SOLUTION_CODE = "soluction_code";
-	public static final String SOLUTION_EXERCISE = "solution_exercise";
+	public static final String CODE = "code";
+	public static final String EXERCISE = "exercise";
 
 	private String code;
 	// reference to student

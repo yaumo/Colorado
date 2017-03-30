@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import com.colorado.denver.model.Course;
 import com.colorado.denver.model.Exercise;
-import com.colorado.denver.model.Home;
 import com.colorado.denver.model.Lecture;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.Solution;
@@ -48,7 +47,7 @@ public class SessionTools {
 
 			// Create session factory instance
 			sessionFactory = configuration.addPackage("com.colorado").addProperties(prop).addAnnotatedClass(Role.class)
-					.addAnnotatedClass(User.class).addAnnotatedClass(Home.class).addAnnotatedClass(Exercise.class)
+					.addAnnotatedClass(User.class).addAnnotatedClass(Exercise.class)
 					.addAnnotatedClass(Lecture.class).addAnnotatedClass(Course.class).addAnnotatedClass(Solution.class)
 					.buildSessionFactory(serviceRegistry);
 

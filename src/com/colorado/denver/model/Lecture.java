@@ -19,26 +19,15 @@ public class Lecture extends EducationEntity {
 	private static final long serialVersionUID = -3837760136840854153L;
 
 	public static final String LECTURE = "lecture";
-	public static final String LECTURE_TITLE = "lecture_title";
 	public static final String LECTURE_USERS = "lecture_users";
 	public static final String LECTURE_COURSE = "lecture_course";
 
-	private String title;
 	private transient Set<User> users;
 	private Course course;
 	private transient Set<Exercise> exercises;
 
 	public Lecture() {
 
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public String setTitle(String lecture_title) {
-		this.title = lecture_title;
-		return this.title;
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY)
