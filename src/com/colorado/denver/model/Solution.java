@@ -1,6 +1,8 @@
 package com.colorado.denver.model;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -16,12 +18,44 @@ public class Solution extends EducationEntity {
 	// ----------------- WRITE IN FUCKING ENGLISH MR. FRIDAY!!!!!
 	// ..... (╯°□°)╯︵ ┻━┻
 
-	int iefqf = "abcdf"; // So you see this shit because it's red
-
 	public static final String SOLUTION = "solution";
+
+	private String code;
+	// reference to student
+	private User student;
+	// reference to the solved exercise
+	private Exercise exercise;
 
 	public Solution() {
 
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "userID")
+	public User getStudent() {
+		return student;
+	}
+
+	public void setStudent(User student) {
+		this.student = student;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "exerciseID")
+	public Exercise getExercise() {
+		return exercise;
+	}
+
+	public void setExercise(Exercise exercise) {
+		this.exercise = exercise;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	@Override

@@ -1,12 +1,19 @@
 package com.colorado.denver.model;
 
+import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Exercise")
-public class Exercise extends BaseEntity {
+public class Exercise extends EducationEntity {
 	/**
 	 * 
 	 */
@@ -15,8 +22,17 @@ public class Exercise extends BaseEntity {
 	public static final String TITLE = "title";
 	public static final String DESCRIPTION = "description";
 
-	public String title;
-	public String description;
+	private transient Set<Lecture> lectures;
+	private Set<Solution> solutions;
+
+	private String title;
+	private String description;
+	private Date deadline;
+	private String videoLink;
+	// template code
+	private String code;
+	private String solution_code;
+	private transient Set<User> users;
 
 	public Exercise() {
 
@@ -29,6 +45,65 @@ public class Exercise extends BaseEntity {
 		System.out.println(this.getClass().getSimpleName());
 		System.out.println(this.getClass().getCanonicalName());
 		this.objectClass = this.getClass().getSimpleName();
+	}
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	public Set<Solution> getSolutions() {
+		return solutions;
+	}
+
+	public void setSolutions(Set<Solution> solutions) {
+		this.solutions = solutions;
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	public Set<Lecture> getLectures() {
+		return lectures;
+	}
+
+	public void setLectures(Set<Lecture> lectures) {
+		this.lectures = lectures;
+	}
+
+	public Date getDeadline() {
+		return deadline;
+	}
+
+	public void setDeadline(Date deadline) {
+		this.deadline = deadline;
+	}
+
+	public String getVideoLink() {
+		return videoLink;
+	}
+
+	public void setVideoLink(String videoLink) {
+		this.videoLink = videoLink;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getSolution_code() {
+		return solution_code;
+	}
+
+	public void setSolution_code(String solution_code) {
+		this.solution_code = solution_code;
 	}
 
 	public String getTitle() {

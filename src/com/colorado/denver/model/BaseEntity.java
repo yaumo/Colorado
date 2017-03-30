@@ -18,6 +18,7 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	 * 
 	 */
 	private static final long serialVersionUID = 2741548100143780881L;
+	@Transient
 	public static final String ID = "id";
 	public static final String OBJECT_CLASS = "objectClass";
 

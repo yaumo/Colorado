@@ -1,16 +1,21 @@
 package com.colorado.denver.model;
 
 import java.util.Collection;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name = "UserDenver")
-public class User extends BaseEntity {
+public class User extends BaseEntity<User> {
 	/**
 	 * 
 	 */
@@ -28,13 +33,52 @@ public class User extends BaseEntity {
 	private String username;
 
 	private transient String password;
-
 	protected transient boolean enabled;
-
+	private transient Set<Lecture> lectures;
+	private Course course;
+	private Set<Solution> solutions;
 	// @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	public transient Collection<Role> roles;
+	private transient Set<Exercise> exercises;
+	private transient Collection<Role> roles;
 
 	public User() {
+	}
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	public Set<Exercise> getExercises() {
+		return exercises;
+	}
+
+	public void setExercises(Set<Exercise> exercises) {
+		this.exercises = exercises;
+	}
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	public Set<Lecture> getLectures() {
+		return lectures;
+	}
+
+	public void setLectures(Set<Lecture> lectures) {
+		this.lectures = lectures;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	public Set<Solution> getSolutions() {
+		return solutions;
+	}
+
+	public void setSolutions(Set<Solution> solutions) {
+		this.solutions = solutions;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "courseID")
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
 	}
 
 	public String getUsername() {
