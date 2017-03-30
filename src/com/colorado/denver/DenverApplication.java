@@ -1,6 +1,7 @@
 package com.colorado.denver;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -22,10 +23,14 @@ import com.colorado.denver.model.Home;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
+import com.colorado.denver.services.javabytecoder.JavaExecutor;
 import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.Tools;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import groovy.util.ResourceException;
+import groovy.util.ScriptException;
 
 /*
  * Keep this class clean! only main method and temporary experiments!
@@ -39,10 +44,17 @@ public class DenverApplication extends SpringBootServletInitializer {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverApplication.class);
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ResourceException, ScriptException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		LOGGER.info("Starting app!");
 		SpringApplication.run(DenverApplication.class, args);
 
+		LOGGER.info("Start of bytebuddy");
+
+		JavaExecutor dC = new JavaExecutor();
+		dC.executeJava();
+
+		LOGGER.info("End of bytebuddy");
 		// //
 		// Hibernate Usage //
 		// //
