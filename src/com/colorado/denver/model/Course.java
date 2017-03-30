@@ -42,8 +42,8 @@ public class Course extends EducationEntity {
 		return users;
 	}
 
-	public void setStudents(Set<User> students) {
-		this.users = students;
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
 
 	@Override

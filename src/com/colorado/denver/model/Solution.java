@@ -34,11 +34,11 @@ public class Solution extends EducationEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "userID")
-	public User getStudent() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setStudent(User user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
