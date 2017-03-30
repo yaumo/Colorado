@@ -19,10 +19,12 @@ public class Solution extends EducationEntity {
 	// ..... (╯°□°)╯︵ ┻━┻
 
 	public static final String SOLUTION = "solution";
+	public static final String SOLUTION_CODE = "soluction_code";
+	public static final String SOLUTION_EXERCISE = "solution_exercise";
 
 	private String code;
 	// reference to student
-	private User student;
+	private User user;
 	// reference to the solved exercise
 	private Exercise exercise;
 
@@ -33,11 +35,11 @@ public class Solution extends EducationEntity {
 	@ManyToOne
 	@JoinColumn(name = "userID")
 	public User getStudent() {
-		return student;
+		return user;
 	}
 
-	public void setStudent(User student) {
-		this.student = student;
+	public void setStudent(User user) {
+		this.user = user;
 	}
 
 	@ManyToOne

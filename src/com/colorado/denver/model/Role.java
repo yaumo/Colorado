@@ -31,14 +31,10 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
 
 	}
 
-	// @ManyToOne(cascade = CascadeType.ALL)
-	// @JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	@Expose(serialize = false)
 	private transient Set<User> users;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	// @ManyToOne(cascade = CascadeType.ALL)
-	// @JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	public Set<User> getUsers() {
 		return this.users;
 	}
@@ -46,18 +42,6 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
 	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
-
-	// @Override
-	// @Id
-	// @GeneratedValue(strategy = GenerationType.AUTO)
-	// public String getId() {
-	// return id;
-	// }
-	//
-	// @Override
-	// public void setId(String id) {
-	// this.id = id;
-	// }
 
 	public String getRoleName() {
 		return roleName;

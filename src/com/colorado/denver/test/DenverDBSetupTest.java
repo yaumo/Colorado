@@ -20,11 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.controller.entityController.RoleController;
-import com.colorado.denver.model.Course;
-import com.colorado.denver.model.Exercise;
-import com.colorado.denver.model.Lecture;
 import com.colorado.denver.model.Role;
-import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
@@ -49,10 +45,7 @@ public class DenverDBSetupTest {
 
 	@Test
 	public void setupDatabase() {
-		Course course = createCourse("WWI 14 SEA");
-		Lecture lecture = createLecture("Programmieren I");
-		Exercise excersice = createExercise();
-		Solution solution = createSolution();
+
 		Role roleAdmin = createRole(UserService.ROLE_GLOBAL_ADMINISTRATOR);
 		Role roleUser = createRole(UserService.ROLE_USER);
 		User systemUser = createSystemUser();
@@ -89,34 +82,6 @@ public class DenverDBSetupTest {
 		hibCtrl.addEntity(role);
 
 		return role;
-	}
-
-	private Course createCourse(String course_name) {
-		Course course = new Course(course_name);
-		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
-		hibCtrl.addEntity(course);
-		return course;
-	}
-
-	private Exercise createExercise() {
-		Exercise exercise = new Exercise();
-		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
-		hibCtrl.addEntity(exercise);
-		return exercise;
-	}
-
-	private Solution createSolution() {
-		Solution solution = new Solution();
-		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
-		hibCtrl.addEntity(solution);
-		return solution;
-	}
-
-	private Lecture createLecture(String lecture_name) {
-		Lecture lecture = new Lecture(lecture_name);
-		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
-		hibCtrl.addEntity(lecture);
-		return lecture;
 	}
 
 	private static User createSystemUser() { // Creating system user

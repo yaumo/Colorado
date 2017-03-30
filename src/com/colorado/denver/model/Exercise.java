@@ -19,8 +19,8 @@ public class Exercise extends EducationEntity {
 	 */
 	private static final long serialVersionUID = 7599837012217952314L;
 	public static final String EXERCISE = "exercise";
-	public static final String TITLE = "title";
-	public static final String DESCRIPTION = "description";
+	public static final String EXERCISE_TITLE = "title";
+	public static final String EXERCISE_DESCRIPTION = "description";
 
 	private transient Set<Lecture> lectures;
 	private Set<Solution> solutions;

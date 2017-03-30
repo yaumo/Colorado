@@ -15,19 +15,19 @@ public class Course extends EducationEntity {
 	/**
 	 * 
 	 */
-	private static String course_title;
-	private static final long serialVersionUID = 917641590246636493L;
 	public static final String COURSE = "course";
+	public static final String COURSE_TITLE = "course_title";
+	public static final String COURSE_STUDENTS = "course_STUDENTS";
+	public static final String COURSE_LECTURES = "course_LECTURES";
 
-	private transient Set<User> students;
+	private static final long serialVersionUID = 917641590246636493L;
+
+	private String course_title;
+	private transient Set<User> users;
 	private Set<Lecture> lectures;
 
 	public Course() {
 
-	}
-
-	public Course(String course_title) {
-		this.course_title = course_title;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -39,6 +39,24 @@ public class Course extends EducationEntity {
 		this.lectures = lectures;
 	}
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setStudents(Set<User> students) {
+		this.users = students;
+	}
+
+	public String getCourse_title() {
+		return course_title;
+	}
+
+	public String setCourse_title(String course_title) {
+		this.course_title = course_title;
+		return this.course_title;
+	}
+
 	@Override
 	@Transient
 	public String getPrefix() {
@@ -48,23 +66,6 @@ public class Course extends EducationEntity {
 	@Override
 	public String setPrefix() {
 		return getPrefix();
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	public Set<User> getStudents() {
-		return students;
-	}
-
-	public void setStudents(Set<User> students) {
-		this.students = students;
-	}
-
-	public static String getCourse_title() {
-		return course_title;
-	}
-
-	public static void setCourse_title(String course_title) {
-		Course.course_title = course_title;
 	}
 
 }
