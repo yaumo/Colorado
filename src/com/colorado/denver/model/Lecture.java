@@ -6,17 +6,17 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Lecture")
-public class Lecture extends BaseEntity {
+public class Lecture extends EducationEntity {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3837760136840854153L;
 	public static final String LECTURE = "lecture";
 
-	public Lecture(){
-		
+	public Lecture() {
+
 	}
-	
+
 	@Override
 	@Transient
 	public String getPrefix() {

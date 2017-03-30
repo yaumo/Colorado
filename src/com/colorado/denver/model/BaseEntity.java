@@ -21,10 +21,8 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	public static final String ID = "id";
 	public static final String OBJECT_CLASS = "objectClass";
 
-	public static final String CREATOR = "creator";
 	public static final String CREATION_DATE = "creationDate";
 
-	public User creator; // TODO: use User Object provided by Security!
 	public transient Date creationDate;
 	public transient boolean hasBeenModified;
 
@@ -54,14 +52,6 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 
 	public void setObjectClass(String objectClass) {
 		this.objectClass = objectClass;
-	}
-
-	public User getCreator() {
-		return creator;
-	}
-
-	public void setCreator(User creator) {
-		this.creator = creator;
 	}
 
 	public Date getCreationDate() {

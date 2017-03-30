@@ -11,7 +11,6 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.LoggerFactory;
 
 import com.colorado.denver.model.BaseEntity;
-import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.GenericTools;
 
@@ -19,17 +18,17 @@ public class HibernateController {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HibernateController.class);
 	/* Method to CREATE an entity in the database */
 
-	public void setCreationInformation(BaseEntity<?> clazz) {
-		clazz.setObjectClass(GenericTools.returnClassName(clazz).toLowerCase());
-		clazz.setCreationDate(new Date());
+	public void setCreationInformation(BaseEntity<?> obj) {
+		obj.setObjectClass(GenericTools.returnClassName(obj).toLowerCase());
+		obj.setCreationDate(new Date());
 
-		if (UserService.getCurrentUser() == null) {
-			LOGGER.error("Saved NULL CREATOR for entity: " + clazz.getObjectClass());
-			clazz.setCreator(null);// TODO: NOT CLEAN!!!
-		} else {
-			LOGGER.info("Trying to get User from Authentication: " + UserService.getCurrentUser().getUsername());
-			clazz.setCreator(UserService.getCurrentUser());
-		}
+		// If EducationEntity set Owner!!!!
+		// if (UserService.getCurrentUser() == null) {
+		// LOGGER.error("Saved NULL CREATOR for entity: " + clazz.getObjectClass());
+		// } else {
+		// LOGGER.info("Trying to get User from Authentication: " + UserService.getCurrentUser().getUsername());
+		// clazz.setCreator(UserService.getCurrentUser());
+		// }
 
 	}
 

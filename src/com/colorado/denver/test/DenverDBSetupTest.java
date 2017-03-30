@@ -61,8 +61,6 @@ public class DenverDBSetupTest {
 
 		try {
 			HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
-			roleAdmin.setCreator(systemUser);
-			roleUser.setCreator(systemUser);
 			hibCtrl.updateEntity(roleAdmin);
 			hibCtrl.updateEntity(roleUser);
 			return true;
@@ -89,8 +87,6 @@ public class DenverDBSetupTest {
 		User systemUser = new User();
 		systemUser.setUsername(DenverConstants.SYSTEM);
 		systemUser.setPassword("password");
-		systemUser.setCreator(systemUser);//
-		// assignToSelf. Bypasses generic Creator assignment
 		LOGGER.info("Created System User");
 
 		// Hib save HibernateController hibCtrl =

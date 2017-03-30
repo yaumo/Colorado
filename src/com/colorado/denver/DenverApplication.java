@@ -78,7 +78,6 @@ public class DenverApplication extends SpringBootServletInitializer {
 		Exercise returnedExcercise = (Exercise) hibCtrl.getEntity(ecxId, Exercise.class);
 		LOGGER.info("The title of excercise is: " + returnedExcercise.getTitle());
 		LOGGER.info("The id of excercise is: " + returnedExcercise.getId());
-		LOGGER.info("The creator of excercise is: " + returnedExcercise.getCreator().getUsername());
 		LOGGER.info("The ObjectClass Of exercise is: " + returnedExcercise.getObjectClass());
 
 		// get List of Entities from table
@@ -87,7 +86,6 @@ public class DenverApplication extends SpringBootServletInitializer {
 			Home home = (Home) iterator.next();
 			LOGGER.info("ID: " + home.getId());
 			LOGGER.info("Content: " + home.getContent());
-			LOGGER.info("Creator: " + home.getCreator().getUsername());
 			LOGGER.info("ObjectClass: " + home.getObjectClass());
 		}
 		LOGGER.info("--------------END OF HIBERNATE EXPERIMENTS------------------");
@@ -109,6 +107,12 @@ public class DenverApplication extends SpringBootServletInitializer {
 		System.out.println();
 		Tools.printGson(jsonRoles);
 		Tools.printGson(jsonUser);
+		User targetObject = new Gson().fromJson(jsonUser, User.class);
+		System.out.println(targetObject.getId());
+		System.out.println(targetObject.getObjectClass());
+		System.out.println(targetObject.getUsername());
+		System.out.println(targetObject.toString());
+
 		LOGGER.info("--------------END JSON STUFF------------------");
 	}
 

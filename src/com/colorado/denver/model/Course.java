@@ -6,7 +6,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Course")
-public class Course extends BaseEntity {
+public class Course extends EducationEntity {
 	/**
 	 * 
 	 */
@@ -14,17 +14,17 @@ public class Course extends BaseEntity {
 	// Kurs
 	public static final String COURSE = "course";
 
-	public Course(){
-		
+	public Course() {
+
 	}
-	
+
 	@Override
 	@Transient
 	public String getPrefix() {
 		return COURSE;
 	}
 
-	@Override	
+	@Override
 	public String setPrefix() {
 		return getPrefix();
 	}
