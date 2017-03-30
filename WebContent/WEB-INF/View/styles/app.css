@@ -12,3 +12,15 @@ margin-left: 256px;
     height: calc(100% - 64px);
 }
 
+.loginheader {
+	background-color: red;
+}
+
+.loginbody {
+	background-color: gray;
+}
+
+.logintext {
+	height: 10%;
+	width: 98%
+}
