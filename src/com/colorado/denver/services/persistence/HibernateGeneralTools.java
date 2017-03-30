@@ -30,9 +30,6 @@ public class HibernateGeneralTools {
 	@Bean
 	public DataSource dataSource() {
 		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-		dataSourceBuilder.url("jdbc:postgresql://104.40.217.248:5432/Denver");
-		dataSourceBuilder.username("hibernateuser");
-		dataSourceBuilder.password("breckenridge");
 		return dataSourceBuilder.build();
 	}
 

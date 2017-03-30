@@ -23,6 +23,7 @@ public class HibernateTests {
 	public HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 	Exercise exc;
 	Session hibSession;
+	String mainExcId;
 
 	@Before
 	public void prepareTest() {
@@ -36,28 +37,46 @@ public class HibernateTests {
 
 	@Test
 	public void testAddEntity() {
-		// Create Exercise Entity
-		assertNotNull("Entity creation FAILED!(Hibernate)", hibCtrl.addEntity(exc));
+		mainExcId = hibCtrl.addEntity(exc);
+		assertNotNull("Entity creation FAILED!(Hibernate)", mainExcId);
 	}
 
 	@Test
 	public void testDeleteEntity() {
 		// Delete Exercise Entity
 		testAddEntity();
-		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
-
+		hibCtrl.deleteEntity(exc);
 	}
 
 	@Test
 	public void testUpdateGetEntity() {
 		testAddEntity();
 
-		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 		exc.setDescription("HibernateTestUPDATE");
 
-		String id = hibCtrl.updateEntity(exc);
-		Exercise exc2 = (Exercise) hibCtrl.getEntity(id, Exercise.class);
+		hibCtrl.updateEntity(exc);
+		Exercise exc2 = (Exercise) hibCtrl.getEntity(mainExcId, Exercise.class);
 		assertEquals("UPDATE Test Failed. Description not updated through DB!", exc.getDescription(), exc2.getDescription());
+
+	}
+
+	@Test
+	public void testMergeEntity() {
+		testAddEntity();
+
+		Exercise exc2 = new Exercise();
+
+		// Manually. We 'fake' the same entity and parse it via hibernate first for all the fields.
+
+		exc2.setDescription("HibernateTestMERGEBeforeSave");
+		String fakeExcid = hibCtrl.addEntity(exc2);
+		Exercise exerciseFake = (Exercise) hibCtrl.getEntity(fakeExcid, Exercise.class);
+		exerciseFake.setDescription("HibernateTestMERGEAFTERSAVE");
+		exerciseFake.setId(mainExcId);
+		assertNotNull(hibCtrl.mergeEntity(exerciseFake));
+
+		hibCtrl.deleteEntity(exc);
+		hibCtrl.deleteEntity(exc2);
 
 	}
 

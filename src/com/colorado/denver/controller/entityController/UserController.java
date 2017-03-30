@@ -63,17 +63,22 @@ public class UserController extends ObjectOperationController {
 		String respJson = "";
 		switch (crud) {
 		case 1:
-			// Create then get from DB for id then update with content
-			respJson = gson.toJson(update(read(create()), targetObject));
+			// Merge should trigger the update itself!
+			respJson = gson.toJson(read(create(targetObject)));
 			break;
 		case 2:
 			respJson = gson.toJson(read(id));
 			break;
 		case 3:
-			respJson = gson.toJson(update(read(id), targetObject));
+			respJson = gson.toJson(update(targetObject));
 			break;
 		case 4:
-			delete(id);
+			if (delete(id)) {
+				respJson = "true";
+			} else {
+				LOGGER.error("Error deleting entity: " + id);
+				respJson = "false";
+			}
 			break;
 
 		default:
@@ -87,9 +92,8 @@ public class UserController extends ObjectOperationController {
 
 	}
 
-	private String create() {
-		User usr = new User();
-		String id = hibCtrl.addEntity(usr);
+	private String create(User newObject) {
+		String id = hibCtrl.addEntity(newObject);
 		return id;
 	}
 
@@ -97,8 +101,8 @@ public class UserController extends ObjectOperationController {
 		return (User) hibCtrl.getEntity(id, User.class);
 	}
 
-	private User update(User oldObject, User newObject) {
-
+	private User update(User newObject) {
+		hibCtrl.mergeEntity(newObject);
 		return null;
 	}
 

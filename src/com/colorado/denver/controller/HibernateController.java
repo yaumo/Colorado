@@ -96,15 +96,15 @@ public class HibernateController {
 	}
 
 	/* Method to GET an entity from the records */
-	public BaseEntity getEntity(String id, Class c) {
-		BaseEntity entity = null;
+	public BaseEntity<?> getEntity(String id, Class c) {
+		BaseEntity<?> entity = null;
 		Session session = SessionTools.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
 			Criteria cr = session.createCriteria(c);
 			cr.add(Restrictions.eq("id", id));
-			entity = (BaseEntity) cr.uniqueResult();
+			entity = (BaseEntity<?>) cr.uniqueResult();
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
@@ -116,9 +116,28 @@ public class HibernateController {
 		return entity;
 	}
 
+	public BaseEntity<?> mergeEntity(BaseEntity<?> entity) {
+		Session session = SessionTools.sessionFactory.openSession();
+		Transaction tx = null;
+		BaseEntity<?> returnEnt = null;
+		try {
+			tx = session.beginTransaction();
+			returnEnt = (BaseEntity<?>) session.merge(entity);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return returnEnt;
+	}
+
 	/* Method to GET a list of entities from the records */
-	public List<BaseEntity> getEntityList(Class c) {
-		List<BaseEntity> entityList = null;
+	public List<BaseEntity<?>> getEntityList(Class c) {
+		List<BaseEntity<?>> entityList = null;
 		Session session = SessionTools.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
@@ -128,8 +147,7 @@ public class HibernateController {
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
-				tx.rollback();
-			e.printStackTrace();
+				e.printStackTrace();
 		} finally {
 			session.close();
 		}
