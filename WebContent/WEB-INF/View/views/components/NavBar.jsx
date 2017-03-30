@@ -24,8 +24,6 @@ const iconStyles = {
   marginRight: 12,
 };
 
-	
-
 class NavBar extends React.Component {
     constructor() {
         super();
