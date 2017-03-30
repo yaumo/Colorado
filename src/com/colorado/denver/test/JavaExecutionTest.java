@@ -23,7 +23,7 @@ public class JavaExecutionTest {
 	public void executeJava() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
 			SecurityException, IOException, ResourceException, ScriptException {
 		LOGGER.info("Start of bytebuddy");
-
+		// Use nashorn for js
 		JavaExecutor dC = new JavaExecutor();
 		dC.executeJava();
 
