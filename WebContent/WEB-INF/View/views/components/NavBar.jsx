@@ -24,24 +24,29 @@ const iconStyles = {
   marginRight: 12,
 };
 
-function handleChange(event, index, value){
-    console.log("click");
-    this.setState({value});
-};
+	
 
 class NavBar extends React.Component {
     constructor() {
         super();
         this.state = {
             open: true,
-            value: 1
+            value: 1,
+			dropdown: 2
         };
+		this.handleChange = this.handleChange.bind(this);
     }
+	
+	handleChange(event, index, value) {
+		this.setState({dropdown: value});
+	}
+	
     onClick(e){
        e.preventDefault();
        browserHistory.push('/user');
     }
 
+	 
     render() {
         return (
             <div style={{ 'margin': '0' }}>
@@ -72,7 +77,7 @@ class NavBar extends React.Component {
                             containerStyle={{ 'position': 'fixed', 'margin': '0', 'top': '64px', height: 'calc(100% - 64px)' }}
                             className= ""
                             >
-                            <DropDownMenu value={this.state.value} onChange={this.handleChange}>
+                            <DropDownMenu value={this.state.dropdown} onChange={this.handleChange}>
                                 <MenuItem value={1} primaryText="Webprogrammierung" />
                                 <MenuItem value={2} primaryText="Datenbanken" />
                                 <MenuItem value={3} primaryText="Programmieren 1" />
