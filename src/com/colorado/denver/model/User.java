@@ -1,17 +1,21 @@
 package com.colorado.denver.model;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name = "UserDenver")
-public class User extends BaseEntity {
+public class User extends BaseEntity<User> {
 	/**
 	 * 
 	 */
@@ -27,15 +31,54 @@ public class User extends BaseEntity {
 	public static final String ROLES = "roles";
 
 	private String username;
-	private String password;
-	private String salt;
-	protected boolean enabled;
-	private String passwordConfirm;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	public Collection<Role> roles;
+	private transient String password;
+	protected transient boolean enabled;
+	private transient Set<Lecture> lectures;
+	private Course course;
+	private Set<Solution> solutions;
+	// @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private transient Set<Exercise> exercises;
+	private transient Collection<Role> roles;
 
 	public User() {
+	}
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	public Set<Exercise> getExercises() {
+		return exercises;
+	}
+
+	public void setExercises(Set<Exercise> exercises) {
+		this.exercises = exercises;
+	}
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	public Set<Lecture> getLectures() {
+		return lectures;
+	}
+
+	public void setLectures(Set<Lecture> lectures) {
+		this.lectures = lectures;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	public Set<Solution> getSolutions() {
+		return solutions;
+	}
+
+	public void setSolutions(Set<Solution> solutions) {
+		this.solutions = solutions;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "courseID")
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
 	}
 
 	public String getUsername() {
@@ -54,14 +97,6 @@ public class User extends BaseEntity {
 		this.password = password;
 	}
 
-	public String getSalt() {
-		return salt;
-	}
-
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
-
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -70,6 +105,7 @@ public class User extends BaseEntity {
 		this.enabled = enabled;
 	}
 
+	@ManyToMany(fetch = FetchType.LAZY)
 	public Collection<Role> getRoles() {
 		return roles;
 	}
@@ -78,30 +114,35 @@ public class User extends BaseEntity {
 		this.roles = roles;
 	}
 
-	@Transient
-	public String getPasswordConfirm() {
-		return passwordConfirm;
-	}
+	// public Collection<GrantedAuthority> getAuthorities() {
+	// // make everyone ROLE_GLOBAL_ADMINISTRATOR
+	// Collection<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+	// GrantedAuthority grantedAuthority = new GrantedAuthority() {
+	// // anonymous inner type
+	// @Override
+	// public String getAuthority() {
+	// return UserService.ROLE_GLOBAL_ADMINISTRATOR;
+	// }
+	// };
+	// grantedAuthorities.add(grantedAuthority);
+	// return grantedAuthorities;
+	// }
 
-	public void setPasswordConfirm(String passwordConfirm) {
-		this.passwordConfirm = passwordConfirm;
-	}
+	// public Collection<GrantedAuthority> getAllAuthorities(BaseEntity<?>
+	// scope) {
+	// if (scope != null) {
+	// scope = HibernateGeneralTools.getInitializedEntity(scope);
+	// }
+	// return GenericTools.getSecurityService().getAllAuthorities(this, scope);
+	// }
+	//
+	// public UserDetails getDetails(){
+	// if(details == null){
+	// details = GenericTools.ge
+	// }
+	// return details;
+	// }
 
-	/*
-	 * public Collection<GrantedAuthority> getAllAuthorities(BaseEntity<?> scope) {
-	 * if (scope != null) {
-	 * scope = HibernateGeneralTools.getInitializedEntity(scope);
-	 * }
-	 * return GenericTools.getSecurityService().getAllAuthorities(this, scope);
-	 * }
-	 * 
-	 * public UserDetails getDetails(){
-	 * if(details == null){
-	 * details = GenericTools.getSecurityService().g
-	 * }
-	 * return details;
-	 * }
-	 */
 	@Override
 	@Transient
 	public String getPrefix() {
