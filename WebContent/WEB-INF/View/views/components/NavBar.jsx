@@ -66,7 +66,10 @@ class NavBar extends React.Component {
 	
     onClick(e){
        e.preventDefault();
+	   if(e.target.textContent == "Settings"){
        browserHistory.push('/user');
+	   }
+	   else browserHistory.push('/');
     }
 
 	 
@@ -87,7 +90,7 @@ class NavBar extends React.Component {
                                     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                                     >
                                     <MenuItem primaryText="Settings" onClick={this.onClick} />
-                                    <MenuItem primaryText="Sign out" />
+                                    <MenuItem primaryText="Sign out" onClick={this.onClick} />
                                 </IconMenu>      
                                 }
                             />
