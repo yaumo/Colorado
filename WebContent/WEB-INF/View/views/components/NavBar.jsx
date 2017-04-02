@@ -15,6 +15,18 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import { browserHistory } from 'react-router';
 
+const lecturelist = [];
+const exerciseslist = [];
+var dropdownjson = '{"lecture": [{"lecture_title":"Datenbanken","lecture_id": "0001","exercises": [{ "exercise_title":"Fibonacci", "exercise_id":"0123123"},{ "exercise_title":"Test2", "exercise_id":"0123124"},{ "exercise_title":"Test3", "exercise_id":"0123125"}]},{"lecture_title":"Webprogrammierung","lecture_id": "0002","exercises": [{ "exercise_title":"WEB1", "exercise_id":"0123123"},{ "exercise_title":"WEB2", "exercise_id":"1123124"},{ "exercise_title":"WEB3", "exercise_id":"1123125"}]},{"lecture_title":"Test","lecture_id": "0003","exercises": [{ "exercise_title":"Test1", "exercise_id":"2123123"},{ "exercise_title":"Test2", "exercise_id":"2123124"},{ "exercise_title":"Test3", "exercise_id":"2123125"}]}]}';
+		const data = JSON.parse(dropdownjson);
+		for(var i=0;i<data.lecture.length;i++){
+			lecturelist.push(<MenuItem value={i} key={i} primaryText={data.lecture[i].lecture_title} />);
+		}
+		for(var j=0;j<data.lecture[0].exercises.length;j++){
+			exerciseslist.push(<MenuItem value={j} key={j} primaryText={data.lecture[0].exercises[j].exercise_title} />);
+		}
+
+
 const personStyles = {
   marginRight: 24,
   marginTop: 12,
@@ -30,12 +42,25 @@ class NavBar extends React.Component {
         this.state = {
             open: true,
             value: 1,
-			dropdown: 2
+			dropdown: 0
         };
 		this.handleChange = this.handleChange.bind(this);
     }
 	
 	handleChange(event, index, value) {
+		/*var dropdownjson = '{"lecture": [{"lecture_title":"Datenbanken","lecture_id": "0001","exercises": [{ "exercise_title":"Fibonacci", "exercise_id":"0123123"},{ "exercise_title":"Test2", "exercise_id":"0123124"},{ "exercise_title":"Test3", "exercise_id":"0123125"}]},{"lecture_title":"Webprogrammierung","lecture_id": "0002","exercises": [{ "exercise_title":"WEB1", "exercise_id":"0123123"},{ "exercise_title":"WEB2", "exercise_id":"1123124"},{ "exercise_title":"WEB3", "exercise_id":"1123125"}]},{"lecture_title":"Test","lecture_id": "0003","exercises": [{ "exercise_title":"Test1", "exercise_id":"2123123"},{ "exercise_title":"Test2", "exercise_id":"2123124"},{ "exercise_title":"Test3", "exercise_id":"2123125"}]}]}';
+		var data = JSON.parse(dropdownjson);
+		for(var i=0;i<data.lecture.length;i++){
+			lecturelist.push(<MenuItem value={i} key={i} primaryText={data.lecture[i].lecture_title} />);
+		}	*/
+		var count = exerciseslist.length;
+		for(var i =0;i<count;i++){
+			exerciseslist.pop();
+		}
+		for(var j=0;j<data.lecture[value].exercises.length;j++){
+			exerciseslist.push(<MenuItem value={j} key={j} primaryText={data.lecture[value].exercises[j].exercise_title} />);
+		}
+		
 		this.setState({dropdown: value});
 	}
 	
@@ -76,14 +101,11 @@ class NavBar extends React.Component {
                             className= ""
                             >
                             <DropDownMenu value={this.state.dropdown} onChange={this.handleChange}>
-                                <MenuItem value={1} primaryText="Webprogrammierung" />
-                                <MenuItem value={2} primaryText="Datenbanken" />
-                                <MenuItem value={3} primaryText="Programmieren 1" />
+                                {lecturelist}
                             </DropDownMenu>
                             <Divider />
-                            <MenuItem><div><ActionCheck style={iconStyles} color={green}/>Exercise 1</div></MenuItem>
-                            <Divider />
-                            <MenuItem>Exercise 2</MenuItem>
+                            {exerciseslist}
+							
                         </Drawer>
                     </div>
                 </MuiThemeProvider>
