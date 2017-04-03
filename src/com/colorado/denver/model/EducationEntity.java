@@ -1,7 +1,9 @@
 package com.colorado.denver.model;
 
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
+@MappedSuperclass
 public class EducationEntity extends BaseEntity<EducationEntity> {
 
 	/**

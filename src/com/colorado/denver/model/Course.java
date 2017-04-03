@@ -29,7 +29,7 @@ public class Course extends EducationEntity {
 
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	public Set<Lecture> getLectures() {
 		return lectures;
 	}
@@ -38,7 +38,7 @@ public class Course extends EducationEntity {
 		this.lectures = lectures;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	public Set<User> getUsers() {
 		return users;
 	}

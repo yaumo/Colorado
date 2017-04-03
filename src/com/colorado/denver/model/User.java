@@ -44,7 +44,7 @@ public class User extends BaseEntity<User> {
 	public User() {
 	}
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	public Set<Exercise> getExercises() {
 		return exercises;
 	}
@@ -53,7 +53,7 @@ public class User extends BaseEntity<User> {
 		this.exercises = exercises;
 	}
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	public Set<Lecture> getLectures() {
 		return lectures;
 	}
@@ -105,7 +105,7 @@ public class User extends BaseEntity<User> {
 		this.enabled = enabled;
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	public Collection<Role> getRoles() {
 		return roles;
 	}

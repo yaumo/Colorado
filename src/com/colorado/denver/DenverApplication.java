@@ -49,23 +49,31 @@ public class DenverApplication extends SpringBootServletInitializer {
 
 		Collection<Role> roles = new HashSet<Role>();;
 		roles = u.getRoles();
+
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String jsonUser = gson.toJson(u);
+		String roleOnSys = "";
 		for (Iterator iterator = roles.iterator(); iterator.hasNext();) {
 			Role type = (Role) iterator.next();
 			System.out.println("Roles on User");
 			System.out.println(type.getRoleName());
+			roleOnSys = gson.toJson(type);
+
 		}
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		String jsonRoles = gson.toJson(roles);
-		String jsonUser = gson.toJson(u);
+		System.out.println();
+		System.out.println("User");
+		// Tools.printGson(jsonRoles);
+
+		Tools.printGson(jsonUser);
 
 		System.out.println();
-		Tools.printGson(jsonRoles);
-		Tools.printGson(jsonUser);
-		User targetObject = new Gson().fromJson(jsonUser, User.class);
-		System.out.println(targetObject.getId());
-		System.out.println(targetObject.getObjectClass());
-		System.out.println(targetObject.getUsername());
-		System.out.println(targetObject.toString());
+		System.out.println("Role");
+		Tools.printGson(roleOnSys);
+		// User targetObject = new Gson().fromJson(jsonUser, User.class);
+		// System.out.println(targetObject.getId());
+		// System.out.println(targetObject.getObjectClass());
+		// System.out.println(targetObject.getUsername());
+		// System.out.println(targetObject.toString());
 
 		LOGGER.info("--------------END JSON STUFF------------------");
 	}

@@ -36,7 +36,7 @@ public class Exercise extends EducationEntity {
 
 	}
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	public Set<User> getUsers() {
 		return users;
 	}
@@ -45,7 +45,7 @@ public class Exercise extends EducationEntity {
 		this.users = users;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	public Set<Solution> getSolutions() {
 		return solutions;
 	}
@@ -54,7 +54,7 @@ public class Exercise extends EducationEntity {
 		this.solutions = solutions;
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	public Set<Lecture> getLectures() {
 		return lectures;
 	}

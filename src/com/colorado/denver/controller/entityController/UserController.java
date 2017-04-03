@@ -98,7 +98,7 @@ public class UserController extends ObjectOperationController {
 	}
 
 	private User read(String id) {
-		return (User) hibCtrl.getEntity(id, User.class);
+		return (User) hibCtrl.getEntity(id);
 	}
 
 	private User update(User newObject) {

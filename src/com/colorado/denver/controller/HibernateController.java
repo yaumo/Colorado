@@ -94,14 +94,26 @@ public class HibernateController {
 		}
 	}
 
-	/* Method to GET an entity from the records */
-	public BaseEntity<?> getEntity(String id, Class c) {
+	public BaseEntity<?> getEntity(String id) {
+		Class<?> clazz = null;
+
+		try {
+			String[] parts = id.split("_");
+			String clazzName = parts[0];
+			clazzName = clazzName.substring(0, 1).toUpperCase() + clazzName.substring(1);
+			clazz = Class.forName("com.colorado.denver.model." + clazzName);
+
+		} catch (Exception e) {
+			LOGGER.error("Error while getting class definition in getEntity()! ID correct? Class existing in model classpath?");
+			e.printStackTrace();
+		}
+
 		BaseEntity<?> entity = null;
 		Session session = SessionTools.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
-			Criteria cr = session.createCriteria(c);
+			Criteria cr = session.createCriteria(clazz);
 			cr.add(Restrictions.eq("id", id));
 			entity = (BaseEntity<?>) cr.uniqueResult();
 			tx.commit();

@@ -88,7 +88,7 @@ public class ExerciseController extends ObjectOperationController {
 	}
 
 	private Exercise read(String id) {
-		return (Exercise) hibCtrl.getEntity(id, Exercise.class);
+		return (Exercise) hibCtrl.getEntity(id);
 	}
 
 	private Exercise update(Exercise exc, JSONObject theObject) {

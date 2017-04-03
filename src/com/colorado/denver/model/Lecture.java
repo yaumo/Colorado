@@ -29,7 +29,7 @@ public class Lecture extends EducationEntity {
 
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	public Set<Exercise> getExercises() {
 		return exercises;
 	}

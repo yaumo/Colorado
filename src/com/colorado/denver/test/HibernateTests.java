@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,8 +14,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
+import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.tools.Tools;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,6 +35,7 @@ public class HibernateTests {
 		// Activate Hibernate:
 		SessionTools.createSessionFactory(true);// TRUE due to UPDATE!!!
 		hibSession = SessionTools.sessionFactory.getCurrentSession();
+		assertNotNull(hibSession);
 		exc = new Exercise();
 		exc.setTitle("HibTest");
 		exc.setDescription("HibernateTests");
@@ -44,39 +50,57 @@ public class HibernateTests {
 	@Test
 	public void testDeleteEntity() {
 		// Delete Exercise Entity
-		testAddEntity();
 		hibCtrl.deleteEntity(exc);
 	}
 
 	@Test
+	@Ignore // update discontinued
 	public void testUpdateGetEntity() {
-		testAddEntity();
-
 		exc.setDescription("HibernateTestUPDATE");
 
 		hibCtrl.updateEntity(exc);
-		Exercise exc2 = (Exercise) hibCtrl.getEntity(mainExcId, Exercise.class);
+		Exercise exc2 = (Exercise) hibCtrl.getEntity(mainExcId);
 		assertEquals("UPDATE Test Failed. Description not updated through DB!", exc.getDescription(), exc2.getDescription());
 
 	}
 
 	@Test
 	public void testMergeEntity() {
-		testAddEntity();
 
-		Exercise exc2 = new Exercise();
+		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.serializeNulls();
+		Gson gson = gb.create();
+		Exercise excToChange = new Exercise();
+		excToChange.setCode("Default code before save");
+		String id = hibCtrl.addEntity(excToChange);
+		excToChange = (Exercise) hibCtrl.getEntity(id);
 
+		String jsonExcToChange = gson.toJson(excToChange);
+		System.out.println("Printing Exercise actual:");
+
+		Tools.printGson(jsonExcToChange);
+
+		UserService.authorizeSystemuser();
+		Exercise excToChangeWith = new Exercise();
+		excToChangeWith.setCode("THis is the new code");
+		excToChangeWith.setDescription("Des2");
+
+		excToChangeWith.setOwner(UserService.getCurrentUser());
+		excToChangeWith.setId(id);
 		// Manually. We 'fake' the same entity and parse it via hibernate first for all the fields.
 
-		exc2.setDescription("HibernateTestMERGEBeforeSave");
-		String fakeExcid = hibCtrl.addEntity(exc2);
-		Exercise exerciseFake = (Exercise) hibCtrl.getEntity(fakeExcid, Exercise.class);
-		exerciseFake.setDescription("HibernateTestMERGEAFTERSAVE");
-		exerciseFake.setId(mainExcId);
-		assertNotNull(hibCtrl.mergeEntity(exerciseFake));
+		String jsonExcToChangeWithBeforeMerge = gson.toJson(excToChangeWith);
+		System.out.println("Printing Exercise new before merge:");
 
-		hibCtrl.deleteEntity(exc);
-		hibCtrl.deleteEntity(exc2);
+		Tools.printGson(jsonExcToChangeWithBeforeMerge);
+
+		hibCtrl.mergeEntity(excToChangeWith);
+		Exercise excMerged = (Exercise) hibCtrl.getEntity(id);
+
+		String jsonExcToChangeWithAfterMerge = gson.toJson(excMerged);
+		System.out.println("Printing Exercise new after merge:");
+
+		Tools.printGson(jsonExcToChangeWithAfterMerge);
 
 	}
 

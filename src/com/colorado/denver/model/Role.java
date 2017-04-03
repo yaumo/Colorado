@@ -33,7 +33,7 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
 	@Expose(serialize = false)
 	private transient Set<User> users;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	public Set<User> getUsers() {
 		return this.users;
 	}
