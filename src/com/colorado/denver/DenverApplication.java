@@ -35,14 +35,14 @@ public class DenverApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		LOGGER.info("Starting app!");
-		SpringApplication.run(DenverApplication.class, args);
 
-		// //
-		// Hibernate Usage //
-		// //
+		// DO NOT DELETE THESE THREE LINES OF CODE I DARE YOU!
+		SpringApplication.run(DenverApplication.class, args);
 		// True = Use the update routine
 		// If you want to rebuild the DB with CREATE use DenverDBSetupTest.java
 		SessionTools.createSessionFactory(true);
+
+		UserService.authorizeSystemuser();
 
 		LOGGER.info("--------------BEGINNING JSON STUFF------------------");
 		User u = UserService.getCurrentUser();

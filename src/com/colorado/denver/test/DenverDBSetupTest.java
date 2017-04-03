@@ -60,11 +60,15 @@ public class DenverDBSetupTest {
 	}
 
 	private boolean updateRoles(Role roleAdmin, Role roleUser, User systemUser) {
+		Set<User> systemUsers = new HashSet<>();
+		systemUsers.add(systemUser);
+		roleAdmin.setUsers(systemUsers);
+		roleUser.setUsers(systemUsers);
 
 		try {
 			HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
-			hibCtrl.updateEntity(roleAdmin);
-			hibCtrl.updateEntity(roleUser);
+			hibCtrl.mergeEntity(roleAdmin);
+			hibCtrl.mergeEntity(roleUser);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
