@@ -21,6 +21,7 @@ import com.colorado.denver.model.Exercise;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.tools.DenverConstants;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @RestController
 public class ExerciseController extends ObjectOperationController {
@@ -36,6 +37,7 @@ public class ExerciseController extends ObjectOperationController {
 	@ResponseBody
 	public void handleRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
+
 		JSONObject theObject = super.handleRequest(request, response, this);
 
 		int crud = 0;
@@ -50,21 +52,23 @@ public class ExerciseController extends ObjectOperationController {
 		}
 
 		// Prepare for CRUD and response
-
-		Gson gson = new Gson();
+		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.serializeNulls();
+		Gson gson = gb.create();
 		String json = null;
 
+		BaseEntity<?> entity = gson.fromJson(json, Exercise.class);
 		switch (crud) {
 		case 1:
 			// Create then get from DB for id then update with content
-			json = gson.toJson(update(read(create()), theObject));
+			// json = gson.toJson(create(entity)));
 			break;
 		case 2:
 			json = gson.toJson(read(id));
 			break;
 		case 3:
 
-			json = gson.toJson(update(read(id), theObject));
+			json = gson.toJson(id);
 			break;
 		case 4:
 			delete(id);
@@ -81,6 +85,10 @@ public class ExerciseController extends ObjectOperationController {
 
 	}
 
+	private BaseEntity<?> update(BaseEntity<?> entity) {
+		return hibCtrl.mergeEntity(entity);
+	}
+
 	private String create() {
 		Exercise exc = new Exercise();
 		String id = hibCtrl.addEntity(exc);
@@ -91,38 +99,15 @@ public class ExerciseController extends ObjectOperationController {
 		return (Exercise) hibCtrl.getEntity(id);
 	}
 
-	private Exercise update(Exercise exc, JSONObject theObject) {
-
-		return exc;
-	}
-
 	private boolean delete(String id) {
-
-		return false;
-	}
-
-	private JSONObject updateTwoJson(JSONObject newObj, JSONObject oldObj) {
-		String key = "key1"; // whatever
-
-		newObj.keys();
-		String val_newer;
 		try {
-			val_newer = newObj.getString(key);
-
-			String val_older = oldObj.getString(key);
-
-			// Compare values
-			if (!val_newer.equals(val_older)) {
-				// Update value in object
-				newObj.put(key, val_newer);
-			}
-
+			hibCtrl.deleteEntity(id);
+			return true;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			LOGGER.error("Something went wrong while deleting: " + id);
 			e.printStackTrace();
+			return false;
 		}
-		return newObj;
-
 	}
 
 }

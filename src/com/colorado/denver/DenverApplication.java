@@ -53,7 +53,7 @@ public class DenverApplication extends SpringBootServletInitializer {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String jsonUser = gson.toJson(u);
 		String roleOnSys = "";
-		for (Iterator iterator = roles.iterator(); iterator.hasNext();) {
+		for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext();) {
 			Role type = (Role) iterator.next();
 			System.out.println("Roles on User");
 			System.out.println(type.getRoleName());

@@ -39,7 +39,7 @@ public class HibernateGeneralTools {
 
 	public static <T extends BaseEntity> T getInitializedEntity(T entity, boolean reattachToSessionIfRequired) throws ReflectionException {
 		Objects.requireNonNull(entity, "Entity expected!");
-		Class<T> clazz = GenericTools.getClassForName(entity.getObjectClass());
+		Class<T> clazz = GenericTools.getModelClassForName(entity.getObjectClass());
 		return getInitializedEntity(clazz, entity);
 	}
 

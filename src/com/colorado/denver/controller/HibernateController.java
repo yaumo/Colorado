@@ -94,21 +94,39 @@ public class HibernateController {
 		}
 	}
 
+	/* Method to DELETE an entity from the records by id */
+	public void deleteEntity(String id) {
+		BaseEntity<?> entity = getEntity(id);
+		Session session = SessionTools.sessionFactory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			session.delete(entity);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
+
 	public BaseEntity<?> getEntity(String id) {
 		Class<?> clazz = null;
+		BaseEntity<?> entity = null;
 
+		// in order to do it the generic way..
 		try {
 			String[] parts = id.split("_");
 			String clazzName = parts[0];
-			clazzName = clazzName.substring(0, 1).toUpperCase() + clazzName.substring(1);
-			clazz = Class.forName("com.colorado.denver.model." + clazzName);
+			clazz = GenericTools.getModelClassForName(clazzName);
 
 		} catch (Exception e) {
 			LOGGER.error("Error while getting class definition in getEntity()! ID correct? Class existing in model classpath?");
 			e.printStackTrace();
 		}
 
-		BaseEntity<?> entity = null;
 		Session session = SessionTools.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
@@ -147,7 +165,7 @@ public class HibernateController {
 	}
 
 	/* Method to GET a list of entities from the records */
-	public List<BaseEntity<?>> getEntityList(Class c) {
+	public List<BaseEntity<?>> getEntityList(Class<?> c) {
 		List<BaseEntity<?>> entityList = null;
 		Session session = SessionTools.sessionFactory.openSession();
 		Transaction tx = null;

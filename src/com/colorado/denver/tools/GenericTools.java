@@ -59,9 +59,12 @@ public class GenericTools {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> Class<T> getClassForName(String className) throws ReflectionException {
+	public static <T> Class<T> getModelClassForName(String className) throws ReflectionException {
 		try {
-			return (Class<T>) Class.forName(className);
+			className = className.substring(0, 1).toUpperCase() + className.substring(1);
+
+			return (Class<T>) Class.forName("com.colorado.denver.model." + className);
+
 		} catch (final ClassNotFoundException e) {
 			throw new ReflectionException(
 					e);
@@ -73,7 +76,7 @@ public class GenericTools {
 	}
 
 	public static <T> T newInstanceOf(String clazz) throws ReflectionException {
-		return newInstanceOf(getClassForName(clazz));
+		return newInstanceOf(getModelClassForName(clazz));
 	}
 
 	public static <T> T newInstanceOf(Class<T> clazz) throws ReflectionException {

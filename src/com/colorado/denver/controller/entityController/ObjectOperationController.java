@@ -74,7 +74,7 @@ public class ObjectOperationController extends HttpServlet {
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
 
-		Class<? extends BaseEntity> clazz = GenericTools.getClassForName(objectClass);
+		Class<? extends BaseEntity<?>> clazz = GenericTools.getModelClassForName(objectClass);
 		Objects.requireNonNull(clazz, "Model class was not found! for: " + objectClass);
 		LOGGER.debug("ObjectClass is: " + clazz.getSimpleName());
 
