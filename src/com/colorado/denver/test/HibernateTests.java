@@ -106,8 +106,7 @@ public class HibernateTests {
 
 	@After
 	public void rollback() {
-		hibSession.getTransaction().rollback();
-		hibSession.close();
+
 	}
 
 }
