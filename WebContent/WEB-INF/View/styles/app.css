@@ -13,14 +13,12 @@ margin-left: 256px;
 }
 
 .loginheader {
-	background-color: red;
+	background-color: #bd051f;
 }
 
 .loginbody {
-	background-color: gray;
+	background-color: #bbbbbb;
 }
-
-.logintext {
-	height: 10%;
-	width: 98%
+.leftbanner {
+	backgroundColor: #bbbbbb;
 }

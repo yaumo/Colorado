@@ -30,7 +30,7 @@ class Content extends React.Component {
             <div id="content" className="content">
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
                     <div>
-                        <Tabs>
+                        <Tabs className="loginheader">
                             <Tab label="Exercises" >
                                 <ExercisesTab />
                             </Tab>
