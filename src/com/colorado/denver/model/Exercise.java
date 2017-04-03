@@ -28,6 +28,8 @@ public class Exercise extends EducationEntity {
 	// template code
 	private String code;
 	private String solution_code;
+
+	// The students who should do this exercise
 	private transient Set<User> users;
 
 	public Exercise() {

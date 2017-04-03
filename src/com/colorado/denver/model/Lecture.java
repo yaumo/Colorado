@@ -22,21 +22,11 @@ public class Lecture extends EducationEntity {
 	public static final String LECTURE_USERS = "lecture_users";
 	public static final String LECTURE_COURSE = "lecture_course";
 
-	private transient Set<User> users;
 	private Course course;
 	private transient Set<Exercise> exercises;
 
 	public Lecture() {
 
-	}
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY)

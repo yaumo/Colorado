@@ -23,23 +23,11 @@ public class Solution extends EducationEntity {
 	public static final String EXERCISE = "exercise";
 
 	private String code;
-	// reference to student
-	private User user;
 	// reference to the solved exercise
 	private Exercise exercise;
 
 	public Solution() {
 
-	}
-
-	@ManyToOne
-	@JoinColumn(name = "userID")
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	@ManyToOne
