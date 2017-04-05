@@ -16,6 +16,7 @@ import Avatar from 'material-ui/Avatar';
 
 injectTapEventPlugin();
 
+
 /*var sectionStyle = {
    backgroundImage: `url(${Background})`
 };*/
@@ -47,14 +48,14 @@ class Header extends React.Component {
       open: true
     };
   }
-
+	
   render() {
     return (
 	
       <div style={{'margin': '0'}}>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <div>
-            <AppBar title="Colorado-Login"/>
+            <AppBar title="Colorado-Login" style={{'backgroundColor': '#bd051f'}}/>
           </div>
         </MuiThemeProvider>
       </div>
@@ -71,7 +72,7 @@ class Content extends React.Component{
   }
   handleClick(e) {
     e.preventDefault();
-    console.log('The link was clicked.');
+    //console.log('The link was clicked.');
 	if(this.state.value === 's12345'){
 		browserHistory.push('/exercise');
 	}
@@ -85,12 +86,15 @@ class Content extends React.Component{
   handleChange(event) {
     this.setState({value: event.target.value});
   }
+   /*componentWillMount() {
+      console.log('Component WILL MOUNT!')
+   }*/
   render() { 
     return (
 	<MuiThemeProvider muiTheme={getMuiTheme()}>
 		<div id="content" style={{'marginLeft': '35%', 'marginRight': '35%', 'marginTop': '10%'}}>
       <Card >
-        <CardHeader>
+        <CardHeader className="loginheader">
           <Avatar
             src="images/colorado.jpg"
             size={60}
@@ -99,20 +103,28 @@ class Content extends React.Component{
         </CardHeader>
         />
         <Divider />
-        <CardText>
+        <CardText className="loginbody">
         <div>
           <TextField
+			className="logintext"
             floatingLabelText="Username"
 			type='text'
 			id="username"
 			value={this.state.value}
 			onChange={this.handleChange}
+			underlineFocusStyle={{'borderColor':'#bbbbbb'}}
+			floatingLabelFocusStyle={{'color':'#bbbbbb'}}
+			style={{'backgroundColor': 'white', 'width': '98%', 'font-size': '150%'}}
           />
           <br/>
+		  <br/>
           <TextField
             floatingLabelText="Password"
             type="password"
 			id="password"
+			underlineFocusStyle={{'borderColor':'#bbbbbb'}}
+			floatingLabelFocusStyle={{'color':'#bbbbbb'}}
+			style={{'backgroundColor': 'white', 'width': '98%', 'font-size': '150%'}}
           />
           <br/>
           <br/>

@@ -18,26 +18,27 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	 * 
 	 */
 	private static final long serialVersionUID = 2741548100143780881L;
+	@Transient
 	public static final String ID = "id";
 	public static final String OBJECT_CLASS = "objectClass";
-	public static final String CREATOR = "creator";
-	public static final String CREATION_DATE = "creationDate";
-	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
-	public static final String CLASS = "Class";
 
-	public User creator; // TODO: use User Object provided by Security!
-	public Date creationDate;
-	public boolean hasBeenModified;
+	public static final String CREATION_DATE = "creationDate";
+
+	public transient Date creationDate;
+	public transient boolean hasBeenModified;
 
 	// Important for identifying the used object. This property is set during Hibernate create
 	public String objectClass;
+	private String id;
+
+	public BaseEntity() {
+
+	}
 
 	@Id
 	@GenericGenerator(name = "custom_id", strategy = "com.colorado.denver.services.persistence.HibernateIdGenerator")
 	@GeneratedValue(generator = "custom_id")
 	@Column(name = "id")
-	private String id;
-
 	public String getId() {
 		return id;
 	}
@@ -54,14 +55,6 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 		this.objectClass = objectClass;
 	}
 
-	public User getCreator() {
-		return creator;
-	}
-
-	public void setCreator(User creator) {
-		this.creator = creator;
-	}
-
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -70,7 +63,7 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 		this.creationDate = creationDate;
 	}
 
-	public boolean isHasBeenModified() {
+	public boolean getHasBeenModified() {
 		return hasBeenModified;
 	}
 

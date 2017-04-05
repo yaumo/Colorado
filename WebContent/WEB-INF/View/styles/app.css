@@ -4,6 +4,7 @@ overflow: auto;
 padding: 12px;
 padding-top: 76px;
 margin-left: 256px;
+
 }
 
 .drawer {
@@ -12,3 +13,13 @@ margin-left: 256px;
     height: calc(100% - 64px);
 }
 
+.loginheader {
+	background-color: #bd051f;
+}
+
+.loginbody {
+	background-color: #bbbbbb;
+}
+.leftbanner {
+	backgroundColor: #bbbbbb;
+}
