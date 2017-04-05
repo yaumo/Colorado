@@ -40,16 +40,17 @@ public class ExerciseController extends ObjectOperationController {
 
 		JSONObject theObject = super.handleRequest(request, response);
 
-		int crud = 0;
 		String id = "ERROR";
 		String json = null;
-
+		int crud = 0;
 		try {
-			crud = theObject.getInt(BaseEntity.ID);
-			id = theObject.getString(BaseEntity.ID);
+			crud = theObject.getInt(DenverConstants.CRUD);
 			json = theObject.getString(DenverConstants.JSON);
+			if (crud != 1)
+				id = theObject.getString(BaseEntity.ID);
+
 		} catch (Exception e) {
-			LOGGER.error("Error extraxting the JSON: " + theObject.toString());
+			LOGGER.error("Error extraxting information from the JSON: " + theObject.toString());
 			e.printStackTrace();
 		}
 
@@ -59,12 +60,12 @@ public class ExerciseController extends ObjectOperationController {
 		Gson gson = gb.create();
 
 		Exercise entity = gson.fromJson(json, Exercise.class);
-
 		String jsonResponse = "NO RESPONSE";
 
 		switch (crud) {
 		case 1:
-			create();
+			String newId = create();
+			entity.setId(newId);
 			jsonResponse = gson.toJson(update(entity));
 			break;
 		case 2:

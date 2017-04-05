@@ -37,7 +37,7 @@ public class DenverApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		LOGGER.info("Starting app!");
 
-		// DO NOT DELETE THESE THREE LINES OF CODE I DARE YOU!
+		// DO NOT DELETE THESE LINES OF CODE I DARE YOU!
 		try {
 			SpringApplication.run(DenverApplication.class, args);
 			// True = Use the update routine
@@ -57,7 +57,6 @@ public class DenverApplication extends SpringBootServletInitializer {
 
 		Collection<Role> roles = new HashSet<Role>();;
 		roles = u.getRoles();
-
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		String jsonUser = gson.toJson(u);
 		String roleOnSys = "";

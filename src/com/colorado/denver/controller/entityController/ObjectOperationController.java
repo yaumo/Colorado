@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpServerErrorException;
@@ -48,9 +47,9 @@ public class ObjectOperationController extends HttpServlet {
 		String jsonStr = DenverConstants.ERROR_NO_OBJECT_FROM_REQUEST;
 		try {
 			jsonStr = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-			Object obj = parser.parse(jsonStr);
+			// Object obj = parser.parse(jsonStr);
 
-			jsonObject = (JSONObject) obj;
+			jsonObject = new JSONObject(jsonStr);
 			jsonObject.put(DenverConstants.JSON, jsonStr);// we need this back
 
 			objectClass = jsonObject.getString(BaseEntity.OBJECT_CLASS);
@@ -63,8 +62,6 @@ public class ObjectOperationController extends HttpServlet {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();

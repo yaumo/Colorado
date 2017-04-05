@@ -11,6 +11,8 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.LoggerFactory;
 
 import com.colorado.denver.model.BaseEntity;
+import com.colorado.denver.model.EducationEntity;
+import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.GenericTools;
 
@@ -18,17 +20,19 @@ public class HibernateController {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HibernateController.class);
 	/* Method to CREATE an entity in the database */
 
-	public void setCreationInformation(BaseEntity<?> obj) {
-		obj.setObjectClass(GenericTools.returnClassName(obj).toLowerCase());
-		obj.setCreationDate(new Date());
+	public void setCreationInformation(EducationEntity entity) {
+		entity.setObjectClass(GenericTools.returnClassName(entity).toLowerCase());
+		entity.setCreationDate(new Date());
 
 		// If EducationEntity set Owner!!!!
-		// if (UserService.getCurrentUser() == null) {
-		// LOGGER.error("Saved NULL CREATOR for entity: " + clazz.getObjectClass());
-		// } else {
-		// LOGGER.info("Trying to get User from Authentication: " + UserService.getCurrentUser().getUsername());
-		// clazz.setCreator(UserService.getCurrentUser());
-		// }
+		if (UserService.getCurrentUser() == null) {
+			LOGGER.error("Saved NULL CREATOR for entity: " + entity.getObjectClass());
+		} else {
+			LOGGER.info("Trying to get User from Authentication: " + UserService.getCurrentUser().getUsername());
+
+			LOGGER.info("Setting user on Education entity: " + UserService.getCurrentUser().getUsername() + " " + entity.getObjectClass());
+			entity.setOwner(UserService.getCurrentUser());
+		}
 
 	}
 
@@ -39,7 +43,12 @@ public class HibernateController {
 		String entityID = null;
 		try {
 			tx = session.beginTransaction();
-			setCreationInformation(entity);
+
+			if (entity.getClass().isAssignableFrom(EducationEntity.class)) {
+				LOGGER.info("Setting creation information on EducationEntity");
+				setCreationInformation((EducationEntity) entity);
+			}
+
 			LOGGER.info("Saving entity: " + entity.getClass().getName());
 			entityID = (String) session.save(entity);
 
