@@ -18,9 +18,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpServerErrorException;
 
+import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.BaseEntity;
+import com.colorado.denver.model.Exercise;
+import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.tools.DenverConstants;
 import com.colorado.denver.tools.GenericTools;
+import com.google.gson.GsonBuilder;
 
 public class ObjectOperationController extends HttpServlet {
 	/**
@@ -28,9 +32,10 @@ public class ObjectOperationController extends HttpServlet {
 	 */
 	private static final long serialVersionUID = -6726973624223302932L;
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ObjectOperationController.class);
+	private HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 
 	public JSONObject handleRequest(HttpServletRequest request,
-			HttpServletResponse response, Object callerObj) throws ReflectionException, IOException {
+			HttpServletResponse response) throws ReflectionException, IOException {
 		// This Method should be generic!!
 		// init
 		JSONParser parser = new JSONParser();
@@ -39,14 +44,17 @@ public class ObjectOperationController extends HttpServlet {
 		int crud = 0;// 0 is bad
 		JSONObject jsonObject = null;
 
+		GsonBuilder builder = new GsonBuilder();
+		String jsonStr = DenverConstants.ERROR_NO_OBJECT_FROM_REQUEST;
 		try {
-			String jsonStr = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+			jsonStr = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 			Object obj = parser.parse(jsonStr);
 
 			jsonObject = (JSONObject) obj;
 			jsonObject.put(DenverConstants.JSON, jsonStr);// we need this back
 
 			objectClass = jsonObject.getString(BaseEntity.OBJECT_CLASS);
+
 			crud = jsonObject.getInt(DenverConstants.CRUD);// Crud is not persisted. Therefore constant
 			if (crud == 1) {
 				id = DenverConstants.ID_CREATE_MODE;
@@ -59,7 +67,6 @@ public class ObjectOperationController extends HttpServlet {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -90,18 +97,29 @@ public class ObjectOperationController extends HttpServlet {
 
 	}
 
-	public static void handleRequest(String id, int crud, Class<?> clazz, List<String> requestParamValues) {
+	private BaseEntity<?> update(BaseEntity<?> entity) {
+		return hibCtrl.mergeEntity(entity);
+	}
 
-		// find correct controller depending on 'clazz'
+	private String create() {
+		Exercise exc = new Exercise();
+		String id = hibCtrl.addEntity(exc);
+		return id;
+	}
 
-		// then call depending on CRUD:
-		// 1: create: classXY = new ClassXY(); ---> THEN fire UPDATE(params)
-		// 2: read: Call all getters on entity. Pack into JSON. Then response. DONT'T USE MAP
-		// 3: update: call all setters on entity. Get override existing values with params.
-		// 4: delete: FUCK IT UP
+	private BaseEntity<?> read(String id) {
+		return hibCtrl.getEntity(id);
+	}
 
-		// JSON handling?
-
+	private boolean delete(String id) {
+		try {
+			hibCtrl.deleteEntity(id);
+			return true;
+		} catch (Exception e) {
+			LOGGER.error("Something went wrong while deleting: " + id);
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@SuppressWarnings("null")

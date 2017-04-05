@@ -18,6 +18,7 @@ import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.tools.GenericTools;
 import com.colorado.denver.tools.Tools;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,12 +38,19 @@ public class DenverApplication extends SpringBootServletInitializer {
 		LOGGER.info("Starting app!");
 
 		// DO NOT DELETE THESE THREE LINES OF CODE I DARE YOU!
-		SpringApplication.run(DenverApplication.class, args);
-		// True = Use the update routine
-		// If you want to rebuild the DB with CREATE use DenverDBSetupTest.java
-		SessionTools.createSessionFactory(true);
+		try {
+			SpringApplication.run(DenverApplication.class, args);
+			// True = Use the update routine
+			// If you want to rebuild the DB with CREATE use DenverDBSetupTest.java
+			SessionTools.createSessionFactory(true);
+			UserService.authorizeSystemuser();
+			LOGGER.info("Successfully obtained system user Token. DB and security should be in healthy state");
 
-		UserService.authorizeSystemuser();
+		} catch (Exception e) {
+			LOGGER.error("Error during starting up the app! Check the DB!");
+			e.printStackTrace();
+			SpringApplication.exit(GenericTools.getApplicationContext());
+		}
 
 		LOGGER.info("--------------BEGINNING JSON STUFF------------------");
 		User u = UserService.getCurrentUser();
@@ -54,7 +62,7 @@ public class DenverApplication extends SpringBootServletInitializer {
 		String jsonUser = gson.toJson(u);
 		String roleOnSys = "";
 		for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext();) {
-			Role type = (Role) iterator.next();
+			Role type = iterator.next();
 			System.out.println("Roles on User");
 			System.out.println(type.getRoleName());
 			roleOnSys = gson.toJson(type);

@@ -39,9 +39,9 @@ public class UserController extends ObjectOperationController {
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.POST)
 	@ResponseBody
-	public void handleRequest(HttpServletRequest request,
+	public void handleUserRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
-		JSONObject theObject = super.handleRequest(request, response, this);
+		JSONObject theObject = super.handleRequest(request, response);
 
 		String jsonReq = DenverConstants.ERROR;
 		int crud = 0;

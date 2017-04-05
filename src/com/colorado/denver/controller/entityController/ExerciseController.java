@@ -35,17 +35,19 @@ public class ExerciseController extends ObjectOperationController {
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Exercise.EXERCISE, method = RequestMethod.POST)
 	@ResponseBody
-	public void handleRequest(HttpServletRequest request,
+	public HttpServletResponse handleExerciseRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
 
-		JSONObject theObject = super.handleRequest(request, response, this);
+		JSONObject theObject = super.handleRequest(request, response);
 
 		int crud = 0;
 		String id = "ERROR";
+		String json = null;
 
 		try {
 			crud = theObject.getInt(BaseEntity.ID);
 			id = theObject.getString(BaseEntity.ID);
+			json = theObject.getString(DenverConstants.JSON);
 		} catch (Exception e) {
 			LOGGER.error("Error extraxting the JSON: " + theObject.toString());
 			e.printStackTrace();
@@ -55,23 +57,25 @@ public class ExerciseController extends ObjectOperationController {
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
 		gb.serializeNulls();
 		Gson gson = gb.create();
-		String json = null;
 
-		BaseEntity<?> entity = gson.fromJson(json, Exercise.class);
+		Exercise entity = gson.fromJson(json, Exercise.class);
+
+		String jsonResponse = "NO RESPONSE";
+
 		switch (crud) {
 		case 1:
-			// Create then get from DB for id then update with content
-			// json = gson.toJson(create(entity)));
+			create();
+			jsonResponse = gson.toJson(update(entity));
 			break;
 		case 2:
-			json = gson.toJson(read(id));
+			jsonResponse = gson.toJson(read(id));
 			break;
 		case 3:
-
-			json = gson.toJson(id);
+			jsonResponse = gson.toJson(update(entity));
 			break;
 		case 4:
 			delete(id);
+			jsonResponse = "SUCCESS";
 			break;
 
 		default:
@@ -80,13 +84,11 @@ public class ExerciseController extends ObjectOperationController {
 		}
 
 		// prepare response
-
-		// json = gson.toJson(//created object )
-
-	}
-
-	private BaseEntity<?> update(BaseEntity<?> entity) {
-		return hibCtrl.mergeEntity(entity);
+		response.setStatus(200);
+		response.getWriter().write(jsonResponse);
+		response.getWriter().flush();
+		// response.getWriter().close(); maybe no close because I didn't open this?
+		return response;
 	}
 
 	private String create() {
@@ -95,8 +97,12 @@ public class ExerciseController extends ObjectOperationController {
 		return id;
 	}
 
-	private Exercise read(String id) {
-		return (Exercise) hibCtrl.getEntity(id);
+	private BaseEntity<?> read(String id) {
+		return hibCtrl.getEntity(id);
+	}
+
+	private BaseEntity<?> update(BaseEntity<?> entity) {
+		return hibCtrl.mergeEntity(entity);
 	}
 
 	private boolean delete(String id) {
