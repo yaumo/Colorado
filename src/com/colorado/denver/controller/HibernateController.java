@@ -44,7 +44,8 @@ public class HibernateController {
 		try {
 			tx = session.beginTransaction();
 
-			if (entity.getClass().isAssignableFrom(EducationEntity.class)) {
+			if (entity instanceof EducationEntity && entity.getClass() != EducationEntity.class) {
+				// AssignableFrom doesn't work somehow...
 				LOGGER.info("Setting creation information on EducationEntity");
 				setCreationInformation((EducationEntity) entity);
 			}

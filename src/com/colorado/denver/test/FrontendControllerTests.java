@@ -16,6 +16,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.controller.entityController.ExerciseController;
+import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
 
 @RunWith(SpringRunner.class)
@@ -37,7 +38,8 @@ public class FrontendControllerTests {
 	public void testExerciseController() {
 
 		try {
-			InputStream is = new FileInputStream("jsonTest.txt");
+			// Change the file to the call u want to make. Using Exercise entity! ID's are hardcoded!
+			InputStream is = new FileInputStream("jsonCreateTest.txt");
 			BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 			String line = buf.readLine();
 			StringBuilder sb = new StringBuilder();
@@ -46,7 +48,7 @@ public class FrontendControllerTests {
 				line = buf.readLine();
 			}
 			String fileAsString = sb.toString();
-
+			UserService.authorizeSystemuser();
 			request = new MockHttpServletRequest("POST", "/exercise");
 			request.setContentType("application/json");
 			request.addHeader("Accept", "application/json, text/javascript, */*");
@@ -54,9 +56,6 @@ public class FrontendControllerTests {
 			request.setContent((fileAsString)
 					.getBytes("UTF-8"));
 
-			System.out.println(request.getRequestURI());
-			System.out.println(request.getRequestURL());
-			System.out.println(request.getServerName());
 			ExerciseController mav = new ExerciseController();
 			mav.handleExerciseRequest(request, response);
 

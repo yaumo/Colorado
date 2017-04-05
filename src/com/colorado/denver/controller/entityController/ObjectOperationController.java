@@ -73,7 +73,7 @@ public class ObjectOperationController extends HttpServlet {
 				|| id.equals(DenverConstants.ERROR_NO_ID_FROM_REQUEST)
 				|| objectClass.equals(null)
 				|| id.equals(null)) {
-			LOGGER.error("Something is wrong with the Request in OOC Validation! Exiting...");
+			LOGGER.error("Something is wrong with the Request in OOC Validation! ID: " + id + " | objectClass: " + objectClass);
 			jsonObject = null;// Invalidate the request for further handling
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
