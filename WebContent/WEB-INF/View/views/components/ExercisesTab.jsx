@@ -23,6 +23,10 @@ function handleClick(e) {
     });
 };
 
+function handleChange(event, index, value) {
+    this.setState({ value });
+};
+
 class ExercisesTab extends React.Component {
 
     constructor() {
@@ -46,8 +50,10 @@ class ExercisesTab extends React.Component {
                             floatingLabelText="Title"
                             fullWidth={false}
                             />
-
-
+                        <DropDownMenu className="language" value={this.state.value} onChange={this.handleChange}>
+                            <MenuItem value={1} primaryText="JavaScript" />
+                            <MenuItem value={2} primaryText="Java" />
+                        </DropDownMenu>
                         <TextField
                             floatingLabelText="Exercise"
                             multiLine={true}

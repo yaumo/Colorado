@@ -6,7 +6,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import TextField from 'material-ui/TextField';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { browserHistory } from 'react-router';
@@ -27,13 +27,13 @@ injectTapEventPlugin();
     console.log('The link was clicked.');
 	browserHistory.push('/exercise')
   }*/
-	
+
 export class Login extends React.Component {
   render() {
     return (
       <div>
         <Header />
-        <Content/>
+        <Content />
       </div>
     );
   }
@@ -48,14 +48,14 @@ class Header extends React.Component {
       open: true
     };
   }
-	
+
   render() {
     return (
-	
-      <div style={{'margin': '0'}}>
+
+      <div style={{ 'margin': '0' }}>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <div>
-            <AppBar title="Colorado-Login" style={{'backgroundColor': '#bd051f'}}/>
+            <AppBar title="Colorado-Login" style={{ 'backgroundColor': '#bd051f' }} />
           </div>
         </MuiThemeProvider>
       </div>
@@ -63,77 +63,77 @@ class Header extends React.Component {
   }
 }
 
-class Content extends React.Component{
+class Content extends React.Component {
   constructor(props) {
     super(props);
-	this.state={value: ''};
-	this.handleClick = this.handleClick.bind(this);
-	this.handleChange = this.handleChange.bind(this);
+    this.state = { value: '' };
+    this.handleClick = this.handleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
   handleClick(e) {
     e.preventDefault();
     //console.log('The link was clicked.');
-	if(this.state.value === 's12345'){
-		browserHistory.push('/exercise');
-	}
-	else if(this.state.value === 'd12345'){
-		browserHistory.push('/docent');
-	}
-	else{
-		alert("Username does not exist!");
-	}
+    if (this.state.value === 's12345') {
+      browserHistory.push('/exercise');
+    }
+    else if (this.state.value === 'd12345') {
+      browserHistory.push('/docent');
+    }
+    else {
+      alert("Username does not exist!");
+    }
   }
   handleChange(event) {
-    this.setState({value: event.target.value});
+    this.setState({ value: event.target.value });
   }
-   /*componentWillMount() {
-      console.log('Component WILL MOUNT!')
-   }*/
-  render() { 
+  /*componentWillMount() {
+     console.log('Component WILL MOUNT!')
+  }*/
+  render() {
     return (
-	<MuiThemeProvider muiTheme={getMuiTheme()}>
-		<div id="content" style={{'marginLeft': '35%', 'marginRight': '35%', 'marginTop': '10%'}}>
-      <Card >
-        <CardHeader className="loginheader">
-          <Avatar
-            src="images/colorado.jpg"
-            size={60}
-            
-          />
-        </CardHeader>
-        />
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <div id="content" style={{ 'marginLeft': '35%', 'marginRight': '35%', 'marginTop': '10%' }}>
+          <Card >
+            <CardHeader className="loginheader">
+              <Avatar
+                src="images/colorado.jpg"
+                size={60}
+
+                />
+            </CardHeader>
+            />
         <Divider />
-        <CardText className="loginbody">
-        <div>
-          <TextField
-			className="logintext"
-            floatingLabelText="Username"
-			type='text'
-			id="username"
-			value={this.state.value}
-			onChange={this.handleChange}
-			underlineFocusStyle={{'borderColor':'#bbbbbb'}}
-			floatingLabelFocusStyle={{'color':'#bbbbbb'}}
-			style={{'backgroundColor': 'white', 'width': '98%', 'font-size': '150%'}}
-          />
-          <br/>
-		  <br/>
-          <TextField
-            floatingLabelText="Password"
-            type="password"
-			id="password"
-			underlineFocusStyle={{'borderColor':'#bbbbbb'}}
-			floatingLabelFocusStyle={{'color':'#bbbbbb'}}
-			style={{'backgroundColor': 'white', 'width': '98%', 'font-size': '150%'}}
-          />
-          <br/>
-          <br/>
-          <RaisedButton label="Login" onClick={this.handleClick}/>
-          </div>
-        </CardText>
-        </Card>
-		</div>
-	</MuiThemeProvider>
+            <CardText className="loginbody">
+              <div >
+                <TextField
+                  className="logintext"
+                  floatingLabelText="Username"
+                  type='text'
+                  id="username"
+                  value={this.state.value}
+                  onChange={this.handleChange}
+                  underlineFocusStyle={{ 'borderColor': '#bbbbbb' }}
+                  floatingLabelFocusStyle={{ 'color': '#bbbbbb' }}
+                  style={{ 'backgroundColor': 'white', 'width': '98%', 'font-size': '150%' }}
+                  />
+                <br />
+                <br />
+                <TextField
+                  floatingLabelText="Password"
+                  type="password"
+                  id="password"
+                  underlineFocusStyle={{ 'borderColor': '#bbbbbb' }}
+                  floatingLabelFocusStyle={{ 'color': '#bbbbbb' }}
+                  style={{ 'backgroundColor': 'white', 'width': '98%', 'font-size': '150%' }}
+                  />
+                <br />
+                <br />
+                <RaisedButton label="Login" onClick={this.handleClick} />
+              </div>
+            </CardText>
+          </Card>
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
