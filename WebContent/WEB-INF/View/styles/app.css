@@ -1,11 +1,30 @@
+body{
+background-image: url("../images/geometry.jpg");
+background-repeat: no-repeat;
+background-attachment: fixed;
+}
+
 .content {
 height: calc(100%-64px);
 overflow: auto;
 padding: 12px;
 padding-top: 76px;
+padding-bottom: 6px;
 margin-left: 256px;
-
 }
+.contentDocent {
+height: calc(100%-64px);
+overflow: auto;
+padding: 10%;
+padding-top: 76px;
+padding-bottom: 6px;
+}
+
+.language
+{
+    text-align: right;
+}
+
 
 .drawer {
     position: absolute;
@@ -18,8 +37,28 @@ margin-left: 256px;
 }
 
 .loginbody {
-	background-color: #bbbbbb;
+    background-color: #bbbbbb;
+    background: #959595; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#bbbbbb, #959595); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#bbbbbb, #959595); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#bbbbbb, #959595); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#bbbbbb, #959595);
 }
+
 .leftbanner {
-	backgroundColor: #bbbbbb;
+	background-color: #bbbbbb;
+    background: #959595; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#bbbbbb, #959595); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#bbbbbb, #959595); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#bbbbbb, #959595); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#bbbbbb, #959595);
+}
+
+#drawer {
+	background-color: #bbbbbb;
+    background: #959595; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#bbbbbb, #959595); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#bbbbbb, #959595); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#bbbbbb, #959595); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#bbbbbb, #959595);
 }

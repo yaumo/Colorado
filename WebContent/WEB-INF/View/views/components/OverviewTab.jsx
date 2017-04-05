@@ -13,30 +13,44 @@ import RaisedButton from 'material-ui/RaisedButton';
 const tableData = [
     {
         name: 'John Smith',
+        exercise: 'Fibonacci',
+        lecture: 'Webprogrammierung',
         status: 'Done',
     },
     {
         name: 'Randal White',
+        exercise: 'Fibonacci',
+        lecture: 'Webprogrammierung',
         status: 'In Progress',
     },
     {
         name: 'Stephanie Sanders',
+        exercise: 'Fibonacci',
+        lecture: 'Webprogrammierung',
         status: 'In Progress',
     },
     {
         name: 'Steve Brown',
+        exercise: 'Fibonacci',
+        lecture: 'Webprogrammierung',
         status: 'In Progress',
     },
     {
         name: 'Joyce Whitten',
+        exercise: 'Fibonacci',
+        lecture: 'Webprogrammierung',
         status: 'In Progress',
     },
     {
         name: 'Samuel Roberts',
+        exercise: 'Fibonacci',
+        lecture: 'Webprogrammierung',
         status: 'Done',
     },
     {
         name: 'Adam Moore',
+        exercise: 'Fibonacci',
+        lecture: 'Webprogrammierung',
         status: 'Done',
     },
 ];
@@ -66,7 +80,7 @@ class OverviewTab extends React.Component {
                                 >
                                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                     <TableRow>
-                                        <TableHeaderColumn colSpan="4" style={{ textAlign: 'center' }}>
+                                        <TableHeaderColumn colSpan="6" style={{ textAlign: 'center' }}>
                                             <DropDownMenu value={this.state.value} onChange={this.handleChange}>
                                                 <MenuItem value={1} primaryText="WWI14SEA" />
                                                 <MenuItem value={2} primaryText="WWI14AMA" />
@@ -89,6 +103,8 @@ class OverviewTab extends React.Component {
                                     </TableRow>
                                     <TableRow>
                                         <TableHeaderColumn>Course</TableHeaderColumn>
+                                        <TableHeaderColumn>Lecture</TableHeaderColumn>
+                                        <TableHeaderColumn>Exercise</TableHeaderColumn>
                                         <TableHeaderColumn>Name</TableHeaderColumn>
                                         <TableHeaderColumn>Status</TableHeaderColumn>
                                         <TableHeaderColumn>View Code</TableHeaderColumn>
@@ -98,6 +114,8 @@ class OverviewTab extends React.Component {
                                     {tableData.map((row, index) => (
                                         <TableRow key={index} selected={row.selected}>
                                             <TableRowColumn>{"WWI14SEA"}</TableRowColumn>
+                                            <TableRowColumn>{row.lecture}</TableRowColumn>
+                                            <TableRowColumn>{row.exercise}</TableRowColumn>
                                             <TableRowColumn>{row.name}</TableRowColumn>
                                             <TableRowColumn>{row.status}</TableRowColumn>
                                             <TableRowColumn><RaisedButton label="?" /></TableRowColumn>

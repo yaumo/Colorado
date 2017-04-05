@@ -23,6 +23,10 @@ function handleClick(e) {
     });
 };
 
+function handleChange(event, index, value) {
+    this.setState({ value });
+};
+
 class ExercisesTab extends React.Component {
 
     constructor() {
@@ -46,18 +50,20 @@ class ExercisesTab extends React.Component {
                             floatingLabelText="Title"
                             fullWidth={false}
                             />
-                        
-                        <TextField
-                            floatingLabelText="Youtube-Link"
-                            fullWidth={false}
-                            />
+                        <DropDownMenu className="language" value={this.state.value} onChange={this.handleChange}>
+                            <MenuItem value={1} primaryText="JavaScript" />
+                            <MenuItem value={2} primaryText="Java" />
+                        </DropDownMenu>
                         <TextField
                             floatingLabelText="Exercise"
                             multiLine={true}
                             rows={3}
                             fullWidth={true}
                             />
-
+                        <TextField
+                            floatingLabelText="Youtube-Link"
+                            fullWidth={true}
+                            />
                         <br />
                         <br />
                         <h4>Pattern Solution</h4>
@@ -66,34 +72,34 @@ class ExercisesTab extends React.Component {
                         </Paper>
                         <h4>Template</h4>
                         <Paper zDepth={4}>
-                            <Solution rows={3}/>
+                            <Solution rows={3} />
                         </Paper>
                         <br />
 
-                            <h4>Testcases</h4>
-                            <Paper zDepth={4}>
-                            <div style={{paddingLeft: "5%"}}>
+                        <h4>Testcases</h4>
+                        <Paper zDepth={4}>
+                            <div style={{ paddingLeft: "5%" }}>
                                 Case 1
-                                <br/>
-                            <TextField
+                                <br />
+                                <TextField
                                     floatingLabelText="Input 1"
                                     fullWidth={false}
                                     />
                             </div>
                             <Divider />
-                            <div style={{paddingLeft: "5%"}}>
+                            <div style={{ paddingLeft: "5%" }}>
                                 Case 2
-                                <br/>
-                            <TextField
+                                <br />
+                                <TextField
                                     floatingLabelText="Input 2"
                                     fullWidth={false}
                                     />
                             </div>
                             <Divider />
-                            <div style={{paddingLeft: "5%"}}>
+                            <div style={{ paddingLeft: "5%" }}>
                                 Case 3
-                                <br/>
-                            <TextField
+                                <br />
+                                <TextField
                                     floatingLabelText="Input 3"
                                     fullWidth={false}
                                     />

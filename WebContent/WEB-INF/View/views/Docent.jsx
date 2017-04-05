@@ -11,13 +11,14 @@ import ExercisesTab from './components/ExercisesTab.jsx';
 import AssignExercisesTab from './components/AssignExercisesTab.jsx';
 import OverviewTab from './components/OverviewTab.jsx';
 import LecturesTab from './components/LecturesTab.jsx';
+import DocentBar from './components/DocentBar.jsx';
 
 
 export class Docent extends React.Component {
     render() {
         return (
             <div>
-                <NavBar />
+                <DocentBar/>
                 <Content />
             </div>
         );
@@ -27,21 +28,21 @@ export class Docent extends React.Component {
 class Content extends React.Component {
     render() {
         return (
-            <div id="content" className="content">
+            <div id="contentDocent" className="contentDocent">
                 <MuiThemeProvider muiTheme={getMuiTheme()} >
                     <div>
                         <Tabs>
-                            <Tab label="Exercises" style={{'backgroundColor': '#bd051f'}}>
+                            <Tab label="Exercises" style={{ 'backgroundColor': '#bd051f' }}>
                                 <ExercisesTab />
                             </Tab>
-                            <Tab label="Assign Exercises" style={{'backgroundColor': '#bd051f'}}>
+                            <Tab label="Assign Exercises" style={{ 'backgroundColor': '#bd051f' }}>
                                 <AssignExercisesTab />
                             </Tab>
-                            <Tab label="Overview" style={{'backgroundColor': '#bd051f'}}>
+                            <Tab label="Overview" style={{ 'backgroundColor': '#bd051f' }}>
                                 <OverviewTab />
                             </Tab>
                             <Tab
-								style={{'backgroundColor': '#bd051f'}}
+                                style={{ 'backgroundColor': '#bd051f' }}
                                 label="Lectures"
                                 data-route="/home"
                                 >
