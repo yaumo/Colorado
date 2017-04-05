@@ -35,9 +35,10 @@ class Content extends React.Component {
                             <Card>
                                 <CardHeader
                                     title="Exercise 1"
+									className="loginheader"
                                     />
                                 <Divider />
-                                <CardText>
+                                <CardText className="loginbody">
                                 <div>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                     Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
@@ -56,9 +57,10 @@ class Content extends React.Component {
                             <Card>
                                 <CardHeader
                                     title="Solution"
+									className="loginheader"
                                     />
                                     <Divider />
-                                <CardText>
+                                <CardText className="loginbody">
                                     <Paper zDepth={4}>
                                     <Solution/>
                                     </Paper> 

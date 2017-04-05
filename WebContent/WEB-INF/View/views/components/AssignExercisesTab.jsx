@@ -30,9 +30,10 @@ class AssignExercisesTab extends React.Component {
                 <Card>
                     <CardHeader
                         title="Append Exercises to Course"
+						className="loginheader"
                         />
                     <Divider />
-                    <CardText>
+                    <CardText className="loginbody">
                     <h4>Step 1: Select Exercise(s)</h4>
                     <Paper zDepth={2}>
                         <div>

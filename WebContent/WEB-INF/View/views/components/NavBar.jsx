@@ -63,7 +63,9 @@ class NavBar extends React.Component {
 		
 		this.setState({dropdown: value});
 	}
-	
+	 /*componentWillMount() {
+      console.log('Component WILL MOUNT!')
+   }*/
     onClick(e){
        e.preventDefault();
 	   if(e.target.textContent == "Settings"){
@@ -80,7 +82,7 @@ class NavBar extends React.Component {
                     <div>
                         <AppBar 
                             title="Colorado"
-                            style={{ 'position': 'fixed'}} 
+                            style={{ 'position': 'fixed','backgroundColor': '#bd051f'}} 
                             iconElementRight={
                                 <IconMenu
                                     iconButtonElement={<IconButton>
@@ -100,10 +102,9 @@ class NavBar extends React.Component {
                             docked={true}
                             open={this.state.open}
                             onRequestChange={(open) => this.setState({ open })}
-                            containerStyle={{ 'position': 'fixed', 'margin': '0', 'top': '64px', height: 'calc(100% - 64px)' }}
-                            className= ""
+                            containerStyle={{ 'position': 'fixed', 'margin': '0', 'top': '64px', 'height': 'calc(100% - 64px)', 'backgroundColor' : '#bbbbbb' }}
                             >
-                            <DropDownMenu value={this.state.dropdown} onChange={this.handleChange}>
+                            <DropDownMenu value={this.state.dropdown} onChange={this.handleChange} >
                                 {lecturelist}
                             </DropDownMenu>
                             <Divider />

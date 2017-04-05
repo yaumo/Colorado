@@ -38,9 +38,10 @@ class ExercisesTab extends React.Component {
                 <Card>
                     <CardHeader
                         title="New Exercise"
+						className="loginheader"
                         />
                     <Divider />
-                    <CardText>
+                    <CardText className="loginbody">
                         <TextField
                             floatingLabelText="Title"
                             fullWidth={false}
