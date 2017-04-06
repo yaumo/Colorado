@@ -46,11 +46,12 @@ public class DenverDBSetupTest {
 	@Test
 	public void setupDatabase() {
 
-		Role roleAdmin = createRole(UserService.ROLE_GLOBAL_ADMINISTRATOR);
-		Role roleUser = createRole(UserService.ROLE_USER);
+		Role roleAdmin = createRole(UserService.ROLE_ADMIN);
+		Role roleStudent = createRole(UserService.ROLE_STUDENT);
+		Role roleDocent = createRole(UserService.ROLE_DOCENT);
 		User systemUser = createSystemUser();
 
-		updateRoles(roleAdmin, roleUser, systemUser);
+		updateRoles(roleAdmin, roleStudent, roleDocent, systemUser);
 	}
 
 	@After
@@ -59,16 +60,18 @@ public class DenverDBSetupTest {
 
 	}
 
-	private boolean updateRoles(Role roleAdmin, Role roleUser, User systemUser) {
+	private boolean updateRoles(Role roleAdmin, Role roleStudent, Role roleDocent, User systemUser) {
 		Set<User> systemUsers = new HashSet<>();
 		systemUsers.add(systemUser);
 		roleAdmin.setUsers(systemUsers);
-		roleUser.setUsers(systemUsers);
+		roleStudent.setUsers(systemUsers);
+		roleDocent.setUsers(systemUsers);
 
 		try {
 			HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 			hibCtrl.mergeEntity(roleAdmin);
-			hibCtrl.mergeEntity(roleUser);
+			hibCtrl.mergeEntity(roleStudent);
+			hibCtrl.mergeEntity(roleDocent);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -98,7 +101,7 @@ public class DenverDBSetupTest {
 		// Hib save HibernateController hibCtrl =
 		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 
-		Role systemRole = RoleController.getRoleByName(UserService.ROLE_GLOBAL_ADMINISTRATOR);
+		Role systemRole = RoleController.getRoleByName(UserService.ROLE_ADMIN);
 
 		LOGGER.info("Got Role:" + systemRole.getRoleName());
 		ArrayList<Role> systemRoles = new ArrayList<Role>(0);

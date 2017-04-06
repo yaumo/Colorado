@@ -32,8 +32,9 @@ public class UserService implements AuthenticationProvider {
 	BCryptPasswordEncoder passWordEncoder = new BCryptPasswordEncoder();
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserService.class);
-	public static final String ROLE_USER = "ROLE_USER";
-	public static final String ROLE_GLOBAL_ADMINISTRATOR = "ROLE_GLOBAL_ADMINISTRATOR";
+	public static final String ROLE_STUDENT = "ROLE_STUDENT";
+	public static final String ROLE_DOCENT = "ROLE_DOCENT";
+	public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
 	public static User getCurrentUser() {
 		// Find out username and retrieve the user from DB
@@ -52,7 +53,7 @@ public class UserService implements AuthenticationProvider {
 	}
 
 	public static UsernamePasswordAuthenticationToken authorizeSystemuser() {
-		Role role = RoleController.getRoleByName(ROLE_GLOBAL_ADMINISTRATOR);
+		Role role = RoleController.getRoleByName(ROLE_ADMIN);
 		List<Role> roles = new ArrayList<>();
 		roles.add(role);
 		return authorizeUserByLoginName(DenverConstants.SYSTEM, "password", roles);
