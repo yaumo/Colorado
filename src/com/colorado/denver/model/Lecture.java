@@ -23,7 +23,7 @@ public class Lecture extends EducationEntity {
 	public static final String LECTURE_COURSE = "lecture_course";
 
 	private Course course;
-	private transient Set<Exercise> exercises;
+	private Set<Exercise> exercises;
 
 	public Lecture() {
 

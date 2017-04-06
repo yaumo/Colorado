@@ -11,12 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.model.Course;
 import com.colorado.denver.tools.DenverConstants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+@RestController
 public class CourseController extends ObjectOperationController {
 
 	/**
