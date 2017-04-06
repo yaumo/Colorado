@@ -36,6 +36,7 @@ public class PopulateDBWithTestData {
 
 	@Test
 	public void populateDatabase() {
+		UserService.authorizeSystemuser();
 		createDocent("Heinrich", "password", UserService.ROLE_GLOBAL_ADMINISTRATOR);
 		createCourse("WWI 14 SEA");
 		createLecture("Programmieren I");

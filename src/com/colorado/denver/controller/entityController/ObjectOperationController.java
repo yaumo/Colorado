@@ -103,9 +103,7 @@ public class ObjectOperationController extends HttpServlet {
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
 		gb.serializeNulls();
 		Gson gson = gb.create();
-
 		String jsonResponse = DenverConstants.ERROR;
-
 		switch (crud) {
 		case 1:
 			String newId = create(entity);

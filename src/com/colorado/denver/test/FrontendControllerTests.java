@@ -43,10 +43,12 @@ public class FrontendControllerTests {
 			BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 			String line = buf.readLine();
 			StringBuilder sb = new StringBuilder();
+
 			while (line != null) {
 				sb.append(line).append("\n");
 				line = buf.readLine();
 			}
+
 			String fileAsString = sb.toString();
 			UserService.authorizeSystemuser();
 			request = new MockHttpServletRequest("POST", "/exercise");

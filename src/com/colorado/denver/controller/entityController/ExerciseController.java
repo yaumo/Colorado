@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.model.Exercise;
+import com.colorado.denver.services.UserService;
 import com.colorado.denver.tools.DenverConstants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,6 +33,7 @@ public class ExerciseController extends ObjectOperationController {
 	public HttpServletResponse handleExerciseRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
 
+		UserService.authorizeSystemuser();
 		// JSONObject theObject = super.handleRequest(request, response);
 		String jsonString = "";
 		try {
