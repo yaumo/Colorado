@@ -27,7 +27,7 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	public transient boolean hasBeenModified;
 
 	@Transient
-	public transient int crud;// Both transient for Hibernate and GSON!
+	public int crud;// Both transient for Hibernate
 
 	// Important for identifying the used object. This property is set during Hibernate create
 	public String objectClass;

@@ -1,0 +1,33 @@
+{
+	"solutions": [{
+		"code": null,
+		"exercise": null,
+		"owner": {
+			"username": "system",
+			"course": null,
+			"solutions": [],
+			"objectClass": "user",
+			"id": "user_00001"
+		},
+		"title": "Fibonacci Loesung",
+		"description": null,
+		"objectClass": "solution",
+		"id": "solution_00001"
+	}],
+	"deadline": null,
+	"videoLink": null,
+	"code": "this is code",
+	"solution_code": null,
+	"owner": {
+		"username": "system",
+		"course": null,
+		"solutions": [],
+		"objectClass": "user",
+		"id": "user_00001"
+	},
+	"title": "Exercise 1",
+	"description": "Lorem ipsum ...",
+	"crud": 3,
+	"objectClass": "exercise",
+	"id": "exercise_00001"
+}
