@@ -18,14 +18,16 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	 * 
 	 */
 	private static final long serialVersionUID = 2741548100143780881L;
-	@Transient
 	public static final String ID = "id";
 	public static final String OBJECT_CLASS = "objectClass";
-
 	public static final String CREATION_DATE = "creationDate";
+	public static final String CRUD = "crud";
 
 	public transient Date creationDate;
 	public transient boolean hasBeenModified;
+
+	@Transient
+	public int crud;
 
 	// Important for identifying the used object. This property is set during Hibernate create
 	public String objectClass;
@@ -76,4 +78,13 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 
 	@Transient
 	public abstract String setPrefix();
+
+	@Transient
+	public int getCrud() {
+		return this.crud;
+	}
+
+	public void setCrud(int crud) {
+		this.crud = crud;
+	}
 }

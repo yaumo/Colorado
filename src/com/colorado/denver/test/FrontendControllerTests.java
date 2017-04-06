@@ -39,7 +39,7 @@ public class FrontendControllerTests {
 
 		try {
 			// Change the file to the call u want to make. Using Exercise entity! ID's are hardcoded!
-			InputStream is = new FileInputStream("jsonCreateTest.txt");
+			InputStream is = new FileInputStream("jsonReadTest.txt");
 			BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 			String line = buf.readLine();
 			StringBuilder sb = new StringBuilder();
@@ -60,6 +60,7 @@ public class FrontendControllerTests {
 			mav.handleExerciseRequest(request, response);
 
 			assertEquals(200, response.getStatus());
+			System.out.println("The content of the response is: " + response.getContentAsString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -3,26 +3,23 @@ package com.colorado.denver.controller.entityController;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.management.ReflectionException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpServerErrorException;
 
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.BaseEntity;
-import com.colorado.denver.model.Exercise;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.tools.DenverConstants;
-import com.colorado.denver.tools.GenericTools;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class ObjectOperationController extends HttpServlet {
@@ -33,17 +30,15 @@ public class ObjectOperationController extends HttpServlet {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ObjectOperationController.class);
 	private HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 
-	public JSONObject handleRequest(HttpServletRequest request,
-			HttpServletResponse response) throws ReflectionException, IOException {
+	public String handleRequest(HttpServletRequest request) throws ReflectionException, IOException, JSONException {
 		// This Method should be generic!!
 		// init
-		JSONParser parser = new JSONParser();
+
 		String objectClass = DenverConstants.ERROR_NO_OBJECT_FROM_REQUEST;
 		String id = DenverConstants.ERROR_NO_ID_FROM_REQUEST;
 		int crud = 0;// 0 is bad
 		JSONObject jsonObject = null;
 
-		GsonBuilder builder = new GsonBuilder();
 		String jsonStr = DenverConstants.ERROR_NO_OBJECT_FROM_REQUEST;
 		try {
 			jsonStr = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
@@ -54,7 +49,7 @@ public class ObjectOperationController extends HttpServlet {
 
 			objectClass = jsonObject.getString(BaseEntity.OBJECT_CLASS);
 
-			crud = jsonObject.getInt(DenverConstants.CRUD);// Crud is not persisted. Therefore constant
+			crud = jsonObject.getInt(BaseEntity.CRUD);// Crud is not persisted but a transient field
 			if (crud == 1) {
 				id = DenverConstants.ID_CREATE_MODE;
 			} else {
@@ -78,10 +73,6 @@ public class ObjectOperationController extends HttpServlet {
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
 
-		Class<? extends BaseEntity<?>> clazz = GenericTools.getModelClassForName(objectClass);
-		Objects.requireNonNull(clazz, "Model class was not found! for: " + objectClass);
-		LOGGER.debug("ObjectClass is: " + clazz.getSimpleName());
-
 		// get user via session
 		// do security check
 		/*
@@ -90,22 +81,66 @@ public class ObjectOperationController extends HttpServlet {
 		 * -Is the user allowed to use the CRUD operation in the request with the given Entity?
 		 */
 
-		return jsonObject;
+		return jsonObject.getString(DenverConstants.JSON);
 
 	}
 
-	private BaseEntity<?> update(BaseEntity<?> entity) {
-		return hibCtrl.mergeEntity(entity);
+	public String doCrud(BaseEntity<?> entity, String jsonString) {
+
+		String id = DenverConstants.ERROR;
+		int crud = 0;
+		try {
+			crud = entity.getCrud();
+			if (crud != 1)
+				id = entity.getId();
+
+		} catch (Exception e) {
+			LOGGER.error("Error extraxting information from the Object(FromJSON): " + entity.getId());
+			e.printStackTrace();
+		}
+
+		// Prepare for CRUD and response
+		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.serializeNulls();
+		Gson gson = gb.create();
+
+		String jsonResponse = DenverConstants.ERROR;
+
+		switch (crud) {
+		case 1:
+			String newId = create(entity);
+			entity.setId(newId);
+			jsonResponse = gson.toJson(read(id));
+			break;
+		case 2:
+			jsonResponse = gson.toJson(read(id));
+			break;
+		case 3:
+			jsonResponse = gson.toJson(update(entity));
+			break;
+		case 4:
+			delete(id);
+			jsonResponse = "SUCCESS";
+			break;
+
+		default:
+			LOGGER.error("ERROR IN ASSERTING A CRUD OPERTAION!! CRUD VALUE: " + crud);
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);// last resort
+		}
+		return jsonResponse;
 	}
 
-	private String create() {
-		Exercise exc = new Exercise();
-		String id = hibCtrl.addEntity(exc);
+	private String create(BaseEntity<?> entity) {
+		String id = hibCtrl.addEntity(entity);
 		return id;
 	}
 
 	private BaseEntity<?> read(String id) {
 		return hibCtrl.getEntity(id);
+	}
+
+	private BaseEntity<?> update(BaseEntity<?> entity) {
+		return hibCtrl.mergeEntity(entity);
 	}
 
 	private boolean delete(String id) {
