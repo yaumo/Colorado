@@ -30,14 +30,14 @@ public class ExerciseController extends ObjectOperationController {
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Exercise.EXERCISE, method = RequestMethod.POST)
 	@ResponseBody
-	public HttpServletResponse handleExerciseRequest(HttpServletRequest request,
+	public void handleExerciseRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
 
 		UserService.authorizeSystemuser();
 		// JSONObject theObject = super.handleRequest(request, response);
 		String jsonString = "";
 		try {
-			jsonString = super.handleRequest(request);
+			jsonString = super.checkRequest(request);
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
@@ -53,8 +53,7 @@ public class ExerciseController extends ObjectOperationController {
 		response.setStatus(200);
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();
-		// response.getWriter().close(); maybe no close because I didn't open this?
-		return response;
+		// response.getWriter().close(); // maybe no close because I didn't open this?
 	}
 
 }

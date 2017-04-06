@@ -32,13 +32,13 @@ public class UserController extends ObjectOperationController {
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.POST)
 	@ResponseBody
-	public HttpServletResponse handleUserRequest(HttpServletRequest request,
+	public void handleUserRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
 		UserService.authorizeSystemuser();
 		// JSONObject theObject = super.handleRequest(request, response);
 		String jsonString = "";
 		try {
-			jsonString = super.handleRequest(request);
+			jsonString = super.checkRequest(request);
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
@@ -54,7 +54,7 @@ public class UserController extends ObjectOperationController {
 		response.setStatus(200);
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();
-		return response;
+
 	}
 
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)

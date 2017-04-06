@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.colorado.denver.controller.entityController.ExerciseController;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
+import com.google.gson.GsonBuilder;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -62,6 +63,8 @@ public class FrontendControllerTests {
 			mav.handleExerciseRequest(request, response);
 
 			assertEquals(200, response.getStatus());
+
+			GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
 			System.out.println("The content of the response is: " + response.getContentAsString());
 		} catch (Exception e) {
 			e.printStackTrace();

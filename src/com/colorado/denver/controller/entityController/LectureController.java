@@ -27,13 +27,13 @@ public class LectureController extends ObjectOperationController {
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Lecture.LECTURE, method = RequestMethod.POST)
 	@ResponseBody
-	public HttpServletResponse handleLectureRequest(HttpServletRequest request,
+	public void handleLectureRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
 
 		// JSONObject theObject = super.handleRequest(request, response);
 		String jsonString = "";
 		try {
-			jsonString = super.handleRequest(request);
+			jsonString = super.checkRequest(request);
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
@@ -49,7 +49,6 @@ public class LectureController extends ObjectOperationController {
 		response.setStatus(200);
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();
-		return response;
 	}
 
 }

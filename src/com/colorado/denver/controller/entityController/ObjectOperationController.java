@@ -30,7 +30,7 @@ public class ObjectOperationController extends HttpServlet {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ObjectOperationController.class);
 	private HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 
-	public String handleRequest(HttpServletRequest request) throws ReflectionException, IOException, JSONException {
+	public String checkRequest(HttpServletRequest request) throws ReflectionException, IOException, JSONException {
 		// This Method should be generic!!
 		// init
 
@@ -80,7 +80,6 @@ public class ObjectOperationController extends HttpServlet {
 		 * -Who is the User? Get user via the session!
 		 * -Is the user allowed to use the CRUD operation in the request with the given Entity?
 		 */
-
 		return jsonObject.getString(DenverConstants.JSON);
 
 	}
@@ -125,6 +124,18 @@ public class ObjectOperationController extends HttpServlet {
 			LOGGER.error("ERROR IN ASSERTING A CRUD OPERTAION!! CRUD VALUE: " + crud);
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);// last resort
 		}
+
+		// TODO: this is not clean. Do it with objects somehow
+
+		try {
+			JSONObject obj = new JSONObject(jsonResponse);
+			// jsonResponse = jsonResponse.replaceAll("\"" + BaseEntity.CRUD + "\"[ ]*:[^,}\\]]*[,]?", "");
+			obj.remove(BaseEntity.CRUD);;
+			jsonResponse = obj.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return jsonResponse;
 	}
 
