@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -12,6 +13,7 @@ import com.colorado.denver.model.Course;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Lecture;
 import com.colorado.denver.model.Solution;
+import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.services.persistence.SessionTools;
 
@@ -34,10 +36,18 @@ public class PopulateDBWithTestData {
 
 	@Test
 	public void populateDatabase() {
+		createDocent("Heinrich", "password", UserService.ROLE_GLOBAL_ADMINISTRATOR);
 		createCourse("WWI 14 SEA");
 		createLecture("Programmieren I");
-		createExercise();
-		createSolution();
+		createExercise("Fibonacci");
+		createSolution("Fibonacci Loesung");
+	}
+
+	private User createDocent(String name, String password, String roleName) {
+		User usr = new User();
+		usr.setName(name);
+		usr.setPassword(password);
+		return usr;
 	}
 
 	private Course createCourse(String course_name) {
@@ -47,15 +57,17 @@ public class PopulateDBWithTestData {
 		return course;
 	}
 
-	private Exercise createExercise() {
+	private Exercise createExercise(String title) {
 		Exercise exercise = new Exercise();
+		exercise.setTitle(title);
 		hibCtrl = HibernateGeneralTools.getHibernateController();
 		hibCtrl.addEntity(exercise);
 		return exercise;
 	}
 
-	private Solution createSolution() {
+	private Solution createSolution(String title) {
 		Solution solution = new Solution();
+		solution.setTitle(title);
 		hibCtrl = HibernateGeneralTools.getHibernateController();
 		hibCtrl.addEntity(solution);
 		return solution;

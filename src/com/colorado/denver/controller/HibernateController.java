@@ -21,8 +21,6 @@ public class HibernateController {
 	/* Method to CREATE an entity in the database */
 
 	public void setCreationInformation(EducationEntity entity) {
-		entity.setObjectClass(GenericTools.returnClassName(entity).toLowerCase());
-		entity.setCreationDate(new Date());
 
 		// If EducationEntity set Owner!!!!
 		if (UserService.getCurrentUser() == null) {
@@ -49,6 +47,9 @@ public class HibernateController {
 				LOGGER.info("Setting creation information on EducationEntity");
 				setCreationInformation((EducationEntity) entity);
 			}
+
+			entity.setObjectClass(GenericTools.returnClassName(entity).toLowerCase());
+			entity.setCreationDate(new Date());
 
 			LOGGER.info("Saving entity: " + entity.getClass().getName());
 			entityID = (String) session.save(entity);
@@ -130,6 +131,7 @@ public class HibernateController {
 		try {
 			String[] parts = id.split("_");
 			String clazzName = parts[0];
+			LOGGER.info("Getting clazz: " + clazzName);
 			clazz = GenericTools.getModelClassForName(clazzName);
 
 		} catch (Exception e) {

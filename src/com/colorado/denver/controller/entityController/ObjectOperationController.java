@@ -110,7 +110,7 @@ public class ObjectOperationController extends HttpServlet {
 		case 1:
 			String newId = create(entity);
 			entity.setId(newId);
-			jsonResponse = gson.toJson(read(id));
+			jsonResponse = gson.toJson(read(newId));
 			break;
 		case 2:
 			jsonResponse = gson.toJson(read(id));

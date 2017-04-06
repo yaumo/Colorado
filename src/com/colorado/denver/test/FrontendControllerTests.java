@@ -39,7 +39,7 @@ public class FrontendControllerTests {
 
 		try {
 			// Change the file to the call u want to make. Using Exercise entity! ID's are hardcoded!
-			InputStream is = new FileInputStream("jsonReadTest.txt");
+			InputStream is = new FileInputStream("jsonCreateTest.txt");
 			BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 			String line = buf.readLine();
 			StringBuilder sb = new StringBuilder();
