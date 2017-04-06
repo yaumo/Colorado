@@ -1,5 +1,6 @@
 package com.colorado.denver.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,7 +31,7 @@ public class Solution extends EducationEntity {
 
 	}
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "exerciseID")
 	public Exercise getExercise() {
 		return exercise;

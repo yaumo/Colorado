@@ -71,7 +71,7 @@ public class User extends BaseEntity<User> {
 		this.solutions = solutions;
 	}
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "courseID")
 	public Course getCourse() {
 		return course;
