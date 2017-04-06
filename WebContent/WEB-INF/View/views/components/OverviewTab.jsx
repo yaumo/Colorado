@@ -69,10 +69,6 @@ class OverviewTab extends React.Component {
         return (
             <div>
                 <Card>
-                    <CardHeader
-						className="loginheader"
-                        title="Overview"
-                        />
                     <Divider />
                     <CardText className="loginbody">
                         <Paper zDepth={4}>

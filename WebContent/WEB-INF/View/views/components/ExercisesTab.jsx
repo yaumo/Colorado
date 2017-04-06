@@ -13,7 +13,7 @@ import Fetch from 'react-fetch';
 
 
 function handleClick(e) {
-    fetch('http://localhost:8080/Excercise', {
+    fetch('http://localhost:8080/excercise', {
         method: 'POST',
         mode: 'no-cors'
     }).then(function (response) {
@@ -39,11 +39,8 @@ class ExercisesTab extends React.Component {
     render() {
         return (
             <div>
-                <Card>
-                    <CardHeader
-                        title="New Exercise"
-						className="loginheader"
-                        />
+                <Card className="card">
+
                     <Divider />
                     <CardText className="loginbody">
                         <TextField
@@ -55,7 +52,7 @@ class ExercisesTab extends React.Component {
                             <MenuItem value={2} primaryText="Java" />
                         </DropDownMenu>
                         <TextField
-                            floatingLabelText="Exercise"
+                            floatingLabelText="Description"
                             multiLine={true}
                             rows={3}
                             fullWidth={true}
@@ -79,28 +76,22 @@ class ExercisesTab extends React.Component {
                         <h4>Testcases</h4>
                         <Paper zDepth={4}>
                             <div style={{ paddingLeft: "5%" }}>
-                                Case 1
-                                <br />
                                 <TextField
-                                    floatingLabelText="Input 1"
+                                    floatingLabelText="Case 1: Input"
                                     fullWidth={false}
                                     />
                             </div>
                             <Divider />
                             <div style={{ paddingLeft: "5%" }}>
-                                Case 2
-                                <br />
                                 <TextField
-                                    floatingLabelText="Input 2"
+                                    floatingLabelText="Case 3: Input"
                                     fullWidth={false}
                                     />
                             </div>
                             <Divider />
                             <div style={{ paddingLeft: "5%" }}>
-                                Case 3
-                                <br />
                                 <TextField
-                                    floatingLabelText="Input 3"
+                                    floatingLabelText="Case 3: Input"
                                     fullWidth={false}
                                     />
                             </div>

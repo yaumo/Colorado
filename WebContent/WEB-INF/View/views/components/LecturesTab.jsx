@@ -60,10 +60,6 @@ class LecturesTab extends React.Component {
         return (
             <div>
                 <Card>
-                    <CardHeader
-                        title="Append Exercises to Course"
-						className="loginheader"
-                        />
                     <Divider />
                     <CardText className="loginbody">
                     <h4>Step 1: Select Curse</h4>

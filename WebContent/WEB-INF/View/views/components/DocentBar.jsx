@@ -51,7 +51,7 @@ class DocentBar extends React.Component {
                     <div>
                         <AppBar 
                             title="Colorado"
-                            style={{ 'position': 'fixed','backgroundColor': '#bd051f'}} 
+                            style={{ 'position': 'fixed','backgroundColor': '#bd051f', 'opacity':'0.9'}} 
                             iconElementRight={
                                 <IconMenu
                                     iconButtonElement={<IconButton>

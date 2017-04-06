@@ -32,10 +32,10 @@ class Content extends React.Component {
                 <MuiThemeProvider muiTheme={getMuiTheme()} >
                     <div>
                         <Tabs>
-                            <Tab label="Exercises" style={{ 'backgroundColor': '#bd051f' }}>
+                            <Tab label="New Exercise" style={{ 'backgroundColor': '#bd051f' }}>
                                 <ExercisesTab />
                             </Tab>
-                            <Tab label="Assign Exercises" style={{ 'backgroundColor': '#bd051f' }}>
+                            <Tab label="Append Exercises" style={{ 'backgroundColor': '#bd051f' }}>
                                 <AssignExercisesTab />
                             </Tab>
                             <Tab label="Overview" style={{ 'backgroundColor': '#bd051f' }}>
@@ -43,8 +43,7 @@ class Content extends React.Component {
                             </Tab>
                             <Tab
                                 style={{ 'backgroundColor': '#bd051f' }}
-                                label="Lectures"
-                                data-route="/home"
+                                label="New Lecture"
                                 >
                                 <LecturesTab />
                             </Tab>

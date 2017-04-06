@@ -28,10 +28,6 @@ class AssignExercisesTab extends React.Component {
         return (
             <div>
                 <Card>
-                    <CardHeader
-                        title="Append Exercises to Course"
-						className="loginheader"
-                        />
                     <Divider />
                     <CardText className="loginbody">
                     <h4>Step 1: Select Exercise(s)</h4>
@@ -74,6 +70,12 @@ class AssignExercisesTab extends React.Component {
                         <br/>
                         <h4>Step 2: Select Lecture</h4>
                         <Paper zDepth={2} style={{textAlign:"center"}}>
+                        <DropDownMenu value={this.state.value} onChange={this.handleChange}>
+                            <MenuItem value={1} primaryText="WWI14SEA" />
+                            <MenuItem value={2} primaryText="WWI14SEB" />
+                            <MenuItem value={3} primaryText="WWI16AMA" />
+                        </DropDownMenu>
+                        
                         <DropDownMenu value={this.state.value} onChange={this.handleChange}>
                             <MenuItem value={1} primaryText="Webprogrammierung" />
                             <MenuItem value={2} primaryText="Datenbanken" />
