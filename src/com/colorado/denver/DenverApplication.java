@@ -1,9 +1,5 @@
 package com.colorado.denver;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -14,13 +10,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.colorado.denver.model.Role;
-import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.GenericTools;
-import com.colorado.denver.tools.Tools;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 /*
@@ -51,38 +43,6 @@ public class DenverApplication extends SpringBootServletInitializer {
 			e.printStackTrace();
 			SpringApplication.exit(GenericTools.getApplicationContext());
 		}
-
-		LOGGER.info("--------------BEGINNING JSON STUFF------------------");
-		User u = UserService.getCurrentUser();
-
-		Collection<Role> roles = new HashSet<Role>();;
-		roles = u.getRoles();
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		String jsonUser = gson.toJson(u);
-		String roleOnSys = "";
-		for (Iterator<Role> iterator = roles.iterator(); iterator.hasNext();) {
-			Role type = iterator.next();
-			System.out.println("Roles on User");
-			System.out.println(type.getRoleName());
-			roleOnSys = gson.toJson(type);
-
-		}
-		System.out.println();
-		System.out.println("User");
-		// Tools.printGson(jsonRoles);
-
-		Tools.printGson(jsonUser);
-
-		System.out.println();
-		System.out.println("Role");
-		Tools.printGson(roleOnSys);
-		// User targetObject = new Gson().fromJson(jsonUser, User.class);
-		// System.out.println(targetObject.getId());
-		// System.out.println(targetObject.getObjectClass());
-		// System.out.println(targetObject.getUsername());
-		// System.out.println(targetObject.toString());
-
-		LOGGER.info("--------------END JSON STUFF------------------");
 	}
 
 	@Override

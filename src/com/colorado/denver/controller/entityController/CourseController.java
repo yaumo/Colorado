@@ -11,29 +11,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.colorado.denver.model.Exercise;
+import com.colorado.denver.model.Course;
 import com.colorado.denver.tools.DenverConstants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-@RestController
-public class ExerciseController extends ObjectOperationController {
+public class CourseController extends ObjectOperationController {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6133518159703299316L;
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ExerciseController.class);
+	private static final long serialVersionUID = -2330023617204647488L;
+	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
 
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Exercise.EXERCISE, method = RequestMethod.POST)
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Course.COURSE, method = RequestMethod.POST)
 	@ResponseBody
-	public HttpServletResponse handleExerciseRequest(HttpServletRequest request,
+	public HttpServletResponse handleCourseRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
 
-		// JSONObject theObject = super.handleRequest(request, response);
-		String jsonString = "";
+		String jsonString = DenverConstants.ERROR;
 		try {
 			jsonString = super.handleRequest(request);
 		} catch (JSONException e) {
@@ -45,14 +42,12 @@ public class ExerciseController extends ObjectOperationController {
 		gb.serializeNulls();
 		Gson gson = gb.create();
 
-		Exercise entity = gson.fromJson(jsonString, Exercise.class);
+		Course entity = gson.fromJson(jsonString, Course.class);
 		String jsonResponse = super.doCrud(entity, jsonString);
 		entity = null; // Let GC run over this quickly
 		response.setStatus(200);
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();
-		// response.getWriter().close(); maybe no close because I didn't open this?
 		return response;
 	}
-
 }
