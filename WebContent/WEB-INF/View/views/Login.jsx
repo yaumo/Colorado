@@ -16,17 +16,24 @@ import Avatar from 'material-ui/Avatar';
 
 injectTapEventPlugin();
 
+function handleClick(e) {
+    fetch('http://localhost:8080/login', {
+        method: 'POST',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            objectClass: 'login',
+        })
+    }).then(function (response) {
 
-/*var sectionStyle = {
-   backgroundImage: `url(${Background})`
-};*/
-// style={ sectionStyle }
-
-/*function handleClick(e) {
-    e.preventDefault();
-    console.log('The link was clicked.');
-	browserHistory.push('/exercise')
-  }*/
+    }).catch(function (err) {
+        console.log(err)
+    });
+};
 
 export class Login extends React.Component {
   render() {
@@ -113,8 +120,8 @@ class Content extends React.Component {
                   value={this.state.value}
                   onChange={this.handleChange}
                   underlineFocusStyle={{ 'borderColor': '#bbbbbb' }}
-                  floatingLabelFocusStyle={{ 'color': '#bbbbbb' }}
-                  style={{ 'backgroundColor': 'white', 'width': '98%', 'font-size': '150%' }}
+                  floatingLabelFocusStyle={{ 'color': 'white' }}
+                  style={{'width': '98%', 'font-size': '150%' }}
                   />
                 <br />
                 <br />
@@ -123,14 +130,17 @@ class Content extends React.Component {
                   type="password"
                   id="password"
                   underlineFocusStyle={{ 'borderColor': '#bbbbbb' }}
-                  floatingLabelFocusStyle={{ 'color': '#bbbbbb' }}
-                  style={{ 'backgroundColor': 'white', 'width': '98%', 'font-size': '150%' }}
+                  floatingLabelFocusStyle={{ 'color': 'white' }}
+                  style={{'width': '98%', 'font-size': '150%' }}
                   />
                 <br />
                 <br />
-                <RaisedButton label="Login" onClick={this.handleClick} />
+                
               </div>
             </CardText>
+            <CardActions className="footer">
+              <RaisedButton label="Login" onClick={this.handleClick} />
+            </CardActions>
           </Card>
         </div>
       </MuiThemeProvider>

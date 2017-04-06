@@ -13,9 +13,21 @@ import Fetch from 'react-fetch';
 
 
 function handleClick(e) {
-    fetch('http://localhost:8080/excercise', {
+    fetch('http://localhost:8080/exercise', {
         method: 'POST',
-        mode: 'no-cors'
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            objectClass: 'exercise',
+            crud: '1',
+            title: 'FrontEnd',
+            description: 'Test 1234',
+            code: 'bam bam baaaaam'
+        })
     }).then(function (response) {
 
     }).catch(function (err) {
@@ -43,10 +55,11 @@ class ExercisesTab extends React.Component {
 
                     <Divider />
                     <CardText className="loginbody">
+                        <h4>Main Information</h4>
                         <TextField
                             floatingLabelText="Title"
                             fullWidth={false}
-                            />
+                        />
                         <DropDownMenu className="language" value={this.state.value} onChange={this.handleChange}>
                             <MenuItem value={1} primaryText="JavaScript" />
                             <MenuItem value={2} primaryText="Java" />
@@ -56,11 +69,11 @@ class ExercisesTab extends React.Component {
                             multiLine={true}
                             rows={3}
                             fullWidth={true}
-                            />
+                        />
                         <TextField
                             floatingLabelText="Youtube-Link"
                             fullWidth={true}
-                            />
+                        />
                         <br />
                         <br />
                         <h4>Pattern Solution</h4>
@@ -79,27 +92,28 @@ class ExercisesTab extends React.Component {
                                 <TextField
                                     floatingLabelText="Case 1: Input"
                                     fullWidth={false}
-                                    />
+                                />
                             </div>
                             <Divider />
                             <div style={{ paddingLeft: "5%" }}>
                                 <TextField
                                     floatingLabelText="Case 3: Input"
                                     fullWidth={false}
-                                    />
+                                />
                             </div>
                             <Divider />
                             <div style={{ paddingLeft: "5%" }}>
                                 <TextField
                                     floatingLabelText="Case 3: Input"
                                     fullWidth={false}
-                                    />
+                                />
                             </div>
                             <Divider />
                         </Paper>
-                        <br />
-                        <RaisedButton label="Create" onClick={handleClick} />
                     </CardText>
+                    <CardActions className="footer">
+                        <RaisedButton label="Create" onClick={handleClick} />
+                    </CardActions>
                 </Card>
             </div>
         );

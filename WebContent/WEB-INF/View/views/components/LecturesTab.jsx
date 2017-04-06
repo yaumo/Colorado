@@ -6,10 +6,32 @@ import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
+
+function handleClick(e) {
+    fetch('http://localhost:8080/lecture', {
+        method: 'POST',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            objectClass: 'lecture',
+            crud: '1',
+            lecture: 'LectureTest',
+            course: 'WWI14SEA'
+        })
+    }).then(function (response) {
+
+    }).catch(function (err) {
+        console.log(err)
+    });
+};
 
 const tableData = [
     {
@@ -62,38 +84,38 @@ class LecturesTab extends React.Component {
                 <Card>
                     <Divider />
                     <CardText className="loginbody">
-                    <h4>Step 1: Select Curse</h4>
-                    <Paper zDepth={2} style={{textAlign:"center"}}>
-                        <div>
-                           <DropDownMenu value={this.state.value} onChange={this.handleChange}>
-                            <MenuItem value={1} primaryText="WWI14SEA" />
-                            <MenuItem value={2} primaryText="WWI14AMA" />
-                            <MenuItem value={3} primaryText="WWI16SEB" />
-                        </DropDownMenu>
-                        </div>
+                        <h4>Step 1: Select Curse</h4>
+                        <Paper zDepth={2} style={{ textAlign: "center" }}>
+                            <div>
+                                <DropDownMenu value={this.state.value} onChange={this.handleChange}>
+                                    <MenuItem value={1} primaryText="WWI14SEA" />
+                                    <MenuItem value={2} primaryText="WWI14AMA" />
+                                    <MenuItem value={3} primaryText="WWI16SEB" />
+                                </DropDownMenu>
+                            </div>
                         </Paper>
 
-                        <br/>
+                        <br />
                         <h4>Step 2: Name Lecture</h4>
-                        <Paper zDepth={2} style={{textAlign:"center"}}>
-                        <TextField
-                            floatingLabelText="Lecture Name"
-                            fullWidth={false}
+                        <Paper zDepth={2} style={{ textAlign: "center" }}>
+                            <TextField
+                                floatingLabelText="Lecture Name"
+                                fullWidth={false}
                             />
                         </Paper>
 
-                        <br/>
+                        <br />
                         <h4>Step 3: Select Tutors</h4>
-                        <Paper zDepth={2} style={{textAlign:"center"}}>
+                        <Paper zDepth={2} style={{ textAlign: "center" }}>
                             <Table multiSelectable={true}
-                                >
+                            >
                                 <TableHeader displaySelectAll={false}>
                                     <TableRow>
                                         <TableHeaderColumn>Name</TableHeaderColumn>
                                         <TableHeaderColumn>E-Mail</TableHeaderColumn>
                                     </TableRow>
                                 </TableHeader>
-                                <TableBody>
+                                <TableBody deselectOnClickaway={false}>
                                     {tableData.map((row, index) => (
                                         <TableRow key={index} selected={row.selected}>
                                             <TableRowColumn>{row.name}</TableRowColumn>
@@ -104,10 +126,10 @@ class LecturesTab extends React.Component {
                             </Table>
 
                         </Paper>
-
-                        <br />
-                        <RaisedButton label="Create" />
                     </CardText>
+                    <CardActions className="footer">
+                        <RaisedButton label="Create" onClick={handleClick}/>
+                    </CardActions>
                 </Card>
             </div>
         );

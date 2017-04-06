@@ -72,8 +72,8 @@ class OverviewTab extends React.Component {
                     <Divider />
                     <CardText className="loginbody">
                         <Paper zDepth={4}>
-                            <Table selectable = {false}
-                                >
+                            <Table selectable={false}
+                            >
                                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                     <TableRow>
                                         <TableHeaderColumn colSpan="6" style={{ textAlign: 'center' }}>
@@ -121,6 +121,8 @@ class OverviewTab extends React.Component {
                             </Table>
                         </Paper>
                     </CardText>
+                    <CardActions className="footer">
+                    </CardActions>
                 </Card>
             </div>
         );
