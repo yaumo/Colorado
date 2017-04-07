@@ -85,7 +85,7 @@ class LecturesTab extends React.Component {
                     <Divider />
                     <CardText className="loginbody">
                         <h4>Step 1: Select Curse</h4>
-                        <Paper zDepth={2} style={{ textAlign: "center" }}>
+                        <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <div>
                                 <DropDownMenu value={this.state.value} onChange={this.handleChange}>
                                     <MenuItem value={1} primaryText="WWI14SEA" />
@@ -97,7 +97,7 @@ class LecturesTab extends React.Component {
 
                         <br />
                         <h4>Step 2: Name Lecture</h4>
-                        <Paper zDepth={2} style={{ textAlign: "center" }}>
+                        <Paper zDepth={2} style={{ textAlign: "center" ,background: "#d1d1d1"}}>
                             <TextField
                                 floatingLabelText="Lecture Name"
                                 fullWidth={false}
@@ -106,10 +106,10 @@ class LecturesTab extends React.Component {
 
                         <br />
                         <h4>Step 3: Select Tutors</h4>
-                        <Paper zDepth={2} style={{ textAlign: "center" }}>
-                            <Table multiSelectable={true}
+                        <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
+                            <Table multiSelectable={true} style={{ textAlign: "center", background: "#d1d1d1" }}
                             >
-                                <TableHeader displaySelectAll={false}>
+                                <TableHeader displaySelectAll={false} >
                                     <TableRow>
                                         <TableHeaderColumn>Name</TableHeaderColumn>
                                         <TableHeaderColumn>E-Mail</TableHeaderColumn>

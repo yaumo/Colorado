@@ -8,7 +8,9 @@ import Paper from 'material-ui/Paper';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
-
+import IconButton from 'material-ui/IconButton';
+import ActionCode from 'material-ui/svg-icons/action/code';
+import ActionSearch from 'material-ui/svg-icons/action/search';
 
 const tableData = [
     {
@@ -76,7 +78,7 @@ class OverviewTab extends React.Component {
                             >
                                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                     <TableRow>
-                                        <TableHeaderColumn colSpan="6" style={{ textAlign: 'center' }}>
+                                        <TableHeaderColumn colSpan="6" style={{ textAlign: 'center', background: "#d1d1d1" }}>
                                             <DropDownMenu value={this.state.value} onChange={this.handleChange}>
                                                 <MenuItem value={1} primaryText="WWI14SEA" />
                                                 <MenuItem value={2} primaryText="WWI14AMA" />
@@ -94,10 +96,12 @@ class OverviewTab extends React.Component {
                                                 <MenuItem value={3} primaryText="Sub" />
                                                 <MenuItem value={3} primaryText="Fibonacci" />
                                             </DropDownMenu>
-                                            <RaisedButton label="Apply" />
+                                            <IconButton>
+                                                    <ActionSearch/>
+                                                </IconButton>
                                         </TableHeaderColumn>
                                     </TableRow>
-                                    <TableRow>
+                                    <TableRow style={{ background: "#d1d1d1" }}>
                                         <TableHeaderColumn>Course</TableHeaderColumn>
                                         <TableHeaderColumn>Lecture</TableHeaderColumn>
                                         <TableHeaderColumn>Exercise</TableHeaderColumn>
@@ -106,7 +110,7 @@ class OverviewTab extends React.Component {
                                         <TableHeaderColumn>View Code</TableHeaderColumn>
                                     </TableRow>
                                 </TableHeader>
-                                <TableBody displayRowCheckbox={false}>
+                                <TableBody displayRowCheckbox={false} style={{ background: "#d1d1d1" }}>
                                     {tableData.map((row, index) => (
                                         <TableRow key={index} selected={row.selected}>
                                             <TableRowColumn>{"WWI14SEA"}</TableRowColumn>
@@ -114,7 +118,11 @@ class OverviewTab extends React.Component {
                                             <TableRowColumn>{row.exercise}</TableRowColumn>
                                             <TableRowColumn>{row.name}</TableRowColumn>
                                             <TableRowColumn>{row.status}</TableRowColumn>
-                                            <TableRowColumn><RaisedButton label="?" /></TableRowColumn>
+                                            <TableRowColumn>
+                                                <IconButton>
+                                                    <ActionCode/>
+                                                </IconButton>
+                                            </TableRowColumn>
                                         </TableRow>
                                     ))}
                                 </TableBody>

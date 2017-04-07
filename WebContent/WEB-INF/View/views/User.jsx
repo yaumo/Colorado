@@ -118,13 +118,15 @@ class Content extends React.Component {
                   floatingLabelText="Repeat New Password"
                   type="password"
                   id="newPassword"
+                  floatingLabel
                   fullWidth={true}
                   />
-                <br />
-                <br />
-                <RaisedButton label="Confirm" onClick={this.handleClick} />
+
               </div>
             </CardText>
+            <CardActions className="footer">
+              <RaisedButton label="Confirm" onClick={this.handleClick} />
+            </CardActions>
           </Card>
         </div>
       </MuiThemeProvider>

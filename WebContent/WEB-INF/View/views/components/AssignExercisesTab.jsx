@@ -54,17 +54,17 @@ class AssignExercisesTab extends React.Component {
                     <Divider />
                     <CardText className="loginbody">
                         <h4>Step 1: Select Exercise(s)</h4>
-                        <Paper zDepth={2}>
+                        <Paper zDepth={2} className="paper">
                             <div>
-                                <Table multiSelectable={true} >
+                                <Table multiSelectable={true} className="paper" >
                                     <TableHeader>
-                                        <TableRow>
+                                        <TableRow className="paper">
                                             <TableHeaderColumn>Title</TableHeaderColumn>
                                             <TableHeaderColumn>Language</TableHeaderColumn>
                                             <TableHeaderColumn>Creation Date</TableHeaderColumn>
                                         </TableRow>
                                     </TableHeader>
-                                    <TableBody deselectOnClickaway={false}>
+                                    <TableBody deselectOnClickaway={false} className="paper">
                                         <TableRow>
                                             <TableRowColumn>Fibonacci</TableRowColumn>
                                             <TableRowColumn>Java</TableRowColumn>
@@ -92,7 +92,7 @@ class AssignExercisesTab extends React.Component {
 
                         <br />
                         <h4>Step 2: Select Lecture</h4>
-                        <Paper zDepth={2} style={{ textAlign: "center" }}>
+                        <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <DropDownMenu value={this.state.value} onChange={this.handleChange}>
                                 <MenuItem value={1} primaryText="WWI14SEA" />
                                 <MenuItem value={2} primaryText="WWI14SEB" />
@@ -108,8 +108,8 @@ class AssignExercisesTab extends React.Component {
 
                         <br />
                         <h4>Step 3: Select Deadline</h4>
-                        <Paper zDepth={2} style={{ textAlign: "center" }}>
-                            <DatePicker floatingLabelText="Deadline" container="inline" mode="landscape" />
+                        <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
+                            <DatePicker floatingLabelText="Deadline" mode="landscape"/>
                         </Paper>
                     </CardText>
                     <CardActions className="footer">

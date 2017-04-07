@@ -58,6 +58,8 @@ class Content extends React.Component {
                                         <iframe width="560" height="315" src="https://www.youtube.com/embed/Ztc6_elMg60" frameBorder="0" allowFullScreen></iframe>
                                     </div>
                                 </CardText>
+                                <CardActions className="footer">
+                                </CardActions>
                             </Card>
                         </div>
                         <br />
@@ -66,7 +68,9 @@ class Content extends React.Component {
                                 <CardHeader
                                     title="Solution"
                                     className="loginheader"
-                                />
+                                >
+                                <div style={{textAlign: "right"}}>In Progress</div>
+                                </CardHeader>
                                 <Divider />
                                 <CardText className="loginbody">
                                     <DropDownMenu disabled="true" value={this.state.value} onChange={this.handleChange} >
@@ -76,10 +80,10 @@ class Content extends React.Component {
                                     <Paper zDepth={4}>
                                         <Solution />
                                     </Paper>
-                                    <br />
-                                    <RaisedButton label="Check" />
-
                                 </CardText>
+                                <CardActions className="footer">
+                                    <RaisedButton label="Check" />
+                                </CardActions>    
                             </Card>
                         </div>
                     </div>
