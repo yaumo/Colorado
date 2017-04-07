@@ -1,6 +1,7 @@
 package com.colorado.denver.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -25,7 +26,7 @@ public class Solution extends EducationEntity {
 
 	private String code;
 	// reference to the solved exercise
-	private Exercise exercise;
+	private transient Exercise exercise;
 
 	public Solution() {
 
@@ -41,6 +42,7 @@ public class Solution extends EducationEntity {
 		this.exercise = exercise;
 	}
 
+	@Column(name = Solution.CODE, columnDefinition = "TEXT")
 	public String getCode() {
 		return code;
 	}

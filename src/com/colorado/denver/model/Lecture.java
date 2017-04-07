@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -33,6 +34,7 @@ public class Lecture extends EducationEntity {
 	}
 
 	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "lectures_exercises", joinColumns = { @JoinColumn(name = "exercises_id") }, inverseJoinColumns = { @JoinColumn(name = "lectures_id") })
 	@Cascade({ CascadeType.ALL })
 	public Set<Exercise> getExercises() {
 		return exercises;
