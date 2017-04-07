@@ -31,7 +31,7 @@ public class Course extends EducationEntity {
 
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "course")
+	@OneToMany(fetch = FetchType.EAGER)
 	@Cascade({ CascadeType.ALL })
 	public Set<Lecture> getLectures() {
 		return lectures;
