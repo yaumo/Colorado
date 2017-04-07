@@ -22,7 +22,7 @@ public class Course extends EducationEntity {
 	private static final long serialVersionUID = 917641590246636493L;
 
 	// The students in the course
-	private transient Set<User> users;
+	private Set<User> users;
 	private Set<Lecture> lectures;
 
 	public Course() {

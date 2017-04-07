@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,6 +37,43 @@ public class FrontendControllerTests {
 	}
 
 	@Test
+	public void testCourseController() {
+
+		try {
+			// Change the file to the call u want to make. Using Exercise entity! ID's are hardcoded!
+			InputStream is = new FileInputStream("jsonReadTest.txt");
+			BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+			String line = buf.readLine();
+			StringBuilder sb = new StringBuilder();
+
+			while (line != null) {
+				sb.append(line).append("\n");
+				line = buf.readLine();
+			}
+
+			String fileAsString = sb.toString();
+			UserService.authorizeSystemuser();
+			request = new MockHttpServletRequest("POST", "/exercise");
+			request.setContentType("application/json");
+			request.addHeader("Accept", "application/json, text/javascript, */*");
+			request.setLocalPort(-1);
+			request.setContent((fileAsString)
+					.getBytes("UTF-8"));
+
+			ExerciseController mav = new ExerciseController();
+			mav.handleExerciseRequest(request, response);
+
+			assertEquals(200, response.getStatus());
+
+			GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+			System.out.println("The content of the response is: " + response.getContentAsString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	@Ignore
 	public void testExerciseController() {
 
 		try {

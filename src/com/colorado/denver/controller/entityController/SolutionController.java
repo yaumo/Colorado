@@ -11,12 +11,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.model.Solution;
+import com.colorado.denver.services.UserService;
 import com.colorado.denver.tools.DenverConstants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+@RestController
 public class SolutionController extends ObjectOperationController {
 	/**
 	 * 
@@ -28,7 +31,7 @@ public class SolutionController extends ObjectOperationController {
 	@ResponseBody
 	public void handleSolutionRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
-
+		UserService.authorizeSystemuser();
 		String jsonString = DenverConstants.ERROR;
 		try {
 			jsonString = super.checkRequest(request);

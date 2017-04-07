@@ -2,6 +2,7 @@ package com.colorado.denver.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -23,13 +24,13 @@ public class Lecture extends EducationEntity {
 	public static final String LECTURE_COURSE = "lecture_course";
 
 	private Course course;
-	private transient Set<Exercise> exercises;
+	private Set<Exercise> exercises;
 
 	public Lecture() {
 
 	}
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
 	public Set<Exercise> getExercises() {
 		return exercises;
 	}
@@ -38,7 +39,7 @@ public class Lecture extends EducationEntity {
 		this.exercises = exercises;
 	}
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "courseID")
 	public Course getCourse() {
 		return course;
