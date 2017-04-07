@@ -11,6 +11,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.google.gson.annotations.Expose;
+
 //There should be NO instance of this entity! Create children of this entity instead!
 @MappedSuperclass
 public abstract class BaseEntity<T> implements Serializable, Cloneable {
@@ -26,7 +28,7 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	public transient Date creationDate;
 	public transient boolean hasBeenModified;
 
-	@Transient
+	@Transient)
 	public int crud;// Both transient for Hibernate
 
 	// Important for identifying the used object. This property is set during Hibernate create

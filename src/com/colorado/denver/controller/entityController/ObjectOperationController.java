@@ -19,6 +19,7 @@ import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.BaseEntity;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.tools.DenverConstants;
+import com.colorado.denver.view.GsonExclusionStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -100,6 +101,7 @@ public class ObjectOperationController extends HttpServlet {
 
 		// Prepare for CRUD and response
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.setExclusionStrategies(new GsonExclusionStrategy());
 		gb.serializeNulls();
 		Gson gson = gb.create();
 		String jsonResponse = DenverConstants.ERROR;
@@ -123,17 +125,6 @@ public class ObjectOperationController extends HttpServlet {
 		default:
 			LOGGER.error("ERROR IN ASSERTING A CRUD OPERTAION!! CRUD VALUE: " + crud);
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);// last resort
-		}
-
-		// TODO: this is not clean. Do it with objects somehow
-
-		try {
-			JSONObject obj = new JSONObject(jsonResponse);
-			// jsonResponse = jsonResponse.replaceAll("\"" + BaseEntity.CRUD + "\"[ ]*:[^,}\\]]*[,]?", "");
-			obj.remove(BaseEntity.CRUD);;
-			jsonResponse = obj.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
 		return jsonResponse;
