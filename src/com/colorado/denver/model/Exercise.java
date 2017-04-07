@@ -3,13 +3,15 @@ package com.colorado.denver.model;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name = "Exercise")
@@ -36,7 +38,8 @@ public class Exercise extends EducationEntity {
 
 	}
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Cascade({ CascadeType.ALL })
 	public Set<User> getUsers() {
 		return users;
 	}
@@ -45,7 +48,8 @@ public class Exercise extends EducationEntity {
 		this.users = users;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER)
+	@Cascade({ CascadeType.ALL })
 	public Set<Solution> getSolutions() {
 		return solutions;
 	}
@@ -54,7 +58,8 @@ public class Exercise extends EducationEntity {
 		this.solutions = solutions;
 	}
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Cascade({ CascadeType.ALL })
 	public Set<Lecture> getLectures() {
 		return lectures;
 	}

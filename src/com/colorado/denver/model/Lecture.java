@@ -2,7 +2,6 @@ package com.colorado.denver.model;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -10,6 +9,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name = "Lecture")
@@ -30,7 +32,8 @@ public class Lecture extends EducationEntity {
 
 	}
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Cascade({ CascadeType.ALL })
 	public Set<Exercise> getExercises() {
 		return exercises;
 	}
@@ -39,7 +42,8 @@ public class Lecture extends EducationEntity {
 		this.exercises = exercises;
 	}
 
-	@ManyToOne(cascade = { CascadeType.ALL })
+	@ManyToOne(fetch = FetchType.EAGER)
+	@Cascade({ CascadeType.ALL })
 	@JoinColumn(name = "courseID")
 	public Course getCourse() {
 		return course;

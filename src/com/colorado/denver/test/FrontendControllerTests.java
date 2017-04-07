@@ -16,6 +16,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.colorado.denver.controller.entityController.CourseController;
 import com.colorado.denver.controller.entityController.ExerciseController;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
@@ -40,8 +41,8 @@ public class FrontendControllerTests {
 	public void testCourseController() {
 
 		try {
-			// Change the file to the call u want to make. Using Exercise entity! ID's are hardcoded!
-			InputStream is = new FileInputStream("jsonReadTest.txt");
+			// Change the file to the call u want to make. CHange Controllers too down below!!!
+			InputStream is = new FileInputStream("ultramergetest2.txt");
 			BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 			String line = buf.readLine();
 			StringBuilder sb = new StringBuilder();
@@ -53,15 +54,15 @@ public class FrontendControllerTests {
 
 			String fileAsString = sb.toString();
 			UserService.authorizeSystemuser();
-			request = new MockHttpServletRequest("POST", "/exercise");
+			request = new MockHttpServletRequest("POST", "/course");
 			request.setContentType("application/json");
 			request.addHeader("Accept", "application/json, text/javascript, */*");
 			request.setLocalPort(-1);
 			request.setContent((fileAsString)
 					.getBytes("UTF-8"));
 
-			ExerciseController mav = new ExerciseController();
-			mav.handleExerciseRequest(request, response);
+			CourseController mav = new CourseController();
+			mav.handleCourseRequest(request, response);
 
 			assertEquals(200, response.getStatus());
 
@@ -78,7 +79,7 @@ public class FrontendControllerTests {
 
 		try {
 			// Change the file to the call u want to make. Using Exercise entity! ID's are hardcoded!
-			InputStream is = new FileInputStream("jsonCreateTest.txt");
+			InputStream is = new FileInputStream("3.txt");
 			BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 			String line = buf.readLine();
 			StringBuilder sb = new StringBuilder();

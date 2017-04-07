@@ -66,7 +66,7 @@ public class HibernateController {
 	}
 
 	/* Method to UPDATE an entity */
-	public String updateEntity(BaseEntity<?> entity) {
+	public BaseEntity<?> updateEntity(BaseEntity<?> entity) {
 		Session session = SessionTools.sessionFactory.openSession();
 		Transaction tx = null;
 		String entityID = null;
@@ -74,9 +74,7 @@ public class HibernateController {
 		try {
 			tx = session.beginTransaction();
 
-			// update given Home
 			session.update(entity);
-
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
@@ -85,7 +83,8 @@ public class HibernateController {
 		} finally {
 			session.close();
 		}
-		return entityID;
+		BaseEntity<?> obj = getEntity(entityID);
+		return obj;
 	}
 
 	/* Method to DELETE an entity from the records */
@@ -170,6 +169,7 @@ public class HibernateController {
 				tx.rollback();
 			e.printStackTrace();
 		} finally {
+
 			session.close();
 		}
 

@@ -140,7 +140,14 @@ public class ObjectOperationController extends HttpServlet {
 	}
 
 	private BaseEntity<?> update(BaseEntity<?> entity) {
-		return hibCtrl.mergeEntity(entity);
+		try {
+			return hibCtrl.mergeEntity(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error("MERGE failed! Trying update");
+			return hibCtrl.updateEntity(entity);
+		}
+
 	}
 
 	private boolean delete(String id) {
