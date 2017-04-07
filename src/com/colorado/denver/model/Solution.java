@@ -26,7 +26,7 @@ public class Solution extends EducationEntity {
 
 	private String code;
 	// reference to the solved exercise
-	private transient Exercise exercise;
+	private Exercise exercise;
 
 	public Solution() {
 

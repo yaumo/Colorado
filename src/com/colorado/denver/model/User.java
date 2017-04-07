@@ -34,12 +34,12 @@ public class User extends BaseEntity<User> {
 
 	private transient String password;
 	protected transient boolean enabled;
-	private transient Set<Lecture> lectures;
+	private Set<Lecture> lectures;
 	private Course course;
 	private Set<Solution> solutions;
 	// @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private transient Set<Exercise> exercises;
-	private transient Collection<Role> roles;
+	private Set<Exercise> exercises;
+	private Collection<Role> roles;
 
 	public User() {
 	}

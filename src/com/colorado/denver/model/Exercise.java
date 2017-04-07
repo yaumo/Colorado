@@ -27,7 +27,7 @@ public class Exercise extends EducationEntity {
 	public static final String CODE = "code";
 	public static final String SOLUTION_CODE = "solution_code";
 
-	private transient Set<Lecture> lectures;
+	private Set<Lecture> lectures;
 	// TODO: inversal JSON not possible! therefore we need transient. This is bad! Modify GSON?
 
 	private Set<Solution> solutions;
@@ -39,7 +39,7 @@ public class Exercise extends EducationEntity {
 	private String solution_code;
 
 	// The students who should do this exercise
-	private transient Set<User> users;
+	private Set<User> users;
 
 	public Exercise() {
 
