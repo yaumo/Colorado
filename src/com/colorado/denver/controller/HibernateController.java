@@ -163,7 +163,8 @@ public class HibernateController {
 		try {
 			tx = session.beginTransaction();
 			returnEnt = (BaseEntity<?>) session.merge(entity);
-			tx.commit();
+			LOGGER.info("Merged Entity: " + entity.getId());
+			tx.commit();			
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();

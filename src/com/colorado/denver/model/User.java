@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -45,6 +46,7 @@ public class User extends BaseEntity<User> {
 	}
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "exercises_users", joinColumns = { @JoinColumn(name = "exercises_id") }, inverseJoinColumns = { @JoinColumn(name = "users_id") })
 	public Set<Exercise> getExercises() {
 		return exercises;
 	}
@@ -54,6 +56,7 @@ public class User extends BaseEntity<User> {
 	}
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "lectures_users", joinColumns = { @JoinColumn(name = "lectures_id") }, inverseJoinColumns = { @JoinColumn(name = "users_id") })
 	public Set<Lecture> getLectures() {
 		return lectures;
 	}
@@ -106,6 +109,7 @@ public class User extends BaseEntity<User> {
 	}
 
 	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "users_roles", joinColumns = { @JoinColumn(name = "roles_id") }, inverseJoinColumns = { @JoinColumn(name = "users_id") })
 	public Collection<Role> getRoles() {
 		return roles;
 	}

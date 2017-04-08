@@ -46,6 +46,7 @@ public class Exercise extends EducationEntity {
 	}
 
 	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "exercises_users", joinColumns = { @JoinColumn(name = "users_id") }, inverseJoinColumns = { @JoinColumn(name = "exercises_id") })
 	@Cascade({ CascadeType.ALL })
 	public Set<User> getUsers() {
 		return users;

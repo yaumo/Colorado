@@ -28,6 +28,7 @@ public class Lecture extends EducationEntity {
 
 	private Course course;
 	private Set<Exercise> exercises;
+	private Set<User> users;
 
 	public Lecture() {
 
@@ -65,6 +66,17 @@ public class Lecture extends EducationEntity {
 	@Transient
 	public String setPrefix() {
 		return getPrefix();
+	}
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "lectures_users", joinColumns = { @JoinColumn(name = "users_id") }, inverseJoinColumns = { @JoinColumn(name = "lectures_id") })
+	@Cascade({ CascadeType.ALL })
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
 
 }
