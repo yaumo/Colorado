@@ -19,7 +19,6 @@ import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.BaseEntity;
 import com.colorado.denver.model.Course;
 import com.colorado.denver.model.Exercise;
-import com.colorado.denver.model.Role;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.tools.DenverConstants;
@@ -111,11 +110,10 @@ public class ObjectOperationController extends HttpServlet {
 
 		new GraphAdapterBuilder()
 				.addType(Exercise.class)
-				// .addType(Lecture.class)
 				.addType(Solution.class)
 				// .addType(Lecture.class)
 				.addType(Course.class)
-				.addType(Role.class)
+				// .addType(Role.class)
 				// .addType(User.class)
 				.registerOn(gb);
 
@@ -141,41 +139,6 @@ public class ObjectOperationController extends HttpServlet {
 		default:
 			LOGGER.error("ERROR IN ASSERTING A CRUD OPERTAION!! CRUD VALUE: " + crud);
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);// last resort
-		}
-
-		try {
-
-			// jsonResponse = jsonResponse.substring(1, jsonResponse.length() - 1);
-			// String firstChars = jsonResponse.substring(0, 10);
-			// jsonResponse = jsonResponse.replaceAll(firstChars, "");
-			JSONObject jsonObject = new JSONObject(jsonResponse.trim());
-
-			jsonResponse = jsonObject.getString("0x1");
-			// String objectClass = jsonObject.getString(BaseEntity.OBJECT_CLASS);
-			// // jsonResponse = jsonResponse.replaceAll("\"" + objectClass + "s" + "\"[ ]*:[^,}\\]]*[,]?", "");
-			// // jsonResponse = jsonResponse.replaceAll(", ],", ",");
-			// JSONArray jsonArray = new JSONArray();
-			// Iterator x = jsonObject.keys();
-			// while (x.hasNext()) {
-			// String key = (String) x.next();
-			// jsonArray.put(jsonObject.get(key));
-			// }
-			//
-			// for (int i = 0, len = jsonArray.length(); i < len; i++) {
-			// try {
-			// JSONObject obj = jsonArray.getJSONObject(i);
-			// obj.remove(objectClass + "s");
-			// } catch (Exception e) {
-			// System.out.println("ups");
-			// }
-			//
-			// }
-			//
-			// // jsonObject.remove(objectClass + "s");
-			// jsonResponse = jsonObject.toString();
-
-		} catch (Exception e) {
-			// Do nothing. No circular reference on parent therefore no fake parent to remove
 		}
 
 		return jsonResponse;
