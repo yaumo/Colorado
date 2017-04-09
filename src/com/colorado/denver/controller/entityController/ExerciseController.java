@@ -44,7 +44,6 @@ public class ExerciseController extends ObjectOperationController {
 		}
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
-		gb.serializeNulls();
 		Gson gson = gb.create();
 
 		Exercise entity = gson.fromJson(jsonString, Exercise.class);

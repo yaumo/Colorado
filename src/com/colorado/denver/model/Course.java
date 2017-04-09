@@ -10,9 +10,13 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(name = "Course")
+@DynamicUpdate(true)
+@DynamicInsert(true)
 public class Course extends EducationEntity {
 	/**
 	 * 

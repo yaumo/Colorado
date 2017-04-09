@@ -41,7 +41,6 @@ public class CourseController extends ObjectOperationController {
 		}
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
-		gb.serializeNulls();
 		Gson gson = gb.create();
 
 		Course entity = gson.fromJson(jsonString, Course.class);

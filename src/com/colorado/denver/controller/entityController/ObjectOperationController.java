@@ -19,7 +19,10 @@ import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.BaseEntity;
 import com.colorado.denver.model.Course;
 import com.colorado.denver.model.Exercise;
+import com.colorado.denver.model.Lecture;
+import com.colorado.denver.model.Role;
 import com.colorado.denver.model.Solution;
+import com.colorado.denver.model.User;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.tools.DenverConstants;
 import com.colorado.denver.tools.GraphAdapterBuilder;
@@ -49,7 +52,14 @@ public class ObjectOperationController extends HttpServlet {
 			jsonStr = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 			// Object obj = parser.parse(jsonStr);
 
+			// JSON validation
+			if (jsonStr.contains("0x1")) {
+
+				LOGGER.error("0x1 on parent!!" + jsonStr);
+				throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
+			}
 			jsonObject = new JSONObject(jsonStr);
+
 			jsonObject.put(DenverConstants.JSON, jsonStr);// we need this back
 
 			objectClass = jsonObject.getString(BaseEntity.OBJECT_CLASS);
@@ -91,6 +101,21 @@ public class ObjectOperationController extends HttpServlet {
 
 	public String doCrud(BaseEntity<?> entity, String jsonString) {
 
+		// init
+		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.setExclusionStrategies(new GsonExclusionStrategy());
+		gb.serializeNulls();
+
+		new GraphAdapterBuilder()
+				.addType(Exercise.class)
+				.addType(Solution.class)
+				.addType(Lecture.class)
+				.addType(Course.class)
+				.addType(Role.class)
+				.addType(User.class)
+				.registerOn(gb);
+		Gson gson = gb.create();
+
 		String id = DenverConstants.ERROR;
 		int crud = 0;
 		try {
@@ -104,20 +129,7 @@ public class ObjectOperationController extends HttpServlet {
 		}
 
 		// Prepare for CRUD and response
-		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
-		gb.setExclusionStrategies(new GsonExclusionStrategy());
-		gb.serializeNulls();
 
-		new GraphAdapterBuilder()
-				.addType(Exercise.class)
-				.addType(Solution.class)
-				// .addType(Lecture.class)
-				.addType(Course.class)
-				// .addType(Role.class)
-				// .addType(User.class)
-				.registerOn(gb);
-
-		Gson gson = gb.create();
 		String jsonResponse = DenverConstants.ERROR;
 		switch (crud) {
 		case 1:
@@ -156,9 +168,11 @@ public class ObjectOperationController extends HttpServlet {
 	private BaseEntity<?> update(BaseEntity<?> entity) {
 		try {
 			return hibCtrl.mergeEntity(entity);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error("MERGE failed! Trying update");
+
 			return hibCtrl.updateEntity(entity);
 		}
 

@@ -49,6 +49,7 @@ public class UserController extends ObjectOperationController {
 		Gson gson = gb.create();
 
 		User entity = gson.fromJson(jsonString, User.class);
+
 		String jsonResponse = super.doCrud(entity, jsonString);
 		entity = null; // Let GC run over this quickly
 		response.setStatus(200);

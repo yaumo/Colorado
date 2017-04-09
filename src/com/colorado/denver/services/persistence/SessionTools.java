@@ -15,6 +15,7 @@ import com.colorado.denver.model.Lecture;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
+import com.colorado.denver.tools.HibernateInterceptor;
 
 public class SessionTools {
 
@@ -46,9 +47,11 @@ public class SessionTools {
 			LOGGER.info("Creating session factory instance!");
 
 			// Create session factory instance
+
 			sessionFactory = configuration.addPackage("com.colorado").addProperties(prop).addAnnotatedClass(Role.class)
 					.addAnnotatedClass(User.class).addAnnotatedClass(Exercise.class)
 					.addAnnotatedClass(Lecture.class).addAnnotatedClass(Course.class).addAnnotatedClass(Solution.class)
+					.setInterceptor(new HibernateInterceptor())
 					.buildSessionFactory(serviceRegistry);
 
 			// TODO: Drop sequences on create!

@@ -81,6 +81,7 @@ public class HibernateController {
 				tx.rollback();
 			e.printStackTrace();
 		} finally {
+			session.flush();
 			session.close();
 		}
 		BaseEntity<?> obj = getEntity(entityID);
@@ -159,18 +160,20 @@ public class HibernateController {
 	public BaseEntity<?> mergeEntity(BaseEntity<?> entity) {
 		Session session = SessionTools.sessionFactory.openSession();
 		Transaction tx = null;
+		// BaseEntity<?> toUpdate = getEntity(entity.getId());
+		// toUpdate = Updater.updater(toUpdate, entity);
 		BaseEntity<?> returnEnt = null;
 		try {
 			tx = session.beginTransaction();
 			returnEnt = (BaseEntity<?>) session.merge(entity);
 			LOGGER.info("Merged Entity: " + entity.getId());
-			tx.commit();			
+			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
 		} finally {
-
+			session.flush();
 			session.close();
 		}
 

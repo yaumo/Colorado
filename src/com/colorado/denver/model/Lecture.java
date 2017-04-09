@@ -13,9 +13,13 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(name = "Lecture")
+@DynamicUpdate(true)
+@DynamicInsert(true)
 public class Lecture extends EducationEntity {
 	/**
 	 * 
@@ -35,8 +39,8 @@ public class Lecture extends EducationEntity {
 	}
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "lectures_exercises", joinColumns = { @JoinColumn(name = "exercises_id") }, inverseJoinColumns = { @JoinColumn(name = "lectures_id") })
-	@Cascade({ CascadeType.ALL })
+	@JoinTable(name = "lectures_exercises", joinColumns = { @JoinColumn(name = "lectures_id") }, inverseJoinColumns = { @JoinColumn(name = "exercises_id") })
+	// @Cascade({ CascadeType.ALL })
 	public Set<Exercise> getExercises() {
 		return exercises;
 	}
