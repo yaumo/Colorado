@@ -24,7 +24,6 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	public static final String CRUD = "crud";
 
 	public transient Date creationDate;
-	public transient boolean hasBeenModified;
 
 	@Transient
 	public int crud;// Both transient for Hibernate
@@ -63,14 +62,6 @@ public abstract class BaseEntity<T> implements Serializable, Cloneable {
 
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
-	}
-
-	public boolean getHasBeenModified() {
-		return hasBeenModified;
-	}
-
-	public void setHasBeenModified(boolean hasBeenModified) {
-		this.hasBeenModified = hasBeenModified;
 	}
 
 	@Transient
