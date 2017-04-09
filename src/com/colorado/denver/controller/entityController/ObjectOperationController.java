@@ -65,11 +65,25 @@ public class ObjectOperationController extends HttpServlet {
 			objectClass = jsonObject.getString(BaseEntity.OBJECT_CLASS);
 
 			crud = jsonObject.getInt(BaseEntity.CRUD);// Crud is not persisted but a transient field
-			if (crud == 1) {
+			switch (crud) {
+			case 1:
 				id = DenverConstants.ID_CREATE_MODE;
-			} else {
+				break;
+
+			case 2:
+				try {
+					id = jsonObject.getString(BaseEntity.ID);
+				} catch (Exception e) {
+					LOGGER.info("Get all entites of: " + objectClass);
+					id = DenverConstants.ID_READ_ALL_MODE;
+				}
+				break;
+
+			default:
 				id = jsonObject.getString(BaseEntity.ID);
+				break;
 			}
+			// jsonObject.("id", id);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -138,7 +152,13 @@ public class ObjectOperationController extends HttpServlet {
 			jsonResponse = gson.toJson(read(newId));
 			break;
 		case 2:
-			jsonResponse = gson.toJson(read(id));
+			if (id == null) {
+
+				jsonResponse = gson.toJson(read(entity));
+			} else {
+				jsonResponse = gson.toJson(read(id));// normal entity read
+			}
+
 			break;
 		case 3:
 			jsonResponse = gson.toJson(update(entity));
@@ -163,6 +183,10 @@ public class ObjectOperationController extends HttpServlet {
 
 	private BaseEntity<?> read(String id) {
 		return hibCtrl.getEntity(id);
+	}
+
+	private List<BaseEntity<?>> read(BaseEntity<?> entities) {
+		return hibCtrl.getEntityList(entities.getClass());
 	}
 
 	private BaseEntity<?> update(BaseEntity<?> entity) {

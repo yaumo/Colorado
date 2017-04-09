@@ -23,6 +23,8 @@ public class Solution extends EducationEntity {
 	public static final String SOLUTION = "solution";
 	public static final String CODE = "code";
 	public static final String EXERCISE = "exercise";
+	public static final String SUBMITTED = "submitted";
+	public static final String ANSWER = "answer";
 
 	private String code;
 	// reference to the solved exercise
