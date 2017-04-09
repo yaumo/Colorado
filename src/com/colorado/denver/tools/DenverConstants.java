@@ -15,4 +15,6 @@ public final class DenverConstants {
 	public static final String ERROR = "ERROR";
 
 	public static final String ID_CREATE_MODE = "ID_CREATE_MODE";
+	public static final String ID_READ_ALL_MODE = "ID_READ_ALL_MODE";
+
 }

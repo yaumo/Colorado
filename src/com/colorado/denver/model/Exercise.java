@@ -30,6 +30,7 @@ public class Exercise extends EducationEntity {
 	public static final String EXERCISE = "exercise";
 	public static final String CODE = "code";
 	public static final String SOLUTION_CODE = "solution_code";
+	public static final String ANSWER = "answer";
 
 	private Set<Lecture> lectures;
 	// TODO: inversal JSON not possible! therefore we need transient. This is bad! Modify GSON?
