@@ -3,6 +3,10 @@ package com.colorado.denver.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,6 +42,7 @@ public class DenverDBSetupTest {
 		// Using hibernate config file!
 		boolean useUpdate = false;
 		LOGGER.info("Creating session factory..");
+		dropAllSequences();
 		SessionTools.createSessionFactory(useUpdate);
 		LOGGER.info("Done Creating session factory.");
 
@@ -125,6 +130,52 @@ public class DenverDBSetupTest {
 		assertEquals(returnedU.getUsername(), UserService.getLoginNameFromAuthentication(auth));
 		return returnedU;
 
+	}
+	
+	private static void dropAllSequences(){
+		try {
+
+			Class.forName("org.postgresql.Driver");
+
+		} catch (ClassNotFoundException e) {
+
+			System.out.println("Where is your PostgreSQL JDBC Driver? "
+					+ "Include in your library path!");
+			e.printStackTrace();
+			return;
+		}
+
+		System.out.println("PostgreSQL JDBC Driver Registered!");
+
+		Connection connection = null;
+
+		try {
+
+			connection = DriverManager.getConnection(
+					"jdbc:postgresql://localhost/Denver", "postgres", "password");
+
+		} catch (SQLException e) {
+
+			System.out.println("Connection Failed! Check output console");
+			e.printStackTrace();
+			return;
+
+		}
+
+		if (connection != null) {
+			try {
+				Statement stmt = connection.createStatement();
+				String sql = "drop sequence if exists course_sequence;drop sequence if exists exercise_sequence;drop sequence if exists lecture_sequence;drop sequence if exists role_sequence;drop sequence if exists solution_sequence;drop sequence if exists user_sequence;";
+				stmt.executeUpdate(sql);
+				if(connection!=null)
+					connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+		} else {
+			System.out.println("Failed to make connection!");
+		}
 	}
 
 }

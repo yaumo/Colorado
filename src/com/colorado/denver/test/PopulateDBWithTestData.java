@@ -1,18 +1,23 @@
 package com.colorado.denver.test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.controller.HibernateController;
+import com.colorado.denver.controller.entityController.RoleController;
 import com.colorado.denver.model.Course;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Lecture;
+import com.colorado.denver.model.Role;
 import com.colorado.denver.model.Solution;
+import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.services.persistence.SessionTools;
@@ -37,17 +42,62 @@ public class PopulateDBWithTestData {
 	@Test
 	public void populateDatabase() {
 		UserService.authorizeSystemuser();
-		createDocent("Heinrich", "password", UserService.ROLE_DOCENT);
-		createCourse("WWI 14 SEA");
-		createLecture("Programmieren I");
-		createExercise("Fibonacci");
-		createSolution("Fibonacci Loesung");
+		User docent = createUser("Heinrich", "password", UserService.ROLE_DOCENT);
+		
+		User student = createUser("Peter", "password", UserService.ROLE_STUDENT);
+		Set<User> users = new HashSet<User>();
+		users.add(student);
+		
+		Course course = createCourse("WWI 14 SEA");
+		
+		Lecture lecture = createLecture("Programmieren I");
+		Set<Lecture> lectures = new HashSet<Lecture>();
+		lectures.add(lecture);
+		
+		Exercise exercise = createExercise("Fibonacci");
+		Set<Exercise> exercises = new HashSet<Exercise>();
+		exercises.add(exercise);
+		
+		Solution solution = createSolution("Fibonacci Loesung");
+		Set<Solution> solutions = new HashSet<Solution>();
+		solutions.add(solution);
+		
+		solution.setExercise(exercise);
+		
+		//student.setLectures(lectures);
+		//student.setExercises(exercises);
+		student.setSolutions(solutions);
+		student.setCourse(course);
+		
+		docent.setLectures(lectures);
+		
+		exercise.setOwner(docent);
+		//exercise.setLectures(lectures); //setting on both entities gives error: lecture.setExercises(exercises); + exercise.setLectures(lectures);
+		exercise.setSolutions(solutions);
+		exercise.setUsers(users);  //TODO: relationship is not saved on DB, why?
+		
+		course.setLectures(lectures);
+		course.setUsers(users);
+		
+		lecture.setUsers(users);
+		lecture.setExercises(exercises);
+		
+		hibCtrl.updateEntity(solution);
+		hibCtrl.updateEntity(student);
+		hibCtrl.updateEntity(docent);
+		hibCtrl.updateEntity(exercise);
+		hibCtrl.updateEntity(course);
+		hibCtrl.updateEntity(lecture);
 	}
 
-	private User createDocent(String name, String password, String roleName) {
+	private User createUser(String name, String password, String roleName) {
 		User usr = new User();
-		usr.setName(name);
+		usr.setUsername(name);
 		usr.setPassword(password);
+		Set<Role> roles = new HashSet<Role>();
+		roles.add(RoleController.getRoleByName(roleName));
+		usr.setRoles(roles);
+		hibCtrl.addEntity(usr);
 		return usr;
 	}
 
@@ -61,7 +111,6 @@ public class PopulateDBWithTestData {
 	private Exercise createExercise(String title) {
 		Exercise exercise = new Exercise();
 		exercise.setTitle(title);
-		hibCtrl = HibernateGeneralTools.getHibernateController();
 		hibCtrl.addEntity(exercise);
 		return exercise;
 	}
@@ -69,7 +118,6 @@ public class PopulateDBWithTestData {
 	private Solution createSolution(String title) {
 		Solution solution = new Solution();
 		solution.setTitle(title);
-		hibCtrl = HibernateGeneralTools.getHibernateController();
 		hibCtrl.addEntity(solution);
 		return solution;
 	}
@@ -77,7 +125,6 @@ public class PopulateDBWithTestData {
 	private Lecture createLecture(String lecture_name) {
 		Lecture lecture = new Lecture();
 		lecture.setTitle(lecture_name);
-		hibCtrl = HibernateGeneralTools.getHibernateController();
 		hibCtrl.addEntity(lecture);
 		return lecture;
 	}
