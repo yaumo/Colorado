@@ -57,6 +57,29 @@ const tableData = [
     },
 ];
 
+
+function handleClick(e) {
+    fetch('http://localhost:8080/user', {
+        method: 'POST',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            objectClass: 'user',
+            crud: '2',
+            id: ""
+        })
+    }).then(function (response) {
+
+    }).catch(function (err) {
+        console.log(err)
+    });
+};
+
+
 class OverviewTab extends React.Component {
     constructor() {
         super();
@@ -96,7 +119,7 @@ class OverviewTab extends React.Component {
                                                 <MenuItem value={3} primaryText="Sub" />
                                                 <MenuItem value={3} primaryText="Fibonacci" />
                                             </DropDownMenu>
-                                            <IconButton>
+                                            <IconButton onClick={handleClick}>
                                                     <ActionSearch/>
                                                 </IconButton>
                                         </TableHeaderColumn>

@@ -11,7 +11,29 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
+/* fetch to get all courses
+    fetch('http://localhost:8080/course', {
+        method: 'POST',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            objectClass: 'course',
+            crud: '2'
+        })
+    }).then(function (response) {
+
+    }).catch(function (err) {
+        console.log(err)
+    });
+*/
+
 function handleClick(e) {
+
+
     fetch('http://localhost:8080/lecture', {
         method: 'POST',
         mode: 'no-cors',
@@ -23,8 +45,8 @@ function handleClick(e) {
         body: JSON.stringify({
             objectClass: 'lecture',
             crud: '1',
-            lecture: 'LectureTest',
-            course: 'WWI14SEA'
+            title: 'LectureTest',
+            courseid: '00001'
         })
     }).then(function (response) {
 
@@ -97,10 +119,12 @@ class LecturesTab extends React.Component {
 
                         <br />
                         <h4>Step 2: Name Lecture</h4>
-                        <Paper zDepth={2} style={{ textAlign: "center" ,background: "#d1d1d1"}}>
+                        <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <TextField
                                 floatingLabelText="Lecture Name"
                                 fullWidth={false}
+                                underlineFocusStyle={{ 'borderColor': '#bd051f' }}
+                                floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                             />
                         </Paper>
 
@@ -128,7 +152,7 @@ class LecturesTab extends React.Component {
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
-                        <RaisedButton label="Create" onClick={handleClick}/>
+                        <RaisedButton label="Create" onClick={handleClick} />
                     </CardActions>
                 </Card>
             </div>

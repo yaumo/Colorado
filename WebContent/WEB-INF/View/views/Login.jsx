@@ -119,8 +119,8 @@ class Content extends React.Component {
                   id="username"
                   value={this.state.value}
                   onChange={this.handleChange}
-                  underlineFocusStyle={{ 'borderColor': '#bbbbbb' }}
-                  floatingLabelFocusStyle={{ 'color': 'white' }}
+                  underlineFocusStyle={{ 'borderColor': '#bd051f' }}
+                  floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                   style={{'width': '98%', 'font-size': '150%' }}
                   />
                 <br />
@@ -129,8 +129,8 @@ class Content extends React.Component {
                   floatingLabelText="Password"
                   type="password"
                   id="password"
-                  underlineFocusStyle={{ 'borderColor': '#bbbbbb' }}
-                  floatingLabelFocusStyle={{ 'color': 'white' }}
+                  underlineFocusStyle={{ 'borderColor': '#bd051f' }}
+                  floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                   style={{'width': '98%', 'font-size': '150%' }}
                   />
                 <br />

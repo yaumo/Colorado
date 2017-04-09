@@ -8,9 +8,7 @@ import '../../node_modules/codemirror/mode/clike/clike.js';
 
 function getInitialState() {
     return {
-        code: defaults.markdown,
-        readOnly: false,
-        mode: 'javascript',
+        readOnly: false
     };
 };
 
@@ -32,7 +30,7 @@ class Solution extends React.Component {
     render() {
         return (
             <div>
-                <Codemirror ref="editor" onChange={this.updateCode}/>
+                <Codemirror ref="editor" onChange={this.updateCode}  />
             </div>
         );
     }

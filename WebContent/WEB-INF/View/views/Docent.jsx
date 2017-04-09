@@ -12,6 +12,7 @@ import AssignExercisesTab from './components/AssignExercisesTab.jsx';
 import OverviewTab from './components/OverviewTab.jsx';
 import LecturesTab from './components/LecturesTab.jsx';
 import DocentBar from './components/DocentBar.jsx';
+import Test from './components/test.jsx';
 
 
 export class Docent extends React.Component {
@@ -29,7 +30,11 @@ class Content extends React.Component {
     render() {
         return (
             <div id="contentDocent" className="contentDocent">
-                <MuiThemeProvider muiTheme={getMuiTheme()} >
+                <MuiThemeProvider muiTheme={getMuiTheme({
+                    datePicker: { selectColor: '#bd051f' },
+                    flatButton: {primaryTextColor: '#bd051f'}
+                }
+                )} >
                     <div>
                         <Tabs>
                             <Tab label="New Exercise" style={{ 'backgroundColor': '#bd051f' }}>
