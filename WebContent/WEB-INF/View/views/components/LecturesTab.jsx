@@ -11,29 +11,12 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
-/* fetch to get all courses
-    fetch('http://localhost:8080/course', {
-        method: 'POST',
-        mode: 'no-cors',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            objectClass: 'course',
-            crud: '2'
-        })
-    }).then(function (response) {
-
-    }).catch(function (err) {
-        console.log(err)
-    });
-*/
-
-function handleClick(e) {
+function getAllCourses(){
+    //fetch
+}
 
 
+function getAllLectures(){
     fetch('http://localhost:8080/lecture', {
         method: 'POST',
         mode: 'no-cors',
@@ -44,15 +27,38 @@ function handleClick(e) {
         },
         body: JSON.stringify({
             objectClass: 'lecture',
-            crud: '1',
-            title: 'LectureTest',
-            courseid: '00001'
+            crud: '2'
         })
     }).then(function (response) {
 
     }).catch(function (err) {
         console.log(err)
     });
+}
+
+function createNewLecture(){
+    fetch('http://localhost:8080/lecture', {
+            method: 'POST',
+            mode: 'no-cors',
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                objectClass: 'lecture',
+                crud: '1',
+                title: 'LectureTest'
+            })
+        }).then(function (response) {
+
+        }).catch(function (err) {
+            console.log(err)
+        });
+}
+
+function handleClick(e) {
+    createNewLecture();
 };
 
 const tableData = [
