@@ -31,14 +31,15 @@ public class Exercise extends EducationEntity {
 	public static final String CODE = "code";
 	public static final String SOLUTION_CODE = "solution_code";
 	public static final String ANSWER = "answer";
+	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
+	public static final String LANGUAGE = "language";
 
 	private Set<Lecture> lectures;
-	// TODO: inversal JSON not possible! therefore we need transient. This is bad! Modify GSON?
-
 	private Set<Solution> solutions;
 
 	private Date deadline;
 	private String anwswer;
+	private boolean hasBeenModified;
 	private String videoLink;
 	// template code
 	private String code;
@@ -46,6 +47,7 @@ public class Exercise extends EducationEntity {
 	private String inputType;
 	private String outputType;
 	private String input;
+	private String language;
 
 	// The students who should do this exercise
 	private Set<User> users;
@@ -162,6 +164,22 @@ public class Exercise extends EducationEntity {
 
 	public void setAnwswer(String anwswer) {
 		this.anwswer = anwswer;
+	}
+
+	public boolean isHasBeenModified() {
+		return hasBeenModified;
+	}
+
+	public void setHasBeenModified(boolean hasBeenModified) {
+		this.hasBeenModified = hasBeenModified;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 }

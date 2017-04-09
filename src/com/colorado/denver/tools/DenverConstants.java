@@ -17,4 +17,12 @@ public final class DenverConstants {
 	public static final String ID_CREATE_MODE = "ID_CREATE_MODE";
 	public static final String ID_READ_ALL_MODE = "ID_READ_ALL_MODE";
 
+	// Data
+	public static final String JAVASCRIPT = "javaScript";
+	public static final String JAVA = "java";
+
+	// Messages
+	public static final String JAVA_EXCEPTION_THROWN = "Java exception thrown!";
+	public static final String JAVA_RESULT_CORRECT = "Congratulations! You have submitted the correct java code!";
+	public static final String JAVA_RESULT_WRONG = "Too bad! Your proposed solution is not correct!";
 }

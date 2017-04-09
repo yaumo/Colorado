@@ -6,12 +6,12 @@ import java.lang.reflect.Method;
 
 import org.slf4j.LoggerFactory;
 
-import com.colorado.denver.DenverApplication;
+import com.colorado.denver.tools.DenverConstants;
 
 import groovy.lang.GroovyClassLoader;
 
 public interface JavaExecutor {
-	final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverApplication.class);
+	final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(JavaExecutor.class);
 
 	public default String executeJava(String inputType, String outputType, String excInput, String code) throws SecurityException {
 
@@ -78,6 +78,8 @@ public interface JavaExecutor {
 					System.out.println("---");
 
 				} catch (Exception e) {
+					result = DenverConstants.JAVA_EXCEPTION_THROWN;
+					result = result + "\n" + e.getMessage();
 					e.printStackTrace();
 				}
 

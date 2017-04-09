@@ -67,6 +67,7 @@ public class SolutionController extends ObjectOperationController {
 				buf.close();
 
 				String fileAsString = sb.toString();
+				// experiment
 
 				// Set real Exercise Entity on SOlution NOT the detached one from the Frontend! -> Prevent cheating by user
 				HibernateController hibCtrl = new HibernateController();
@@ -76,23 +77,14 @@ public class SolutionController extends ObjectOperationController {
 				entity.setCode(fileAsString);
 				SolutionExecutor solex = new SolutionExecutor(entity);
 
-				String result = solex.execute();
-				entity.setAnwswer(result);
-				if (entity.getExercise().getAnwswer().equals(result)) {
-					entity.setCorrect(true);
-					LOGGER.info("Answer for entity " + entity.getId() + " correct with value: " + result);
-				} else {
-					LOGGER.info("Answer for entity " + entity.getId() + " NOT correct with value: " + result);
-					entity.setCorrect(false);
-				}
+				entity = solex.execute();
+
 			} catch (Exception e) {
 				LOGGER.error("Executing Solution failed! : " + entity.getId());
 				e.printStackTrace();
 			}
 
 		}
-		// Reset
-		entity.setHasBeenModified(false);
 
 		String jsonResponse = super.doCrud(entity, jsonString);
 		// entity = gson.fromJson(jsonResponse, Solution.class);

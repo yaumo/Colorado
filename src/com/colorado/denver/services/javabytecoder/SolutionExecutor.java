@@ -1,8 +1,13 @@
 package com.colorado.denver.services.javabytecoder;
 
-import com.colorado.denver.model.Solution;
+import org.slf4j.LoggerFactory;
 
-public class SolutionExecutor implements JavaExecutor {
+import com.colorado.denver.model.Solution;
+import com.colorado.denver.tools.DenverConstants;
+
+public class SolutionExecutor implements JavaExecutor, JavaScriptExecutor {
+
+	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SolutionExecutor.class);
 
 	Solution sol;
 	String inputType;
@@ -19,8 +24,33 @@ public class SolutionExecutor implements JavaExecutor {
 
 	}
 
-	public String execute() {
-		return executeJava(inputType, outputType, excInput, code);
+	public Solution execute() {
+		String answer = "";
+		String message = "";
+		if (sol.getExercise().getLanguage().equals(DenverConstants.JAVA)) {
+			answer = executeJava(inputType, outputType, excInput, code);
+			if (answer.startsWith(DenverConstants.JAVA_EXCEPTION_THROWN)) {
+				answer = DenverConstants.JAVA_EXCEPTION_THROWN;
+				message = answer.replaceAll(DenverConstants.JAVA_EXCEPTION_THROWN, "");
+			}
+		} else {
+
+		}
+
+		if (sol.getExercise().getAnwswer().equals(answer)) {
+			sol.setCorrect(true);
+			LOGGER.info("Answer for entity " + sol.getId() + " correct with value: " + answer);
+			message = DenverConstants.JAVA_RESULT_WRONG;
+		} else {
+			LOGGER.info("Answer for entity " + sol.getId() + " NOT correct with value: " + answer);
+			message = DenverConstants.JAVA_RESULT_CORRECT;
+			sol.setCorrect(false);
+		}
+		sol.setAnwswer(answer);
+		sol.setMessage(message);
+		// Reset
+		sol.setHasBeenModified(false);
+		return sol;
 	}
 
 }

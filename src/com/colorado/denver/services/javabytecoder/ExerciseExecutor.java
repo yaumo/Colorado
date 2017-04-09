@@ -18,4 +18,15 @@ public class ExerciseExecutor implements JavaExecutor {
 		this.code = exc.getCode();
 	}
 
+	public Exercise execute() {
+		String answer = executeJava(inputType, outputType, excInput, code);
+		exc.setAnwswer(answer);
+
+		LOGGER.info("Answer for exercise " + exc.getId() + "  with value: " + answer);
+
+		// Reset
+		exc.setHasBeenModified(false);
+		return exc;
+	}
+
 }

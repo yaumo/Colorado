@@ -15,10 +15,6 @@ public class Solution extends EducationEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 8150720003975451024L;
-	// Klasse für die Lösung von Aufgaben, Refernz zu der Aufgabe und dem User
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	// ----------------- WRITE IN FUCKING ENGLISH MR. FRIDAY!!!!!
-	// ..... (╯°□°)╯︵ ┻━┻
 
 	public static final String SOLUTION = "solution";
 	public static final String CODE = "code";
@@ -27,13 +23,15 @@ public class Solution extends EducationEntity {
 	public static final String ANSWER = "answer";
 	public static final String CORRECT = "correct";
 	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
+	public static final String MESSAGE = "message";
 
 	private String anwswer;
+	private String message;
 	private boolean submitted;
 	private boolean correct;
 	private String code;
 	private boolean hasBeenModified;
-	// reference to the solved exercise
+	// reference to the exercise
 	private Exercise exercise;
 
 	public Solution() {
@@ -101,6 +99,14 @@ public class Solution extends EducationEntity {
 
 	public void setAnwswer(String anwswer) {
 		this.anwswer = anwswer;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }
