@@ -40,10 +40,10 @@ public class SolutionExecutor implements JavaExecutor, JavaScriptExecutor {
 		if (sol.getExercise().getAnwswer().equals(answer)) {
 			sol.setCorrect(true);
 			LOGGER.info("Answer for entity " + sol.getId() + " correct with value: " + answer);
-			message = DenverConstants.JAVA_RESULT_WRONG;
+			message = DenverConstants.JAVA_RESULT_CORRECT;
 		} else {
 			LOGGER.info("Answer for entity " + sol.getId() + " NOT correct with value: " + answer);
-			message = DenverConstants.JAVA_RESULT_CORRECT;
+			message = DenverConstants.JAVA_RESULT_WRONG;
 			sol.setCorrect(false);
 		}
 		sol.setAnwswer(answer);

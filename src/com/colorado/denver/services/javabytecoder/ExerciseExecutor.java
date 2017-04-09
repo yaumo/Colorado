@@ -15,7 +15,7 @@ public class ExerciseExecutor implements JavaExecutor {
 		this.inputType = exc.getInputType();
 		this.outputType = exc.getOutputType();
 		this.excInput = exc.getInput();
-		this.code = exc.getCode();
+		this.code = exc.getSolution_code();
 	}
 
 	public Exercise execute() {

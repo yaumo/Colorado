@@ -54,6 +54,7 @@ public class SolutionController extends ObjectOperationController {
 
 		if (entity.isSubmitted() && entity.isHasBeenModified()) {
 			try {
+				entity.setCorrect(false); // init with false. Otherwise the value might be set from the frontend in another update
 				// Experimental! We need the code from the itself not from a file on the server
 				InputStream is = new FileInputStream("fibonacci.txt");
 				BufferedReader buf = new BufferedReader(new InputStreamReader(is));
