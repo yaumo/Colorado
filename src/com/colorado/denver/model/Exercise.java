@@ -38,6 +38,7 @@ public class Exercise extends EducationEntity {
 	private Set<Solution> solutions;
 
 	private Date deadline;
+	private String anwswer;
 	private String videoLink;
 	// template code
 	private String code;
@@ -153,6 +154,14 @@ public class Exercise extends EducationEntity {
 
 	public void setInput(String input) {
 		this.input = input;
+	}
+
+	public String getAnwswer() {
+		return anwswer;
+	}
+
+	public void setAnwswer(String anwswer) {
+		this.anwswer = anwswer;
 	}
 
 }

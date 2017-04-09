@@ -1,5 +1,11 @@
 package com.colorado.denver.test;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +41,7 @@ public class PopulateDBWithTestData {
 	}
 
 	@Test
-	public void populateDatabase() {
+	public void populateDatabase() throws IOException {
 		UserService.authorizeSystemuser();
 		createDocent("Heinrich", "password", UserService.ROLE_DOCENT);
 		createCourse("WWI 14 SEA");
@@ -61,14 +67,36 @@ public class PopulateDBWithTestData {
 	private Exercise createExercise(String title) {
 		Exercise exercise = new Exercise();
 		exercise.setTitle(title);
+		exercise.setAnwswer(89 + "");
+		exercise.setInput(11 + "");
+		exercise.setInputType("int");
+		exercise.setOutputType("int");
 		hibCtrl = HibernateGeneralTools.getHibernateController();
 		hibCtrl.addEntity(exercise);
+
 		return exercise;
 	}
 
-	private Solution createSolution(String title) {
+	private Solution createSolution(String title) throws IOException {
+
+		InputStream is = new FileInputStream("fibonacci.txt");
+		BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+		String line = buf.readLine();
+		StringBuilder sb = new StringBuilder();
+
+		while (line != null) {
+			sb.append(line).append("\n");
+			line = buf.readLine();
+		}
+		buf.close();
+		String fileAsString = sb.toString();
+
 		Solution solution = new Solution();
 		solution.setTitle(title);
+		solution.setCode(fileAsString);
+		solution.setSubmitted(false);
+		solution.setHasBeenModified(false);
+
 		hibCtrl = HibernateGeneralTools.getHibernateController();
 		hibCtrl.addEntity(solution);
 		return solution;

@@ -1,6 +1,10 @@
 package com.colorado.denver.controller.entityController;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javax.management.ReflectionException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.colorado.denver.controller.HibernateController;
+import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.services.UserService;
+import com.colorado.denver.services.javabytecoder.SolutionExecutor;
 import com.colorado.denver.tools.DenverConstants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -43,12 +50,49 @@ public class SolutionController extends ObjectOperationController {
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
 		gb.serializeNulls();
 		Gson gson = gb.create();
-
 		Solution entity = gson.fromJson(jsonString, Solution.class);
 
 		if (entity.isSubmitted() && entity.isHasBeenModified()) {
+			try {
+				// Experimental! We need the code from the itself not from a file on the server
+				InputStream is = new FileInputStream("fibonacci.txt");
+				BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+				String line = buf.readLine();
+				StringBuilder sb = new StringBuilder();
+
+				while (line != null) {
+					sb.append(line).append("\n");
+					line = buf.readLine();
+				}
+				buf.close();
+
+				String fileAsString = sb.toString();
+
+				// Set real Exercise Entity on SOlution NOT the detached one from the Frontend! -> Prevent cheating by user
+				HibernateController hibCtrl = new HibernateController();
+				Exercise exc = (Exercise) hibCtrl.getEntity(entity.getExercise().getId());
+				entity.setExercise(exc);
+
+				entity.setCode(fileAsString);
+				SolutionExecutor solex = new SolutionExecutor(entity);
+
+				String result = solex.execute();
+				entity.setAnwswer(result);
+				if (entity.getExercise().getAnwswer().equals(result)) {
+					entity.setCorrect(true);
+					LOGGER.info("Answer for entity " + entity.getId() + " correct with value: " + result);
+				} else {
+					LOGGER.info("Answer for entity " + entity.getId() + " NOT correct with value: " + result);
+					entity.setCorrect(false);
+				}
+			} catch (Exception e) {
+				LOGGER.error("Executing Solution failed! : " + entity.getId());
+				e.printStackTrace();
+			}
 
 		}
+		// Reset
+		entity.setHasBeenModified(false);
 
 		String jsonResponse = super.doCrud(entity, jsonString);
 		// entity = gson.fromJson(jsonResponse, Solution.class);
