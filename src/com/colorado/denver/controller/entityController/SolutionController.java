@@ -45,7 +45,14 @@ public class SolutionController extends ObjectOperationController {
 		Gson gson = gb.create();
 
 		Solution entity = gson.fromJson(jsonString, Solution.class);
+
+		if (entity.isSubmitted() && entity.isHasBeenModified()) {
+
+		}
+
 		String jsonResponse = super.doCrud(entity, jsonString);
+		// entity = gson.fromJson(jsonResponse, Solution.class);
+
 		entity = null; // Let GC run over this quickly
 		response.setStatus(200);
 		response.getWriter().write(jsonResponse);

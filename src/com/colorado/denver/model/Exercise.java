@@ -42,6 +42,9 @@ public class Exercise extends EducationEntity {
 	// template code
 	private String code;
 	private String solution_code;
+	private String inputType;
+	private String outputType;
+	private String input;
 
 	// The students who should do this exercise
 	private Set<User> users;
@@ -126,6 +129,30 @@ public class Exercise extends EducationEntity {
 	@Transient
 	public String setPrefix() {
 		return getPrefix();
+	}
+
+	public String getInputType() {
+		return inputType;
+	}
+
+	public void setInputType(String inputType) {
+		this.inputType = inputType;
+	}
+
+	public String getOutputType() {
+		return outputType;
+	}
+
+	public void setOutputType(String outputType) {
+		this.outputType = outputType;
+	}
+
+	public String getInput() {
+		return input;
+	}
+
+	public void setInput(String input) {
+		this.input = input;
 	}
 
 }

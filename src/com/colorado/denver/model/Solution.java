@@ -25,8 +25,13 @@ public class Solution extends EducationEntity {
 	public static final String EXERCISE = "exercise";
 	public static final String SUBMITTED = "submitted";
 	public static final String ANSWER = "answer";
+	public static final String CORRECT = "correct";
+	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
 
+	private boolean submitted;
+	private boolean correct;
 	private String code;
+	private boolean hasBeenModified;
 	// reference to the solved exercise
 	private Exercise exercise;
 
@@ -49,8 +54,24 @@ public class Solution extends EducationEntity {
 		return code;
 	}
 
+	public boolean isSubmitted() {
+		return submitted;
+	}
+
+	public void setSubmitted(boolean submitted) {
+		this.submitted = submitted;
+	}
+
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public boolean isCorrect() {
+		return correct;
+	}
+
+	public void setCorrect(boolean correct) {
+		this.correct = correct;
 	}
 
 	@Override
@@ -63,6 +84,14 @@ public class Solution extends EducationEntity {
 	@Transient
 	public String setPrefix() {
 		return getPrefix();
+	}
+
+	public boolean isHasBeenModified() {
+		return hasBeenModified;
+	}
+
+	public void setHasBeenModified(boolean hasBeenModified) {
+		this.hasBeenModified = hasBeenModified;
 	}
 
 }
