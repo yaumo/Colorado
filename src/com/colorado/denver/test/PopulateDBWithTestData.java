@@ -47,24 +47,32 @@ public class PopulateDBWithTestData {
 	@Test
 	public void populateDatabase() throws IOException {
 		UserService.authorizeSystemuser();
-		User docent = createUser("Heinrich", "password", UserService.ROLE_DOCENT);
-		User docent2 = createUser("Baum", "password", UserService.ROLE_DOCENT);
+		User docent = createUser("Heinrich Docent", "password", UserService.ROLE_DOCENT);
+		User tutor1 = createUser("Baum Tutor L2", "password", UserService.ROLE_TUTOR);
+		User tutor2 = createUser("Tim Tutor L2", "password", UserService.ROLE_TUTOR);
 
-		User student = createUser("Peter", "password", UserService.ROLE_STUDENT);
-		User student2 = createUser("Klause", "password", UserService.ROLE_STUDENT);
-		User student3 = createUser("Tom", "password", UserService.ROLE_STUDENT);
-		User student4 = createUser("Karsten", "password", UserService.ROLE_STUDENT);
-		Set<User> users = new HashSet<User>();
+		User student = createUser("Peter Student C1", "password", UserService.ROLE_STUDENT);
+		User student2 = createUser("Klaus Student C2", "password", UserService.ROLE_STUDENT);
+		User student3 = createUser("Tom Student C2", "password", UserService.ROLE_STUDENT);
+		User student4 = createUser("Karsten Student C3", "password", UserService.ROLE_STUDENT);
 
-		users.add(student);
-		users.add(student2);
-		users.add(student3);
-		users.add(student4);
+		Set<User> usersTutors = new HashSet<User>();
+		usersTutors.add(tutor1);
+		usersTutors.add(tutor2);
 
-		Course course = createCourse("WWI 14 SEA");
-		Course course2 = createCourse("WWI 15 SEB");
-		Course course3 = createCourse("AI 14");
-		Course course4 = createCourse("IMBIT 16 B");
+		Set<User> usersStudentsC1 = new HashSet<User>();
+		Set<User> usersStudentsC2 = new HashSet<User>();
+		Set<User> usersStudentsC3 = new HashSet<User>();
+
+		usersStudentsC1.add(student);
+		usersStudentsC2.add(student2);
+		usersStudentsC2.add(student3);
+		usersStudentsC3.add(student4);
+
+		Course course = createCourse("Course 1");
+		Course course2 = createCourse("Course 2");
+		Course course3 = createCourse("Course 3");
+		Course course4 = createCourse("Course 4");
 
 		student.setCourse(course);
 		student.setCourse(course2);
@@ -74,12 +82,18 @@ public class PopulateDBWithTestData {
 		Lecture lecture = createLecture("Programmieren I");
 		Lecture lecture2 = createLecture("Programmieren II");
 		Lecture lecture3 = createLecture("Programmieren III");
-		Lecture lecture4 = createLecture("Programmieren für Gute");
+		Lecture lecture4 = createLecture("Programmieren IV");
 
 		lecture3.setCourse(course3);
 		lecture2.setCourse(course2);
 		lecture.setCourse(course);
 		lecture4.setCourse(course4);
+
+		course.setUsers(usersStudentsC1);
+		course2.setUsers(usersStudentsC2);
+		course3.setUsers(usersStudentsC3);
+
+		lecture2.setUsers(usersTutors);
 
 		Set<Lecture> lectures = new HashSet<Lecture>();
 		lectures.add(lecture);
@@ -101,12 +115,11 @@ public class PopulateDBWithTestData {
 		student.setSolutions(solutions);
 		student.setCourse(course);
 
-		exercise.setOwner(docent2);
+		exercise.setOwner(docent);
 		exercise.setLectures(lectures); // setting on both entities gives error: lecture.setExercises(exercises); +
 										// exercise.setLectures(lectures);
 
 		course.setLectures(lectures);
-		course.setUsers(users);
 		course.setOwner(docent);
 
 		lecture.setExercises(exercises);
@@ -118,7 +131,8 @@ public class PopulateDBWithTestData {
 		hibCtrl.updateEntity(student3);
 		hibCtrl.updateEntity(student4);
 		hibCtrl.updateEntity(docent);
-		hibCtrl.updateEntity(docent2);
+		hibCtrl.updateEntity(tutor1);
+		hibCtrl.updateEntity(tutor2);
 		hibCtrl.updateEntity(exercise);
 		hibCtrl.updateEntity(course);
 		hibCtrl.updateEntity(course2);

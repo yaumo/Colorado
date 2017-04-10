@@ -18,11 +18,13 @@ import org.springframework.web.client.HttpServerErrorException;
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.BaseEntity;
 import com.colorado.denver.model.Course;
+import com.colorado.denver.model.EducationEntity;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Lecture;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
+import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.tools.DenverConstants;
 import com.colorado.denver.tools.GraphAdapterBuilder;
@@ -37,6 +39,8 @@ public class ObjectOperationController extends HttpServlet {
 	private static final long serialVersionUID = -6726973624223302932L;
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ObjectOperationController.class);
 	private HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
+
+	private User workingUser = null;
 
 	public String checkRequest(HttpServletRequest request) throws ReflectionException, IOException, JSONException {
 		// This Method should be generic!!
@@ -101,6 +105,8 @@ public class ObjectOperationController extends HttpServlet {
 			jsonObject = null;// Invalidate the request for further handling
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
+
+		workingUser = UserService.getCurrentUser();
 
 		// get user via session
 		// do security check
@@ -172,11 +178,15 @@ public class ObjectOperationController extends HttpServlet {
 			LOGGER.error("ERROR IN ASSERTING A CRUD OPERTAION!! CRUD VALUE: " + crud);
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);// last resort
 		}
-
+		workingUser = null;
 		return jsonResponse;
 	}
 
 	private String create(BaseEntity<?> entity) {
+		if (entity instanceof EducationEntity) {
+			((EducationEntity) entity).setOwner(workingUser);
+		}
+
 		String id = hibCtrl.addEntity(entity);
 		return id;
 	}
@@ -190,6 +200,10 @@ public class ObjectOperationController extends HttpServlet {
 	}
 
 	private BaseEntity<?> update(BaseEntity<?> entity) {
+		if (entity instanceof EducationEntity) {
+			((EducationEntity) entity).setOwner(workingUser);
+		}
+
 		try {
 			return hibCtrl.mergeEntity(entity);
 

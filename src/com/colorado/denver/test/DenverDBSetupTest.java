@@ -54,9 +54,10 @@ public class DenverDBSetupTest {
 		Role roleAdmin = createRole(UserService.ROLE_ADMIN);
 		Role roleStudent = createRole(UserService.ROLE_STUDENT);
 		Role roleDocent = createRole(UserService.ROLE_DOCENT);
+		Role roleTutor = createRole(UserService.ROLE_TUTOR);
 		User systemUser = createSystemUser();
 
-		updateRoles(roleAdmin, roleStudent, roleDocent, systemUser);
+		updateRoles(roleAdmin, roleStudent, roleDocent, roleTutor, systemUser);
 	}
 
 	@After
@@ -65,18 +66,20 @@ public class DenverDBSetupTest {
 
 	}
 
-	private boolean updateRoles(Role roleAdmin, Role roleStudent, Role roleDocent, User systemUser) {
+	private boolean updateRoles(Role roleAdmin, Role roleStudent, Role roleDocent, Role roleTutor, User systemUser) {
 		Set<User> systemUsers = new HashSet<>();
 		systemUsers.add(systemUser);
 		roleAdmin.setUsers(systemUsers);
 		roleStudent.setUsers(systemUsers);
 		roleDocent.setUsers(systemUsers);
+		roleTutor.setUsers(systemUsers);
 
 		try {
 			HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 			hibCtrl.mergeEntity(roleAdmin);
 			hibCtrl.mergeEntity(roleStudent);
 			hibCtrl.mergeEntity(roleDocent);
+			hibCtrl.mergeEntity(roleTutor);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

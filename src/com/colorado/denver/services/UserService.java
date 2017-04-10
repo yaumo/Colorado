@@ -33,6 +33,7 @@ public class UserService implements AuthenticationProvider {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 	public static final String ROLE_STUDENT = "ROLE_STUDENT";
+	public static final String ROLE_TUTOR = "ROLE_TUTOR";
 	public static final String ROLE_DOCENT = "ROLE_DOCENT";
 	public static final String ROLE_ADMIN = "ROLE_ADMIN";
 

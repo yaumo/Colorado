@@ -24,7 +24,7 @@ public class HibernateInterceptor extends EmptyInterceptor {
 			Object[] previousState,
 			String[] propertyNames,
 			Type[] types) {
-		LOGGER.info("Interceptor working in update!");
+		LOGGER.debug("Interceptor working in update!");
 		boolean worked = false;
 		if (entity instanceof BaseEntity<?>) {
 			for (int i = 0; i < propertyNames.length; i++) {
@@ -43,7 +43,7 @@ public class HibernateInterceptor extends EmptyInterceptor {
 
 				}
 			}
-			LOGGER.info("Interceptor worked in update!");
+			LOGGER.debug("Interceptor worked in update!");
 			return worked;
 		}
 		return worked;
