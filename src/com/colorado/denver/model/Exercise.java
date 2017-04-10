@@ -9,12 +9,9 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -35,7 +32,6 @@ public class Exercise extends EducationEntity {
 	public static final String LANGUAGE = "language";
 
 	private Set<Lecture> lectures;
-	private Set<Solution> solutions;
 
 	private Date deadline;
 	private String anwswer;
@@ -49,32 +45,8 @@ public class Exercise extends EducationEntity {
 	private String input;
 	private String language;
 
-	// The students who should do this exercise
-	private Set<User> users;
-
 	public Exercise() {
 
-	}
-
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "exercises_users", joinColumns = { @JoinColumn(name = "users_id") }, inverseJoinColumns = { @JoinColumn(name = "exercises_id") })
-	@Cascade({ CascadeType.ALL })
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
-
-	@OneToMany(fetch = FetchType.EAGER)
-	@Cascade({ CascadeType.ALL })
-	public Set<Solution> getSolutions() {
-		return solutions;
-	}
-
-	public void setSolutions(Set<Solution> solutions) {
-		this.solutions = solutions;
 	}
 
 	@ManyToMany(fetch = FetchType.EAGER)

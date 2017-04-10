@@ -21,7 +21,7 @@ import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.services.UserService;
-import com.colorado.denver.services.javabytecoder.SolutionExecutor;
+import com.colorado.denver.services.codeExecution.SolutionExecutor;
 import com.colorado.denver.tools.DenverConstants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

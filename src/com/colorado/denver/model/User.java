@@ -35,34 +35,11 @@ public class User extends BaseEntity<User> {
 
 	private transient String password;
 	protected transient boolean enabled;
-	private Set<Lecture> lectures;
 	private Course course;
 	private Set<Solution> solutions;
-	// @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Exercise> exercises;
 	private Collection<Role> roles;
 
 	public User() {
-	}
-
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "exercises_users", joinColumns = { @JoinColumn(name = "exercises_id") }, inverseJoinColumns = { @JoinColumn(name = "users_id") })
-	public Set<Exercise> getExercises() {
-		return exercises;
-	}
-
-	public void setExercises(Set<Exercise> exercises) {
-		this.exercises = exercises;
-	}
-
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "lectures_users", joinColumns = { @JoinColumn(name = "lectures_id") }, inverseJoinColumns = { @JoinColumn(name = "users_id") })
-	public Set<Lecture> getLectures() {
-		return lectures;
-	}
-
-	public void setLectures(Set<Lecture> lectures) {
-		this.lectures = lectures;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

@@ -131,21 +131,21 @@ public class DenverDBSetupTest {
 		return returnedU;
 
 	}
-	
-	private static void dropAllSequences(){
+
+	private static void dropAllSequences() {
 		try {
 
 			Class.forName("org.postgresql.Driver");
 
 		} catch (ClassNotFoundException e) {
 
-			System.out.println("Where is your PostgreSQL JDBC Driver? "
+			LOGGER.error("Where is your PostgreSQL JDBC Driver? "
 					+ "Include in your library path!");
 			e.printStackTrace();
 			return;
 		}
 
-		System.out.println("PostgreSQL JDBC Driver Registered!");
+		LOGGER.info("PostgreSQL JDBC Driver Registered!");
 
 		Connection connection = null;
 
@@ -156,7 +156,7 @@ public class DenverDBSetupTest {
 
 		} catch (SQLException e) {
 
-			System.out.println("Connection Failed! Check output console");
+			LOGGER.error("Connection Failed! Check output console");
 			e.printStackTrace();
 			return;
 
@@ -167,14 +167,14 @@ public class DenverDBSetupTest {
 				Statement stmt = connection.createStatement();
 				String sql = "drop sequence if exists course_sequence;drop sequence if exists exercise_sequence;drop sequence if exists lecture_sequence;drop sequence if exists role_sequence;drop sequence if exists solution_sequence;drop sequence if exists user_sequence;";
 				stmt.executeUpdate(sql);
-				if(connection!=null)
+				if (connection != null)
 					connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
+
 		} else {
-			System.out.println("Failed to make connection!");
+			LOGGER.error("Failed to make connection!");
 		}
 	}
 

@@ -1,6 +1,5 @@
 package com.colorado.denver.test;
 
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -49,51 +48,86 @@ public class PopulateDBWithTestData {
 	public void populateDatabase() throws IOException {
 		UserService.authorizeSystemuser();
 		User docent = createUser("Heinrich", "password", UserService.ROLE_DOCENT);
-		
+		User docent2 = createUser("Baum", "password", UserService.ROLE_DOCENT);
+
 		User student = createUser("Peter", "password", UserService.ROLE_STUDENT);
+		User student2 = createUser("Klause", "password", UserService.ROLE_STUDENT);
+		User student3 = createUser("Tom", "password", UserService.ROLE_STUDENT);
+		User student4 = createUser("Karsten", "password", UserService.ROLE_STUDENT);
 		Set<User> users = new HashSet<User>();
+
 		users.add(student);
-		
+		users.add(student2);
+		users.add(student3);
+		users.add(student4);
+
 		Course course = createCourse("WWI 14 SEA");
-		
+		Course course2 = createCourse("WWI 15 SEB");
+		Course course3 = createCourse("AI 14");
+		Course course4 = createCourse("IMBIT 16 B");
+
+		student.setCourse(course);
+		student.setCourse(course2);
+		student.setCourse(course2);
+		student.setCourse(course3);
+
 		Lecture lecture = createLecture("Programmieren I");
+		Lecture lecture2 = createLecture("Programmieren II");
+		Lecture lecture3 = createLecture("Programmieren III");
+		Lecture lecture4 = createLecture("Programmieren für Gute");
+
+		lecture3.setCourse(course3);
+		lecture2.setCourse(course2);
+		lecture.setCourse(course);
+		lecture4.setCourse(course4);
+
 		Set<Lecture> lectures = new HashSet<Lecture>();
 		lectures.add(lecture);
-		
+		lectures.add(lecture2);
+		lectures.add(lecture3);
+
 		Exercise exercise = createExercise("Fibonacci");
 		Set<Exercise> exercises = new HashSet<Exercise>();
 		exercises.add(exercise);
-		
+
 		Solution solution = createSolution("Fibonacci Loesung");
 		Set<Solution> solutions = new HashSet<Solution>();
 		solutions.add(solution);
-		
+
 		solution.setExercise(exercise);
-		
-		//student.setLectures(lectures);
-		//student.setExercises(exercises);
+
+		// student.setLectures(lectures);
+		// student.setExercises(exercises);
 		student.setSolutions(solutions);
 		student.setCourse(course);
-		
-		docent.setLectures(lectures);
-		
-		exercise.setOwner(docent);
-		//exercise.setLectures(lectures); //setting on both entities gives error: lecture.setExercises(exercises); + exercise.setLectures(lectures);
-		exercise.setSolutions(solutions);
-		exercise.setUsers(users);  //TODO: relationship is not saved on DB, why?
-		
+
+		exercise.setOwner(docent2);
+		exercise.setLectures(lectures); // setting on both entities gives error: lecture.setExercises(exercises); +
+										// exercise.setLectures(lectures);
+
 		course.setLectures(lectures);
 		course.setUsers(users);
-		
-		lecture.setUsers(users);
+		course.setOwner(docent);
+
 		lecture.setExercises(exercises);
-		
+		lecture.setOwner(docent);
+
 		hibCtrl.updateEntity(solution);
 		hibCtrl.updateEntity(student);
+		hibCtrl.updateEntity(student2);
+		hibCtrl.updateEntity(student3);
+		hibCtrl.updateEntity(student4);
 		hibCtrl.updateEntity(docent);
+		hibCtrl.updateEntity(docent2);
 		hibCtrl.updateEntity(exercise);
 		hibCtrl.updateEntity(course);
+		hibCtrl.updateEntity(course2);
+		hibCtrl.updateEntity(course3);
+		hibCtrl.updateEntity(course4);
 		hibCtrl.updateEntity(lecture);
+		hibCtrl.updateEntity(lecture2);
+		hibCtrl.updateEntity(lecture3);
+		hibCtrl.updateEntity(lecture4);
 	}
 
 	private User createUser(String name, String password, String roleName) {
