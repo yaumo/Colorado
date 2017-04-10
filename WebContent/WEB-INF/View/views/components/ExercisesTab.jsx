@@ -35,9 +35,6 @@ function handleClick(e) {
     });
 };
 
-function handleChange(event, index, value) {
-    this.setState({ value });
-};
 
 class ExercisesTab extends React.Component {
 
@@ -45,9 +42,16 @@ class ExercisesTab extends React.Component {
         super();
         this.state = {
             open: true,
+			selectedProgrammingLanguage: 1,
             value: 1
         };
+		this.handleChangeProgrammingLanguage = this.handleChangeProgrammingLanguage.bind(this);
     }
+	
+	handleChangeProgrammingLanguage(event, index, value){
+		this.setState({selectedProgrammingLanguage: value});
+	}
+	
     render() {
         return (
             <div>
@@ -68,7 +72,7 @@ class ExercisesTab extends React.Component {
                                             />
                                         </td>
                                         <td style={{ width: "50%", padding: "6px", verticalAlign: "top" }}>
-                                            <DropDownMenu className="language" value={this.state.value} onChange={this.handleChange}>
+                                            <DropDownMenu className="language" value={this.state.selectedProgrammingLanguage} onChange={this.handleChangeProgrammingLanguage}>
                                                 <MenuItem value={1} primaryText="JavaScript" />
                                                 <MenuItem value={2} primaryText="Java" />
                                             </DropDownMenu>

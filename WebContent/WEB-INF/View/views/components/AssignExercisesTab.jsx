@@ -10,6 +10,9 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
+var lecturesjson;
+const courselist=[];
+const lecturelist=[];
 
 function handleChange(event, index, value) {
     this.setState({ value });
@@ -44,9 +47,47 @@ class AssignExercisesTab extends React.Component {
         super();
         this.state = {
             open: true,
-            value: 1
+            value: 1,
+			selectedLecture: 0,
+			selectedCourse:0
         };
+		this.handleChangeLecture = this.handleChangeLecture.bind(this);
+		this.handleChangeCourse = this.handleChangeCourse.bind(this);
     }
+	
+	componentWillMount() {
+		var lectures='{"course": [	{"course_title":"WWI14SEA",	 "course_id":"1",	 "lectures":[		{"lecture_title":"Datenbanken",		"lecture_id": "0001",		"exercises": [			{ "exercise_title":"Fibonacci", "exercise_id":"0123123"},			{ "exercise_title":"Test2", "exercise_id":"0123124"},			{ "exercise_title":"Test3", "exercise_id":"0123125"}		]},		{"lecture_title":"Webprogrammierung",		"lecture_id": "0002",		"exercises": [			{ "exercise_title":"WEB1", "exercise_id":"0123123"},			{ "exercise_title":"WEB2", "exercise_id":"1123124"},			{ "exercise_title":"WEB3", "exercise_id":"1123125"}		]},		{"lecture_title":"Test2",		"lecture_id": "0003",		"exercises": [			{ "exercise_title":"Test1", "exercise_id":"2123123"},			{ "exercise_title":"Test2", "exercise_id":"2123124"},			{ "exercise_title":"Test3", "exercise_id":"2123125"}	]}	 ]},	{"course_title":"WWI14AMA",	 "course_id":"1",	 "lectures":[		{"lecture_title":"Datenbanken",		"lecture_id": "0001",		"exercises": [			{ "exercise_title":"Fibonacci", "exercise_id":"0123123"},			{ "exercise_title":"Test2", "exercise_id":"0123124"},			{ "exercise_title":"Test3", "exercise_id":"0123125"}		]},		{"lecture_title":"Webprogrammierung",		"lecture_id": "0002",		"exercises": [			{ "exercise_title":"WEB1", "exercise_id":"0123123"},			{ "exercise_title":"WEB2", "exercise_id":"1123124"},			{ "exercise_title":"WEB3", "exercise_id":"1123125"}		]},		{"lecture_title":"Test",		"lecture_id": "0003",		"exercises": [			{ "exercise_title":"Test1", "exercise_id":"2123123"},			{ "exercise_title":"Test2", "exercise_id":"2123124"},			{ "exercise_title":"Test3", "exercise_id":"2123125"}		]}	 ]}   ]}';
+		lecturesjson= JSON.parse(lectures);
+		
+		if(courselist.length===0){
+			for(var i=0;i<lecturesjson.course.length;i++){
+				courselist.push(<MenuItem value={i} key={i} primaryText={lecturesjson.course[i].course_title} />);
+			}
+		}
+		if(lecturelist.length===0){
+			for(var j=0;j<lecturesjson.course[0].lectures.length;j++){
+				lecturelist.push(<MenuItem value={j} key={j} primaryText={lecturesjson.course[0].lectures[j].lecture_title} />);
+			}
+		}
+		console.log(lecturesjson);	
+	}
+	
+	handleChangeLecture(event, index, value){
+		var count = lecturelist.length;
+		for(var i =0;i<count;i++){
+			lecturelist.pop();
+		}
+		for(var j=0;j<lecturesjson.course[value].lectures.length;j++){
+			lecturelist.push(<MenuItem value={j} key={j} primaryText={lecturesjson.course[value].lectures[j].lecture_title} />);
+		}
+		
+		this.setState({selectedLecture: value});
+		this.setState({selectedCourse: 0});
+	}
+	
+	handleChangeCourse(event, index, value){
+		this.setState({selectedCourse: value});	
+	}
     render() {
         return (
             <div>
@@ -93,16 +134,12 @@ class AssignExercisesTab extends React.Component {
                         <br />
                         <h4>Step 2: Select Lecture</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
-                            <DropDownMenu value={this.state.value} onChange={this.handleChange}>
-                                <MenuItem value={1} primaryText="WWI14SEA" />
-                                <MenuItem value={2} primaryText="WWI14SEB" />
-                                <MenuItem value={3} primaryText="WWI16AMA" />
+                            <DropDownMenu value={this.state.selectedLecture} onChange={this.handleChangeLecture}>
+                                {courselist}
                             </DropDownMenu>
 
-                            <DropDownMenu value={this.state.value} onChange={this.handleChange}>
-                                <MenuItem value={1} primaryText="Webprogrammierung" />
-                                <MenuItem value={2} primaryText="Datenbanken" />
-                                <MenuItem value={3} primaryText="Programmieren 1" />
+                            <DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
+                                {lecturelist}
                             </DropDownMenu>
                         </Paper>
 
