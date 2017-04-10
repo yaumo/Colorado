@@ -10,9 +10,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import CodeMirror from 'react-codemirror';
 import NavBar from './components/NavBar.jsx';
-import Solution from './components/Solution.jsx';
 import Paper from 'material-ui/Paper';
 import DropDownMenu from 'material-ui/DropDownMenu';
+import EditorAce from './components/EditorAce.jsx';
 
 
 export class Exercise extends React.Component {
@@ -78,7 +78,7 @@ class Content extends React.Component {
                                         <MenuItem value={2} primaryText="Java" />
                                     </DropDownMenu>
                                     <Paper zDepth={4}>
-                                        <Solution />
+                                        <EditorAce />
                                     </Paper>
                                 </CardText>
                                 <CardActions className="footer">

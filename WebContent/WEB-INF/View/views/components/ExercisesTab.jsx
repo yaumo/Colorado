@@ -10,8 +10,7 @@ import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import Fetch from 'react-fetch';
-import Test from './test.jsx';
-
+import EditorAce from './EditorAce.jsx';
 
 function handleClick(e) {
     fetch('http://localhost:8080/exercise', {
@@ -106,13 +105,13 @@ class ExercisesTab extends React.Component {
                                     <td style={{ width: "50%", padding: "6px", paddingLeft: "0px" }}>
                                         <h4>Pattern Solution</h4>
                                         <Paper zDepth={4}>
-                                            <Solution />
+                                            <EditorAce />
                                         </Paper>
                                     </td>
                                     <td style={{ width: "50%", padding: "6px", paddingRight: "0px" }}>
                                         <h4>Template</h4>
                                         <Paper zDepth={4}>
-                                            <Solution />
+                                            <EditorAce />
                                         </Paper>
                                     </td>
                                 </tr>

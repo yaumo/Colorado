@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import Codemirror from 'react-codemirror';
-import '../../node_modules/codemirror/mode/javascript/javascript.js';
+//import '../../node_modules/codemirror/mode/javascript/javascript.js';
 import '../../node_modules/codemirror/mode/clike/clike.js';
 
 
 
 function getInitialState() {
     return {
-        readOnly: false
+        readOnly: false,
+        mode: 'clike',
+        mime: 'text/x-java'
     };
 };
 
@@ -30,7 +32,7 @@ class Solution extends React.Component {
     render() {
         return (
             <div>
-                <Codemirror ref="editor" onChange={this.updateCode}  />
+                <Codemirror ref="editor" onChange={this.updateCode} />
             </div>
         );
     }

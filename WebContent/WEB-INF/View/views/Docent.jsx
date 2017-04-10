@@ -12,7 +12,7 @@ import AssignExercisesTab from './components/AssignExercisesTab.jsx';
 import OverviewTab from './components/OverviewTab.jsx';
 import LecturesTab from './components/LecturesTab.jsx';
 import DocentBar from './components/DocentBar.jsx';
-import Test from './components/test.jsx';
+
 
 
 export class Docent extends React.Component {

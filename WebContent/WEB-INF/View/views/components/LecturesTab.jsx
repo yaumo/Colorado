@@ -11,12 +11,32 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
-function getAllCourses(){
-    //fetch
+function getAllCourses() {
+    fetch('http://localhost:8080/course', {
+        method: 'POST',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            objectClass: 'course',
+            crud: '2'
+        })
+    }).then(function (response) {
+        var hallo = response.text();
+        alert(typeof hallo);
+        alert(hallo);
+        return JSON.parse(hallo);
+
+    }).catch(function (err) {
+        console.log(err);
+    });
 }
 
 
-function getAllLectures(){
+function getAllLectures() {
     fetch('http://localhost:8080/lecture', {
         method: 'POST',
         mode: 'no-cors',
@@ -30,35 +50,38 @@ function getAllLectures(){
             crud: '2'
         })
     }).then(function (response) {
+        return response.json();
 
     }).catch(function (err) {
         console.log(err)
     });
 }
 
-function createNewLecture(){
+function createNewLecture() {
     fetch('http://localhost:8080/lecture', {
-            method: 'POST',
-            mode: 'no-cors',
-            credentials: 'same-origin',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                objectClass: 'lecture',
-                crud: '1',
-                title: 'LectureTest'
-            })
-        }).then(function (response) {
+        method: 'POST',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            objectClass: 'lecture',
+            crud: '1',
+            title: 'LectureTest2'
+        })
+    }).then(function (response) {
 
-        }).catch(function (err) {
-            console.log(err)
-        });
+    }).catch(function (err) {
+        console.log(err)
+    });
 }
 
 function handleClick(e) {
-    createNewLecture();
+    getAllCourses();
+    //createNewLecture();
+    //getAllLectures();
 };
 
 const tableData = [
