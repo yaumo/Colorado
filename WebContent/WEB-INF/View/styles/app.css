@@ -49,6 +49,13 @@ padding-bottom: 6px;
     background: linear-gradient(#bbbbbb, #959595);
 }
 
+.coloradologo {
+	background-color: #bd051f;
+    color: white;
+	position:relative;
+	margin-left: calc(50% - 115px);
+}
+
 .leftbanner {
 	background-color: #bbbbbb;
     background: #959595; /* For browsers that do not support gradients */

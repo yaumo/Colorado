@@ -62,7 +62,13 @@ class Header extends React.Component {
       <div style={{ 'margin': '0' }}>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <div>
-            <AppBar title="Colorado-Login" style={{ 'backgroundColor': '#bd051f' }} />
+            <AppBar 
+			title="Colorado-Login" 
+			iconElementLeft={<Avatar
+                src="images/colorado.jpg"
+                size={45}
+			/>}
+			style={{ 'backgroundColor': '#bd051f' }}  />
           </div>
         </MuiThemeProvider>
       </div>
@@ -100,12 +106,12 @@ class Content extends React.Component {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id="content" style={{ 'marginLeft': '35%', 'marginRight': '35%', 'marginTop': '10%' }}>
-          <Card >
+          <Card>
             <CardHeader className="loginheader">
               <Avatar
                 src="images/colorado.jpg"
                 size={60}
-
+				className="coloradologo"
                 />
             </CardHeader>
             />
