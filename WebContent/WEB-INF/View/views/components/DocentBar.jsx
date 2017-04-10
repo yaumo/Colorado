@@ -14,6 +14,7 @@ import ActionCheck from 'material-ui/svg-icons/action/check-circle';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import { browserHistory } from 'react-router';
+import Avatar from 'material-ui/Avatar';
 
 
 const personStyles = {
@@ -52,6 +53,10 @@ class DocentBar extends React.Component {
                         <AppBar 
                             title="Colorado"
                             style={{ 'position': 'fixed','backgroundColor': '#bd051f', 'opacity':'0.9'}} 
+							iconElementLeft={<Avatar
+							src="images/colorado.jpg"
+							size={45}
+							/>}
                             iconElementRight={
                                 <IconMenu
                                     iconButtonElement={<IconButton>

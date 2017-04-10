@@ -44,6 +44,7 @@ class Content extends React.Component {
                                 <CardHeader
                                     title="Exercise 1"
                                     className="loginheader"
+									titleColor="white"
                                 />
                                 <Divider />
                                 <CardText className="loginbody">
@@ -68,6 +69,7 @@ class Content extends React.Component {
                                 <CardHeader
                                     title="Solution"
                                     className="loginheader"
+									titleColor="white"
                                 >
                                 <div style={{textAlign: "right"}}>In Progress</div>
                                 </CardHeader>
@@ -82,7 +84,9 @@ class Content extends React.Component {
                                     </Paper>
                                 </CardText>
                                 <CardActions className="footer">
-                                    <RaisedButton label="Check" />
+                                    <RaisedButton label="Check"
+									backgroundColor="#bd051f"
+									labelColor="#FFFFFF"/>
                                 </CardActions>    
                             </Card>
                         </div>
