@@ -72,7 +72,7 @@ class AssignExercisesTab extends React.Component {
 		console.log(lecturesjson);	
 	}
 	
-	handleChangeLecture(event, index, value){
+	handleChangeCourse(event, index, value){
 		var count = lecturelist.length;
 		for(var i =0;i<count;i++){
 			lecturelist.pop();
@@ -81,12 +81,12 @@ class AssignExercisesTab extends React.Component {
 			lecturelist.push(<MenuItem value={j} key={j} primaryText={lecturesjson.course[value].lectures[j].lecture_title} />);
 		}
 		
-		this.setState({selectedLecture: value});
-		this.setState({selectedCourse: 0});
+		this.setState({selectedLecture: 0});
+		this.setState({selectedCourse: value});
 	}
 	
-	handleChangeCourse(event, index, value){
-		this.setState({selectedCourse: value});	
+	handleChangeLecture(event, index, value){
+		this.setState({selectedLecture: value});	
 	}
     render() {
         return (
@@ -134,11 +134,11 @@ class AssignExercisesTab extends React.Component {
                         <br />
                         <h4>Step 2: Select Lecture</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
-                            <DropDownMenu value={this.state.selectedLecture} onChange={this.handleChangeLecture}>
+                            <DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
                                 {courselist}
                             </DropDownMenu>
 
-                            <DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
+                            <DropDownMenu value={this.state.selectedLecture} onChange={this.handleChangeLecture}>
                                 {lecturelist}
                             </DropDownMenu>
                         </Paper>

@@ -43,13 +43,20 @@ class ExercisesTab extends React.Component {
         this.state = {
             open: true,
 			selectedProgrammingLanguage: 1,
-            value: 1
+            value: 1,
+			language: 'javascript'
         };
 		this.handleChangeProgrammingLanguage = this.handleChangeProgrammingLanguage.bind(this);
     }
 	
 	handleChangeProgrammingLanguage(event, index, value){
 		this.setState({selectedProgrammingLanguage: value});
+		if(value===1){
+			this.setState({language:'javascript'});
+		}
+		else if(value===2){
+			this.setState({language:'java'});
+		}
 	}
 	
     render() {
@@ -109,13 +116,13 @@ class ExercisesTab extends React.Component {
                                     <td style={{ width: "50%", padding: "6px", paddingLeft: "0px" }}>
                                         <h4>Pattern Solution</h4>
                                         <Paper zDepth={4}>
-                                            <EditorAce />
+                                            <EditorAce mode='javascript'/>
                                         </Paper>
                                     </td>
                                     <td style={{ width: "50%", padding: "6px", paddingRight: "0px" }}>
                                         <h4>Template</h4>
                                         <Paper zDepth={4}>
-                                            <EditorAce />
+                                            <EditorAce mode='javascript'/>
                                         </Paper>
                                     </td>
                                 </tr>

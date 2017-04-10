@@ -17,7 +17,7 @@ class EditorAce extends React.Component {
     render() {
         return (
             <AceEditor
-                mode="javascript"
+                mode='javascript'
                 theme="chrome"
                 name="code"
                 width="100%"
