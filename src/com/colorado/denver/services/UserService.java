@@ -14,7 +14,6 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -80,21 +79,23 @@ public class UserService extends WebSecurityConfigurerAdapter implements Authent
 		return roleHierarchy;
 	}
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http
-				.authorizeRequests()
-				.expressionHandler(webExpressionHandler())
-				.antMatchers("/users/**")
-				.access("hasRole('ROLE__STUDENT')")
-				.anyRequest().authenticated();
-		http
-				.formLogin()
-				.loginPage("/login").permitAll()
-				.and()
-				.logout()
-				.permitAll();
-	}
+	/*
+	 * @Override
+	 * protected void configure(HttpSecurity http) throws Exception {
+	 * http
+	 * .authorizeRequests()
+	 * .expressionHandler(webExpressionHandler())
+	 * .antMatchers("/users/**")
+	 * .access("hasRole('ROLE__STUDENT')")
+	 * .anyRequest().authenticated();
+	 * http
+	 * .formLogin()
+	 * .loginPage("/login").permitAll()
+	 * .and()
+	 * .logout()
+	 * .permitAll();
+	 * }
+	 */
 
 	public static UsernamePasswordAuthenticationToken authorizeUserByLoginName(String username, String password, Collection<Role> roles) {
 
