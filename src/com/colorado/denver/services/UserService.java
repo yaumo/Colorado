@@ -8,9 +8,14 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -18,6 +23,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.stereotype.Service;
 
 import com.colorado.denver.controller.entityController.RoleController;
@@ -27,7 +34,7 @@ import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.DenverConstants;
 
 @Service
-public class UserService implements AuthenticationProvider {
+public class UserService extends WebSecurityConfigurerAdapter implements AuthenticationProvider {
 
 	BCryptPasswordEncoder passWordEncoder = new BCryptPasswordEncoder();
 
@@ -58,6 +65,35 @@ public class UserService implements AuthenticationProvider {
 		List<Role> roles = new ArrayList<>();
 		roles.add(role);
 		return authorizeUserByLoginName(DenverConstants.SYSTEM, "password", roles);
+	}
+
+	private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
+		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
+		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy());
+		return defaultWebSecurityExpressionHandler;
+	}
+
+	@Bean
+	public RoleHierarchyImpl roleHierarchy() {
+		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+		roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_DOCENT > ROLE_TUTOR > ROLE_STUDENT");
+		return roleHierarchy;
+	}
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+				.authorizeRequests()
+				.expressionHandler(webExpressionHandler())
+				.antMatchers("/users/**")
+				.access("hasRole('ROLE__STUDENT')")
+				.anyRequest().authenticated();
+		http
+				.formLogin()
+				.loginPage("/login").permitAll()
+				.and()
+				.logout()
+				.permitAll();
 	}
 
 	public static UsernamePasswordAuthenticationToken authorizeUserByLoginName(String username, String password, Collection<Role> roles) {
