@@ -3,6 +3,7 @@ package com.colorado.denver.model;
 import java.util.Collection;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -12,9 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name = "UserDenver")
@@ -44,9 +42,8 @@ public class User extends BaseEntity<User> {
 	public User() {
 	}
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "lectures_users", joinColumns = { @JoinColumn(name = "lectures_id") }, inverseJoinColumns = { @JoinColumn(name = "users_id") })
-	@Cascade({ CascadeType.ALL })
 	public Set<Lecture> getLectures() {
 		return lectures;
 	}
@@ -55,8 +52,7 @@ public class User extends BaseEntity<User> {
 		this.lectures = lectures;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER)
-	@Cascade({ CascadeType.ALL })
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	public Set<Solution> getSolutions() {
 		return solutions;
 	}
@@ -65,9 +61,8 @@ public class User extends BaseEntity<User> {
 		this.solutions = solutions;
 	}
 
-	@ManyToOne()
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "courseID")
-	@Cascade({ CascadeType.ALL })
 	public Course getCourse() {
 		return course;
 	}
