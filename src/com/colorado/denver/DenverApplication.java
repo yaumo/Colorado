@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.colorado.denver.services.UserService;
@@ -31,10 +32,12 @@ public class DenverApplication extends SpringBootServletInitializer {
 
 		// DO NOT DELETE THESE LINES OF CODE I DARE YOU!
 		try {
-			SpringApplication.run(DenverApplication.class, args);
+			ApplicationContext ctx = SpringApplication.run(DenverApplication.class, args);
 			// True = Use the update routine
 			// If you want to rebuild the DB with CREATE use DenverDBSetupTest.java
 			SessionTools.createSessionFactory(true);
+			GenericTools gt = new GenericTools();
+			gt.setApplicationContext(ctx);
 			UserService.authorizeSystemuser();
 			LOGGER.info("Successfully obtained system user Token. DB and security should be in healthy state");
 

@@ -8,6 +8,7 @@ public final class DenverConstants {
 	public static final String COLORADO_PACKAGE = "com.colorado";
 	public static final String SYSTEM = "system";
 	public static final String JSON = "json";
+	public static final String LOGIN = "login";
 
 	// Error codes:
 	public static final String ERROR_NO_OBJECT_FROM_REQUEST = "ERROR_NO_OBJECT_FROM_REQUEST";

@@ -8,22 +8,12 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.access.expression.SecurityExpressionHandler;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.FilterInvocation;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.stereotype.Service;
 
 import com.colorado.denver.controller.entityController.RoleController;
@@ -33,7 +23,7 @@ import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.DenverConstants;
 
 @Service
-public class UserService extends WebSecurityConfigurerAdapter implements AuthenticationProvider {
+public class UserService {
 
 	BCryptPasswordEncoder passWordEncoder = new BCryptPasswordEncoder();
 
@@ -66,42 +56,13 @@ public class UserService extends WebSecurityConfigurerAdapter implements Authent
 		return authorizeUserByLoginName(DenverConstants.SYSTEM, "password", roles);
 	}
 
-	private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
-		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
-		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy());
-		return defaultWebSecurityExpressionHandler;
-	}
-
-	@Bean
-	public RoleHierarchyImpl roleHierarchy() {
-		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-		roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_DOCENT > ROLE_TUTOR > ROLE_STUDENT");
-		return roleHierarchy;
-	}
-
-	/*
-	 * @Override
-	 * protected void configure(HttpSecurity http) throws Exception {
-	 * http
-	 * .authorizeRequests()
-	 * .expressionHandler(webExpressionHandler())
-	 * .antMatchers("/users/**")
-	 * .access("hasRole('ROLE__STUDENT')")
-	 * .anyRequest().authenticated();
-	 * http
-	 * .formLogin()
-	 * .loginPage("/login").permitAll()
-	 * .and()
-	 * .logout()
-	 * .permitAll();
-	 * }
-	 */
-
 	public static UsernamePasswordAuthenticationToken authorizeUserByLoginName(String username, String password, Collection<Role> roles) {
 
 		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, roles);
+
 		SecurityContext secContext = createNewSecurityContext(authToken);
 		SecurityContextHolder.setContext(secContext);
+
 		return authToken;
 	}
 
@@ -115,34 +76,20 @@ public class UserService extends WebSecurityConfigurerAdapter implements Authent
 		LOGGER.info("Trying to get user from DB: " + loginName);
 		// we query Database directly. no use of chache!
 		List<User> u = null;
-		Session session = SessionTools.sessionFactory.getCurrentSession();
+		Session session = SessionTools.sessionFactory.openSession();
 		session.beginTransaction();
 		u = session.createCriteria(User.class).setComment("getUser '" + loginName + "'")
 				.add(Restrictions.eq(User.USERNAME, loginName).ignoreCase()).list();
 		for (User user : u) {
 			LOGGER.info("Sucessfully received user from database: " + user.getUsername());
 		}
-
+		session.flush();
+		session.close();
 		return u.get(0);
 	}
 
 	public static String getLoginNameFromAuthentication(Authentication auth) {
 		return auth.getPrincipal().toString();
-	}
-
-	@Override
-	public Authentication authenticate(Authentication auth) throws AuthenticationException {
-		User user = getUserByLoginName(auth.getName());
-		if (user != null) {
-			String encryptedPassword = passWordEncoder.encode(auth.getCredentials().toString());
-			if (passWordEncoder.matches(user.getPassword(), encryptedPassword)) {
-				return authorizeUserByLoginName(auth.getName(), user.getPassword(), user.getRoles());
-			} else {
-				throw new BadCredentialsException("invalid password!");
-			}
-		} else {
-			throw new UsernameNotFoundException("unknown username");
-		}
 	}
 
 	public void save(User user) {
@@ -154,12 +101,6 @@ public class UserService extends WebSecurityConfigurerAdapter implements Authent
 		// Hibernate save for user!
 		LOGGER.info("Security Save for user: " + user.getUsername() + "sucessful! newPassword: " + user.getPassword());
 
-	}
-
-	@Override
-	public boolean supports(Class<?> arg0) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }
