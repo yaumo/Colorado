@@ -125,23 +125,23 @@ public class PopulateDBWithTestData {
 		lecture.setExercises(exercises);
 		lecture.setOwner(docent);
 
-		hibCtrl.updateEntity(solution);
-		hibCtrl.updateEntity(student);
-		hibCtrl.updateEntity(student2);
-		hibCtrl.updateEntity(student3);
-		hibCtrl.updateEntity(student4);
-		hibCtrl.updateEntity(docent);
-		hibCtrl.updateEntity(tutor1);
-		hibCtrl.updateEntity(tutor2);
-		hibCtrl.updateEntity(exercise);
-		hibCtrl.updateEntity(course);
-		hibCtrl.updateEntity(course2);
-		hibCtrl.updateEntity(course3);
-		hibCtrl.updateEntity(course4);
-		hibCtrl.updateEntity(lecture);
-		hibCtrl.updateEntity(lecture2);
-		hibCtrl.updateEntity(lecture3);
-		hibCtrl.updateEntity(lecture4);
+		hibCtrl.mergeEntity(solution);
+		hibCtrl.mergeEntity(student);
+		hibCtrl.mergeEntity(student2);
+		hibCtrl.mergeEntity(student3);
+		hibCtrl.mergeEntity(student4);
+		hibCtrl.mergeEntity(docent);
+		hibCtrl.mergeEntity(tutor1);
+		hibCtrl.mergeEntity(tutor2);
+		hibCtrl.mergeEntity(exercise);
+		hibCtrl.mergeEntity(course);
+		hibCtrl.mergeEntity(course2);
+		hibCtrl.mergeEntity(course3);
+		hibCtrl.mergeEntity(course4);
+		hibCtrl.mergeEntity(lecture);
+		hibCtrl.mergeEntity(lecture2);
+		hibCtrl.mergeEntity(lecture3);
+		hibCtrl.mergeEntity(lecture4);
 	}
 
 	private User createUser(String name, String password, String roleName) {
