@@ -75,6 +75,7 @@ public class ExerciseController extends ObjectOperationController {
 
 		String jsonResponse = super.doCrud(entity, jsonString);
 		entity = null; // Let GC run over this quickly, this entity is detached!
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.setStatus(200);
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();

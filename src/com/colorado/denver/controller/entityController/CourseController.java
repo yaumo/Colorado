@@ -48,6 +48,7 @@ public class CourseController extends ObjectOperationController {
 		String jsonResponse = super.doCrud(entity, jsonString);
 		entity = null; // Let GC run over this quickly
 		response.setStatus(200);
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();
 	}

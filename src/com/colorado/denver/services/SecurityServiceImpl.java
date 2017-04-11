@@ -22,6 +22,10 @@ public class SecurityServiceImpl implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		if (authentication == null) {
+			LOGGER.error("authentication null!");
+		}
+
 		String username = authentication.getName();
 		String password = authentication.getCredentials().toString();
 
@@ -36,7 +40,7 @@ public class SecurityServiceImpl implements AuthenticationProvider {
 		}
 
 		Collection<? extends GrantedAuthority> authorities = user.getRoles();
-
+		LOGGER.info("Successful user login! " + user.getUsername());
 		return new UsernamePasswordAuthenticationToken(user, password, authorities);
 	}
 

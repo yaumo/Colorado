@@ -27,20 +27,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable();
-		/*
-		 * http.authorizeRequests().antMatchers("/assests/**").permitAll()
-		 * .antMatchers("/admin").access("hasRole('ADMIN')")
-		 * .antMatchers("/member").access("hasRole('ADMIN') and hasRole('MEMBER')")
-		 * .and()
-		 * .formLogin().loginPage("/loginPage")
-		 * .defaultSuccessUrl("/homePage")
-		 * .failureUrl("/loginPage?error")
-		 * .usernameParameter("userName").passwordParameter("password")
-		 * .and().csrf()
-		 * .and()
-		 * .logout().logoutSuccessUrl("/loginPage?logout");
-		 */
+
+		http.authorizeRequests().antMatchers("/").permitAll()
+				.and()
+				.formLogin().loginPage("/login")
+				.defaultSuccessUrl("/exercise")
+				.failureUrl("/login?error")
+				.usernameParameter("username").passwordParameter("password")
+				.and().csrf().disable()
+				.logout().logoutSuccessUrl("/loginPage?logout");
 
 	}
 

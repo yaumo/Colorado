@@ -18,8 +18,8 @@
 
 		<form-login
 		    login-page="/login"
-		    default-target-url="/welcome"
-			authentication-failure-url=""
+		    default-target-url="/exercise"
+			authentication-failure-url="/login"
 			username-parameter="username"
 			password-parameter="password" />
 		<logout logout-success-url="/logout"  />
