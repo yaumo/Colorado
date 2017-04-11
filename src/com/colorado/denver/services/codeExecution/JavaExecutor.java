@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.colorado.denver.tools.DenverConstants;
 
 import groovy.lang.GroovyClassLoader;
+import javassist.tools.web.BadHttpRequest;
 
 public interface JavaExecutor {
 	final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(JavaExecutor.class);
@@ -21,19 +22,7 @@ public interface JavaExecutor {
 
 		try {
 
-			// InputStream is = new FileInputStream("fibonacci.txt");
-			// BufferedReader buf = new BufferedReader(new InputStreamReader(is));
-			// String line = buf.readLine();
-			// StringBuilder sb = new StringBuilder();
-			//
-			// while (line != null) {
-			// sb.append(line).append("\n");
-			// line = buf.readLine();
-			// }
-			// buf.close();
-			// String fileAsString = sb.toString();
-			// System.out.println(fileAsString);
-			System.out.println(code);
+			LOGGER.info(code);
 			GroovyClassLoader gcl = new GroovyClassLoader();
 			Class<?> scriptClass = gcl.parseClass(code);
 			String className = scriptClass.getSimpleName();
@@ -72,7 +61,8 @@ public interface JavaExecutor {
 						break;
 
 					default:
-						break;
+						LOGGER.error("No valid return Type found!!! Please set as return types: int, String, boolean, long");
+						throw new BadHttpRequest();
 					}
 					System.out.println("Method name is: " + methods[i].getName());
 					System.out.println("---");
