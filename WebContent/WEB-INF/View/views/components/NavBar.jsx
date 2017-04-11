@@ -103,7 +103,7 @@ class NavBar extends React.Component {
                             docked={true}
                             open={this.state.open}
                             onRequestChange={(open) => this.setState({ open })}
-                            containerStyle={{ 'position': 'fixed', 'margin': '0', 'top': '64px', 'height': 'calc(100% - 64px)', 'backgroundColor' : '#959595' }}
+                            containerStyle={{ 'position': 'fixed', 'margin': '0', 'top': '64px', 'height': 'calc(100% - 64px)' , 'backgroundColor' : '#959595', 'background': '-webkit-linear-gradient(#bbbbbb, #959595)' }}
                             >
                             <DropDownMenu value={this.state.dropdown} onChange={this.handleChange} >
                                 {lecturelist}

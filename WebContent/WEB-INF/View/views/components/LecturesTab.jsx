@@ -181,7 +181,11 @@ class LecturesTab extends React.Component {
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
-                        <RaisedButton label="Create" onClick={handleClick} />
+                        <RaisedButton 
+						label="Create" 
+						onClick={handleClick}
+						backgroundColor="#bd051f"
+						labelColor="#FFFFFF"/>
                     </CardActions>
                 </Card>
             </div>

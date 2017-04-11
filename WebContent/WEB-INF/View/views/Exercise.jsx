@@ -31,9 +31,15 @@ class Content extends React.Component {
         super();
         this.state = {
             open: true,
-            value: 1
+            value: 1,
+			java: 0
         };
-    }
+		this.handleChange = this.handleChange.bind(this);
+    }		
+		handleChange(event, index, value) {
+		this.setState({java: value});
+	}
+
     render() {
         return (
             <div id="content" className="content">
@@ -75,9 +81,9 @@ class Content extends React.Component {
                                 </CardHeader>
                                 <Divider />
                                 <CardText className="loginbody">
-                                    <DropDownMenu disabled="true" value={this.state.value} onChange={this.handleChange} >
-                                        <MenuItem value={1} primaryText="JavaScript" />
-                                        <MenuItem value={2} primaryText="Java" />
+                                    <DropDownMenu disabled={false} value={this.state.java} onChange={this.handleChange}>
+                                        <MenuItem value={0} primaryText="JavaScript" />
+                                        <MenuItem value={1} primaryText="Java" />
                                     </DropDownMenu>
                                     <Paper zDepth={4}>
                                         <EditorAce />
