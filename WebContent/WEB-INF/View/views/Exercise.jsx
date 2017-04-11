@@ -81,7 +81,7 @@ class Content extends React.Component {
                                 </CardHeader>
                                 <Divider />
                                 <CardText className="loginbody">
-                                    <DropDownMenu disabled={false} value={this.state.java} onChange={this.handleChange}>
+                                    <DropDownMenu disabled={true} value={this.state.java} onChange={this.handleChange}>
                                         <MenuItem value={0} primaryText="JavaScript" />
                                         <MenuItem value={1} primaryText="Java" />
                                     </DropDownMenu>
