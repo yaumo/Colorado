@@ -126,19 +126,24 @@ class LecturesTab extends React.Component {
         super();
         this.state = {
             open: true,
-            value: 1
+            value: 1,
+			selectedCourse:1
         };
+		this.handleChangeCourse = this.handleChangeCourse.bind(this);
     }
+	handleChangeCourse(event, index, value){
+		this.setState({selectedCourse: value});
+	}
     render() {
         return (
             <div>
                 <Card>
                     <Divider />
                     <CardText className="loginbody">
-                        <h4>Step 1: Select Curse</h4>
+                        <h4>Step 1: Select Course</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <div>
-                                <DropDownMenu value={this.state.value} onChange={this.handleChange}>
+                                <DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
                                     <MenuItem value={1} primaryText="WWI14SEA" />
                                     <MenuItem value={2} primaryText="WWI14AMA" />
                                     <MenuItem value={3} primaryText="WWI16SEB" />
