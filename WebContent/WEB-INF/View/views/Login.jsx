@@ -127,7 +127,7 @@ class Content extends React.Component {
                   onChange={this.handleChange}
                   underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                   floatingLabelFocusStyle={{ 'color': '#bd051f' }}
-                  style={{'width': '98%', 'font-size': '150%' }}
+                  style={{'width': '98%', 'fontSize': '150%' }}
                   />
                 <br />
                 <br />
@@ -137,7 +137,7 @@ class Content extends React.Component {
                   id="password"
                   underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                   floatingLabelFocusStyle={{ 'color': '#bd051f' }}
-                  style={{'width': '98%', 'font-size': '150%' }}
+                  style={{'width': '98%', 'fontSize': '150%' }}
                   />
                 <br />
                 <br />
@@ -145,7 +145,11 @@ class Content extends React.Component {
               </div>
             </CardText>
             <CardActions className="footer">
-              <RaisedButton label="Login" onClick={this.handleClick} />
+              <RaisedButton 
+			  label="Login" 
+			  onClick={this.handleClick}
+			  backgroundColor="#bd051f"
+			  labelColor="#FFFFFF"/>
             </CardActions>
           </Card>
         </div>
