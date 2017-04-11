@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.codeExecution.ExerciseExecutor;
@@ -56,7 +57,7 @@ public class ExerciseController extends ObjectOperationController {
 		if (entity.isHasBeenModified()) {
 			try {
 				// Experimental! We need the code from the itself not from a file on the server
-				InputStream is = new FileInputStream("fibonacci.txt");
+				InputStream is = new FileInputStream("fibonacciJS.txt");
 				BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 				String line = buf.readLine();
 				StringBuilder sb = new StringBuilder();
@@ -67,9 +68,11 @@ public class ExerciseController extends ObjectOperationController {
 				}
 				buf.close();
 
+				HibernateController hibCtrl = new HibernateController();
+				Exercise exc = (Exercise) hibCtrl.getEntity(entity.getId());
 				String fileAsString = sb.toString();
-				entity.setSolution_code(fileAsString);
-				ExerciseExecutor excExcutor = new ExerciseExecutor(entity);
+				exc.setSolution_code(fileAsString);
+				ExerciseExecutor excExcutor = new ExerciseExecutor(exc);
 				entity = excExcutor.execute();
 			} catch (Exception e) {
 				LOGGER.error("Executing Ecercise failed! : " + entity.getId());

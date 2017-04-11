@@ -28,13 +28,15 @@ public class SolutionExecutor implements JavaExecutor, JavaScriptExecutor {
 		String answer = "";
 		String message = "";
 		if (sol.getExercise().getLanguage().equals(DenverConstants.JAVA)) {
+			LOGGER.info("Executing Java with code: " + code);
 			answer = executeJava(inputType, outputType, excInput, code);
 			if (answer.startsWith(DenverConstants.JAVA_EXCEPTION_THROWN)) {
 				answer = DenverConstants.JAVA_EXCEPTION_THROWN;
 				message = answer.replaceAll(DenverConstants.JAVA_EXCEPTION_THROWN, "");
 			}
 		} else {
-
+			LOGGER.info("Executing JavaScript with code: " + code);
+			answer = executeJavaScript(inputType, outputType, excInput, code);
 		}
 
 		if (sol.getExercise().getAnwswer().equals(answer)) {
