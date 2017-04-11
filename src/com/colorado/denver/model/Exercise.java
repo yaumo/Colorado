@@ -34,7 +34,7 @@ public class Exercise extends EducationEntity {
 	private Set<Lecture> lectures;
 
 	private Date deadline;
-	private String anwswer;
+	private String answer;
 	private boolean hasBeenModified;
 	private String videoLink;
 	// template code
@@ -130,12 +130,12 @@ public class Exercise extends EducationEntity {
 		this.input = input;
 	}
 
-	public String getAnwswer() {
-		return anwswer;
+	public String setAnswer() {
+		return answer;
 	}
 
-	public void setAnwswer(String anwswer) {
-		this.anwswer = anwswer;
+	public void setAnswer(String answer) {
+		this.answer = answer;
 	}
 
 	public boolean isHasBeenModified() {

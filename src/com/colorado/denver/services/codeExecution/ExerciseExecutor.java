@@ -25,7 +25,7 @@ public class ExerciseExecutor implements JavaExecutor, JavaScriptExecutor {
 		String answer = "";
 		String message = "";
 		if (exc.getLanguage().equals(DenverConstants.JAVA)) {
-			LOGGER.info("Executing Java with code: " + code);
+			LOGGER.info("Executing Java code");
 			answer = executeJava(inputType, outputType, excInput, code);
 			if (answer.startsWith(DenverConstants.JAVA_EXCEPTION_THROWN)) {
 				answer = DenverConstants.JAVA_EXCEPTION_THROWN;
@@ -35,7 +35,7 @@ public class ExerciseExecutor implements JavaExecutor, JavaScriptExecutor {
 			LOGGER.info("Executing JavaScript with code: " + code);
 			answer = executeJavaScript(inputType, outputType, excInput, code);
 		}
-		exc.setAnwswer(answer);
+		exc.setAnswer(answer);
 
 		LOGGER.info("Answer for exercise " + exc.getId() + "  with value: " + answer);
 

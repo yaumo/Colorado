@@ -1,5 +1,0 @@
-{
-"objectClass": "exercise",
-"crud": "4",
-"id": "exercise_00001"
-}

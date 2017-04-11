@@ -1,10 +1,6 @@
 package com.colorado.denver.controller.entityController;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import javax.management.ReflectionException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +18,7 @@ import com.colorado.denver.model.Exercise;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.codeExecution.ExerciseExecutor;
 import com.colorado.denver.tools.DenverConstants;
+import com.colorado.denver.tools.Tools;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -56,26 +53,21 @@ public class ExerciseController extends ObjectOperationController {
 
 		if (entity.isHasBeenModified()) {
 			try {
-				// Experimental! We need the code from the itself not from a file on the server
-				InputStream is = new FileInputStream("fibonacciJS.txt");
-				BufferedReader buf = new BufferedReader(new InputStreamReader(is));
-				String line = buf.readLine();
-				StringBuilder sb = new StringBuilder();
+				entity.setCode(Tools.unescape_string((entity.getCode())));
+				entity.setSolution_code(Tools.unescape_string((entity.getSolution_code())));
 
-				while (line != null) {
-					sb.append(line).append("\n");
-					line = buf.readLine();
-				}
-				buf.close();
-
+				// Get real entity from db:
 				HibernateController hibCtrl = new HibernateController();
 				Exercise exc = (Exercise) hibCtrl.getEntity(entity.getId());
-				String fileAsString = sb.toString();
-				exc.setSolution_code(fileAsString);
 				ExerciseExecutor excExcutor = new ExerciseExecutor(exc);
 				entity = excExcutor.execute();
+				entity.setAnswer(exc.setAnswer());
+
+				// Back to fronted:
+				entity.setSolution_code(Tools.quote(entity.getSolution_code()));
 			} catch (Exception e) {
 				LOGGER.error("Executing Ecercise failed! : " + entity.getId());
+				LOGGER.error("Executing Ecercise failed with code: " + entity.getSolution_code());
 				e.printStackTrace();
 			}
 

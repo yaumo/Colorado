@@ -82,6 +82,7 @@ public class SolutionController extends ObjectOperationController {
 
 			} catch (Exception e) {
 				LOGGER.error("Executing Solution failed! : " + entity.getId());
+				LOGGER.error("Executing Ecercise failed with code: " + entity.getCode());
 				e.printStackTrace();
 			}
 

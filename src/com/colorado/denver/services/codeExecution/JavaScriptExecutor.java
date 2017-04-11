@@ -1,9 +1,5 @@
 package com.colorado.denver.services.codeExecution;
 
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
@@ -23,28 +19,13 @@ public interface JavaScriptExecutor {
 			NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
 			ScriptEngine nashorn = factory.getScriptEngine(new NoJavaFilter());
 			JSObject object = (JSObject) nashorn.eval(code);
-			Invocable invocable = (Invocable) nashorn;
-			Object results = invocable.invokeFunction("test", excInput);
 
-			// call that anon function
-			Set<String> keySet = object.keySet();
-			int i = 0;
-			for (Iterator iterator = keySet.iterator(); iterator.hasNext();) {
-				String content = (String) iterator.next();
-				System.out.println("Pos: " + i + "   Value: " + content);
-				i++;
-			}
-
-			System.out.println("Object way: " + object.call(null, excInput));
-			System.out.println("Invoke way: " + results);
-			System.out.println("Invoke way class: " + results.getClass());
-			result = results.toString();
+			result = object.call(null, excInput).toString();
+			LOGGER.debug("Result of JavaScript Calc is: " + result);
 		} catch (ScriptException e) {
 			LOGGER.error("Error executing script itself");
 			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			LOGGER.error("No method");
-			e.printStackTrace();
+			result = e.toString();
 		}
 
 		return result;

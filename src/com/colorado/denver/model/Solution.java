@@ -25,7 +25,7 @@ public class Solution extends EducationEntity {
 	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
 	public static final String MESSAGE = "message";
 
-	private String anwswer;
+	private String answer;
 	private String message;
 	private boolean submitted;
 	private boolean correct;
@@ -93,12 +93,12 @@ public class Solution extends EducationEntity {
 		this.hasBeenModified = hasBeenModified;
 	}
 
-	public String getAnwswer() {
-		return anwswer;
+	public String getAnswer() {
+		return answer;
 	}
 
-	public void setAnwswer(String anwswer) {
-		this.anwswer = anwswer;
+	public void setAnswer(String answer) {
+		this.answer = answer;
 	}
 
 	public String getMessage() {
