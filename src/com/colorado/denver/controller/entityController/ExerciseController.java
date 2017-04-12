@@ -1,6 +1,7 @@
 package com.colorado.denver.controller.entityController;
 
 import java.io.IOException;
+import java.util.Set;
 
 import javax.management.ReflectionException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
+import com.colorado.denver.services.ExerciseService;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.codeExecution.ExerciseExecutor;
 import com.colorado.denver.tools.DenverConstants;
@@ -23,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @RestController
+@RequestMapping(value = "/exercise")
 public class ExerciseController extends ObjectOperationController {
 
 	/**
@@ -58,7 +61,7 @@ public class ExerciseController extends ObjectOperationController {
 
 				// Get real entity from db:
 				HibernateController hibCtrl = new HibernateController();
-				Exercise exc = (Exercise) hibCtrl.getEntity(entity.getId());
+				Exercise exc = (Exercise) hibCtrl.getEntity(entity.getHibId());
 				ExerciseExecutor excExcutor = new ExerciseExecutor(exc);
 				entity = excExcutor.execute();
 				entity.setAnswer(exc.setAnswer());
@@ -66,7 +69,7 @@ public class ExerciseController extends ObjectOperationController {
 				// Back to fronted:
 				entity.setSolution_code(Tools.quote(entity.getSolution_code()));
 			} catch (Exception e) {
-				LOGGER.error("Executing Ecercise failed! : " + entity.getId());
+				LOGGER.error("Executing Ecercise failed! : " + entity.getHibId());
 				LOGGER.error("Executing Ecercise failed with code: " + entity.getSolution_code());
 				e.printStackTrace();
 			}
@@ -80,6 +83,12 @@ public class ExerciseController extends ObjectOperationController {
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();
 		// response.getWriter().close(); // maybe no close because I didn't open this?
+	}
+
+	@RequestMapping(value = "/all", method = RequestMethod.GET)
+	public Set<Exercise> getExersisesForUser() {
+		UserService.authorizeSystemuser();
+		return ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getHibId());
 	}
 
 }

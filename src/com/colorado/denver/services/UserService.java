@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.controller.entityController.RoleController;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
@@ -100,6 +101,14 @@ public class UserService {
 
 		// Hibernate save for user!
 		LOGGER.info("Security Save for user: " + user.getUsername() + "sucessful! newPassword: " + user.getPassword());
+
+	}
+
+	public static List<User> allUsers() {
+		LOGGER.info("I AM GETTING ALL USERS");
+		HibernateController hibCtrl = new HibernateController();
+
+		return (List<User>) (List<?>) hibCtrl.getEntityList(User.class);
 
 	}
 

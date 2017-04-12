@@ -14,6 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "UserDenver")
 public class User extends BaseEntity<User> {
@@ -44,6 +47,7 @@ public class User extends BaseEntity<User> {
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "lectures_users", joinColumns = { @JoinColumn(name = "lectures_id") }, inverseJoinColumns = { @JoinColumn(name = "users_id") })
+	@JsonBackReference
 	public Set<Lecture> getLectures() {
 		return lectures;
 	}
@@ -63,6 +67,7 @@ public class User extends BaseEntity<User> {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "courseID")
+	@JsonBackReference
 	public Course getCourse() {
 		return course;
 	}
@@ -97,6 +102,7 @@ public class User extends BaseEntity<User> {
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "users_roles", joinColumns = { @JoinColumn(name = "roles_id") }, inverseJoinColumns = { @JoinColumn(name = "users_id") })
+	@JsonManagedReference
 	public Collection<Role> getRoles() {
 		return roles;
 	}
@@ -107,7 +113,7 @@ public class User extends BaseEntity<User> {
 
 	// public Collection<GrantedAuthority> getAuthorities() {
 	// // make everyone ROLE_GLOBAL_ADMINISTRATOR
-	// Collection<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+	// Collection<GrantedAuthority> grantedAuthorities = new ArraySet<GrantedAuthority>();
 	// GrantedAuthority grantedAuthority = new GrantedAuthority() {
 	// // anonymous inner type
 	// @Override

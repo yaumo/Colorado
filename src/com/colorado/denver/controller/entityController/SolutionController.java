@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Set;
 
 import javax.management.ReflectionException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Solution;
+import com.colorado.denver.services.SolutionService;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.codeExecution.SolutionExecutor;
 import com.colorado.denver.tools.DenverConstants;
@@ -27,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @RestController
+@RequestMapping(value = "/solution")
 public class SolutionController extends ObjectOperationController {
 	/**
 	 * 
@@ -72,7 +75,7 @@ public class SolutionController extends ObjectOperationController {
 
 				// Set real Exercise Entity on SOlution NOT the detached one from the Frontend! -> Prevent cheating by user
 				HibernateController hibCtrl = new HibernateController();
-				Exercise exc = (Exercise) hibCtrl.getEntity(entity.getExercise().getId());
+				Exercise exc = (Exercise) hibCtrl.getEntity(entity.getExercise().getHibId());
 				entity.setExercise(exc);
 
 				entity.setCode(fileAsString);
@@ -97,4 +100,11 @@ public class SolutionController extends ObjectOperationController {
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();
 	}
+
+	@RequestMapping(value = "/all", method = RequestMethod.GET)
+	public Set getSolutionsForUser() {
+		UserService.authorizeSystemuser();
+		return SolutionService.getAllSolutionsForUser(UserService.getCurrentUser().getHibId());
+	}
+
 }

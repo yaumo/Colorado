@@ -13,6 +13,7 @@ import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.google.gson.annotations.Expose;
 
 @Entity
@@ -37,12 +38,13 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "users_roles", joinColumns = { @JoinColumn(name = "users_id") }, inverseJoinColumns = { @JoinColumn(name = "roles_id") })
+	@JsonBackReference
 	public Set<User> getUsers() {
 		return this.users;
 	}
 
-	public void setUsers(Set<User> users) {
-		this.users = users;
+	public void setUsers(Set<User> systemUsers) {
+		this.users = systemUsers;
 	}
 
 	public String getRoleName() {

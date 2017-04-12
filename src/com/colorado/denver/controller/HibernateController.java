@@ -66,11 +66,9 @@ public class HibernateController {
 	}
 
 	/* Method to UPDATE an entity */
-	public BaseEntity<?> updateEntity(BaseEntity<?> entity) {
+	public BaseEntity<?> updateEntity(BaseEntity<?> entity, String entityID) {
 		Session session = SessionTools.sessionFactory.openSession();
 		Transaction tx = null;
-		String entityID = null;
-		entityID = entity.getId();
 		try {
 			tx = session.beginTransaction();
 

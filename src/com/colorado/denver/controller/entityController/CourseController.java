@@ -1,5 +1,7 @@
 package com.colorado.denver.controller.entityController;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
 import java.io.IOException;
 
 import javax.management.ReflectionException;
@@ -8,18 +10,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.model.Course;
+import com.colorado.denver.services.CourseService;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.tools.DenverConstants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @RestController
+@RequestMapping(value = "/course")
 public class CourseController extends ObjectOperationController {
 
 	/**
@@ -52,4 +57,17 @@ public class CourseController extends ObjectOperationController {
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();
 	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public Course getCoursesForUser() {
+		UserService.authorizeSystemuser();
+		Course course = CourseService.getCourseForUser(UserService.getCurrentUser().getHibId());
+		if (course != null) {
+			Link selfLink = linkTo(UserController.class).slash(Course.COURSE).withSelfRel();
+			course.add(selfLink);
+		}
+
+		return course;
+	}
+
 }

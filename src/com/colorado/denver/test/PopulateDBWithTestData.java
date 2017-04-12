@@ -78,7 +78,9 @@ public class PopulateDBWithTestData {
 		student.setCourse(course2);
 		student.setCourse(course2);
 		student.setCourse(course3);
-
+		UserService.authorizeSystemuser();
+		User system = UserService.getCurrentUser();
+		system.setCourse(course);
 		Lecture lecture = createLecture("Programmieren I");
 		Lecture lecture2 = createLecture("Programmieren II");
 		Lecture lecture3 = createLecture("Programmieren III");
@@ -142,6 +144,8 @@ public class PopulateDBWithTestData {
 		hibCtrl.mergeEntity(lecture2);
 		hibCtrl.mergeEntity(lecture3);
 		hibCtrl.mergeEntity(lecture4);
+		hibCtrl.mergeEntity(system);
+
 	}
 
 	private User createUser(String name, String password, String roleName) {

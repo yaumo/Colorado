@@ -76,7 +76,7 @@ public class ObjectOperationController extends HttpServlet {
 
 			case 2:
 				try {
-					id = jsonObject.getString(BaseEntity.ID);
+					id = jsonObject.getString(BaseEntity.HIB_ID);
 				} catch (Exception e) {
 					LOGGER.info("Get all entites of: " + objectClass);
 					id = DenverConstants.ID_READ_ALL_MODE;
@@ -84,7 +84,7 @@ public class ObjectOperationController extends HttpServlet {
 				break;
 
 			default:
-				id = jsonObject.getString(BaseEntity.ID);
+				id = jsonObject.getString(BaseEntity.HIB_ID);
 				break;
 			}
 			// jsonObject.("id", id);
@@ -141,7 +141,7 @@ public class ObjectOperationController extends HttpServlet {
 		try {
 			crud = entity.getCrud();
 			if (crud != 1)
-				id = entity.getId();
+				id = entity.getHibId();
 
 		} catch (Exception e) {
 			LOGGER.error("Error extraxting information from the Object(FromJSON): " + entity.getId());
@@ -154,7 +154,7 @@ public class ObjectOperationController extends HttpServlet {
 		switch (crud) {
 		case 1:
 			String newId = create(entity);
-			entity.setId(newId);
+			entity.setHibId(newId);
 			jsonResponse = gson.toJson(read(newId));
 			break;
 		case 2:
@@ -211,7 +211,7 @@ public class ObjectOperationController extends HttpServlet {
 			e.printStackTrace();
 			LOGGER.error("MERGE failed! Trying update");
 
-			return hibCtrl.updateEntity(entity);
+			return hibCtrl.updateEntity(entity, entity.getHibId());
 		}
 
 	}

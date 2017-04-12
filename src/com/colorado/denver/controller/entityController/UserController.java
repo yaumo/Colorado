@@ -1,6 +1,11 @@
 package com.colorado.denver.controller.entityController;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 import javax.management.ReflectionException;
 import javax.servlet.http.HttpServletRequest;
@@ -8,20 +13,24 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.Link;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
+import com.colorado.denver.services.ExerciseService;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.tools.DenverConstants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @RestController
+@RequestMapping(value = "/user")
 public class UserController extends ObjectOperationController {
 
 	/**
@@ -75,6 +84,25 @@ public class UserController extends ObjectOperationController {
 			model.addAttribute("message", "You have been logged out successfully.");
 
 		return "login";
+	}
+
+	@RequestMapping(value = "/all", method = RequestMethod.GET)
+	public List<User> getAllUsers() {
+		List<User> allUsers = UserService.allUsers();
+		for (User user : allUsers) {
+			Link selfLink = linkTo(UserController.class).slash(user.getHibId()).withSelfRel();
+			user.add(selfLink);
+			if (ExerciseService.getAllExercisesForUser(user.getHibId()).size() > 0) {
+				Set<Exercise> methodLinkBuilder = methodOn(UserController.class).getExersisesForUser(user.getHibId());
+				Link exercisesLink = linkTo(methodLinkBuilder).withRel("allExercises");
+				user.add(exercisesLink);
+			}
+		}
+		return allUsers;
+	}
+
+	public Set<Exercise> getExersisesForUser(String hibId) {
+		return ExerciseService.getAllExercisesForUser(hibId);
 	}
 
 	public static Role calculateRoleBasedOnUser(User usr) {
