@@ -95,10 +95,12 @@ class OverviewTab extends React.Component {
             value: 1,
 			selectedLecture: 0,
 			selectedCourse:0,
-			selectedExercise:0
+			selectedExercise:0,
+			disabledDropDownExercise: true
         };
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
 		this.handleChangeCourse = this.handleChangeCourse.bind(this);
+		this.handleChangeExercise = this.handleChangeExercise.bind(this);
     }
 
 	componentWillMount() {
@@ -117,13 +119,13 @@ class OverviewTab extends React.Component {
 			}
 		}
 		
+		exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
 		/*if(exerciselist.length===0){
 			exerciselist.push(<MenuItem value={0} key={0} primaryText={'All Exercises'} />);
 			for(var k=1;j<lecturesjson.course[0].lectures[0].exercises.length;k++){
 				exerciselist.push(<MenuItem value={k} key={k} primaryText={lecturesjson.course[0].lectures[0].exercises[k].exercise_title} />);
 			}
 		}*/
-		console.log(lecturesjson);	
 	}
 	
 	handleChangeCourse(event, index, value){
@@ -140,6 +142,8 @@ class OverviewTab extends React.Component {
 		for(var j=1;j<=lecturesjson.course[value].lectures.length;j++){
 			lecturelist.push(<MenuItem value={j} key={j} primaryText={lecturesjson.course[value].lectures[j-1].lecture_title} />);
 		}
+		
+		exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
 		/*
 		for(var k=0;j<lecturesjson.course[value].lectures[0].exercises.length;k++){
 			lecturelist.push(<MenuItem value={j} key={j} primaryText={lecturesjson.course[value].lectures[0].exercises[k].exercise_title} />);
@@ -159,9 +163,14 @@ class OverviewTab extends React.Component {
 		if(value!=0)
 		{
 			exerciselist.push(<MenuItem value={0} key={0} primaryText={'All Exercises'} />);
+			this.setState({disabledDropDownExercise: false});
 			for(var k=1;k<=lecturesjson.course[this.state.selectedCourse].lectures[value-1].exercises.length;k++){
-				exerciselist.push(<MenuItem value={k} key={k} primaryText={lecturesjson.course[this.state.selectedLecture].lectures[value-1].exercises[k-1].exercise_title} />);
+				exerciselist.push(<MenuItem value={k} key={k} primaryText={lecturesjson.course[this.state.selectedCourse].lectures[value-1].exercises[k-1].exercise_title} />);
 			}
+		}
+		else{
+			exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+			this.setState({disabledDropDownExercise: true});
 		}
 		this.setState({selectedLecture: value});
 		this.setState({selectedExercise: 0});
@@ -189,9 +198,11 @@ class OverviewTab extends React.Component {
                                             <DropDownMenu value={this.state.selectedLecture} onChange={this.handleChangeLecture}>
                                                 {lecturelist}
                                             </DropDownMenu>
-                                            <DropDownMenu value={this.state.selectedExercise} onChange={this.handleChangeExercise}>
+											
+                                            <DropDownMenu disabled={this.state.disabledDropDownExercise} value={this.state.selectedExercise} onChange={this.handleChangeExercise} ref={'dropdownexercise'}>
                                                 {exerciselist}
                                             </DropDownMenu>
+											
                                             <IconButton onClick={handleClick}>
                                                     <ActionSearch/>
                                                 </IconButton>
