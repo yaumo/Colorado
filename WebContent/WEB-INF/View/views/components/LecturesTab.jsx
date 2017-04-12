@@ -14,21 +14,19 @@ import RaisedButton from 'material-ui/RaisedButton';
 function getAllCourses() {
     fetch('http://localhost:8080/course', {
         method: 'POST',
-        mode: 'no-cors',
         credentials: 'same-origin',
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Accept': 'application/json'
         },
         body: JSON.stringify({
             objectClass: 'course',
             crud: '2'
         })
     }).then(function (response) {
-        var hallo = response.text();
-        alert(typeof hallo);
-        alert(hallo);
-        return JSON.parse(hallo);
+        return response.json();
+    }).then(function (courses) {
+        console.log(courses);
+        console.log(courses[0]["0x1"].title);
 
     }).catch(function (err) {
         console.log(err);
@@ -181,11 +179,11 @@ class LecturesTab extends React.Component {
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
-                        <RaisedButton 
-						label="Create" 
-						onClick={handleClick}
-						backgroundColor="#bd051f"
-						labelColor="#FFFFFF"/>
+                        <RaisedButton
+                            label="Create"
+                            onClick={handleClick}
+                            backgroundColor="#bd051f"
+                            labelColor="#FFFFFF" />
                     </CardActions>
                 </Card>
             </div>
