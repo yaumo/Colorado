@@ -112,4 +112,10 @@ public class UserService {
 
 	}
 
+	public static User getUserById(String id) {
+		HibernateController hibCtrl = new HibernateController();
+		User usr = (User) hibCtrl.getEntity(id);
+		return usr;
+	}
+
 }

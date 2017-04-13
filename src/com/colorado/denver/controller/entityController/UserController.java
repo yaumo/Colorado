@@ -1,7 +1,6 @@
 package com.colorado.denver.controller.entityController;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,10 +16,10 @@ import org.springframework.hateoas.Link;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.model.Exercise;
+import com.colorado.denver.model.Lecture;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.ExerciseService;
@@ -30,7 +29,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @RestController
-@RequestMapping(value = "/user")
 public class UserController extends ObjectOperationController {
 
 	/**
@@ -40,8 +38,7 @@ public class UserController extends ObjectOperationController {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.POST)
-	@ResponseBody
-	public void handleUserRequest(HttpServletRequest request,
+	public User userPost(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
 		UserService.authorizeSystemuser();
 		// JSONObject theObject = super.handleRequest(request, response);
@@ -58,14 +55,13 @@ public class UserController extends ObjectOperationController {
 		Gson gson = gb.create();
 
 		User entity = gson.fromJson(jsonString, User.class);
-		System.out.println("id: " + entity.getId());
-		String jsonResponse = super.doCrud(entity, jsonString);
-		entity = null; // Let GC run over this quickly
-		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.setStatus(200);
-		response.getWriter().write(jsonResponse);
-		response.getWriter().flush();
 
+		String jsonResponse = super.doCrud(entity, jsonString);
+		entity = null;
+		User entityAfterCrud = gson.fromJson(jsonResponse, User.class);
+		Link selfLink = linkTo(UserController.class).withSelfRel();
+		entityAfterCrud.add(selfLink);
+		return entityAfterCrud;
 	}
 
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -73,6 +69,24 @@ public class UserController extends ObjectOperationController {
 		model.addAttribute("userForm", new User());
 
 		return "registration";
+	}
+
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.GET)
+	public User getUser() {
+		UserService.authorizeSystemuser();
+
+		User usr = UserService.getCurrentUser();
+		Link selfLink = linkTo(UserController.class).slash(usr.getHibId()).withSelfRel();
+
+		usr.add(selfLink);
+		Set<Lecture> lect = usr.getLectures();
+
+		Link lecturesLink = linkTo(lect).withRel("/lectures");
+		usr.add(lecturesLink);
+
+		Link courseLink = linkTo(CourseController.class).withRel("/course");
+		usr.add(courseLink);
+		return usr;
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -86,17 +100,24 @@ public class UserController extends ObjectOperationController {
 		return "login";
 	}
 
-	@RequestMapping(value = "/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/docent", method = RequestMethod.GET)
+	public User getDocent() {
+		UserService.authorizeSystemuser();
+
+		User usr = UserService.getCurrentUser();
+		Link selfLink = linkTo(UserController.class).withSelfRel();
+		usr.add(selfLink);
+
+		return usr;
+
+	}
+
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USERS, method = RequestMethod.GET)
 	public List<User> getAllUsers() {
 		List<User> allUsers = UserService.allUsers();
 		for (User user : allUsers) {
 			Link selfLink = linkTo(UserController.class).slash(user.getHibId()).withSelfRel();
 			user.add(selfLink);
-			if (ExerciseService.getAllExercisesForUser(user.getHibId()).size() > 0) {
-				Set<Exercise> methodLinkBuilder = methodOn(UserController.class).getExersisesForUser(user.getHibId());
-				Link exercisesLink = linkTo(methodLinkBuilder).withRel("allExercises");
-				user.add(exercisesLink);
-			}
 		}
 		return allUsers;
 	}

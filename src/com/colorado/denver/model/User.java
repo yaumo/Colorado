@@ -28,6 +28,7 @@ public class User extends BaseEntity<User> {
 
 	public static final String DENVER_USER = "DenverUser";
 	public static final String USER = "user";
+	public static final String USERS = "users";
 	public static final String USERNAME = "username";
 	public static final String PASSWORD = "password";
 	public static final String SALT = "salt";

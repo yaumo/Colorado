@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.management.ReflectionException;
@@ -15,13 +17,14 @@ import org.json.JSONException;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Solution;
-import com.colorado.denver.services.SolutionService;
+import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.codeExecution.SolutionExecutor;
 import com.colorado.denver.tools.DenverConstants;
@@ -29,7 +32,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @RestController
-@RequestMapping(value = "/solution")
 public class SolutionController extends ObjectOperationController {
 	/**
 	 * 
@@ -101,10 +103,27 @@ public class SolutionController extends ObjectOperationController {
 		response.getWriter().flush();
 	}
 
-	@RequestMapping(value = "/all", method = RequestMethod.GET)
-	public Set getSolutionsForUser() {
+	@RequestMapping(value = "/solution", method = RequestMethod.GET)
+	public Solution getSolutionsForUser(@RequestParam("excId") String excId, @RequestParam("usrId") String usrId) {
 		UserService.authorizeSystemuser();
-		return SolutionService.getAllSolutionsForUser(UserService.getCurrentUser().getHibId());
+		User usr = UserService.getCurrentUser();
+		Set<Solution> sols = new HashSet<>();
+		if (usrId != null) {
+			// Current user Docent?
+			User student = UserService.getUserById(usrId);
+			sols = student.getSolutions();
+
+		} else {
+			sols = usr.getSolutions();
+		}
+
+		for (Iterator iterator = sols.iterator(); iterator.hasNext();) {
+			Solution solution = (Solution) iterator.next();
+			if (solution.getExercise().getHibId().equals(excId))
+				return solution;
+		}
+
+		return null;
 	}
 
 }

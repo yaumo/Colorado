@@ -105,7 +105,7 @@ public class PopulateDBWithTestData {
 		Exercise exercise = createExercise("Fibonacci");
 		Set<Exercise> exercises = new HashSet<Exercise>();
 		exercises.add(exercise);
-
+		system.setLectures(lectures);
 		Solution solution = createSolution("Fibonacci Loesung");
 		Set<Solution> solutions = new HashSet<Solution>();
 		solutions.add(solution);

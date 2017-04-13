@@ -3,6 +3,8 @@ package com.colorado.denver.controller.entityController;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.management.ReflectionException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +26,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @RestController
-@RequestMapping(value = "/course")
 public class CourseController extends ObjectOperationController {
 
 	/**
@@ -58,7 +59,7 @@ public class CourseController extends ObjectOperationController {
 		response.getWriter().flush();
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "/course", method = RequestMethod.GET)
 	public Course getCoursesForUser() {
 		UserService.authorizeSystemuser();
 		Course course = CourseService.getCourseForUser(UserService.getCurrentUser().getHibId());
@@ -68,6 +69,23 @@ public class CourseController extends ObjectOperationController {
 		}
 
 		return course;
+	}
+
+	@RequestMapping(value = "/courses", method = RequestMethod.GET)
+	public List<Course> getAllCourses() {
+		// Add docent security!
+		List<Course> courses = CourseService.getAllCourses();
+
+		if (!courses.isEmpty()) {
+			for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
+				Course course = (Course) iterator.next();
+				Link selfLink = linkTo(CourseController.class).withSelfRel();
+				course.add(selfLink);
+
+			}
+		}
+
+		return courses;
 	}
 
 }
