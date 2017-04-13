@@ -104,10 +104,14 @@ public class SolutionController extends ObjectOperationController {
 	}
 
 	@RequestMapping(value = "/solution", method = RequestMethod.GET)
-	public Solution getSolutionsForUser(@RequestParam("excId") String excId, @RequestParam("usrId") String usrId) {
+	public Solution getSolutionsForUser(@RequestParam(value = "excId", required = false) String excId,
+			@RequestParam(value = "usrId", required = false) String usrId) {
 		UserService.authorizeSystemuser();
 		User usr = UserService.getCurrentUser();
 		Set<Solution> sols = new HashSet<>();
+		LOGGER.debug("UserId:" + usrId);
+		LOGGER.debug("ExcId:" + excId);
+
 		if (usrId != null) {
 			// Current user Docent?
 			User student = UserService.getUserById(usrId);
@@ -119,8 +123,10 @@ public class SolutionController extends ObjectOperationController {
 
 		for (Iterator iterator = sols.iterator(); iterator.hasNext();) {
 			Solution solution = (Solution) iterator.next();
-			if (solution.getExercise().getHibId().equals(excId))
+
+			if (solution.getExercise().getHibId().equals(excId)) {
 				return solution;
+			}
 		}
 
 		return null;

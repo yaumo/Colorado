@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -59,10 +60,16 @@ public class CourseController extends ObjectOperationController {
 		response.getWriter().flush();
 	}
 
-	@RequestMapping(value = "/course", method = RequestMethod.GET)
-	public Course getCoursesForUser() {
+	public Course getCourseForUser() {
 		UserService.authorizeSystemuser();
-		Course course = CourseService.getCourseForUser(UserService.getCurrentUser().getHibId());
+
+		return getCourseForUser(UserService.getCurrentUser().getHibId());
+	}
+
+	@RequestMapping(value = "/course", method = RequestMethod.GET)
+	public Course getCourseForUser(@RequestParam(value = "user", required = false) String hibId) {
+
+		Course course = CourseService.getCourseForUser(hibId);
 		if (course != null) {
 			Link selfLink = linkTo(UserController.class).slash(Course.COURSE).withSelfRel();
 			course.add(selfLink);

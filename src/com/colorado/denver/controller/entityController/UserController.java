@@ -1,6 +1,7 @@
 package com.colorado.denver.controller.entityController;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.model.Exercise;
-import com.colorado.denver.model.Lecture;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.ExerciseService;
@@ -76,15 +76,10 @@ public class UserController extends ObjectOperationController {
 		UserService.authorizeSystemuser();
 
 		User usr = UserService.getCurrentUser();
-		Link selfLink = linkTo(UserController.class).slash(usr.getHibId()).withSelfRel();
-
+		Link selfLink = linkTo(methodOn(UserController.class).getUser()).withSelfRel();
 		usr.add(selfLink);
-		Set<Lecture> lect = usr.getLectures();
 
-		Link lecturesLink = linkTo(lect).withRel("/lectures");
-		usr.add(lecturesLink);
-
-		Link courseLink = linkTo(CourseController.class).withRel("/course");
+		Link courseLink = linkTo(methodOn(CourseController.class).getCourseForUser()).withRel("course");
 		usr.add(courseLink);
 		return usr;
 	}
@@ -105,7 +100,7 @@ public class UserController extends ObjectOperationController {
 		UserService.authorizeSystemuser();
 
 		User usr = UserService.getCurrentUser();
-		Link selfLink = linkTo(UserController.class).withSelfRel();
+		Link selfLink = linkTo(methodOn(UserController.class).getDocent()).withSelfRel();
 		usr.add(selfLink);
 
 		return usr;
@@ -116,8 +111,8 @@ public class UserController extends ObjectOperationController {
 	public List<User> getAllUsers() {
 		List<User> allUsers = UserService.allUsers();
 		for (User user : allUsers) {
-			Link selfLink = linkTo(UserController.class).slash(user.getHibId()).withSelfRel();
-			user.add(selfLink);
+			Link courseLink = linkTo(methodOn(CourseController.class).getCourseForUser(user.getHibId())).withRel("course");
+			user.add(courseLink);
 		}
 		return allUsers;
 	}
