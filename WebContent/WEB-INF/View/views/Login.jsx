@@ -79,14 +79,14 @@ class Header extends React.Component {
 class Content extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: '' };
+    this.state = { username: '', password: ''  };
     this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
   handleClick(e) {
     e.preventDefault();
     //console.log('The link was clicked.');
-    if (this.state.value === 's12345') {
+    /*if (this.state.value === 's12345') {
       browserHistory.push('/exercise');
     }
     else if (this.state.value === 'd12345') {
@@ -94,11 +94,35 @@ class Content extends React.Component {
     }
     else {
       alert("Username does not exist!");
-    }
+    }*/
+	var username = this.state.username;
+	var password = this.state.password;
+	fetch('http://localhost:8080/login', {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username : 'test',
+			password: 'hallo'
+        })
+    }).then(function (response) {
+      
+    }).catch(function (err) {
+        console.log(err)
+    });
+	
   }
   handleChange(event) {
-    this.setState({ value: event.target.value });
+    this.setState({ username: event.target.value });
   }
+  
+  handleChangePassword(event){
+	this.setState({password: event.target.value});
+  }	  
   /*componentWillMount() {
      console.log('Component WILL MOUNT!')
   }*/
@@ -123,7 +147,8 @@ class Content extends React.Component {
                   floatingLabelText="Username"
                   type='text'
                   id="username"
-                  value={this.state.value}
+				  name="username"
+                  value={this.state.username}
                   onChange={this.handleChange}
                   underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                   floatingLabelFocusStyle={{ 'color': '#bd051f' }}
@@ -135,6 +160,8 @@ class Content extends React.Component {
                   floatingLabelText="Password"
                   type="password"
                   id="password"
+				  name="password"
+				  onChange={this.handleChangePassword}
                   underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                   floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                   style={{'width': '98%', 'fontSize': '150%' }}

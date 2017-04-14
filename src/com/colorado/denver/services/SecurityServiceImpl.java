@@ -20,6 +20,29 @@ public class SecurityServiceImpl implements AuthenticationProvider {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SecurityServiceImpl.class);
 
+	public Authentication authenticate(String username, String password) throws AuthenticationException {
+		System.out.println("Starte Authentifizierung");
+		// System.out.println(authentication);
+		// System.out.println(authentication.getCredentials().toString());
+		// String username = authentication.getName();
+		// String password = authentication.getCredentials().toString();
+		System.out.println("Username:" + username);
+
+		User user = UserService.getUserByLoginName(username);
+
+		if (user == null || !user.getUsername().equalsIgnoreCase(username)) {
+			throw new BadCredentialsException("Username not found.");
+		}
+
+		if (!password.equals(user.getPassword())) {
+			throw new BadCredentialsException("Wrong password.");
+		}
+
+		Collection<? extends GrantedAuthority> authorities = user.getRoles();
+		LOGGER.info("Successful user login! " + user.getUsername());
+		return new UsernamePasswordAuthenticationToken(user, password, authorities);
+	}
+
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		if (authentication == null) {
