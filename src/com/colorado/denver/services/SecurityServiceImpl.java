@@ -21,12 +21,6 @@ public class SecurityServiceImpl implements AuthenticationProvider {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SecurityServiceImpl.class);
 
 	public Authentication authenticate(String username, String password) throws AuthenticationException {
-		System.out.println("Starte Authentifizierung");
-		// System.out.println(authentication);
-		// System.out.println(authentication.getCredentials().toString());
-		// String username = authentication.getName();
-		// String password = authentication.getCredentials().toString();
-		System.out.println("Username:" + username);
 
 		User user = UserService.getUserByLoginName(username);
 

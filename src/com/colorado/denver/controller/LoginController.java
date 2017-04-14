@@ -26,6 +26,7 @@ public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = -5162423220413438255L;
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + DenverConstants.LOGIN, method = RequestMethod.POST)
+
 	@ResponseBody
 	public void handleLoginRequest(HttpServletRequest request,
 			HttpServletResponse response, Authentication authentication) throws IOException {
@@ -34,7 +35,8 @@ public class LoginController extends HttpServlet {
 		SecurityServiceImpl impl = new SecurityServiceImpl();
 
 		impl.authenticate(authentication);
-		request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+		request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+				SecurityContextHolder.getContext());
 		System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 		response.setStatus(200);
 		response.getWriter().write(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());

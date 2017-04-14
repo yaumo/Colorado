@@ -14,14 +14,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.colorado.denver.services.SecurityServiceImpl;
 
 public class SecurityFilter extends AbstractAuthenticationProcessingFilter {
 	public static final String USERNAME = "username";
 	public static final String PASSWORD = "password";
-	AuthenticationSuccessHandler authenticationSuccessHandler;
+	SecurityAuthenticationSuccessHandler authenticationSuccessHandler = new SecurityAuthenticationSuccessHandler();
 	SecurityServiceImpl sec = new SecurityServiceImpl();
 
 	public SecurityFilter() {
@@ -53,25 +52,20 @@ public class SecurityFilter extends AbstractAuthenticationProcessingFilter {
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
-		System.out.println(request.toString());
-		System.out.println(request.getContentType());
 		String username = getUsername(request);
 		String password = getPassword(request);
 
 		Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
-		System.out.println(authentication);
-		sec.authenticate(username, password);
-		System.out.println("Usename:" + username);
-		System.out.println("Password:" + password);
+		// sec.authenticate(username, password);
 
 		return sec.authenticate(authentication);
 	}
 
 	public String getUsername(HttpServletRequest request) {
-		return request.getParameter(USERNAME);
+		return request.getParameter("username");
 	}
 
 	public String getPassword(HttpServletRequest request) {
-		return request.getParameter(PASSWORD);
+		return request.getParameter("password");
 	}
 }
