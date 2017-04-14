@@ -32,7 +32,7 @@ public class LoginController extends HttpServlet {
 		System.out.println("HALLO bin im login!");
 
 		SecurityServiceImpl impl = new SecurityServiceImpl();
-
+		System.out.println("Starting the authentication now");
 		impl.authenticate(authentication);
 		request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 		System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
