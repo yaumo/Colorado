@@ -52,6 +52,7 @@ public class UserController extends ObjectOperationController {
 		System.out.println("id: " + entity.getId());
 		String jsonResponse = super.doCrud(entity, jsonString);
 		entity = null; // Let GC run over this quickly
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.setStatus(200);
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();
@@ -74,11 +75,6 @@ public class UserController extends ObjectOperationController {
 			model.addAttribute("message", "You have been logged out successfully.");
 
 		return "login";
-	}
-
-	@RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
-	public String welcome(Model model) {
-		return "welcome";
 	}
 
 	public static Role calculateRoleBasedOnUser(User usr) {

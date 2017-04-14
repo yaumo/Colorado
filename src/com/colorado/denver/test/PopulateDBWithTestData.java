@@ -165,7 +165,7 @@ public class PopulateDBWithTestData {
 	private Exercise createExercise(String title) {
 		Exercise exercise = new Exercise();
 		exercise.setTitle(title);
-		exercise.setAnwswer(89 + "");
+		exercise.setAnswer(89 + "");
 		exercise.setInput(11 + "");
 		exercise.setInputType("int");
 		exercise.setOutputType("int");

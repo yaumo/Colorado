@@ -82,6 +82,7 @@ public class SolutionController extends ObjectOperationController {
 
 			} catch (Exception e) {
 				LOGGER.error("Executing Solution failed! : " + entity.getId());
+				LOGGER.error("Executing Ecercise failed with code: " + entity.getCode());
 				e.printStackTrace();
 			}
 
@@ -92,6 +93,7 @@ public class SolutionController extends ObjectOperationController {
 
 		entity = null; // Let GC run over this quickly
 		response.setStatus(200);
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();
 	}

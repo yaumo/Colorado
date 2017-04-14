@@ -181,6 +181,7 @@ public class HibernateController {
 	}
 
 	/* Method to GET a list of entities from the records */
+	@SuppressWarnings("unchecked")
 	public List<BaseEntity<?>> getEntityList(Class<?> c) {
 		List<BaseEntity<?>> entityList = null;
 		Session session = SessionTools.sessionFactory.openSession();

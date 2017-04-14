@@ -1,6 +1,5 @@
 package com.colorado.denver.services.codeExecution;
 
-import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
@@ -13,24 +12,20 @@ import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 public interface JavaScriptExecutor {
 	final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(JavaExecutor.class);
 
+	@SuppressWarnings("restriction")
 	public default String executeJavaScript(String inputType, String outputType, String excInput, String code) throws SecurityException {
 		String result = "";
 		try {
 			NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
 			ScriptEngine nashorn = factory.getScriptEngine(new NoJavaFilter());
 			JSObject object = (JSObject) nashorn.eval(code);
-			Invocable invocable = (Invocable) nashorn;
-			Object results = invocable.invokeFunction("test", excInput);
 
-			// call that anon function
-			System.out.println("Object way: " + object.call(null, excInput));
-			System.out.println("Invoke way: " + result);
-			System.out.println("Invoke way class: " + result.getClass());
-			result = results.toString();
+			result = object.call(null, excInput).toString();
+			LOGGER.debug("Result of JavaScript Calc is: " + result);
 		} catch (ScriptException e) {
+			LOGGER.error("Error executing script itself");
 			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
+			result = e.toString();
 		}
 
 		return result;

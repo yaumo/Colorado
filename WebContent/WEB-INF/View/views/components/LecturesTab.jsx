@@ -14,21 +14,19 @@ import RaisedButton from 'material-ui/RaisedButton';
 function getAllCourses() {
     fetch('http://localhost:8080/course', {
         method: 'POST',
-        mode: 'no-cors',
         credentials: 'same-origin',
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Accept': 'application/json'
         },
         body: JSON.stringify({
             objectClass: 'course',
             crud: '2'
         })
     }).then(function (response) {
-        var hallo = response.text();
-        alert(typeof hallo);
-        alert(hallo);
-        return JSON.parse(hallo);
+        return response.json();
+    }).then(function (courses) {
+        console.log(courses);
+        console.log(courses[0]["0x1"].title);
 
     }).catch(function (err) {
         console.log(err);
@@ -126,19 +124,24 @@ class LecturesTab extends React.Component {
         super();
         this.state = {
             open: true,
-            value: 1
+            value: 1,
+			selectedCourse:1
         };
+		this.handleChangeCourse = this.handleChangeCourse.bind(this);
     }
+	handleChangeCourse(event, index, value){
+		this.setState({selectedCourse: value});
+	}
     render() {
         return (
             <div>
                 <Card>
                     <Divider />
                     <CardText className="loginbody">
-                        <h4>Step 1: Select Curse</h4>
+                        <h4>Step 1: Select Course</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <div>
-                                <DropDownMenu value={this.state.value} onChange={this.handleChange}>
+                                <DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
                                     <MenuItem value={1} primaryText="WWI14SEA" />
                                     <MenuItem value={2} primaryText="WWI14AMA" />
                                     <MenuItem value={3} primaryText="WWI16SEB" />
@@ -181,7 +184,11 @@ class LecturesTab extends React.Component {
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
-                        <RaisedButton label="Create" onClick={handleClick} />
+                        <RaisedButton
+                            label="Create"
+                            onClick={handleClick}
+                            backgroundColor="#bd051f"
+                            labelColor="#FFFFFF" />
                     </CardActions>
                 </Card>
             </div>

@@ -1,5 +1,0 @@
-{
-"objectClass": "solution",
-"crud": "2",
-"id": "solution_00001"
-}

@@ -43,11 +43,16 @@ class NavBar extends React.Component {
 	componentWillMount() {
 		var dropdownjson = '{"lecture": [{"lecture_title":"Datenbanken","lecture_id": "0001","exercises": [{ "exercise_title":"Fibonacci", "exercise_id":"0123123"},{ "exercise_title":"Test2", "exercise_id":"0123124"},{ "exercise_title":"Test3", "exercise_id":"0123125"}]},{"lecture_title":"Webprogrammierung","lecture_id": "0002","exercises": [{ "exercise_title":"WEB1", "exercise_id":"0123123"},{ "exercise_title":"WEB2", "exercise_id":"1123124"},{ "exercise_title":"WEB3", "exercise_id":"1123125"}]},{"lecture_title":"Test","lecture_id": "0003","exercises": [{ "exercise_title":"Test1", "exercise_id":"2123123"},{ "exercise_title":"Test2", "exercise_id":"2123124"},{ "exercise_title":"Test3", "exercise_id":"2123125"}]}]}';
 		data = JSON.parse(dropdownjson);
-		for(var i=0;i<data.lecture.length;i++){
-			lecturelist.push(<MenuItem value={i} key={i} primaryText={data.lecture[i].lecture_title} />);
+		if(lecturelist.length===0){
+			for(var i=0;i<data.lecture.length;i++){
+				lecturelist.push(<MenuItem value={i} key={i} primaryText={data.lecture[i].lecture_title} />);
+			}
 		}
-		for(var j=0;j<data.lecture[0].exercises.length;j++){
-			exerciseslist.push(<MenuItem value={j} key={j} primaryText={data.lecture[0].exercises[j].exercise_title} />);
+		if(exerciseslist.length===0)
+		{
+			for(var j=0;j<data.lecture[0].exercises.length;j++){
+				exerciseslist.push(<MenuItem value={j} key={j} primaryText={data.lecture[0].exercises[j].exercise_title} />);
+			}
 		}
     }
 	
@@ -103,7 +108,7 @@ class NavBar extends React.Component {
                             docked={true}
                             open={this.state.open}
                             onRequestChange={(open) => this.setState({ open })}
-                            containerStyle={{ 'position': 'fixed', 'margin': '0', 'top': '64px', 'height': 'calc(100% - 64px)', 'backgroundColor' : '#959595' }}
+                            containerStyle={{ 'position': 'fixed', 'margin': '0', 'top': '64px', 'height': 'calc(100% - 64px)' , 'backgroundColor' : '#959595', 'background': '-webkit-linear-gradient(#bbbbbb, #959595)' }}
                             >
                             <DropDownMenu value={this.state.dropdown} onChange={this.handleChange} >
                                 {lecturelist}

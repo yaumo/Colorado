@@ -75,7 +75,7 @@ class Content extends React.Component {
         <div id="content" style={{ 'marginLeft': '35%', 'marginRight': '35%', 'marginTop': '10%' }}>
           <Card>
             <CardHeader className="loginheader">
-              <Avatar size={60} src="images/colorado.jpg" />
+              <Avatar size={60} src="images/colorado.jpg" className="coloradologo" />
             </CardHeader>
             <Divider />
             <CardText className="loginbody">
@@ -137,7 +137,11 @@ class Content extends React.Component {
               </div>
             </CardText>
             <CardActions className="footer">
-              <RaisedButton label="Confirm" onClick={this.handleClick} />
+              <RaisedButton 
+			  label="Confirm" 
+			  onClick={this.handleClick}
+			  backgroundColor="#bd051f"
+			  labelColor="#FFFFFF"/>
             </CardActions>
           </Card>
         </div>

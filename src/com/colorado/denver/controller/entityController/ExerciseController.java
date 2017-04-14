@@ -1,10 +1,6 @@
 package com.colorado.denver.controller.entityController;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import javax.management.ReflectionException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.codeExecution.ExerciseExecutor;
 import com.colorado.denver.tools.DenverConstants;
+import com.colorado.denver.tools.Tools;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -55,24 +53,21 @@ public class ExerciseController extends ObjectOperationController {
 
 		if (entity.isHasBeenModified()) {
 			try {
-				// Experimental! We need the code from the itself not from a file on the server
-				InputStream is = new FileInputStream("fibonacci.txt");
-				BufferedReader buf = new BufferedReader(new InputStreamReader(is));
-				String line = buf.readLine();
-				StringBuilder sb = new StringBuilder();
+				entity.setCode(Tools.unescape_string((entity.getCode())));
+				entity.setSolution_code(Tools.unescape_string((entity.getSolution_code())));
 
-				while (line != null) {
-					sb.append(line).append("\n");
-					line = buf.readLine();
-				}
-				buf.close();
-
-				String fileAsString = sb.toString();
-				entity.setSolution_code(fileAsString);
-				ExerciseExecutor excExcutor = new ExerciseExecutor(entity);
+				// Get real entity from db:
+				HibernateController hibCtrl = new HibernateController();
+				Exercise exc = (Exercise) hibCtrl.getEntity(entity.getId());
+				ExerciseExecutor excExcutor = new ExerciseExecutor(exc);
 				entity = excExcutor.execute();
+				entity.setAnswer(exc.setAnswer());
+
+				// Back to fronted:
+				entity.setSolution_code(Tools.quote(entity.getSolution_code()));
 			} catch (Exception e) {
 				LOGGER.error("Executing Ecercise failed! : " + entity.getId());
+				LOGGER.error("Executing Ecercise failed with code: " + entity.getSolution_code());
 				e.printStackTrace();
 			}
 
@@ -80,6 +75,7 @@ public class ExerciseController extends ObjectOperationController {
 
 		String jsonResponse = super.doCrud(entity, jsonString);
 		entity = null; // Let GC run over this quickly, this entity is detached!
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.setStatus(200);
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();

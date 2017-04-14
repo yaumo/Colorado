@@ -25,19 +25,22 @@ public class SolutionExecutor implements JavaExecutor, JavaScriptExecutor {
 	}
 
 	public Solution execute() {
+
 		String answer = "";
 		String message = "";
 		if (sol.getExercise().getLanguage().equals(DenverConstants.JAVA)) {
+			LOGGER.info("Executing Java");
 			answer = executeJava(inputType, outputType, excInput, code);
 			if (answer.startsWith(DenverConstants.JAVA_EXCEPTION_THROWN)) {
 				answer = DenverConstants.JAVA_EXCEPTION_THROWN;
 				message = answer.replaceAll(DenverConstants.JAVA_EXCEPTION_THROWN, "");
 			}
 		} else {
-
+			LOGGER.info("Executing JavaScriptx");
+			answer = executeJavaScript(inputType, outputType, excInput, code);
 		}
 
-		if (sol.getExercise().getAnwswer().equals(answer)) {
+		if (sol.getExercise().setAnswer().equals(answer)) {
 			sol.setCorrect(true);
 			LOGGER.info("Answer for entity " + sol.getId() + " correct with value: " + answer);
 			message = DenverConstants.JAVA_RESULT_CORRECT;
@@ -46,7 +49,7 @@ public class SolutionExecutor implements JavaExecutor, JavaScriptExecutor {
 			message = DenverConstants.JAVA_RESULT_WRONG;
 			sol.setCorrect(false);
 		}
-		sol.setAnwswer(answer);
+		sol.setAnswer(answer);
 		sol.setMessage(message);
 		// Reset
 		sol.setHasBeenModified(false);

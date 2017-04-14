@@ -11,6 +11,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import ActionCode from 'material-ui/svg-icons/action/code';
 import ActionSearch from 'material-ui/svg-icons/action/search';
+import Popover from 'material-ui/Popover';
+import EditorAce from './EditorAce.jsx';
+import Menu from 'material-ui/Menu';
 
 
 var lecturesjson;
@@ -91,14 +94,18 @@ class OverviewTab extends React.Component {
     constructor() {
         super();
         this.state = {
-            open: true,
+            open: false,
             value: 1,
 			selectedLecture: 0,
 			selectedCourse:0,
-			selectedExercise:0
+			selectedExercise:0,
+			disabledDropDownExercise: true
         };
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
 		this.handleChangeCourse = this.handleChangeCourse.bind(this);
+		this.handleChangeExercise = this.handleChangeExercise.bind(this);
+		this.handleClickViewCode = this.handleClickViewCode.bind(this);
+		this.handleRequestClose = this.handleRequestClose.bind(this);
     }
 
 	componentWillMount() {
@@ -117,13 +124,13 @@ class OverviewTab extends React.Component {
 			}
 		}
 		
+		exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
 		/*if(exerciselist.length===0){
 			exerciselist.push(<MenuItem value={0} key={0} primaryText={'All Exercises'} />);
 			for(var k=1;j<lecturesjson.course[0].lectures[0].exercises.length;k++){
 				exerciselist.push(<MenuItem value={k} key={k} primaryText={lecturesjson.course[0].lectures[0].exercises[k].exercise_title} />);
 			}
 		}*/
-		console.log(lecturesjson);	
 	}
 	
 	handleChangeCourse(event, index, value){
@@ -140,6 +147,8 @@ class OverviewTab extends React.Component {
 		for(var j=1;j<=lecturesjson.course[value].lectures.length;j++){
 			lecturelist.push(<MenuItem value={j} key={j} primaryText={lecturesjson.course[value].lectures[j-1].lecture_title} />);
 		}
+		
+		exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
 		/*
 		for(var k=0;j<lecturesjson.course[value].lectures[0].exercises.length;k++){
 			lecturelist.push(<MenuItem value={j} key={j} primaryText={lecturesjson.course[value].lectures[0].exercises[k].exercise_title} />);
@@ -159,9 +168,14 @@ class OverviewTab extends React.Component {
 		if(value!=0)
 		{
 			exerciselist.push(<MenuItem value={0} key={0} primaryText={'All Exercises'} />);
+			this.setState({disabledDropDownExercise: false});
 			for(var k=1;k<=lecturesjson.course[this.state.selectedCourse].lectures[value-1].exercises.length;k++){
-				exerciselist.push(<MenuItem value={k} key={k} primaryText={lecturesjson.course[this.state.selectedLecture].lectures[value-1].exercises[k-1].exercise_title} />);
+				exerciselist.push(<MenuItem value={k} key={k} primaryText={lecturesjson.course[this.state.selectedCourse].lectures[value-1].exercises[k-1].exercise_title} />);
 			}
+		}
+		else{
+			exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+			this.setState({disabledDropDownExercise: true});
 		}
 		this.setState({selectedLecture: value});
 		this.setState({selectedExercise: 0});
@@ -169,6 +183,18 @@ class OverviewTab extends React.Component {
 	
 	handleChangeExercise(event, index, value){
 		this.setState({selectedExercise: value});
+	}
+	
+	handleClickViewCode(event, index, value){
+		if(index == 6){
+			this.setState({
+				open: true,
+				//anchorEl: event.currentTarget
+			});
+		}
+	}
+	handleRequestClose(){
+		this.setState({open: false});
 	}
 
     render() {
@@ -178,7 +204,7 @@ class OverviewTab extends React.Component {
                     <Divider />
                     <CardText className="loginbody">
                         <Paper zDepth={4}>
-                            <Table selectable={false}
+                            <Table selectable={false} onCellClick={this.handleClickViewCode}
                             >
                                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                     <TableRow>
@@ -189,9 +215,11 @@ class OverviewTab extends React.Component {
                                             <DropDownMenu value={this.state.selectedLecture} onChange={this.handleChangeLecture}>
                                                 {lecturelist}
                                             </DropDownMenu>
-                                            <DropDownMenu value={this.state.selectedExercise} onChange={this.handleChangeExercise}>
+											
+                                            <DropDownMenu disabled={this.state.disabledDropDownExercise} value={this.state.selectedExercise} onChange={this.handleChangeExercise} ref={'dropdownexercise'}>
                                                 {exerciselist}
                                             </DropDownMenu>
+											
                                             <IconButton onClick={handleClick}>
                                                     <ActionSearch/>
                                                 </IconButton>
@@ -223,6 +251,20 @@ class OverviewTab extends React.Component {
                                     ))}
                                 </TableBody>
                             </Table>
+							<Popover
+							open={this.state.open}
+							style={{ marginTop: '20%', marginLeft: '35%', width: '550px', height:'400px'}}
+							onRequestClose={this.handleRequestClose}
+							>
+							 
+							<Card >
+								<CardText>
+									<Paper zDepth={4}>
+                                            <EditorAce mode='javascript'/>
+									</Paper>
+								</CardText>
+							</Card>
+							</Popover>
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
