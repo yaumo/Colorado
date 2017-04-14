@@ -11,6 +11,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import ActionCode from 'material-ui/svg-icons/action/code';
 import ActionSearch from 'material-ui/svg-icons/action/search';
+import Popover from 'material-ui/Popover';
+import EditorAce from './EditorAce.jsx';
+import Menu from 'material-ui/Menu';
 
 
 var lecturesjson;
@@ -91,7 +94,7 @@ class OverviewTab extends React.Component {
     constructor() {
         super();
         this.state = {
-            open: true,
+            open: false,
             value: 1,
 			selectedLecture: 0,
 			selectedCourse:0,
@@ -101,6 +104,8 @@ class OverviewTab extends React.Component {
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
 		this.handleChangeCourse = this.handleChangeCourse.bind(this);
 		this.handleChangeExercise = this.handleChangeExercise.bind(this);
+		this.handleClickViewCode = this.handleClickViewCode.bind(this);
+		this.handleRequestClose = this.handleRequestClose.bind(this);
     }
 
 	componentWillMount() {
@@ -179,6 +184,18 @@ class OverviewTab extends React.Component {
 	handleChangeExercise(event, index, value){
 		this.setState({selectedExercise: value});
 	}
+	
+	handleClickViewCode(event, index, value){
+		if(index == 6){
+			this.setState({
+				open: true,
+				//anchorEl: event.currentTarget
+			});
+		}
+	}
+	handleRequestClose(){
+		this.setState({open: false});
+	}
 
     render() {
         return (
@@ -187,7 +204,7 @@ class OverviewTab extends React.Component {
                     <Divider />
                     <CardText className="loginbody">
                         <Paper zDepth={4}>
-                            <Table selectable={false}
+                            <Table selectable={false} onCellClick={this.handleClickViewCode}
                             >
                                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                     <TableRow>
@@ -234,6 +251,20 @@ class OverviewTab extends React.Component {
                                     ))}
                                 </TableBody>
                             </Table>
+							<Popover
+							open={this.state.open}
+							style={{ marginTop: '20%', marginLeft: '35%', width: '550px', height:'400px'}}
+							onRequestClose={this.handleRequestClose}
+							>
+							 
+							<Card >
+								<CardText>
+									<Paper zDepth={4}>
+                                            <EditorAce mode='javascript'/>
+									</Paper>
+								</CardText>
+							</Card>
+							</Popover>
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
