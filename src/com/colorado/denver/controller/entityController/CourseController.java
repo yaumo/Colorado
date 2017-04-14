@@ -62,12 +62,16 @@ public class CourseController extends ObjectOperationController {
 
 	public Course getCourseForUser() {
 		UserService.authorizeSystemuser();
-
-		return getCourseForUser(UserService.getCurrentUser().getHibId());
+		String hibId = UserService.getCurrentUser().getHibId();
+		return getCourseForUser(hibId);
 	}
 
 	@RequestMapping(value = "/course", method = RequestMethod.GET)
 	public Course getCourseForUser(@RequestParam(value = "user", required = false) String hibId) {
+		// Check docent level rights here!
+		if (hibId == null) {
+			return getCourseForUser();
+		}
 
 		Course course = CourseService.getCourseForUser(hibId);
 		if (course != null) {

@@ -78,8 +78,8 @@ public class UserController extends ObjectOperationController {
 		User usr = UserService.getCurrentUser();
 		Link selfLink = linkTo(methodOn(UserController.class).getUser()).withSelfRel();
 		usr.add(selfLink);
-
-		Link courseLink = linkTo(methodOn(CourseController.class).getCourseForUser()).withRel("course");
+		System.out.println("Course On user: " + usr.getCourse().getHibId());
+		Link courseLink = linkTo(methodOn(CourseController.class).getCourseForUser(usr.getHibId())).withRel("course");
 		usr.add(courseLink);
 		return usr;
 	}
