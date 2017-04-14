@@ -11,44 +11,42 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
-const courselist=[];
-
-
-
+var coursesJSON;
 function getAllCourses() {
     fetch('http://localhost:8080/courses', {
         method: 'GET',
         credentials: 'same-origin',
-        mode: 'no-cors',
         headers: {
             'Accept': 'application/json'
         }
     }).then(function (response) {
         return response.json();
     }).then(function (courses) {
-        console.log(courses.length)
+        courseJSON = courses;
     }).catch(function (err) {
         console.log(err);
     });
 }
 
+var courseJSON;
 function getCurrentCourse() {
     fetch('http://localhost:8080/course', {
         method: 'GET',
         credentials: 'same-origin',
-        mode: 'no-cors',
         headers: {
             'Accept': 'application/json'
         }
     }).then(function (response) {
         return response.json();
-    }).then(function (courses) {
-        console.log(courses.length)
+    }).then(function (course) {
+        courseJSON = course;
     }).catch(function (err) {
         console.log(err);
     });
 }
 
+
+var allUsersJSON;
 function getAllUsers() {
     fetch('http://localhost:8080/users', {
         method: 'GET',
@@ -59,16 +57,17 @@ function getAllUsers() {
         }
     }).then(function (response) {
         return response.json();
-    }).then(function (courses) {
-        console.log(courses.length)
+    }).then(function (allUsers) {
+        allUsersJSON = allUsers;
     }).catch(function (err) {
         console.log(err);
     });
 }
 
 
-function getAllLectures() {
-    fetch('http://localhost:8080/lecture', {
+var allDocentsJSON;
+function getAllUsers() {
+    fetch('http://localhost:8080/users', {
         method: 'GET',
         credentials: 'same-origin',
         headers: {
@@ -76,22 +75,45 @@ function getAllLectures() {
         }
     }).then(function (response) {
         return response.json();
+    }).then(function (allDocents) {
+        allDocentsJSON = allDocents;
+        tableData = allDocentsJSON;
+    }).catch(function (err) {
+        console.log(err);
+    });
+}
 
+
+var currentUserJSON;
+function getCurrentUser() {
+    fetch('http://localhost:8080/user', {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(function (response) {
+        return response.json();
+    }).then(function (user) {
+        currentUserJSON = user;
     }).catch(function (err) {
         console.log(err)
     });
 }
 
-function getCurrentUser() {
+function createLecture() {
     fetch('http://localhost:8080/user', {
-        method: 'GET',
+        method: 'POST',
         credentials: 'same-origin',
-        mode: 'no-cors',
         headers: {
             'Accept': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+            course_ID: '',
+            title: ''
+        })
     }).then(function (response) {
-        return response.json();
+
     }).catch(function (err) {
         console.log(err)
     });
@@ -99,37 +121,35 @@ function getCurrentUser() {
 
 function handleClick(e) {
     getAllUsers();
-    //createNewLecture();
-    //getAllLectures();
 };
 
-const tableData = [
+var tableData = [
     {
-        name: 'John Smith',
+        username: 'John Smith',
         mail: 'd12345@docent.dhbw-mannheim.de',
     },
     {
-        name: 'Randal White',
+        username: 'Randal White',
         mail: 'd12345@docent.dhbw-mannheim.de',
     },
     {
-        name: 'Stephanie Sanders',
+        username: 'Stephanie Sanders',
         mail: 'd12345@docent.dhbw-mannheim.de',
     },
     {
-        name: 'Steve Brown',
+        username: 'Steve Brown',
         mail: 'd12345@docent.dhbw-mannheim.de',
     },
     {
-        name: 'Joyce Whitten',
+        username: 'Joyce Whitten',
         mail: 'd12345@docent.dhbw-mannheim.de',
     },
     {
-        name: 'Samuel Roberts',
+        username: 'Samuel Roberts',
         mail: 'd12345@docent.dhbw-mannheim.de',
     },
     {
-        name: 'Adam Moore',
+        username: 'Adam Moore',
         mail: 'd12345@docent.dhbw-mannheim.de',
     },
 ];
@@ -146,14 +166,14 @@ class LecturesTab extends React.Component {
         this.state = {
             open: true,
             value: 1,
-			selectedCourse:0
+            selectedCourse: 0
         };
-		this.handleChangeCourse = this.handleChangeCourse.bind(this);
+        this.handleChangeCourse = this.handleChangeCourse.bind(this);
     }
-	handleChangeCourse(event, index, value){
-		this.setState({selectedCourse: value});
-	}
-    componentWillMount(){
+    handleChangeCourse(event, index, value) {
+        this.setState({ selectedCourse: value });
+    }
+    componentWillMount() {
         getAllCourses();
     }
 
@@ -167,7 +187,7 @@ class LecturesTab extends React.Component {
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <div>
                                 <DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
-                                    {courselist}
+
                                 </DropDownMenu>
                             </div>
                         </Paper>
@@ -197,7 +217,7 @@ class LecturesTab extends React.Component {
                                 <TableBody deselectOnClickaway={false}>
                                     {tableData.map((row, index) => (
                                         <TableRow key={index} selected={row.selected}>
-                                            <TableRowColumn>{row.name}</TableRowColumn>
+                                            <TableRowColumn>{row.username}</TableRowColumn>
                                             <TableRowColumn>{row.mail}</TableRowColumn>
                                         </TableRow>
                                     ))}
