@@ -82,6 +82,7 @@ class Content extends React.Component {
     this.state = { username: '', password: ''  };
     this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
+	this.handleChangePassword = this.handleChangePassword.bind(this);
   }
   handleClick(e) {
     e.preventDefault();
@@ -97,18 +98,23 @@ class Content extends React.Component {
     }*/
 	var username = this.state.username;
 	var password = this.state.password;
+	console.log(username);
+	console.log(password);
+	var obj = "username="+username+"&password="+password;
 	fetch('http://localhost:8080/login', {
         method: 'POST',
-        mode: 'cors',
+        mode: 'no-cors',
         credentials: 'same-origin',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: JSON.stringify({
-            username : 'test',
-			password: 'hallo'
-        })
+        body: obj
+		
+		/*JSON.stringify({
+            username : username,
+			password: password
+        })*/
     }).then(function (response) {
       
     }).catch(function (err) {

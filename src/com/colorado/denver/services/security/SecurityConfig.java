@@ -20,10 +20,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private SecurityFilter customLoginFilter = new SecurityFilter();
 
+	private SecurityAuthenticationSuccessHandler customSuccessHandler = new SecurityAuthenticationSuccessHandler();
+
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth
 				.authenticationProvider(customAuthenticationProvider);// This will probaply not work
-		auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("ROLE_STUDENT");
 	}
 
 	@Override
@@ -40,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.usernameParameter("username")
 				.passwordParameter("password")
 				.defaultSuccessUrl("/exercise")
+				.successHandler(customSuccessHandler)
 				.failureUrl("/login?error")
 				.and()
 				.logout()
