@@ -11,23 +11,56 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
+const courselist=[];
+
+
+
 function getAllCourses() {
-    fetch('http://localhost:8080/course', {
-        method: 'POST',
+    fetch('http://localhost:8080/courses', {
+        method: 'GET',
         credentials: 'same-origin',
+        mode: 'no-cors',
         headers: {
             'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            objectClass: 'course',
-            crud: '2'
-        })
+        }
     }).then(function (response) {
         return response.json();
     }).then(function (courses) {
-        console.log(courses);
-        console.log(courses[0]["0x1"].title);
+        console.log(courses.length)
+    }).catch(function (err) {
+        console.log(err);
+    });
+}
 
+function getCurrentCourse() {
+    fetch('http://localhost:8080/course', {
+        method: 'GET',
+        credentials: 'same-origin',
+        mode: 'no-cors',
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(function (response) {
+        return response.json();
+    }).then(function (courses) {
+        console.log(courses.length)
+    }).catch(function (err) {
+        console.log(err);
+    });
+}
+
+function getAllUsers() {
+    fetch('http://localhost:8080/users', {
+        method: 'GET',
+        credentials: 'same-origin',
+        mode: 'no-cors',
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(function (response) {
+        return response.json();
+    }).then(function (courses) {
+        console.log(courses.length)
     }).catch(function (err) {
         console.log(err);
     });
@@ -36,17 +69,11 @@ function getAllCourses() {
 
 function getAllLectures() {
     fetch('http://localhost:8080/lecture', {
-        method: 'POST',
-        mode: 'no-cors',
+        method: 'GET',
         credentials: 'same-origin',
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            objectClass: 'lecture',
-            crud: '2'
-        })
+            'Accept': 'application/json'
+        }
     }).then(function (response) {
         return response.json();
 
@@ -55,29 +82,23 @@ function getAllLectures() {
     });
 }
 
-function createNewLecture() {
-    fetch('http://localhost:8080/lecture', {
-        method: 'POST',
-        mode: 'no-cors',
+function getCurrentUser() {
+    fetch('http://localhost:8080/user', {
+        method: 'GET',
         credentials: 'same-origin',
+        mode: 'no-cors',
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            objectClass: 'lecture',
-            crud: '1',
-            title: 'LectureTest2'
-        })
+            'Accept': 'application/json'
+        }
     }).then(function (response) {
-
+        return response.json();
     }).catch(function (err) {
         console.log(err)
     });
 }
 
 function handleClick(e) {
-    getAllCourses();
+    getAllUsers();
     //createNewLecture();
     //getAllLectures();
 };
@@ -125,13 +146,17 @@ class LecturesTab extends React.Component {
         this.state = {
             open: true,
             value: 1,
-			selectedCourse:1
+			selectedCourse:0
         };
 		this.handleChangeCourse = this.handleChangeCourse.bind(this);
     }
 	handleChangeCourse(event, index, value){
 		this.setState({selectedCourse: value});
 	}
+    componentWillMount(){
+        getAllCourses();
+    }
+
     render() {
         return (
             <div>
@@ -142,9 +167,7 @@ class LecturesTab extends React.Component {
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <div>
                                 <DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
-                                    <MenuItem value={1} primaryText="WWI14SEA" />
-                                    <MenuItem value={2} primaryText="WWI14AMA" />
-                                    <MenuItem value={3} primaryText="WWI16SEB" />
+                                    {courselist}
                                 </DropDownMenu>
                             </div>
                         </Paper>
