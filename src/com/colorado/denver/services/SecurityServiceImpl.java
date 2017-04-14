@@ -39,7 +39,7 @@ public class SecurityServiceImpl implements AuthenticationProvider {
 		}
 
 		Collection<? extends GrantedAuthority> authorities = user.getRoles();
-
+		LOGGER.info("Successful user login! " + user.getUsername());
 		return new UsernamePasswordAuthenticationToken(user, password, authorities);
 	}
 
