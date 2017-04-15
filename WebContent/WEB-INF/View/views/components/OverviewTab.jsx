@@ -11,8 +11,15 @@ import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import ActionCode from 'material-ui/svg-icons/action/code';
 import ActionSearch from 'material-ui/svg-icons/action/search';
+import Popover from 'material-ui/Popover';
+import EditorAce from './EditorAce.jsx';
+import Menu from 'material-ui/Menu';
+import Avatar from 'material-ui/Avatar';
+import TextField from 'material-ui/TextField';
 
-
+var lecture='';
+var exercise='';
+var name='';
 var lecturesjson;
 const courselist=[];
 const lecturelist=[];
@@ -91,16 +98,19 @@ class OverviewTab extends React.Component {
     constructor() {
         super();
         this.state = {
-            open: true,
+            open: false,
             value: 1,
 			selectedLecture: 0,
 			selectedCourse:0,
 			selectedExercise:0,
-			disabledDropDownExercise: true
+			disabledDropDownExercise: true,
+			row: 0
         };
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
 		this.handleChangeCourse = this.handleChangeCourse.bind(this);
 		this.handleChangeExercise = this.handleChangeExercise.bind(this);
+		this.handleClickViewCode = this.handleClickViewCode.bind(this);
+		this.handleRequestClose = this.handleRequestClose.bind(this);
     }
 
 	componentWillMount() {
@@ -179,6 +189,19 @@ class OverviewTab extends React.Component {
 	handleChangeExercise(event, index, value){
 		this.setState({selectedExercise: value});
 	}
+	
+	handleClickViewCode(event, index, value){
+		
+		lecture=event.currentTarget.parentElement.parentElement.cells[1].innerText;
+		exercise=event.currentTarget.parentElement.parentElement.cells[2].innerText;
+		name=event.currentTarget.parentElement.parentElement.cells[3].innerText;
+		this.setState({
+			open: true,
+		});
+	}
+	handleRequestClose(){
+		this.setState({open: false});
+	}
 
     render() {
         return (
@@ -187,8 +210,7 @@ class OverviewTab extends React.Component {
                     <Divider />
                     <CardText className="loginbody">
                         <Paper zDepth={4}>
-                            <Table selectable={false}
-                            >
+                            <Table selectable={false}>
                                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                     <TableRow>
                                         <TableHeaderColumn colSpan="6" style={{ textAlign: 'center', background: "#d1d1d1" }}>
@@ -226,7 +248,7 @@ class OverviewTab extends React.Component {
                                             <TableRowColumn>{row.name}</TableRowColumn>
                                             <TableRowColumn>{row.status}</TableRowColumn>
                                             <TableRowColumn>
-                                                <IconButton>
+                                                <IconButton onClick={this.handleClickViewCode}>
                                                     <ActionCode/>
                                                 </IconButton>
                                             </TableRowColumn>
@@ -234,6 +256,68 @@ class OverviewTab extends React.Component {
                                     ))}
                                 </TableBody>
                             </Table>
+							<Popover
+							open={this.state.open}
+							style={{ marginTop: '20%', marginLeft: '35%', width: 'auto', height:'auto'}}
+							onRequestClose={this.handleRequestClose}
+							>
+							 
+							<Card>
+								<CardHeader className="loginheader">
+								  <Avatar
+									src="images/colorado.jpg"
+									size={60}
+									className="coloradologo"
+									/>
+								</CardHeader>
+								<CardText className="loginbody">
+									<table className="paper" width="100%">
+										<tbody>
+											<tr>
+												<td>
+													<TextField
+														floatingLabelText={lecture}
+														fullWidth={true}
+														width="3%"
+														disabled={true}
+														underlineShow={false}
+														
+													/>
+												</td>
+												<td>
+													<TextField
+														floatingLabelText={exercise}
+														fullWidth={true}
+														width="3%"
+														disabled={true}
+														underlineShow={false}
+													/>
+												</td>
+												<td>
+													<TextField
+														floatingLabelText={name}
+														fullWidth={true}
+														width="3%"
+														disabled={true}
+														underlineShow={false}
+													/>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<Paper zDepth={4}>
+                                            <EditorAce mode='javascript'/>
+									</Paper>
+								</CardText>
+								<CardActions className="footer">
+									<RaisedButton 
+									label="Close" 
+									onClick={this.handleRequestClose}
+									backgroundColor="#bd051f"
+									labelColor="#FFFFFF"/>
+								</CardActions>
+							</Card>
+							</Popover>
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
