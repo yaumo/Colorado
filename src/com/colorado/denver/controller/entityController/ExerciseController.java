@@ -87,7 +87,6 @@ public class ExerciseController extends ObjectOperationController {
 
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	public Set<Exercise> getExersisesForUser() {
-		UserService.authorizeSystemuser();
 		return ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getHibId());
 	}
 

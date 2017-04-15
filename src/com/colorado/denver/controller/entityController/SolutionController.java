@@ -106,7 +106,6 @@ public class SolutionController extends ObjectOperationController {
 	@RequestMapping(value = "/solution", method = RequestMethod.GET)
 	public Solution getSolutionsForUser(@RequestParam(value = "excId", required = false) String excId,
 			@RequestParam(value = "usrId", required = false) String usrId) {
-		UserService.authorizeSystemuser();
 		User usr = UserService.getCurrentUser();
 		Set<Solution> sols = new HashSet<>();
 		LOGGER.debug("UserId:" + usrId);

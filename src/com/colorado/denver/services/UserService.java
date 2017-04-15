@@ -86,7 +86,13 @@ public class UserService {
 		}
 		session.flush();
 		session.close();
-		return u.get(0);
+		if (!u.isEmpty()) {
+			return u.get(0);
+		} else {
+			LOGGER.error("No user found for the given name: " + loginName);
+			return null;
+		}
+
 	}
 
 	public static String getLoginNameFromAuthentication(Authentication auth) {

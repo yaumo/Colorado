@@ -73,12 +73,11 @@ public class UserController extends ObjectOperationController {
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.GET)
 	public User getUser() {
-		UserService.authorizeSystemuser();
-
 		User usr = UserService.getCurrentUser();
+
 		Link selfLink = linkTo(methodOn(UserController.class).getUser()).withSelfRel();
 		usr.add(selfLink);
-		System.out.println("Course On user: " + usr.getCourse().getHibId());
+
 		Link courseLink = linkTo(methodOn(CourseController.class).getCourseForUser(usr.getHibId())).withRel("course");
 		usr.add(courseLink);
 		return usr;
@@ -97,7 +96,6 @@ public class UserController extends ObjectOperationController {
 
 	@RequestMapping(value = "/docent", method = RequestMethod.GET)
 	public User getDocent() {
-		UserService.authorizeSystemuser();
 
 		User usr = UserService.getCurrentUser();
 		Link selfLink = linkTo(methodOn(UserController.class).getDocent()).withSelfRel();

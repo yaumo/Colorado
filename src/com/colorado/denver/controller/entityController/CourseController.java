@@ -61,7 +61,6 @@ public class CourseController extends ObjectOperationController {
 	}
 
 	public Course getCourseForUser() {
-		UserService.authorizeSystemuser();
 		String hibId = UserService.getCurrentUser().getHibId();
 		return getCourseForUser(hibId);
 	}

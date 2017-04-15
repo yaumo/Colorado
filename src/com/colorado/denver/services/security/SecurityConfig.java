@@ -7,7 +7,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.colorado.denver.services.SecurityServiceImpl;
 
@@ -18,8 +19,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private SecurityServiceImpl customAuthenticationProvider;
 
-	private SecurityFilter customLoginFilter = new SecurityFilter();
-
 	private SecurityAuthenticationSuccessHandler customSuccessHandler = new SecurityAuthenticationSuccessHandler();
 
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -29,23 +28,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-				.addFilterBefore(customLoginFilter, UsernamePasswordAuthenticationFilter.class)
-				.authorizeRequests()
-				.anyRequest().authenticated()
-				.and()
-				.formLogin()
-				.loginPage("/login")
-				.permitAll()
-				.loginProcessingUrl("/login")
-				.usernameParameter("username")
-				.passwordParameter("password")
-				.defaultSuccessUrl("/exercise")
-				.successHandler(customSuccessHandler)
-				.failureUrl("/login?error")
-				.and()
-				.logout()
-				.logoutSuccessUrl("/login?logout");
+		http.csrf().disable();
+		// .authorizeRequests()
+		// .anyRequest().authenticated()
+		// .formLogin()
+		// .loginPage("/login")
+		// .permitAll()
+		// .loginProcessingUrl("/login")
+		// .usernameParameter("username")
+		// .passwordParameter("password")
+		// .defaultSuccessUrl("/exercise")
+		// .successHandler(customSuccessHandler)
+		// .failureUrl("/login?error")
+		// .and()
+		// .logout()
+		// .logoutSuccessUrl("/login?logout");
+
+		http.addFilterBefore(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class)
+				.addFilterBefore(new CORSFilter(), ChannelProcessingFilter.class);
 	}
 
 	@Override

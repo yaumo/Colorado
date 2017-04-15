@@ -42,23 +42,31 @@ public class SecurityServiceImpl implements AuthenticationProvider {
 		if (authentication == null) {
 			LOGGER.error("authentication null!");
 		}
+		try {
+			String username = authentication.getName();
+			String password = authentication.getCredentials().toString();
 
-		String username = authentication.getName();
-		String password = authentication.getCredentials().toString();
+			User user = UserService.getUserByLoginName(username);
 
-		User user = UserService.getUserByLoginName(username);
+			if (user == null || !user.getUsername().equalsIgnoreCase(username)) {
+				throw new BadCredentialsException("Username not found." + user.getUsername() + " Name on authentication:" + username);
+			}
 
-		if (user == null || !user.getUsername().equalsIgnoreCase(username)) {
-			throw new BadCredentialsException("Username not found.");
+			if (!password.equals(user.getPassword())) {
+				throw new BadCredentialsException("Wrong password.");
+			}
+
+			Collection<? extends GrantedAuthority> authorities = user.getRoles();
+
+			return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), authorities);
 		}
 
-		if (!password.equals(user.getPassword())) {
-			throw new BadCredentialsException("Wrong password.");
+		catch (Exception e) {
+			LOGGER.error("Error in authenticate!");
+			e.printStackTrace();
+			return null;
 		}
 
-		Collection<? extends GrantedAuthority> authorities = user.getRoles();
-		LOGGER.info("Successful user login! " + user.getUsername());
-		return new UsernamePasswordAuthenticationToken(user, password, authorities);
 	}
 
 	@Override
