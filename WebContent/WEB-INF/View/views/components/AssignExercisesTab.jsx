@@ -11,8 +11,36 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 var lecturesjson;
-const courselist=[];
-const lecturelist=[];
+const courselist = [];
+const lecturelist = [];
+var coursesJSON;
+function getAllCourses() {
+    fetch('http://localhost:8080/courses', {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(function (response) {
+        return response.json();
+    }).then(function (courses) {
+        coursesJSON = courses;
+        if (courselist.length === 0) {
+            for (var i = 0; i < coursesJSON.length; i++) {
+                courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
+            }
+        }
+        if (lecturelist.length === 0) {
+            lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
+            for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
+                lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[j - 1].title} />);
+            }
+        }
+
+    }).catch(function (err) {
+        console.log(err);
+    });
+}
 
 function handleChange(event, index, value) {
     this.setState({ value });
@@ -48,46 +76,35 @@ class AssignExercisesTab extends React.Component {
         this.state = {
             open: true,
             value: 1,
-			selectedLecture: 0,
-			selectedCourse:0
+            selectedLecture: 0,
+            selectedCourse: 0
         };
-		this.handleChangeLecture = this.handleChangeLecture.bind(this);
-		this.handleChangeCourse = this.handleChangeCourse.bind(this);
+        this.handleChangeLecture = this.handleChangeLecture.bind(this);
+        this.handleChangeCourse = this.handleChangeCourse.bind(this);
     }
-	
-	componentWillMount() {
-		var lectures='{"course": [	{"course_title":"WWI14SEA",	 "course_id":"1",	 "lectures":[		{"lecture_title":"Datenbanken",		"lecture_id": "0001",		"exercises": [			{ "exercise_title":"Fibonacci", "exercise_id":"0123123"},			{ "exercise_title":"Test2", "exercise_id":"0123124"},			{ "exercise_title":"Test3", "exercise_id":"0123125"}		]},		{"lecture_title":"Webprogrammierung",		"lecture_id": "0002",		"exercises": [			{ "exercise_title":"WEB1", "exercise_id":"0123123"},			{ "exercise_title":"WEB2", "exercise_id":"1123124"},			{ "exercise_title":"WEB3", "exercise_id":"1123125"}		]},		{"lecture_title":"Test2",		"lecture_id": "0003",		"exercises": [			{ "exercise_title":"Test1", "exercise_id":"2123123"},			{ "exercise_title":"Test2", "exercise_id":"2123124"},			{ "exercise_title":"Test3", "exercise_id":"2123125"}	]}	 ]},	{"course_title":"WWI14AMA",	 "course_id":"1",	 "lectures":[		{"lecture_title":"Datenbanken",		"lecture_id": "0001",		"exercises": [			{ "exercise_title":"Fibonacci", "exercise_id":"0123123"},			{ "exercise_title":"Test2", "exercise_id":"0123124"},			{ "exercise_title":"Test3", "exercise_id":"0123125"}		]},		{"lecture_title":"Webprogrammierung",		"lecture_id": "0002",		"exercises": [			{ "exercise_title":"WEB1", "exercise_id":"0123123"},			{ "exercise_title":"WEB2", "exercise_id":"1123124"},			{ "exercise_title":"WEB3", "exercise_id":"1123125"}		]},		{"lecture_title":"Test",		"lecture_id": "0003",		"exercises": [			{ "exercise_title":"Test1", "exercise_id":"2123123"},			{ "exercise_title":"Test2", "exercise_id":"2123124"},			{ "exercise_title":"Test3", "exercise_id":"2123125"}		]}	 ]}   ]}';
-		lecturesjson= JSON.parse(lectures);
-		
-		if(courselist.length===0){
-			for(var i=0;i<lecturesjson.course.length;i++){
-				courselist.push(<MenuItem value={i} key={i} primaryText={lecturesjson.course[i].course_title} />);
-			}
-		}
-		if(lecturelist.length===0){
-			for(var j=0;j<lecturesjson.course[0].lectures.length;j++){
-				lecturelist.push(<MenuItem value={j} key={j} primaryText={lecturesjson.course[0].lectures[j].lecture_title} />);
-			}
-		}
-		console.log(lecturesjson);	
-	}
-	
-	handleChangeCourse(event, index, value){
-		var count = lecturelist.length;
-		for(var i =0;i<count;i++){
-			lecturelist.pop();
-		}
-		for(var j=0;j<lecturesjson.course[value].lectures.length;j++){
-			lecturelist.push(<MenuItem value={j} key={j} primaryText={lecturesjson.course[value].lectures[j].lecture_title} />);
-		}
-		
-		this.setState({selectedLecture: 0});
-		this.setState({selectedCourse: value});
-	}
-	
-	handleChangeLecture(event, index, value){
-		this.setState({selectedLecture: value});	
-	}
+
+    componentWillMount() {
+        getAllCourses();
+    }
+
+    handleChangeCourse(event, index, value) {
+        var countLectures = lecturelist.length;
+
+        for (var i = 0; i < countLectures; i++) {
+            lecturelist.pop();
+        }
+        lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
+        for (var j = 1; j <= coursesJSON[value].lectures.length; j++) {
+            lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
+        }
+
+        this.setState({ selectedCourse: value });
+        this.setState({ selectedLecture: 0 });
+    }
+
+    handleChangeLecture(event, index, value) {
+        this.setState({ selectedLecture: value });
+    }
     render() {
         return (
             <div>
@@ -146,15 +163,15 @@ class AssignExercisesTab extends React.Component {
                         <br />
                         <h4>Step 3: Select Deadline</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
-                            <DatePicker floatingLabelText="Deadline" mode="landscape"/>
+                            <DatePicker floatingLabelText="Deadline" mode="landscape" />
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
-                        <RaisedButton 
-						label="Assign"
-						onClick={handleClick}
-						backgroundColor="#bd051f"
-						labelColor="#FFFFFF"/>
+                        <RaisedButton
+                            label="Assign"
+                            onClick={handleClick}
+                            backgroundColor="#bd051f"
+                            labelColor="#FFFFFF" />
                     </CardActions>
                 </Card>
             </div>

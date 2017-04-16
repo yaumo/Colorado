@@ -15,6 +15,26 @@ import IconButton from 'material-ui/IconButton';
 import NavigationBack from 'material-ui/svg-icons/navigation/arrow-back';
 
 
+
+var currentUserJSON;
+function getCurrentUser() {
+    fetch('http://localhost:8080/user', {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(function (response) {
+        return response.json();
+    }).then(function (user) {
+        currentUserJSON = user;
+    }).catch(function (err) {
+        console.log(err)
+    });
+}
+
+
+
 export class User extends React.Component {
   render() {
     return (
@@ -38,6 +58,10 @@ class Header extends React.Component {
 
   onBack() {
     browserHistory.goBack();
+  }
+
+  componentWillMount() {
+    getCurrentUser();
   }
 
   render() {

@@ -14,6 +14,22 @@ import Paper from 'material-ui/Paper';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import EditorAce from './components/EditorAce.jsx';
 
+var courseJSON;
+function getCurrentCourse() {
+    fetch('http://localhost:8080/course', {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(function (response) {
+        return response.json();
+    }).then(function (course) {
+        courseJSON = course;
+    }).catch(function (err) {
+        console.log(err);
+    });
+}
 
 export class Exercise extends React.Component {
     render() {
@@ -32,13 +48,18 @@ class Content extends React.Component {
         this.state = {
             open: true,
             value: 1,
-			java: 0
+            java: 0
         };
-		this.handleChange = this.handleChange.bind(this);
-    }		
-		handleChange(event, index, value) {
-		this.setState({java: value});
-	}
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentWillMount() {
+        getCurrentCourse();
+    }
+
+    handleChange(event, index, value) {
+        this.setState({ java: value });
+    }
 
     render() {
         return (
@@ -50,7 +71,7 @@ class Content extends React.Component {
                                 <CardHeader
                                     title="Exercise 1"
                                     className="loginheader"
-									titleColor="white"
+                                    titleColor="white"
                                 />
                                 <Divider />
                                 <CardText className="loginbody">
@@ -75,9 +96,9 @@ class Content extends React.Component {
                                 <CardHeader
                                     title="Solution"
                                     className="loginheader"
-									titleColor="white"
+                                    titleColor="white"
                                 >
-                                <div style={{textAlign: "right"}}>In Progress</div>
+                                    <div style={{ textAlign: "right" }}>In Progress</div>
                                 </CardHeader>
                                 <Divider />
                                 <CardText className="loginbody">
@@ -91,9 +112,9 @@ class Content extends React.Component {
                                 </CardText>
                                 <CardActions className="footer">
                                     <RaisedButton label="Check"
-									backgroundColor="#bd051f"
-									labelColor="#FFFFFF"/>
-                                </CardActions>    
+                                        backgroundColor="#bd051f"
+                                        labelColor="#FFFFFF" />
+                                </CardActions>
                             </Card>
                         </div>
                     </div>
