@@ -12,8 +12,36 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 
 var lecturesjson;
-const courselist=[];
-const lecturelist=[];
+const courselist = [];
+const lecturelist = [];
+var coursesJSON;
+function getAllCourses() {
+    fetch('http://localhost:8080/courses', {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(function (response) {
+        return response.json();
+    }).then(function (courses) {
+        coursesJSON = courses;
+        if (courselist.length === 0) {
+            for (var i = 0; i < coursesJSON.length; i++) {
+                courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
+            }
+        }
+        if (lecturelist.length === 0) {
+            lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
+            for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
+                lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[j - 1].title} />);
+            }
+        }
+
+    }).catch(function (err) {
+        console.log(err);
+    });
+}
 
 function handleChange(event, index, value) {
     this.setState({ value });
@@ -50,9 +78,10 @@ class AssignExercisesTab extends React.Component {
             open: true,
 			opendialog: false,
             value: 1,
-			selectedLecture: 0,
-			selectedCourse:0
+            selectedLecture: 0,
+            selectedCourse: 0
         };
+<<<<<<< HEAD
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
 		this.handleChangeCourse = this.handleChangeCourse.bind(this);
 		this.handleOpenDialog = this.handleOpenDialog.bind(this);
@@ -99,6 +128,34 @@ class AssignExercisesTab extends React.Component {
 		this.setState({opendialog: false});
 	}
 	
+=======
+        this.handleChangeLecture = this.handleChangeLecture.bind(this);
+        this.handleChangeCourse = this.handleChangeCourse.bind(this);
+    }
+
+    componentWillMount() {
+        getAllCourses();
+    }
+
+    handleChangeCourse(event, index, value) {
+        var countLectures = lecturelist.length;
+
+        for (var i = 0; i < countLectures; i++) {
+            lecturelist.pop();
+        }
+        lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
+        for (var j = 1; j <= coursesJSON[value].lectures.length; j++) {
+            lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
+        }
+
+        this.setState({ selectedCourse: value });
+        this.setState({ selectedLecture: 0 });
+    }
+
+    handleChangeLecture(event, index, value) {
+        this.setState({ selectedLecture: value });
+    }
+>>>>>>> origin/hateos
     render() {
         return (
             <div>
@@ -157,10 +214,11 @@ class AssignExercisesTab extends React.Component {
                         <br />
                         <h4>Step 3: Select Deadline</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
-                            <DatePicker floatingLabelText="Deadline" mode="landscape"/>
+                            <DatePicker floatingLabelText="Deadline" mode="landscape" />
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
+<<<<<<< HEAD
                         <RaisedButton 
 						label="Assign"
 						onClick={handleClick}
@@ -174,6 +232,13 @@ class AssignExercisesTab extends React.Component {
 						>
 							The actions in this window were passed in as an array of React objects.
 						</Dialog>
+=======
+                        <RaisedButton
+                            label="Assign"
+                            onClick={handleClick}
+                            backgroundColor="#bd051f"
+                            labelColor="#FFFFFF" />
+>>>>>>> origin/hateos
                     </CardActions>
                 </Card>
             </div>

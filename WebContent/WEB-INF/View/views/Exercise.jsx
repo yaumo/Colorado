@@ -17,6 +17,22 @@ import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
 
 
+var courseJSON;
+function getCurrentCourse() {
+    fetch('http://localhost:8080/course', {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(function (response) {
+        return response.json();
+    }).then(function (course) {
+        courseJSON = course;
+    }).catch(function (err) {
+        console.log(err);
+    });
+}
 
 export class Exercise extends React.Component {
     render() {
@@ -36,8 +52,9 @@ class Content extends React.Component {
             open: true,
 			opendialog: false,
             value: 1,
-			java: 0
+            java: 0
         };
+<<<<<<< HEAD
 		this.handleChange = this.handleChange.bind(this);
 		this.handleOpenDialog = this.handleOpenDialog.bind(this);
 		this.handleCloseDialog = this.handleCloseDialog.bind(this);
@@ -51,6 +68,18 @@ class Content extends React.Component {
 		handleCloseDialog(event, index, value) {
 			this.setState({opendialog: false});
 		}
+=======
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentWillMount() {
+        getCurrentCourse();
+    }
+
+    handleChange(event, index, value) {
+        this.setState({ java: value });
+    }
+>>>>>>> origin/hateos
 
     render() {
         return (
@@ -62,7 +91,7 @@ class Content extends React.Component {
                                 <CardHeader
                                     title="Exercise 1"
                                     className="loginheader"
-									titleColor="white"
+                                    titleColor="white"
                                 />
                                 <Divider />
                                 <CardText className="loginbody">
@@ -87,9 +116,9 @@ class Content extends React.Component {
                                 <CardHeader
                                     title="Solution"
                                     className="loginheader"
-									titleColor="white"
+                                    titleColor="white"
                                 >
-                                <div style={{textAlign: "right"}}>In Progress</div>
+                                    <div style={{ textAlign: "right" }}>In Progress</div>
                                 </CardHeader>
                                 <Divider />
                                 <CardText className="loginbody">
@@ -107,6 +136,7 @@ class Content extends React.Component {
                                 </CardText>
                                 <CardActions className="footer">
                                     <RaisedButton label="Check"
+<<<<<<< HEAD
 									backgroundColor="#bd051f"
 									labelColor="#FFFFFF"
 									onClick={this.handleOpenDialog}/>
@@ -119,6 +149,11 @@ class Content extends React.Component {
 									  The actions in this window were passed in as an array of React objects.
 									</Dialog>
                                 </CardActions>    
+=======
+                                        backgroundColor="#bd051f"
+                                        labelColor="#FFFFFF" />
+                                </CardActions>
+>>>>>>> origin/hateos
                             </Card>
                         </div>
                     </div>

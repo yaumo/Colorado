@@ -13,63 +13,33 @@ import Dialog from 'material-ui/Dialog';
 
 
 var coursesJSON;
+const courselist = [];
 function getAllCourses() {
-    fetch('http://localhost:8080/courses', {
-        method: 'GET',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json'
-        }
-    }).then(function (response) {
-        return response.json();
-    }).then(function (courses) {
-        courseJSON = courses;
-    }).catch(function (err) {
-        console.log(err);
-    });
-}
-
-var courseJSON;
-function getCurrentCourse() {
-    fetch('http://localhost:8080/course', {
-        method: 'GET',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json'
-        }
-    }).then(function (response) {
-        return response.json();
-    }).then(function (course) {
-        courseJSON = course;
-    }).catch(function (err) {
-        console.log(err);
-    });
-}
-
-
-var allUsersJSON;
-function getAllUsers() {
-    fetch('http://localhost:8080/users', {
-        method: 'GET',
-        credentials: 'same-origin',
-        mode: 'no-cors',
-        headers: {
-            'Accept': 'application/json'
-        }
-    }).then(function (response) {
-        return response.json();
-    }).then(function (allUsers) {
-        allUsersJSON = allUsers;
-    }).catch(function (err) {
-        console.log(err);
-    });
+	fetch('http://localhost:8080/courses', {
+		method: 'GET',
+		credentials: 'same-origin',
+		headers: {
+			'Accept': 'application/json'
+		}
+	}).then(function (response) {
+		return response.json();
+	}).then(function (courses) {
+		coursesJSON = courses;
+		if (courselist.length === 0) {
+			for (var i = 0; i < coursesJSON.length; i++) {
+				courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
+			}
+		}
+	}).catch(function (err) {
+		console.log(err);
+	});
 }
 
 
 var allDocentsJSON;
-function getAllUsers() {
+function getAllDocents() {
     fetch('http://localhost:8080/users', {
-        method: 'GET',
+        method: 'GET', //hier noch dozenten abfragen
         credentials: 'same-origin',
         headers: {
             'Accept': 'application/json'
@@ -84,23 +54,6 @@ function getAllUsers() {
     });
 }
 
-
-var currentUserJSON;
-function getCurrentUser() {
-    fetch('http://localhost:8080/user', {
-        method: 'GET',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json'
-        }
-    }).then(function (response) {
-        return response.json();
-    }).then(function (user) {
-        currentUserJSON = user;
-    }).catch(function (err) {
-        console.log(err)
-    });
-}
 
 function createLecture() {
     fetch('http://localhost:8080/user', {
@@ -197,7 +150,7 @@ class LecturesTab extends React.Component {
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <div>
                                 <DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
-
+                                    {courselist}
                                 </DropDownMenu>
                             </div>
                         </Paper>
