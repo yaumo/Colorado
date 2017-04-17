@@ -86,6 +86,7 @@ class Content extends React.Component {
   }
   handleClick(e) {
     e.preventDefault();
+	this.setState({ errorText: '' })
     //console.log('The link was clicked.');
     /*if (this.state.value === 's12345') {
       browserHistory.push('/exercise');
@@ -156,8 +157,10 @@ class Content extends React.Component {
 				  name="username"
                   value={this.state.username}
                   onChange={this.handleChange}
-                  underlineFocusStyle={{ 'borderColor': '#bd051f' }}
-                  floatingLabelFocusStyle={{ 'color': '#bd051f' }}
+				  floatingLabelStyle={{'color':'#000000'}}
+                  underlineFocusStyle={{ 'borderColor': '#000000' }}
+                  floatingLabelFocusStyle={{ 'color': '#000000' }}
+				  errorStyle={{'color':'#bd051f'}}
                   style={{'width': '98%', 'fontSize': '150%' }}
                   />
                 <br />
@@ -168,8 +171,10 @@ class Content extends React.Component {
                   id="password"
 				  name="password"
 				  onChange={this.handleChangePassword}
-                  underlineFocusStyle={{ 'borderColor': '#bd051f' }}
-                  floatingLabelFocusStyle={{ 'color': '#bd051f' }}
+				  floatingLabelStyle={{'color':'#000000'}}
+                  underlineFocusStyle={{ 'borderColor': '#000000' }}
+                  floatingLabelFocusStyle={{ 'color': '#000000' }}
+				  errorStyle={{'color':'#bd051f'}}
                   style={{'width': '98%', 'fontSize': '150%' }}
                   />
                 <br />

@@ -13,6 +13,7 @@ import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
 import NavigationBack from 'material-ui/svg-icons/navigation/arrow-back';
+import Dialog from 'material-ui/Dialog';
 
 
 export class User extends React.Component {
@@ -39,6 +40,7 @@ class Header extends React.Component {
   onBack() {
     browserHistory.goBack();
   }
+	
 
   render() {
     return (
@@ -59,16 +61,26 @@ class Header extends React.Component {
 class Content extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: '' };
+    this.state = { value: '',opendialog: false };
     this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
+	this.handleOpenDialog = this.handleOpenDialog.bind(this);
+	this.handleCloseDialog = this.handleCloseDialog.bind(this);
   }
   handleClick(e) {
     alert("Changed Password!");
   }
+  
   handleChange(event) {
     this.setState({ value: event.target.value });
   }
+  handleOpenDialog(event, index, value) {
+	this.setState({opendialog: true});
+  }
+  handleCloseDialog(event, index, value) {
+	this.setState({opendialog: false});
+  }
+  
   render() {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -142,6 +154,14 @@ class Content extends React.Component {
 			  onClick={this.handleClick}
 			  backgroundColor="#bd051f"
 			  labelColor="#FFFFFF"/>
+			<Dialog
+			title="Dialog With Actions"
+			modal={false}
+			open={this.state.opendialog}
+			onRequestClose={this.handleCloseDialog}
+			>
+				The actions in this window were passed in as an array of React objects.
+			</Dialog>			  
             </CardActions>
           </Card>
         </div>

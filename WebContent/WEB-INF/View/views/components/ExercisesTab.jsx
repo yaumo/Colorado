@@ -11,6 +11,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import Fetch from 'react-fetch';
 import EditorAce from './EditorAce.jsx';
+import Dialog from 'material-ui/Dialog';
 
 function handleClick(e) {
     fetch('http://localhost:8080/exercise', {
@@ -42,11 +43,14 @@ class ExercisesTab extends React.Component {
         super();
         this.state = {
             open: true,
+			opendialog: false,
 			selectedProgrammingLanguage: 1,
             value: 1,
 			language: 'javascript'
         };
 		this.handleChangeProgrammingLanguage = this.handleChangeProgrammingLanguage.bind(this);
+		this.handleOpenDialog = this.handleOpenDialog.bind(this);
+		this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }
 	
 	handleChangeProgrammingLanguage(event, index, value){
@@ -58,6 +62,12 @@ class ExercisesTab extends React.Component {
 			this.setState({language:'java'});
 		}
 	}
+	handleOpenDialog(event, index, value) {
+			this.setState({opendialog: true});
+		}
+		handleCloseDialog(event, index, value) {
+			this.setState({opendialog: false});
+		}
 	
     render() {
         return (
@@ -172,6 +182,14 @@ class ExercisesTab extends React.Component {
 						onClick={handleClick}
 						backgroundColor="#bd051f"
 						labelColor="#FFFFFF"/>
+						<Dialog
+						title="Dialog With Actions"
+						modal={false}
+						open={this.state.opendialog}
+						onRequestClose={this.handleCloseDialog}
+						>
+							The actions in this window were passed in as an array of React objects.
+						</Dialog>
                     </CardActions>
                 </Card>
             </div>

@@ -9,6 +9,7 @@ import MenuItem from 'material-ui/MenuItem';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
 
 var lecturesjson;
 const courselist=[];
@@ -47,12 +48,15 @@ class AssignExercisesTab extends React.Component {
         super();
         this.state = {
             open: true,
+			opendialog: false,
             value: 1,
 			selectedLecture: 0,
 			selectedCourse:0
         };
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
 		this.handleChangeCourse = this.handleChangeCourse.bind(this);
+		this.handleOpenDialog = this.handleOpenDialog.bind(this);
+		this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }
 	
 	componentWillMount() {
@@ -88,6 +92,13 @@ class AssignExercisesTab extends React.Component {
 	handleChangeLecture(event, index, value){
 		this.setState({selectedLecture: value});	
 	}
+	handleOpenDialog(event, index, value) {
+		this.setState({opendialog: true});
+	}
+	handleCloseDialog(event, index, value) {
+		this.setState({opendialog: false});
+	}
+	
     render() {
         return (
             <div>
@@ -155,6 +166,14 @@ class AssignExercisesTab extends React.Component {
 						onClick={handleClick}
 						backgroundColor="#bd051f"
 						labelColor="#FFFFFF"/>
+						 <Dialog
+						title="Dialog With Actions"
+						modal={false}
+						open={this.state.opendialog}
+						onRequestClose={this.handleCloseDialog}
+						>
+							The actions in this window were passed in as an array of React objects.
+						</Dialog>
                     </CardActions>
                 </Card>
             </div>

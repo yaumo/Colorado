@@ -13,6 +13,9 @@ import NavBar from './components/NavBar.jsx';
 import Paper from 'material-ui/Paper';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import EditorAce from './components/EditorAce.jsx';
+import TextField from 'material-ui/TextField';
+import Dialog from 'material-ui/Dialog';
+
 
 
 export class Exercise extends React.Component {
@@ -31,14 +34,23 @@ class Content extends React.Component {
         super();
         this.state = {
             open: true,
+			opendialog: false,
             value: 1,
 			java: 0
         };
 		this.handleChange = this.handleChange.bind(this);
+		this.handleOpenDialog = this.handleOpenDialog.bind(this);
+		this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }		
 		handleChange(event, index, value) {
 		this.setState({java: value});
-	}
+		}
+		handleOpenDialog(event, index, value) {
+			this.setState({opendialog: true});
+		}
+		handleCloseDialog(event, index, value) {
+			this.setState({opendialog: false});
+		}
 
     render() {
         return (
@@ -81,10 +93,14 @@ class Content extends React.Component {
                                 </CardHeader>
                                 <Divider />
                                 <CardText className="loginbody">
-                                    <DropDownMenu disabled={true} value={this.state.java} onChange={this.handleChange}>
-                                        <MenuItem value={0} primaryText="JavaScript" />
-                                        <MenuItem value={1} primaryText="Java" />
-                                    </DropDownMenu>
+									<TextField
+										floatingLabelText="JavaScript"
+										fullWidth={true}
+										disabled={true}
+										underlineShow={false}
+										floatingLabelStyle={{'color':'#000000'}}
+									/>
+                                   
                                     <Paper zDepth={4}>
                                         <EditorAce />
                                     </Paper>
@@ -92,7 +108,16 @@ class Content extends React.Component {
                                 <CardActions className="footer">
                                     <RaisedButton label="Check"
 									backgroundColor="#bd051f"
-									labelColor="#FFFFFF"/>
+									labelColor="#FFFFFF"
+									onClick={this.handleOpenDialog}/>
+									 <Dialog
+									  title="Dialog With Actions"
+									  modal={false}
+									  open={this.state.opendialog}
+									  onRequestClose={this.handleCloseDialog}
+									>
+									  The actions in this window were passed in as an array of React objects.
+									</Dialog>
                                 </CardActions>    
                             </Card>
                         </div>
