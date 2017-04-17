@@ -126,13 +126,13 @@ class ExercisesTab extends React.Component {
                                     <td style={{ width: "50%", padding: "6px", paddingLeft: "0px" }}>
                                         <h4>Pattern Solution</h4>
                                         <Paper zDepth={4}>
-                                            <EditorAce mode='javascript'/>
+                                            <EditorAce mode={this.state.language}/>
                                         </Paper>
                                     </td>
                                     <td style={{ width: "50%", padding: "6px", paddingRight: "0px" }}>
                                         <h4>Template</h4>
                                         <Paper zDepth={4}>
-                                            <EditorAce mode='javascript'/>
+                                            <EditorAce mode={this.state.language}/>
                                         </Paper>
                                     </td>
                                 </tr>
