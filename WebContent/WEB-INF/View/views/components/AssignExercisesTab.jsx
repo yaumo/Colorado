@@ -81,7 +81,7 @@ class AssignExercisesTab extends React.Component {
             selectedLecture: 0,
             selectedCourse: 0
         };
-<<<<<<< HEAD
+
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
 		this.handleChangeCourse = this.handleChangeCourse.bind(this);
 		this.handleOpenDialog = this.handleOpenDialog.bind(this);
@@ -127,11 +127,6 @@ class AssignExercisesTab extends React.Component {
 	handleCloseDialog(event, index, value) {
 		this.setState({opendialog: false});
 	}
-	
-=======
-        this.handleChangeLecture = this.handleChangeLecture.bind(this);
-        this.handleChangeCourse = this.handleChangeCourse.bind(this);
-    }
 
     componentWillMount() {
         getAllCourses();
@@ -155,7 +150,6 @@ class AssignExercisesTab extends React.Component {
     handleChangeLecture(event, index, value) {
         this.setState({ selectedLecture: value });
     }
->>>>>>> origin/hateos
     render() {
         return (
             <div>
@@ -218,7 +212,6 @@ class AssignExercisesTab extends React.Component {
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
-<<<<<<< HEAD
                         <RaisedButton 
 						label="Assign"
 						onClick={handleClick}
@@ -232,13 +225,6 @@ class AssignExercisesTab extends React.Component {
 						>
 							The actions in this window were passed in as an array of React objects.
 						</Dialog>
-=======
-                        <RaisedButton
-                            label="Assign"
-                            onClick={handleClick}
-                            backgroundColor="#bd051f"
-                            labelColor="#FFFFFF" />
->>>>>>> origin/hateos
                     </CardActions>
                 </Card>
             </div>

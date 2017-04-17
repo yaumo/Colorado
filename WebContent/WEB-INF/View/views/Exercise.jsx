@@ -54,7 +54,6 @@ class Content extends React.Component {
             value: 1,
             java: 0
         };
-<<<<<<< HEAD
 		this.handleChange = this.handleChange.bind(this);
 		this.handleOpenDialog = this.handleOpenDialog.bind(this);
 		this.handleCloseDialog = this.handleCloseDialog.bind(this);
@@ -68,9 +67,7 @@ class Content extends React.Component {
 		handleCloseDialog(event, index, value) {
 			this.setState({opendialog: false});
 		}
-=======
-        this.handleChange = this.handleChange.bind(this);
-    }
+        
 
     componentWillMount() {
         getCurrentCourse();
@@ -79,7 +76,6 @@ class Content extends React.Component {
     handleChange(event, index, value) {
         this.setState({ java: value });
     }
->>>>>>> origin/hateos
 
     render() {
         return (
@@ -136,7 +132,6 @@ class Content extends React.Component {
                                 </CardText>
                                 <CardActions className="footer">
                                     <RaisedButton label="Check"
-<<<<<<< HEAD
 									backgroundColor="#bd051f"
 									labelColor="#FFFFFF"
 									onClick={this.handleOpenDialog}/>
@@ -148,12 +143,7 @@ class Content extends React.Component {
 									>
 									  The actions in this window were passed in as an array of React objects.
 									</Dialog>
-                                </CardActions>    
-=======
-                                        backgroundColor="#bd051f"
-                                        labelColor="#FFFFFF" />
                                 </CardActions>
->>>>>>> origin/hateos
                             </Card>
                         </div>
                     </div>
