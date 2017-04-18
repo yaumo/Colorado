@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -88,6 +89,38 @@ public class ExerciseController extends ObjectOperationController {
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	public Set<Exercise> getExersisesForUser() {
 		return ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getHibId());
+	}
+
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Exercise.EXERCISE, method = RequestMethod.PATCH)
+	public Exercise exercisePatch(HttpServletRequest request, HttpServletResponse response) {
+		UserService.authorizeSystemuser();
+
+		String jsonString = "";
+
+		try {
+			jsonString = super.checkRequest(request, DenverConstants.PATCH);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (ReflectionException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.serializeNulls();
+
+		Gson gson = gb.create();
+
+		Exercise entity = gson.fromJson(jsonString, Exercise.class);
+
+		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.PATCH);
+		entity = null;
+		Exercise entityAfterPatch = gson.fromJson(jsonResponse, Exercise.class);
+		Link selfLink = linkTo(ExerciseController.class).withSelfRel();
+		entityAfterPatch.add(selfLink);
+		return entityAfterPatch;
+
 	}
 
 }
