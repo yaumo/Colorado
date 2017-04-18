@@ -46,7 +46,7 @@ public class SolutionController extends ObjectOperationController {
 		UserService.authorizeSystemuser();
 		String jsonString = DenverConstants.ERROR;
 		try {
-			jsonString = super.checkRequest(request);
+			jsonString = super.checkRequest(request, DenverConstants.POST);// Add request Method from DenverConstants
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
@@ -93,7 +93,7 @@ public class SolutionController extends ObjectOperationController {
 
 		}
 
-		String jsonResponse = super.doCrud(entity, jsonString);
+		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.POST);
 		// entity = gson.fromJson(jsonResponse, Solution.class);
 
 		entity = null; // Let GC run over this quickly

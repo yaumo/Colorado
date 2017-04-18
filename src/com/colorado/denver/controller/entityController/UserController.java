@@ -40,11 +40,13 @@ public class UserController extends ObjectOperationController {
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.POST)
 	public User userPost(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
-		UserService.authorizeSystemuser();
-		// JSONObject theObject = super.handleRequest(request, response);
+		UserService.authorizeSystemuser();// For testing. Use requesting user instead!
 		String jsonString = "";
 		try {
-			jsonString = super.checkRequest(request);
+			jsonString = super.checkRequest(request, DenverConstants.POST);
+			// TODO: Parse the "objectClass" like this: super.checkRequest(request, DenverConstants.POST, User.USER)
+			// same in "doOperation down below and other controllers please"
+			// We remove the "objectClass from the entities to make it more RESTful.. >.<
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
@@ -56,12 +58,66 @@ public class UserController extends ObjectOperationController {
 
 		User entity = gson.fromJson(jsonString, User.class);
 
-		String jsonResponse = super.doCrud(entity, jsonString);
+		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.POST);
 		entity = null;
-		User entityAfterCrud = gson.fromJson(jsonResponse, User.class);
+		User entityAfterPost = gson.fromJson(jsonResponse, User.class);
 		Link selfLink = linkTo(UserController.class).withSelfRel();
-		entityAfterCrud.add(selfLink);
-		return entityAfterCrud;
+		entityAfterPost.add(selfLink);
+		return entityAfterPost;
+	}
+
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.PATCH)
+	public User userPatch(HttpServletRequest request,
+			HttpServletResponse response) throws ReflectionException, IOException {
+		UserService.authorizeSystemuser();
+		// JSONObject theObject = super.handleRequest(request, response);
+		String jsonString = "";
+		try {
+			jsonString = super.checkRequest(request, DenverConstants.PATCH);
+		} catch (JSONException e) {
+			LOGGER.error("Error in OOC while handling the request: " + request.toString());
+			e.printStackTrace();
+		}
+
+		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.serializeNulls();
+		Gson gson = gb.create();
+
+		User entity = gson.fromJson(jsonString, User.class);
+
+		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.PATCH);
+		entity = null;
+		User entityAfterPost = gson.fromJson(jsonResponse, User.class);
+		Link selfLink = linkTo(UserController.class).withSelfRel();
+		entityAfterPost.add(selfLink);
+		return entityAfterPost;
+	}
+
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.DELETE)
+	public User userDelete(HttpServletRequest request,
+			HttpServletResponse response) throws ReflectionException, IOException {
+		UserService.authorizeSystemuser();
+		// JSONObject theObject = super.handleRequest(request, response);
+		String jsonString = "";
+		try {
+			jsonString = super.checkRequest(request, DenverConstants.DELETE);
+		} catch (JSONException e) {
+			LOGGER.error("Error in OOC while handling the request: " + request.toString());
+			e.printStackTrace();
+		}
+
+		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.serializeNulls();
+		Gson gson = gb.create();
+
+		User entity = gson.fromJson(jsonString, User.class);
+
+		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.DELETE);
+		entity = null;
+		User entityAfterPost = gson.fromJson(jsonResponse, User.class);
+		Link selfLink = linkTo(UserController.class).withSelfRel();
+		entityAfterPost.add(selfLink);
+		return entityAfterPost;
 	}
 
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)
