@@ -14,17 +14,10 @@ import Dialog from 'material-ui/Dialog';
 
 const courselist = [];
 const lecturelist = [];
+var exercisesTableData = [];
 var exercisesJSON;
 var coursesJSON;
 
-
-function handleChange(event, index, value) {
-    this.setState({ value });
-};
-
-function handleClick(e) {
-
-};
 
 class AssignExercisesTab extends React.Component {
 
@@ -37,14 +30,25 @@ class AssignExercisesTab extends React.Component {
             selectedLecture: 0,
             selectedCourse: 0,
             exerciselist: [],
-            lecturelist: []
+            lecturelist: [],
+            exercisesTableData: []
         };
+
+        this.handleChangeLecture = this.handleChangeLecture.bind(this);
+        this.handleChangeCourse = this.handleChangeCourse.bind(this);
+        this.handleAssignClick = this.handleAssignClick.bind(this);
+        this.handleOpenDialog = this.handleOpenDialog.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
+    }
+
+    componentDidMount() {
         $.ajax({
-            url: "http://localhost:8080/exercise",
+            url: "http://localhost:8080/exercises",
             dataType: 'json',
             method: 'GET',
+            data: 'owner=2',
             success: function (exercises) {
-                exercisesJSON = exercises;
+                this.setState({ exercisesTableData: exercises });
             }.bind(this)
         });
 
@@ -56,29 +60,19 @@ class AssignExercisesTab extends React.Component {
                 coursesJSON = courses;
                 if (courselist.length === 0) {
                     for (var i = 0; i < coursesJSON.length; i++) {
-                        courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
+                        courselist.push(<MenuItem value={i} key={coursesJSON[i].hibId} primaryText={coursesJSON[i].title} />);
                     }
                 }
                 if (lecturelist.length === 0) {
                     lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
                     for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
-                        lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[j - 1].title} />);
+                        lecturelist.push(<MenuItem value={j} key={j} id={coursesJSON[0].lectures.hibId} primaryText={coursesJSON[0].lectures[j - 1].title} />);
                     }
                 }
                 this.setState({ courselist: courselist });
                 this.setState({ lecturelist: lecturelist });
             }.bind(this)
         });
-
-
-        this.handleChangeLecture = this.handleChangeLecture.bind(this);
-        this.handleChangeCourse = this.handleChangeCourse.bind(this);
-        this.handleOpenDialog = this.handleOpenDialog.bind(this);
-        this.handleCloseDialog = this.handleCloseDialog.bind(this);
-    }
-
-    componentDidMount() {
-
     }
 
     handleChangeCourse(event, index, value) {
@@ -102,6 +96,28 @@ class AssignExercisesTab extends React.Component {
     }
     handleCloseDialog(event, index, value) {
         this.setState({ opendialog: false });
+    }
+
+    handleAssignClick(e){
+        var exercises = [];
+        var courseId;
+        var lectureId;
+        var deadline = $("#deadline").val();
+
+        $.ajax({
+            url: "http://localhost:8080/lecture",
+            dataType: 'json',
+            method: 'POST',
+            data: JSON.stringify({
+                "exercises" : exercises,
+                "courseId": courseId,
+                "lectureId": lectureId,
+                "deadline": deadline
+            }),
+            success: function (response) {
+                //handle response
+            }.bind(this)
+        });
     }
 
 
@@ -143,26 +159,14 @@ class AssignExercisesTab extends React.Component {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody deselectOnClickaway={false} className="paper">
-                                        <TableRow>
-                                            <TableRowColumn>Fibonacci</TableRowColumn>
-                                            <TableRowColumn>Java</TableRowColumn>
-                                            <TableRowColumn>24.11.2011</TableRowColumn>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableRowColumn>Division</TableRowColumn>
-                                            <TableRowColumn>JavaScript</TableRowColumn>
-                                            <TableRowColumn>24.11.2011</TableRowColumn>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableRowColumn>Sum</TableRowColumn>
-                                            <TableRowColumn>JavaScript</TableRowColumn>
-                                            <TableRowColumn>24.11.2011</TableRowColumn>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableRowColumn>Sub</TableRowColumn>
-                                            <TableRowColumn>Java</TableRowColumn>
-                                            <TableRowColumn>24.11.2011</TableRowColumn>
-                                        </TableRow>
+                                            {/*this.state.exerciseTableData.map((row, index) => (
+                                                <TableRow key={index} selected={row.selected}>
+                                                    <TableRowColumn>{row.title}</TableRowColumn>
+                                                    <TableRowColumn>{row.language}</TableRowColumn>
+                                                    <TableRowColumn>{row.creationDate}</TableRowColumn>
+                                                    <TableRowColumn>{row.hibId}</TableRowColumn>
+                                                </TableRow>
+                                            ))*/}
                                     </TableBody>
                                 </Table>
                             </div>
@@ -171,11 +175,11 @@ class AssignExercisesTab extends React.Component {
                         <br />
                         <h4>Step 2: Select Lecture</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
-                            <DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
+                            <DropDownMenu id="appendCourse" value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
                                 {this.state.courselist}
                             </DropDownMenu>
 
-                            <DropDownMenu value={this.state.selectedLecture} onChange={this.handleChangeLecture}>
+                            <DropDownMenu id="appendLecture" value={this.state.selectedLecture} onChange={this.handleChangeLecture}>
                                 {this.state.lecturelist}
                             </DropDownMenu>
                         </Paper>
@@ -183,13 +187,13 @@ class AssignExercisesTab extends React.Component {
                         <br />
                         <h4>Step 3: Select Deadline</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
-                            <DatePicker floatingLabelText="Deadline" mode="landscape" />
+                            <DatePicker  id="deadline" floatingLabelText="Deadline" mode="landscape"  />
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
                         <RaisedButton
                             label="Assign"
-                            onClick={handleClick}
+                            onClick={this.handleAssignClick}
                             backgroundColor="#bd051f"
                             labelColor="#FFFFFF" />
                         <Dialog

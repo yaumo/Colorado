@@ -164,9 +164,20 @@ class OverviewTab extends React.Component {
 	}
 
 	handleClickViewCode(event, index, value) {
+		$.ajax({
+            url: "http://localhost:8080/solution",
+            dataType: 'json',
+            method: 'GET',
+            data: 'owner=2',
+            success: function (solution) {
+                //handle SolutionCode
+            }.bind(this)
+        });
+		
 		lecture = event.currentTarget.parentElement.parentElement.cells[1].innerText;
 		exercise = event.currentTarget.parentElement.parentElement.cells[2].innerText;
 		name = event.currentTarget.parentElement.parentElement.cells[3].innerText;
+
 		this.setState({
 			open: true
 		});

@@ -61,6 +61,7 @@ class LecturesTab extends React.Component {
             url: "http://localhost:8080/users",
             dataType: 'json',
             method: 'GET',
+            data: 'docent = true',
             success: function (allDocents) {
                 this.setState({ tableData: allDocents });
             }.bind(this)
@@ -112,6 +113,7 @@ class LecturesTab extends React.Component {
                                     <TableRow>
                                         <TableHeaderColumn>Name</TableHeaderColumn>
                                         <TableHeaderColumn>E-Mail</TableHeaderColumn>
+                                        <TableHeaderColumn className = "hidden">userID</TableHeaderColumn>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody deselectOnClickaway={false}>
@@ -119,6 +121,7 @@ class LecturesTab extends React.Component {
                                         <TableRow key={index} selected={row.selected}>
                                             <TableRowColumn>{row.username}</TableRowColumn>
                                             <TableRowColumn>{row.mail}</TableRowColumn>
+                                            <TableRowColumn className = "hidden">{row.hibId}</TableRowColumn>
                                         </TableRow>
                                     ))}
                                 </TableBody>

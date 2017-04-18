@@ -13,30 +13,6 @@ import Fetch from 'react-fetch';
 import EditorAce from './EditorAce.jsx';
 import Dialog from 'material-ui/Dialog';
 
-function handleClick(e) {
-    fetch('http://localhost:8080/exercise', {
-        method: 'POST',
-        mode: 'no-cors',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            objectClass: 'exercise',
-            crud: '1',
-            title: 'FrontEnd',
-            description: 'Test 1234',
-            code: 'bam bam baaaaam'
-        })
-    }).then(function (response) {
-
-    }).catch(function (err) {
-        console.log(err)
-    });
-};
-
-
 class ExercisesTab extends React.Component {
 
     constructor() {
