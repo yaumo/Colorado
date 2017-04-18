@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.management.ReflectionException;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.controller.HibernateController;
-import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
@@ -77,8 +75,10 @@ public class SolutionController extends ObjectOperationController {
 
 				// Set real Exercise Entity on SOlution NOT the detached one from the Frontend! -> Prevent cheating by user
 				HibernateController hibCtrl = new HibernateController();
-				Exercise exc = (Exercise) hibCtrl.getEntity(entity.getExercise().getHibId());
-				entity.setExercise(exc);
+				Solution sol = (Solution) hibCtrl.getEntity(entity.getHibId());
+
+				// Exercise exc = (Exercise) hibCtrl.getEntity(entity.getExercise().getHibId());
+				entity.setExercise(sol.getExercise());
 
 				entity.setCode(fileAsString);
 				SolutionExecutor solex = new SolutionExecutor(entity);

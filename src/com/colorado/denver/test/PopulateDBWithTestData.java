@@ -103,6 +103,12 @@ public class PopulateDBWithTestData {
 		lectures.add(lecture3);
 
 		Exercise exercise = createExercise("Fibonacci");
+		exercise.setInput("11");
+		exercise.setInputType("int");
+		exercise.setOutputType("int");
+		exercise.setAnswer("89");
+		exercise.setLanguage("java");
+
 		Set<Exercise> exercises = new HashSet<Exercise>();
 		exercises.add(exercise);
 		system.setLectures(lectures);

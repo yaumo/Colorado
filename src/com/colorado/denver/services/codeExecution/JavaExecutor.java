@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import com.colorado.denver.tools.DenverConstants;
 
 import groovy.lang.GroovyClassLoader;
-import javassist.tools.web.BadHttpRequest;
 
 public interface JavaExecutor {
 	final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(JavaExecutor.class);
@@ -28,27 +27,28 @@ public interface JavaExecutor {
 			String className = scriptClass.getSimpleName();
 			Object scriptInstance = scriptClass.newInstance();
 			Method[] methods = scriptClass.getDeclaredMethods();
-			Object[] params = {};
+			Object[] params = new Object[1];
 
+			int inputInt = 0;
+			String inputString = "";
+			boolean inputBoolean = false;
+			Long inputLong = 0L;
 			switch (inputType) {
 			case "int":
-				int inputInt = Integer.parseInt(excInput);
-				params[0] = inputInt;
+				inputInt = Integer.parseInt(excInput);
 
 				break;
 
 			case "String":
-				params[0] = excInput;
+				inputString = excInput;
 				break;
 
 			case "boolean":
-				boolean inputBoolean = Boolean.getBoolean(excInput);
-				params[0] = inputBoolean;
+				inputBoolean = Boolean.getBoolean(excInput);
 				break;
 
 			case "Long":
-				Long inputLong = Long.parseLong(excInput);
-				params[0] = inputLong;
+				inputLong = Long.parseLong(excInput);
 				break;
 
 			default:
@@ -61,16 +61,16 @@ public interface JavaExecutor {
 					switch (methods[i].getReturnType().getSimpleName()) {
 					case "int":
 
-						int res = (int) methods[i].invoke(scriptInstance, new Object[] { params });
+						int res = (int) methods[i].invoke(scriptInstance, new Object[] { inputInt });
 						result = res + "";
 						break;
 					case "String":
-						result = (String) methods[i].invoke(scriptInstance, new Object[] { params });
+						result = (String) methods[i].invoke(scriptInstance, new Object[] { inputString });
 						break;
 
 					case "boolean":
 
-						boolean resultBool = (boolean) methods[i].invoke(scriptInstance, new Object[] { params });
+						boolean resultBool = (boolean) methods[i].invoke(scriptInstance, new Object[] { inputBoolean });
 						if (resultBool) {
 							result = "true";
 						} else {
@@ -80,14 +80,13 @@ public interface JavaExecutor {
 						break;
 
 					case "long":
-						long resultLong = (long) methods[i].invoke(scriptInstance, new Object[] { params });
+						long resultLong = (long) methods[i].invoke(scriptInstance, new Object[] { inputLong });
 						result = resultLong + "";
 
 						break;
 
 					default:
-						LOGGER.error("No valid return Type found!!! Please set as return types: int, String, boolean, long");
-						throw new BadHttpRequest();
+
 					}
 					System.out.println("Method name is: " + methods[i].getName());
 					System.out.println("---");

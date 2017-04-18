@@ -67,7 +67,7 @@ public class ExerciseController extends ObjectOperationController {
 				Exercise exc = (Exercise) hibCtrl.getEntity(entity.getHibId());
 				ExerciseExecutor excExcutor = new ExerciseExecutor(exc);
 				entity = excExcutor.execute();
-				entity.setAnswer(exc.setAnswer());
+				entity.setAnswer(exc.getAnswer());
 
 				// Back to fronted:
 				entity.setSolution_code(Tools.quote(entity.getSolution_code()));

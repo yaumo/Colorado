@@ -133,7 +133,7 @@ public class Exercise extends EducationEntity {
 		this.input = input;
 	}
 
-	public String setAnswer() {
+	public String getAnswer() {
 		return answer;
 	}
 
