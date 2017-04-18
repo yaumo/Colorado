@@ -1,5 +1,7 @@
 package com.colorado.denver.controller.entityController;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
 import java.io.IOException;
 import java.util.Set;
 
@@ -92,7 +94,7 @@ public class ExerciseController extends ObjectOperationController {
 	}
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Exercise.EXERCISE, method = RequestMethod.PATCH)
-	public Exercise exercisePatch(HttpServletRequest request, HttpServletResponse response) {
+	public Exercise exercisePatch(HttpServletRequest request, HttpServletResponse response) throws ReflectionException, IOException {
 		UserService.authorizeSystemuser();
 
 		String jsonString = "";
@@ -100,10 +102,6 @@ public class ExerciseController extends ObjectOperationController {
 		try {
 			jsonString = super.checkRequest(request, DenverConstants.PATCH);
 		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (ReflectionException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
 			e.printStackTrace();
 		}
 

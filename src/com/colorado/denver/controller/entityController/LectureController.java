@@ -1,5 +1,7 @@
 package com.colorado.denver.controller.entityController;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
 import java.io.IOException;
 
 import javax.management.ReflectionException;
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -55,4 +58,32 @@ public class LectureController extends ObjectOperationController {
 		response.getWriter().flush();
 	}
 
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Lecture.LECTURE, method = RequestMethod.PATCH)
+	public Lecture lecturePatch(HttpServletRequest request, HttpServletResponse response) throws ReflectionException, IOException {
+
+		UserService.authorizeSystemuser();
+
+		String jsonString = "";
+
+		try {
+			jsonString = super.checkRequest(request, DenverConstants.PATCH);
+		} catch (JSONException e) {
+			LOGGER.error("Error in OOC while handling the request:" + request.toString());
+			e.printStackTrace();
+		}
+
+		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.serializeNulls();
+		Gson gson = gb.create();
+
+		Lecture entity = gson.fromJson(jsonString, Lecture.class);
+
+		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.PATCH);
+		entity = null;
+		Lecture entityAfterPatch = gson.fromJson(jsonResponse, Lecture.class);
+
+		Link selfLink = linkTo(LectureController.class).withSelfRel();
+		entityAfterPatch.add(selfLink);
+		return entityAfterPatch;
+	}
 }
