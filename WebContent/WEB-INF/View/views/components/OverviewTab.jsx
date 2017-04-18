@@ -27,95 +27,6 @@ const lecturelist = [];
 const exerciselist = [];
 const userlist = [];
 
-function getAllCourses() {
-	fetch('http://localhost:8080/courses', {
-		method: 'GET',
-		credentials: 'same-origin',
-		headers: {
-			'Accept': 'application/json'
-		}
-	}).then(function (response) {
-		return response.json();
-	}).then(function (courses) {
-		coursesJSON = courses;
-		if (courselist.length === 0) {
-			for (var i = 0; i < coursesJSON.length; i++) {
-				courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
-			}
-		}
-		if (lecturelist.length === 0) {
-			lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
-			for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
-				lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[j - 1].title} />);
-			}
-		}
-		exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
-	}).catch(function (err) {
-		console.log(err);
-	});
-}
-
-function getAllUsers() {
-	fetch('http://localhost:8080/users', {
-		method: 'GET',
-		credentials: 'same-origin',
-		headers: {
-			'Accept': 'application/json'
-		}
-	}).then(function (response) {
-		return response.json();
-	}).then(function (allUsers) {
-		allUsersJSON = allUsers;
-		if (userlist.length === 0) {
-			var x = 0;
-			for (var i = 0; i < allUsersJSON.length; i++) {
-				for (var j = 0; j < allUsersJSON[i].solutions.length; j++) {
-					userlist.push(
-						<TableRow key={x}>
-							<TableRowColumn>{"WWI14SEA"}</TableRowColumn>
-							<TableRowColumn>{allUsersJSON[i].username}</TableRowColumn>
-							<TableRowColumn>{allUsersJSON[i].solutions[j].exercise.title}</TableRowColumn>
-							<TableRowColumn>{allUsersJSON[i].username}</TableRowColumn>
-							<TableRowColumn>{allUsersJSON[i].solutions[j].correct}</TableRowColumn>
-							<TableRowColumn>
-								<IconButton onClick={this.handleClickViewCode}>
-									<ActionCode />
-								</IconButton>
-							</TableRowColumn>
-						</TableRow>
-					)
-					x++;
-				}
-			}
-		}
-	}).catch(function (err) {
-		console.log(err);
-	});
-}
-
-
-function handleClick(e) {
-	fetch('http://localhost:8080/user', {
-		method: 'POST',
-		mode: 'no-cors',
-		credentials: 'same-origin',
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			objectClass: 'user',
-			crud: '2',
-			id: ""
-		})
-	}).then(function (response) {
-
-	}).catch(function (err) {
-		console.log(err)
-	});
-};
-
-
 
 class OverviewTab extends React.Component {
 	constructor() {
@@ -128,7 +39,11 @@ class OverviewTab extends React.Component {
 			selectedExercise: 0,
 			disabledDropDownExercise: true,
 			row: 0,
-			tableData: []
+			tableData: [],
+			courselist: [],
+			lecturelist: [],
+			exerciselist: [],
+			userlist: []
 		};
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
 		this.handleChangeCourse = this.handleChangeCourse.bind(this);
@@ -137,9 +52,68 @@ class OverviewTab extends React.Component {
 		this.handleRequestClose = this.handleRequestClose.bind(this);
 	}
 
-	componentWillMount() {
-		getAllCourses();
-		getAllUsers();
+	componentDidMount() {
+		$.ajax({
+			url: "http://localhost:8080/courses",
+			dataType: 'json',
+			method: 'GET',
+			success: function (courses) {
+				coursesJSON = courses;
+				if (courselist.length === 0) {
+					for (var i = 0; i < coursesJSON.length; i++) {
+						courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
+					}
+				}
+				if (lecturelist.length === 0) {
+					lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
+					for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
+						lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[j - 1].title} />);
+					}
+				}
+				exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+				this.setState({ courselist: courselist });
+				this.setState({ lecturelist: lecturelist });
+				this.setState({ exerciselist: exerciselist });
+			}.bind(this)
+		});
+
+
+		$.ajax({
+			url: "http://localhost:8080/users",
+			dataType: 'json',
+			method: 'GET',
+
+			success: function (allUsers) {
+				allUsersJSON = allUsers;
+				if (userlist.length === 0) {
+					var x = 0;
+					for (var i = 0; i < allUsersJSON.length; i++) {
+						for (var j = 0; j < allUsersJSON[i].solutions.length; j++) {
+							userlist.push(
+								<TableRow key={x}>
+									<TableRowColumn>{"WWI14SEA"}</TableRowColumn>
+									<TableRowColumn>{allUsersJSON[i].username}</TableRowColumn>
+									<TableRowColumn>{allUsersJSON[i].solutions[j].exercise.title}</TableRowColumn>
+									<TableRowColumn>{allUsersJSON[i].username}</TableRowColumn>
+									<TableRowColumn>{allUsersJSON[i].solutions[j].correct.toString()}</TableRowColumn>
+									<TableRowColumn>
+										<IconButton onClick={this.handleClickViewCode}>
+											<ActionCode />
+										</IconButton>
+									</TableRowColumn>
+									<TableRowColumn className="hidden">{allUsersJSON[i].id}</TableRowColumn>
+									<TableRowColumn className="hidden">{allUsersJSON[i].solutions[j].correct.toString()}</TableRowColumn>
+									<TableRowColumn className="hidden">{allUsersJSON[i].solutions[j].correct.toString()}</TableRowColumn>
+								</TableRow>
+							)
+							x++;
+						}
+					}
+				}
+				this.setState({ userlist: userlist});
+				
+			}.bind(this)
+		});
 	}
 
 
@@ -190,16 +164,20 @@ class OverviewTab extends React.Component {
 	}
 
 	handleClickViewCode(event, index, value) {
-
 		lecture = event.currentTarget.parentElement.parentElement.cells[1].innerText;
 		exercise = event.currentTarget.parentElement.parentElement.cells[2].innerText;
 		name = event.currentTarget.parentElement.parentElement.cells[3].innerText;
 		this.setState({
-			open: true,
+			open: true
 		});
 	}
+
 	handleRequestClose() {
 		this.setState({ open: false });
+	}
+
+	handleClick(e){
+
 	}
 
 	render() {
@@ -214,17 +192,17 @@ class OverviewTab extends React.Component {
 									<TableRow>
 										<TableHeaderColumn colSpan="6" style={{ textAlign: 'center', background: "#d1d1d1" }}>
 											<DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
-												{courselist}
+												{this.state.courselist}
 											</DropDownMenu>
 											<DropDownMenu value={this.state.selectedLecture} onChange={this.handleChangeLecture}>
-												{lecturelist}
+												{this.state.lecturelist}
 											</DropDownMenu>
 
 											<DropDownMenu disabled={this.state.disabledDropDownExercise} value={this.state.selectedExercise} onChange={this.handleChangeExercise} ref={'dropdownexercise'}>
-												{exerciselist}
+												{this.state.exerciselist}
 											</DropDownMenu>
 
-											<IconButton onClick={handleClick}>
+											<IconButton onClick={this.handleClick}>
 												<ActionSearch />
 											</IconButton>
 										</TableHeaderColumn>
@@ -236,10 +214,13 @@ class OverviewTab extends React.Component {
 										<TableHeaderColumn>Name</TableHeaderColumn>
 										<TableHeaderColumn>Status</TableHeaderColumn>
 										<TableHeaderColumn>View Code</TableHeaderColumn>
+										<TableHeaderColumn className="hidden">exerciseID</TableHeaderColumn>
+										<TableHeaderColumn className="hidden">userID</TableHeaderColumn>
+										<TableHeaderColumn className="hidden">lectureID</TableHeaderColumn>
 									</TableRow>
 								</TableHeader>
 								<TableBody displayRowCheckbox={false} style={{ background: "#d1d1d1" }}>
-									{userlist}
+									{this.state.userlist}
 								</TableBody>
 							</Table>
 							<Popover

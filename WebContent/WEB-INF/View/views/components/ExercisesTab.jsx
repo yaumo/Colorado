@@ -43,32 +43,59 @@ class ExercisesTab extends React.Component {
         super();
         this.state = {
             open: true,
-			opendialog: false,
-			selectedProgrammingLanguage: 1,
+            opendialog: false,
+            selectedProgrammingLanguage: 1,
             value: 1,
-			language: 'javascript'
+            language: 'javascript'
         };
-		this.handleChangeProgrammingLanguage = this.handleChangeProgrammingLanguage.bind(this);
-		this.handleOpenDialog = this.handleOpenDialog.bind(this);
-		this.handleCloseDialog = this.handleCloseDialog.bind(this);
+        this.handleChangeProgrammingLanguage = this.handleChangeProgrammingLanguage.bind(this);
+        this.handleOpenDialog = this.handleOpenDialog.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }
-	
-	handleChangeProgrammingLanguage(event, index, value){
-		this.setState({selectedProgrammingLanguage: value});
-		if(value===1){
-			this.setState({language:'javascript'});
-		}
-		else if(value===2){
-			this.setState({language:'java'});
-		}
-	}
-	handleOpenDialog(event, index, value) {
-			this.setState({opendialog: true});
-		}
-		handleCloseDialog(event, index, value) {
-			this.setState({opendialog: false});
-		}
-	
+
+    handleChangeProgrammingLanguage(event, index, value) {
+        this.setState({ selectedProgrammingLanguage: value });
+        if (value === 1) {
+            this.setState({ language: 'javascript' });
+        }
+        else if (value === 2) {
+            this.setState({ language: 'java' });
+        }
+    }
+    handleOpenDialog(event, index, value) {
+        this.setState({ opendialog: true });
+    }
+    handleCloseDialog(event, index, value) {
+        this.setState({ opendialog: false });
+    }
+
+    handleCreateExercise() {
+        var title = $("#title")[0].value.toString();
+        var description = $("#description")[0].value.toString();
+        var language = $("#language").text();
+        var youtube = $("#youtube")[0].value.toString();
+        //var patternSolution = $("#patternSolution")[0].value.toString();
+        //var template = $("#template")[0].value.toString();
+
+
+        $.ajax({
+            url: "http://localhost:8080/exercise",
+            dataType: 'json',
+            method: 'POST',
+            data: JSON.stringify({
+                "title": title,
+                "description": description,
+                "language" : language,
+                //"patternSolution": patternSolution
+                //"template": template,
+                "youtube": youtube
+            }),
+            success: function (response) {
+
+            }.bind(this)
+        });
+    }
+
     render() {
         return (
             <div>
@@ -82,6 +109,7 @@ class ExercisesTab extends React.Component {
                                     <tr>
                                         <td style={{ width: "50%", padding: "6px", paddingTop: "0" }}>
                                             <TextField
+                                                id = "title"
                                                 floatingLabelText="Title"
                                                 fullWidth={false}
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
@@ -89,7 +117,7 @@ class ExercisesTab extends React.Component {
                                             />
                                         </td>
                                         <td style={{ width: "50%", padding: "6px", verticalAlign: "top" }}>
-                                            <DropDownMenu className="language" value={this.state.selectedProgrammingLanguage} onChange={this.handleChangeProgrammingLanguage}>
+                                            <DropDownMenu className="language" id="language" value={this.state.selectedProgrammingLanguage} onChange={this.handleChangeProgrammingLanguage}>
                                                 <MenuItem value={1} primaryText="JavaScript" />
                                                 <MenuItem value={2} primaryText="Java" />
                                             </DropDownMenu>
@@ -98,6 +126,7 @@ class ExercisesTab extends React.Component {
                                     <tr>
                                         <td style={{ width: "50%", padding: "6px" }}>
                                             <TextField
+                                             id = "description"
                                                 floatingLabelText="Description"
                                                 multiLine={true}
                                                 rows={3}
@@ -108,6 +137,7 @@ class ExercisesTab extends React.Component {
                                         </td>
                                         <td style={{ width: "50%", padding: "6px", verticalAlign: "bottom" }}>
                                             <TextField
+                                             id = "youtube"
                                                 floatingLabelText="Youtube-Link"
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
@@ -126,13 +156,13 @@ class ExercisesTab extends React.Component {
                                     <td style={{ width: "50%", padding: "6px", paddingLeft: "0px" }}>
                                         <h4>Pattern Solution</h4>
                                         <Paper zDepth={4}>
-                                            <EditorAce mode={this.state.language}/>
+                                            <EditorAce mode={this.state.language}  id = "patternSolution" />
                                         </Paper>
                                     </td>
                                     <td style={{ width: "50%", padding: "6px", paddingRight: "0px" }}>
                                         <h4>Template</h4>
                                         <Paper zDepth={4}>
-                                            <EditorAce mode={this.state.language}/>
+                                            <EditorAce mode={this.state.language}   id = "template"/>
                                         </Paper>
                                     </td>
                                 </tr>
@@ -145,6 +175,7 @@ class ExercisesTab extends React.Component {
                                     <tr>
                                         <td style={{ width: "33%", padding: "6px" }}>
                                             <TextField
+                                             id = "case1"
                                                 floatingLabelText="Case 1: Input"
                                                 fullWidth={false}
                                                 width="12%"
@@ -154,6 +185,7 @@ class ExercisesTab extends React.Component {
                                         </td>
                                         <td style={{ width: "33%", padding: "6px" }}>
                                             <TextField
+                                             id = "case2"
                                                 floatingLabelText="Case 2: Input"
                                                 fullWidth={false}
                                                 width="12%"
@@ -164,6 +196,7 @@ class ExercisesTab extends React.Component {
 
                                         <td style={{ width: "33%", padding: "6px" }}>
                                             <TextField
+                                             id = "case3"
                                                 floatingLabelText="Case 3: Input"
                                                 fullWidth={false}
                                                 width="12%"
@@ -177,18 +210,18 @@ class ExercisesTab extends React.Component {
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
-                        <RaisedButton 
-						label="Create" 
-						onClick={handleClick}
-						backgroundColor="#bd051f"
-						labelColor="#FFFFFF"/>
-						<Dialog
-						title="Dialog With Actions"
-						modal={false}
-						open={this.state.opendialog}
-						onRequestClose={this.handleCloseDialog}
-						>
-							The actions in this window were passed in as an array of React objects.
+                        <RaisedButton
+                            label="Create"
+                            onClick={this.handleCreateExercise}
+                            backgroundColor="#bd051f"
+                            labelColor="#FFFFFF" />
+                        <Dialog
+                            title="Dialog With Actions"
+                            modal={false}
+                            open={this.state.opendialog}
+                            onRequestClose={this.handleCloseDialog}
+                        >
+                            The actions in this window were passed in as an array of React objects.
 						</Dialog>
                     </CardActions>
                 </Card>

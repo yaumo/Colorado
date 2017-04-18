@@ -14,131 +14,68 @@ import Dialog from 'material-ui/Dialog';
 
 var coursesJSON;
 const courselist = [];
-function getAllCourses() {
-	fetch('http://localhost:8080/courses', {
-		method: 'GET',
-		credentials: 'same-origin',
-		headers: {
-			'Accept': 'application/json'
-		}
-	}).then(function (response) {
-		return response.json();
-	}).then(function (courses) {
-		coursesJSON = courses;
-		if (courselist.length === 0) {
-			for (var i = 0; i < coursesJSON.length; i++) {
-				courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
-			}
-		}
-	}).catch(function (err) {
-		console.log(err);
-	});
-}
-
-
+var tableData = [];
 var allDocentsJSON;
-function getAllDocents() {
-    fetch('http://localhost:8080/users', {
-        method: 'GET', //hier noch dozenten abfragen
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json'
-        }
-    }).then(function (response) {
-        return response.json();
-    }).then(function (allDocents) {
-        allDocentsJSON = allDocents;
-        tableData = allDocentsJSON;
-    }).catch(function (err) {
-        console.log(err);
-    });
-}
 
 
-function createLecture() {
-    fetch('http://localhost:8080/user', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            course_ID: '',
-            title: ''
-        })
-    }).then(function (response) {
-
-    }).catch(function (err) {
-        console.log(err)
-    });
-}
-
-function handleClick(e) {
-    getAllUsers();
-};
-
-var tableData = [
-    {
-        username: 'John Smith',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-    {
-        username: 'Randal White',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-    {
-        username: 'Stephanie Sanders',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-    {
-        username: 'Steve Brown',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-    {
-        username: 'Joyce Whitten',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-    {
-        username: 'Samuel Roberts',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-    {
-        username: 'Adam Moore',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-];
-
-
-function handleChange(event, index, value) {
-    this.setState({ value });
-};
 
 class LecturesTab extends React.Component {
 
     constructor() {
         super();
+        
         this.state = {
             open: true,
-			opendialog: false,
+            opendialog: false,
             value: 1,
-            selectedCourse: 0
+            selectedCourse: 0,
+            courselist: [],
+            tableData: []
         };
         this.handleChangeCourse = this.handleChangeCourse.bind(this);
-		this.handleOpenDialog = this.handleOpenDialog.bind(this);
-		this.handleCloseDialog = this.handleCloseDialog.bind(this);
+        this.handleOpenDialog = this.handleOpenDialog.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }
     handleChangeCourse(event, index, value) {
         this.setState({ selectedCourse: value });
     }
-    componentWillMount() {
-        getAllCourses();
+
+    componentDidMount() {
+        $.ajax({
+            url: "http://localhost:8080/courses",
+            dataType: 'json',
+            method: 'GET',
+            success: function (courses) {
+                coursesJSON = courses;
+                if (courselist.length === 0) {
+                    for (var i = 0; i < coursesJSON.length; i++) {
+                        courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
+                    }
+                }
+                this.setState({ courselist: courselist });
+            }.bind(this)
+        });
+
+
+        $.ajax({
+            url: "http://localhost:8080/users",
+            dataType: 'json',
+            method: 'GET',
+            success: function (allDocents) {
+                this.setState({ tableData: allDocents });
+            }.bind(this)
+        });
     }
-	handleOpenDialog(event, index, value) {
-		this.setState({opendialog: true});
-	}
-	handleCloseDialog(event, index, value) {
-		this.setState({opendialog: false});
-	}
+
+    handleOpenDialog(event, index, value) {
+        this.setState({ opendialog: true });
+    }
+    handleCloseDialog(event, index, value) {
+        this.setState({ opendialog: false });
+    }
+    handleClick(e) {
+
+    };
 
     render() {
         return (
@@ -150,7 +87,7 @@ class LecturesTab extends React.Component {
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <div>
                                 <DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
-                                    {courselist}
+                                    {this.state.courselist}
                                 </DropDownMenu>
                             </div>
                         </Paper>
@@ -178,7 +115,7 @@ class LecturesTab extends React.Component {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody deselectOnClickaway={false}>
-                                    {tableData.map((row, index) => (
+                                    {this.state.tableData.map((row, index) => (
                                         <TableRow key={index} selected={row.selected}>
                                             <TableRowColumn>{row.username}</TableRowColumn>
                                             <TableRowColumn>{row.mail}</TableRowColumn>
@@ -192,16 +129,16 @@ class LecturesTab extends React.Component {
                     <CardActions className="footer">
                         <RaisedButton
                             label="Create"
-                            onClick={handleClick}
+                            onClick={this.handleClick}
                             backgroundColor="#bd051f"
                             labelColor="#FFFFFF" />
-						<Dialog
-							title="Dialog With Actions"
-							modal={false}
-							open={this.state.opendialog}
-							onRequestClose={this.handleCloseDialog}
-						>
-							The actions in this window were passed in as an array of React objects.
+                        <Dialog
+                            title="Dialog With Actions"
+                            modal={false}
+                            open={this.state.opendialog}
+                            onRequestClose={this.handleCloseDialog}
+                        >
+                            The actions in this window were passed in as an array of React objects.
 						</Dialog>
                     </CardActions>
                 </Card>
