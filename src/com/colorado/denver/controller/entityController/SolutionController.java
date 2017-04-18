@@ -104,31 +104,24 @@ public class SolutionController extends ObjectOperationController {
 	}
 
 	@RequestMapping(value = "/solution", method = RequestMethod.GET)
-	public Solution getSolutionsForUser(@RequestParam(value = "excId", required = false) String excId,
+	public Set<Solution> getSolutionsForUser(@RequestParam(value = "excId", required = false) String excId,
 			@RequestParam(value = "usrId", required = false) String usrId) {
 		User usr = UserService.getCurrentUser();
 		Set<Solution> sols = new HashSet<>();
-		LOGGER.debug("UserId:" + usrId);
-		LOGGER.debug("ExcId:" + excId);
+		LOGGER.info("UserId:" + usrId);
+		LOGGER.info("ExcId:" + excId);
 
 		if (usrId != null) {
 			// Current user Docent?
 			User student = UserService.getUserById(usrId);
 			sols = student.getSolutions();
+			return sols;
 
 		} else {
 			sols = usr.getSolutions();
 		}
 
-		for (Iterator iterator = sols.iterator(); iterator.hasNext();) {
-			Solution solution = (Solution) iterator.next();
-
-			if (solution.getExercise().getHibId().equals(excId)) {
-				return solution;
-			}
-		}
-
-		return null;
+		return sols;
 	}
 
 }
