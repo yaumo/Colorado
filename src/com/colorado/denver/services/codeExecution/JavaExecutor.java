@@ -28,24 +28,49 @@ public interface JavaExecutor {
 			String className = scriptClass.getSimpleName();
 			Object scriptInstance = scriptClass.newInstance();
 			Method[] methods = scriptClass.getDeclaredMethods();
+			Object[] params = {};
 
-			int input = Integer.parseInt(excInput);
+			switch (inputType) {
+			case "int":
+				int inputInt = Integer.parseInt(excInput);
+				params[0] = inputInt;
+
+				break;
+
+			case "String":
+				params[0] = excInput;
+				break;
+
+			case "boolean":
+				boolean inputBoolean = Boolean.getBoolean(excInput);
+				params[0] = inputBoolean;
+				break;
+
+			case "Long":
+				Long inputLong = Long.parseLong(excInput);
+				params[0] = inputLong;
+				break;
+
+			default:
+				break;
+			}
+
 			for (int i = 0; i < methods.length; i++) {
 				try {
 
 					switch (methods[i].getReturnType().getSimpleName()) {
 					case "int":
 
-						int res = (int) methods[i].invoke(scriptInstance, new Object[] { input });
+						int res = (int) methods[i].invoke(scriptInstance, new Object[] { params });
 						result = res + "";
 						break;
 					case "String":
-						result = (String) methods[i].invoke(scriptInstance, new Object[] { input });
+						result = (String) methods[i].invoke(scriptInstance, new Object[] { params });
 						break;
 
 					case "boolean":
 
-						boolean resultBool = (boolean) methods[i].invoke(scriptInstance, new Object[] { input });
+						boolean resultBool = (boolean) methods[i].invoke(scriptInstance, new Object[] { params });
 						if (resultBool) {
 							result = "true";
 						} else {
@@ -55,7 +80,7 @@ public interface JavaExecutor {
 						break;
 
 					case "long":
-						long resultLong = (long) methods[i].invoke(scriptInstance, new Object[] { input });
+						long resultLong = (long) methods[i].invoke(scriptInstance, new Object[] { params });
 						result = resultLong + "";
 
 						break;
