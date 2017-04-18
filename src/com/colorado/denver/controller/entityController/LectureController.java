@@ -36,7 +36,7 @@ public class LectureController extends ObjectOperationController {
 		// JSONObject theObject = super.handleRequest(request, response);
 		String jsonString = "";
 		try {
-			jsonString = super.checkRequest(request);
+			jsonString = super.checkRequest(request, DenverConstants.POST);
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
@@ -47,7 +47,7 @@ public class LectureController extends ObjectOperationController {
 		Gson gson = gb.create();
 
 		Lecture entity = gson.fromJson(jsonString, Lecture.class);
-		String jsonResponse = super.doCrud(entity, jsonString);
+		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.POST);
 		entity = null; // Let GC run over this quickly
 		response.setStatus(200);
 		response.addHeader("Access-Control-Allow-Origin", "*");

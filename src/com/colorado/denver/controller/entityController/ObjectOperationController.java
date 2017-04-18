@@ -24,7 +24,6 @@ import com.colorado.denver.model.Lecture;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
-import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.tools.DenverConstants;
 import com.colorado.denver.tools.GraphAdapterBuilder;
@@ -42,13 +41,12 @@ public class ObjectOperationController extends HttpServlet {
 
 	private User workingUser = null;
 
-	public String checkRequest(HttpServletRequest request) throws ReflectionException, IOException, JSONException {
+	public String checkRequest(HttpServletRequest request, String mode) throws ReflectionException, IOException, JSONException {
 		// This Method should be generic!!
 		// init
 
 		String objectClass = DenverConstants.ERROR_NO_OBJECT_FROM_REQUEST;
 		String id = DenverConstants.ERROR_NO_ID_FROM_REQUEST;
-		int crud = 0;// 0 is bad
 		JSONObject jsonObject = null;
 
 		String jsonStr = DenverConstants.ERROR_NO_OBJECT_FROM_REQUEST;
@@ -68,19 +66,9 @@ public class ObjectOperationController extends HttpServlet {
 
 			objectClass = jsonObject.getString(BaseEntity.OBJECT_CLASS);
 
-			crud = jsonObject.getInt(BaseEntity.CRUD);// Crud is not persisted but a transient field
-			switch (crud) {
-			case 1:
+			switch (mode) {
+			case "POST":
 				id = DenverConstants.ID_CREATE_MODE;
-				break;
-
-			case 2:
-				try {
-					id = jsonObject.getString(BaseEntity.HIB_ID);
-				} catch (Exception e) {
-					LOGGER.info("Get all entites of: " + objectClass);
-					id = DenverConstants.ID_READ_ALL_MODE;
-				}
 				break;
 
 			default:
@@ -96,8 +84,7 @@ public class ObjectOperationController extends HttpServlet {
 		}
 
 		// Some Checks
-		if (crud < 1 || crud > 4
-				|| objectClass.equals(DenverConstants.ERROR_NO_OBJECT_FROM_REQUEST)
+		if (objectClass.equals(DenverConstants.ERROR_NO_OBJECT_FROM_REQUEST)
 				|| id.equals(DenverConstants.ERROR_NO_ID_FROM_REQUEST)
 				|| objectClass.equals(null)
 				|| id.equals(null)) {
@@ -106,20 +93,19 @@ public class ObjectOperationController extends HttpServlet {
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
 
-		workingUser = UserService.getCurrentUser();
-
-		// get user via session
+		// TODO: Security checks here Nele!! Based on current user (You can parse via method declaration and the operation and entity!
+		// Write user in "workingUser", see class at top
 		// do security check
 		/*
 		 * Security dependencies:
 		 * -Who is the User? Get user via the session!
-		 * -Is the user allowed to use the CRUD operation in the request with the given Entity?
+		 * -Is the user allowed to use the operation in the request with the given Entity?
 		 */
 		return jsonObject.getString(DenverConstants.JSON);
 
 	}
 
-	public String doCrud(BaseEntity<?> entity, String jsonString) {
+	public String doOperation(BaseEntity<?> entity, String jsonString, String mode) {
 
 		// init
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
@@ -137,45 +123,31 @@ public class ObjectOperationController extends HttpServlet {
 		Gson gson = gb.create();
 
 		String id = DenverConstants.ERROR;
-		int crud = 0;
 		try {
-			crud = entity.getCrud();
-			if (crud != 1)
-				id = entity.getHibId();
+			id = entity.getHibId();
 
 		} catch (Exception e) {
 			LOGGER.error("Error extraxting information from the Object(FromJSON): " + entity.getId());
 			e.printStackTrace();
 		}
 
-		// Prepare for CRUD and response
-
 		String jsonResponse = DenverConstants.ERROR;
-		switch (crud) {
-		case 1:
+		switch (mode) {
+		case "POST":
 			String newId = create(entity);
 			entity.setHibId(newId);
 			jsonResponse = gson.toJson(read(newId));
 			break;
-		case 2:
-			if (id == null) {
-
-				jsonResponse = gson.toJson(read(entity));
-			} else {
-				jsonResponse = gson.toJson(read(id));// normal entity read
-			}
-
-			break;
-		case 3:
+		case "PATCH":
 			jsonResponse = gson.toJson(update(entity));
 			break;
-		case 4:
+		case "DELETE":
 			delete(id);
 			jsonResponse = "SUCCESS";
 			break;
 
 		default:
-			LOGGER.error("ERROR IN ASSERTING A CRUD OPERTAION!! CRUD VALUE: " + crud);
+			LOGGER.error("ERROR IN ASSERTING A OPERTAION!! VALUE: " + mode);
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);// last resort
 		}
 		workingUser = null;

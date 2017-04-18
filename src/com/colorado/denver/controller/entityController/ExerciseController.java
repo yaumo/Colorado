@@ -43,7 +43,7 @@ public class ExerciseController extends ObjectOperationController {
 		// JSONObject theObject = super.handleRequest(request, response);
 		String jsonString = "";
 		try {
-			jsonString = super.checkRequest(request);
+			jsonString = super.checkRequest(request, DenverConstants.POST);
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
@@ -76,7 +76,7 @@ public class ExerciseController extends ObjectOperationController {
 
 		}
 
-		String jsonResponse = super.doCrud(entity, jsonString);
+		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.POST);
 		entity = null; // Let GC run over this quickly, this entity is detached!
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.setStatus(200);

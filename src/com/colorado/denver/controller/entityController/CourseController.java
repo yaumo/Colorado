@@ -42,7 +42,7 @@ public class CourseController extends ObjectOperationController {
 		UserService.authorizeSystemuser();
 		String jsonString = DenverConstants.ERROR;
 		try {
-			jsonString = super.checkRequest(request);
+			jsonString = super.checkRequest(request, DenverConstants.POST);
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
@@ -52,7 +52,7 @@ public class CourseController extends ObjectOperationController {
 		Gson gson = gb.create();
 
 		Course entity = gson.fromJson(jsonString, Course.class);
-		String jsonResponse = super.doCrud(entity, jsonString);
+		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.POST);
 		entity = null; // Let GC run over this quickly
 		response.setStatus(200);
 		response.addHeader("Access-Control-Allow-Origin", "*");
