@@ -39,6 +39,11 @@ public class Tools {
 		return object;
 	}
 
+	public static void setLoggingLevel(ch.qos.logback.classic.Level level) {
+		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+		root.setLevel(level);
+	}
+
 	public static String quote(String string) {
 		if (string == null || string.length() == 0) {
 			return "\"\"";

@@ -14,7 +14,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.GenericTools;
+import com.colorado.denver.tools.Tools;
 import com.google.gson.GsonBuilder;
+
+import ch.qos.logback.classic.Level;
 
 /*
  * Keep this class clean! only main method and temporary experiments!
@@ -39,6 +42,7 @@ public class DenverApplication extends SpringBootServletInitializer {
 			GenericTools gt = new GenericTools();
 			gt.setApplicationContext(ctx);
 			UserService.authorizeSystemuser();
+			Tools.setLoggingLevel(Level.ERROR);
 			LOGGER.info("Successfully obtained system user Token. DB and security should be in healthy state");
 
 		} catch (Exception e) {
