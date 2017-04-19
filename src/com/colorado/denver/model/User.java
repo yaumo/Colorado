@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "UserDenver")
@@ -36,8 +38,13 @@ public class User extends BaseEntity<User> {
 
 	private String username;
 	private Set<Lecture> lectures;
+
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private transient String password;
+
+	@JsonProperty(access = Access.WRITE_ONLY)
 	protected transient boolean enabled;
+
 	private Course course;
 	private Set<Solution> solutions;
 	private Collection<Role> roles;
