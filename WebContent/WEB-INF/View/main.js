@@ -14,7 +14,7 @@ import OverviewTab from './views/components/OverviewTab.jsx';
 
 
 //ReactDOM.render(<App />, document.getElementById('app'));
-ReactDOM.render(<Docent />, document.getElementById('app'));
+//ReactDOM.render(<Docent />, document.getElementById('app'));
 
 class App extends React.Component {
     render() {

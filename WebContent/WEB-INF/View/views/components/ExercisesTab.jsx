@@ -97,7 +97,7 @@ class ExercisesTab extends React.Component {
         var description = $("#description")[0].value.toString();
         var language = $("#language").text();
         var youtube = $("#youtube")[0].value.toString();
-        var patternSolution = this.state.solutionpattern;
+        var patternSolution = this.state.solutionPattern;
         var template = this.state.template;
         var input1Value = $("#case1")[0].value.toString();
         var input1Type = this.state.case1Type;
