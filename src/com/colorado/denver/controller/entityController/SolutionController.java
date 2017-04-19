@@ -123,7 +123,7 @@ public class SolutionController extends ObjectOperationController {
 		return null;
 	}
 
-	@RequestMapping(value = "/docent/solutionsAll", method = RequestMethod.GET)
+	@RequestMapping(value = "/docent/solutions", method = RequestMethod.GET)
 	public Set<Solution> getAllSolutions(@RequestParam(value = "lectureId", required = true) String lectureId,
 			@RequestParam(value = "exerciseId", required = true) String exerciseId) {
 		if (UserService.isCurrentUserDocent()) {
