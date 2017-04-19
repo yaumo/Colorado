@@ -28,7 +28,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @RestController
-@RequestMapping(value = "/exercise")
 public class ExerciseController extends ObjectOperationController {
 
 	/**
@@ -89,11 +88,6 @@ public class ExerciseController extends ObjectOperationController {
 		response.getWriter().write(jsonResponse);
 		response.getWriter().flush();
 		// response.getWriter().close(); // maybe no close because I didn't open this?
-	}
-
-	@RequestMapping(value = "/all", method = RequestMethod.GET)
-	public Set<Exercise> getExersisesForUser() {
-		return ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getHibId());
 	}
 
 	@RequestMapping(value = "/exercise", method = RequestMethod.GET)
