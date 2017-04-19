@@ -91,7 +91,7 @@ public class LectureController extends ObjectOperationController {
 	}
 
 	@RequestMapping(value = "/lecture", method = RequestMethod.GET)
-	public Lecture getLectureForUser(@RequestParam(value = "lecId", required = true) String lecId) {
+	public Lecture getLectureForUser(@RequestParam(value = "lectureId", required = true) String lecId) {
 		Course course = CourseService.getCourseForUser(UserService.getCurrentUser().getHibId());
 		Set<Lecture> lectures = course.getLectures();
 		for (Iterator iterator = lectures.iterator(); iterator.hasNext();) {

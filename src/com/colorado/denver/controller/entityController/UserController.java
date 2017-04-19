@@ -4,6 +4,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Set;
 
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.Link;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -168,13 +168,13 @@ public class UserController extends ObjectOperationController {
 	}
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USERS, method = RequestMethod.GET)
-	public List<User> getAllUsers() {
-		List<User> allUsers = UserService.allUsers();
-		for (User user : allUsers) {
-			Link courseLink = linkTo(methodOn(CourseController.class).getCourseForUser(user.getHibId())).withRel("course");
-			user.add(courseLink);
+	public List<User> getAllUsers() throws AccessDeniedException {
+		if (UserService.isCurrentUserDocent()) {
+			return UserService.allUsers();
+		} else {
+			throw new AccessDeniedException(DenverConstants.STUDENT_ACCES_DENIED);
 		}
-		return allUsers;
+
 	}
 
 	public Set<Exercise> getExersisesForUser(String hibId) {
