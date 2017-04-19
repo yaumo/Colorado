@@ -32,6 +32,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
+		http.csrf().disable();
+
+		http.sessionManagement()
+				.invalidSessionUrl("/invalidSession");
 		// .authorizeRequests()
 		// .anyRequest().authenticated()
 		// .formLogin()
@@ -47,15 +51,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// .logout()
 		// .logoutSuccessUrl("/login?logout");
 
-		http.csrf().disable().authorizeRequests()
-
-				.anyRequest()
-				.authenticated()
-				.and()
-				.formLogin()
-				.loginPage("/login")
-				.permitAll()
-				.successHandler(successHandler);
+		// http.csrf().disable().authorizeRequests()
+		//
+		// .anyRequest()
+		// .authenticated()
+		// .and()
+		// .formLogin()
+		// .loginPage("/login")
+		// .permitAll()
+		// .successHandler(successHandler);
 
 		http.addFilterBefore(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class)
 				.addFilterBefore(new CORSFilter(), ChannelProcessingFilter.class);
