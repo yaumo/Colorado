@@ -86,7 +86,7 @@ class Content extends React.Component {
 
 
     fetch('http://localhost:8080/login', {
-      method: 'POST',
+      method: 'GET',
 
       credentials: 'same-origin',
       headers: {
