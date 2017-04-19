@@ -14,8 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "UserDenver")
@@ -37,8 +38,13 @@ public class User extends BaseEntity<User> {
 
 	private String username;
 	private Set<Lecture> lectures;
+
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private transient String password;
+
+	@JsonProperty(access = Access.WRITE_ONLY)
 	protected transient boolean enabled;
+
 	private Course course;
 	private Set<Solution> solutions;
 	private Collection<Role> roles;
@@ -48,7 +54,7 @@ public class User extends BaseEntity<User> {
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "lectures_users", joinColumns = { @JoinColumn(name = "lectures_id") }, inverseJoinColumns = { @JoinColumn(name = "users_id") })
-	@JsonBackReference
+	@JsonManagedReference
 	public Set<Lecture> getLectures() {
 		return lectures;
 	}
@@ -68,7 +74,7 @@ public class User extends BaseEntity<User> {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "courseID")
-	@JsonBackReference
+	@JsonManagedReference
 	public Course getCourse() {
 		return course;
 	}

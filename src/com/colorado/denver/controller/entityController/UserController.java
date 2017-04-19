@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.Link;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -150,12 +151,7 @@ public class UserController extends ObjectOperationController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(Model model, String error, String logout) {
-		if (error != null)
-			model.addAttribute("error", "Your username and password is invalid.");
-
-		if (logout != null)
-			model.addAttribute("message", "You have been logged out successfully.");
+	public String login() {
 
 		return "login";
 	}

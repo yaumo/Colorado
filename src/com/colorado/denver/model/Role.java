@@ -14,7 +14,8 @@ import javax.persistence.Transient;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.google.gson.annotations.Expose;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "role")
@@ -27,13 +28,14 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
 	public static final String ROLE = "role";
 	public static final String ROLE_NAME = "roleName";
 
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String roleName;
 
 	public Role() {
 
 	}
 
-	@Expose(serialize = false)
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private transient Set<User> users;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -57,6 +59,7 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
 
 	@Override
 	@Transient
+	@JsonProperty(access = Access.WRITE_ONLY)
 	public String getPrefix() {
 
 		return ROLE;
