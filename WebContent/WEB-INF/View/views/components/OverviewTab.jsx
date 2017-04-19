@@ -66,6 +66,9 @@ class OverviewTab extends React.Component {
 			url: "http://localhost:8080/courses",
 			dataType: 'json',
 			method: 'GET',
+			xhrFields: {
+                    withCredentials: true
+            },
 			success: function (courses) {
 				coursesJSON = courses;
 				if (courselist.length === 0) {
@@ -141,6 +144,9 @@ class OverviewTab extends React.Component {
 			url: "http://localhost:8080/docent/solution",
 			dataType: 'json',
 			method: 'GET',
+			xhrFields: {
+				withCredentials: true
+			},
 			//data: 'owner=2 exerciseID=1',
 			success: function (solution) {
 				solutionJSON = solution;
@@ -168,6 +174,9 @@ class OverviewTab extends React.Component {
 			url: "http://localhost:8080/docent/solutions",
 			dataType: 'json',
 			method: 'GET',
+			xhrFields: {
+				withCredentials: true
+			},
 			//data: 'lectureID=2 exerciseID=1',
 			success: function (solutions) {
 				solutionsJSON = solution;
