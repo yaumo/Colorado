@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CORSFilter implements Filter {
 
-	private final List<String> allowedOrigins = Arrays.asList("http://localhost:8081");
+	private final List<String> allowedOrigins = Arrays.asList("http://localhost:8080", "http://localhost:8081");
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(CORSFilter.class);
 
