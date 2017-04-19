@@ -19,6 +19,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private SecurityServiceImpl customAuthenticationProvider;
 
+	@Autowired
+	DDAuthenticationSuccessHandler successHandler;
+
 	private SecurityAuthenticationSuccessHandler customSuccessHandler = new SecurityAuthenticationSuccessHandler();
 
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -28,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable();
+
 		// .authorizeRequests()
 		// .anyRequest().authenticated()
 		// .formLogin()
@@ -43,6 +46,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// .and()
 		// .logout()
 		// .logoutSuccessUrl("/login?logout");
+
+		http.csrf().disable().authorizeRequests()
+
+				.anyRequest()
+				.authenticated()
+				.and()
+				.formLogin()
+				.loginPage("/login")
+				.permitAll()
+				.successHandler(successHandler);
 
 		http.addFilterBefore(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class)
 				.addFilterBefore(new CORSFilter(), ChannelProcessingFilter.class);
