@@ -86,7 +86,7 @@ class Content extends React.Component {
   }
   handleClick(e) {
     e.preventDefault();
-	this.setState({ errorText: '' })
+	//this.setState({ errorText: '' })
     //console.log('The link was clicked.');
     /*if (this.state.value === 's12345') {
       browserHistory.push('/exercise');
@@ -102,20 +102,18 @@ class Content extends React.Component {
 	console.log(username);
 	console.log(password);
 	var obj = "username="+username+"&password="+password;
+			
+	
 	fetch('http://localhost:8080/login', {
         method: 'POST',
-        mode: 'no-cors',
+        
         credentials: 'same-origin',
         headers: {
+			'Authorization': 'Basic '+btoa(username+':'+password),
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: obj
+        }		
 		
-		/*JSON.stringify({
-            username : username,
-			password: password
-        })*/
     }).then(function (response) {
       
     }).catch(function (err) {
