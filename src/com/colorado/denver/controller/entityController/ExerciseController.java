@@ -107,6 +107,12 @@ public class ExerciseController extends ObjectOperationController {
 		return null;
 	}
 
+	@RequestMapping(value = "/exercises", method = RequestMethod.GET)
+	public Set<Exercise> getAllExercisesForUser() {
+		return ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getHibId());
+
+	}
+
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Exercise.EXERCISE, method = RequestMethod.PATCH)
 	public Exercise exercisePatch(HttpServletRequest request, HttpServletResponse response) throws ReflectionException, IOException {
 

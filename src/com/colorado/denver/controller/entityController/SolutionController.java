@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -15,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +25,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
+import com.colorado.denver.services.SolutionService;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.codeExecution.SolutionExecutor;
 import com.colorado.denver.tools.DenverConstants;
@@ -122,25 +123,27 @@ public class SolutionController extends ObjectOperationController {
 		return null;
 	}
 
-	@RequestMapping(value = "/solutions", method = RequestMethod.GET)
-	public Set<Solution> getSolutionsForUser(@RequestParam(value = "excId", required = false) String excId,
-			@RequestParam(value = "usrId", required = false) String usrId) {
-		User usr = UserService.getCurrentUser();
-		Set<Solution> sols = new HashSet<>();
-		LOGGER.info("UserId:" + usrId);
-		LOGGER.info("ExcId:" + excId);
-
-		if (usrId != null) {
-			// Current user Docent?
-			User student = UserService.getUserById(usrId);
-			sols = student.getSolutions();
-			return sols;
+	@RequestMapping(value = "/docent/solutionsAll", method = RequestMethod.GET)
+	public Set<Solution> getAllSolutions(@RequestParam(value = "lectureId", required = true) String lectureId,
+			@RequestParam(value = "exerciseId", required = true) String exerciseId) {
+		if (UserService.isCurrentUserDocent()) {
+			return SolutionService.getAllSollutionsBasedCriteria(exerciseId, lectureId);
 
 		} else {
-			sols = usr.getSolutions();
+			throw new AccessDeniedException("As a student you are not eligible to make this request!");
+		}
+	}
+
+	@RequestMapping(value = "/docent/solution", method = RequestMethod.GET)
+	public Solution getSolutionForUser(@RequestParam(value = "excId", required = true) String excId,
+			@RequestParam(value = "usrId", required = false) String usrId) {
+
+		if (usrId != null && UserService.isCurrentUserDocent()) {
+			return SolutionService.getSollutionBasedCriteria(excId, usrId);
+		} else {
+			return SolutionService.getSollutionBasedCriteria(excId, UserService.getCurrentUser().getHibId());
 		}
 
-		return sols;
 	}
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Solution.SOLUTION, method = RequestMethod.PATCH)
