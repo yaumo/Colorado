@@ -22,6 +22,8 @@ var exercise = '';
 var name = '';
 var coursesJSON;
 var allUsersJSON;
+var solutionsJSON;
+var solutionJSON;
 const courselist = [];
 const lecturelist = [];
 const exerciselist = [];
@@ -45,7 +47,10 @@ class OverviewTab extends React.Component {
 			lecturelist: [],
 			exerciselist: [],
 			userlist: [],
-			overviewlist: [<TableRow><TableRowColumn>Please select a Course, Lecture and an Exercise</TableRowColumn></TableRow>],
+			overviewlist: [{
+				name: "Please select a course,",
+				status: "lecture and an exercise"
+			}],
 			allUsers: ''
 		};
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
@@ -82,46 +87,6 @@ class OverviewTab extends React.Component {
 				this.setState({ exerciselist: exerciselist });
 			}.bind(this)
 		});
-
-/*
-		$.ajax({
-			url: "http://localhost:8080/users",
-			dataType: 'json',
-			method: 'GET',
-
-			success: function (allUsers) {
-				allUsersJSON = allUsers;
-				this.setState({ allUsers: allUsersJSON });
-				if (userlist.length === 0) {
-					var x = 0;
-					for (var i = 0; i < allUsersJSON.length; i++) {
-						for (var j = 0; j < allUsersJSON[i].solutions.length; j++) {
-							userlist.push(
-								<TableRow key={x}>
-									<TableRowColumn>{allUsersJSON[i].course.title}</TableRowColumn>
-									<TableRowColumn>{allUsersJSON[i].username}</TableRowColumn>
-									<TableRowColumn>{allUsersJSON[i].solutions[j].exercise.title}</TableRowColumn>
-									<TableRowColumn>{allUsersJSON[i].username}</TableRowColumn>
-									<TableRowColumn>{allUsersJSON[i].solutions[j].correct.toString()}</TableRowColumn>
-									<TableRowColumn>
-										<IconButton onClick={this.handleClickViewCode}>
-											<ActionCode />
-										</IconButton>
-									</TableRowColumn>
-									<TableRowColumn className="hidden">{allUsersJSON[i].id}</TableRowColumn>
-									<TableRowColumn className="hidden">{allUsersJSON[i].solutions[j].correct.toString()}</TableRowColumn>
-									<TableRowColumn className="hidden">{allUsersJSON[i].solutions[j].correct.toString()}</TableRowColumn>
-								</TableRow>
-							)
-							x++;
-						}
-					}
-				}
-				this.setState({ userlist: userlist });
-
-			}.bind(this)
-		});
-		*/
 	}
 
 
@@ -173,22 +138,25 @@ class OverviewTab extends React.Component {
 
 	handleClickViewCode(event, index, value) {
 		$.ajax({
-			url: "http://localhost:8080/solution",
+			url: "http://localhost:8080/docent/solution",
 			dataType: 'json',
 			method: 'GET',
 			//data: 'owner=2 exerciseID=1',
 			success: function (solution) {
-				//handle SolutionCode
+				solutionJSON = solution;
+				lecture = event.currentTarget.parentElement.parentElement.cells[1].innerText;
+				exercise = event.currentTarget.parentElement.parentElement.cells[2].innerText;
+				name = event.currentTarget.parentElement.parentElement.cells[3].innerText;
+
+				this.setState({
+					open: true
+					//code noch changen
+				});
+
 			}.bind(this)
 		});
 
-		lecture = event.currentTarget.parentElement.parentElement.cells[1].innerText;
-		exercise = event.currentTarget.parentElement.parentElement.cells[2].innerText;
-		name = event.currentTarget.parentElement.parentElement.cells[3].innerText;
 
-		this.setState({
-			open: true
-		});
 	}
 
 	handleRequestClose() {
@@ -196,73 +164,21 @@ class OverviewTab extends React.Component {
 	}
 
 	handleClickSearch(e) {
-		console.log('Trest');
-		/*
-		var selectedCourseText=this.refs.DropDownCourse.props.children[this.refs.DropDownCourse.props.value].props.primaryText;
-		var selectedLectureText=this.refs.DropDownLecture.props.children[this.refs.DropDownLecture.props.value].props.primaryText;
-		var selectedExerciseText=this.refs.DropDownExercise.props.children[this.refs.DropDownExercise.props.value].props.primaryText;
-		var count = userlist.length;
-		for(var i=0; i<count;i++){
-			userlist.pop();
-		}
-		if(selectedLectureText==='All Lectures'){
-			for(var i=0; i<this.state.allUsers.length; i++){
-				if(selectedCourseText===this.state.allUsers[i].username){
-					for (var j = 0; j < this.state.allUsers[i].solutions.length; j++) {
-						userlist.push(
-							<TableRow key={x}>
-								<TableRowColumn>{"WWI14SEA"}</TableRowColumn>
-								<TableRowColumn>{allUsersJSON[i].username}</TableRowColumn>
-								<TableRowColumn>{allUsersJSON[i].solutions[j].exercise.title}</TableRowColumn>
-								<TableRowColumn>{allUsersJSON[i].username}</TableRowColumn>
-								<TableRowColumn>{allUsersJSON[i].solutions[j].correct.toString()}</TableRowColumn>
-								<TableRowColumn>
-									<IconButton onClick={this.handleClickViewCode}>
-										<ActionCode />
-									</IconButton>
-								</TableRowColumn>
-								<TableRowColumn className="hidden">{allUsersJSON[i].id}</TableRowColumn>
-								<TableRowColumn className="hidden">{allUsersJSON[i].solutions[j].correct.toString()}</TableRowColumn>
-								<TableRowColumn className="hidden">{allUsersJSON[i].solutions[j].correct.toString()}</TableRowColumn>
-							</TableRow>
-						)
-						x++;
-					}
-				}
-				
-			}
-		}
-		else if (selectedExerciseText === 'All Exercises'){
-			for(var i=0; i<this.state.allUsers.length; i++){
-				if(selectedCourseText===this.state.allUsers[i].username){
-					for (var j = 0; j < this.state.allUsers[i].solutions.length; j++) {
-						if(selectedLectureText===this.state.allUsers[j].solutions){
-							userlist.push(
-								<TableRow key={x}>
-									<TableRowColumn>{"WWI14SEA"}</TableRowColumn>
-									<TableRowColumn>{allUsersJSON[i].username}</TableRowColumn>
-									<TableRowColumn>{allUsersJSON[i].solutions[j].exercise.title}</TableRowColumn>
-									<TableRowColumn>{allUsersJSON[i].username}</TableRowColumn>
-									<TableRowColumn>{allUsersJSON[i].solutions[j].correct.toString()}</TableRowColumn>
-									<TableRowColumn>
-										<IconButton onClick={this.handleClickViewCode}>
-											<ActionCode />
-										</IconButton>
-									</TableRowColumn>
-									<TableRowColumn className="hidden">{allUsersJSON[i].id}</TableRowColumn>
-									<TableRowColumn className="hidden">{allUsersJSON[i].solutions[j].correct.toString()}</TableRowColumn>
-									<TableRowColumn className="hidden">{allUsersJSON[i].solutions[j].correct.toString()}</TableRowColumn>
-								</TableRow>
-							)
-							x++;
-						}
-					}
-				}
-			}
-		}
-		else{
-		}
-		this.setState({userlist: userlist});*/
+		$.ajax({
+			url: "http://localhost:8080/docent/solutions",
+			dataType: 'json',
+			method: 'GET',
+			//data: 'lectureID=2 exerciseID=1',
+			success: function (solutions) {
+				solutionsJSON = solution;
+				this.setState({
+					overviewlist: solutionsJSON
+				});
+			}.bind(this),
+			error: function (error) {
+				//handle error
+			}.bind(this)
+		});
 	}
 
 	render() {

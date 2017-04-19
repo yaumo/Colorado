@@ -30,8 +30,8 @@ class ExercisesTab extends React.Component {
             case1Type: 1,
             case2Type: 1,
             language: 'javascript',
-			template: '',
-			solutionpattern: ''
+            template: '',
+            solutionpattern: ''
         };
         this.handleChangeProgrammingLanguage = this.handleChangeProgrammingLanguage.bind(this);
         this.handleOpenDialog = this.handleOpenDialog.bind(this);
@@ -39,8 +39,8 @@ class ExercisesTab extends React.Component {
         this.handleCreateExercise = this.handleCreateExercise.bind(this);
         this.handleChangeCase1Type = this.handleChangeCase1Type.bind(this);
         this.handleChangeCase2Type = this.handleChangeCase2Type.bind(this);
-		this.handleChangePatternSolution = this.handleChangePatternSolution.bind(this);
-		this.handleChangeTemplate = this.handleChangeTemplate.bind(this);
+        this.handleChangePatternSolution = this.handleChangePatternSolution.bind(this);
+        this.handleChangeTemplate = this.handleChangeTemplate.bind(this);
     }
 
     handleChangeProgrammingLanguage(event, index, value) {
@@ -54,7 +54,7 @@ class ExercisesTab extends React.Component {
     }
 
     handleChangeCase1Type(event, index, value) {
-        this.setState({ selectedCase1Type: value});
+        this.setState({ selectedCase1Type: value });
         if (value === 1) {
             this.setState({ case1Type: 'String' });
         }
@@ -70,7 +70,7 @@ class ExercisesTab extends React.Component {
     }
 
     handleChangeCase2Type(event, index, value) {
-        this.setState({ selectedCase2Type: value});
+        this.setState({ selectedCase2Type: value });
         if (value === 1) {
             this.setState({ case2Type: 'String' });
         }
@@ -97,26 +97,30 @@ class ExercisesTab extends React.Component {
         var description = $("#description")[0].value.toString();
         var language = $("#language").text();
         var youtube = $("#youtube")[0].value.toString();
-        //var patternSolution = $("#patternSolution")[0].value.toString();
-        //var template = $("#template")[0].value.toString();
+        var patternSolution = this.state.solutionpattern;
+        var template = this.state.template;
         var input1Value = $("#case1")[0].value.toString();
         var input1Type = this.state.case1Type;
         var input2Value = $("#case2")[0].value.toString();
         var input2Type = this.state.case2Type;
 
-        if ((title || description || input1Value || input2Value) == "") {
-            if ((title || description) == "") {
-                this.setState({
-                    opendialog: true,
-                    dialog: "Please fill in a title and a description"
-                });
-            }
-            else if ((testcase1 || testcase2) === "") {
-                this.setState({
-                    opendialog: true,
-                    dialog: "Please fill in at least two testcases"
-                });
-            }
+        if ((title || description) == "") {
+            this.setState({
+                opendialog: true,
+                dialog: "Please fill in a title and a description"
+            });
+        }
+        else if ((input1Value || input2Value) == "") {
+            this.setState({
+                opendialog: true,
+                dialog: "Please fill in at least two testcases"
+            });
+        }
+        else if (patternSolution == "") {
+            this.setState({
+                opendialog: true,
+                dialog: "Please enter a solution"
+            });
         }
         else {
             $.ajax({
@@ -127,7 +131,7 @@ class ExercisesTab extends React.Component {
                     "title": title,
                     "description": description,
                     "language": language,
-                    //"patternSolution": patternSolution,
+                    //"patternSolution": solutionpattern,
                     //"template": template,
                     "youtube": youtube,
                     "input1Value": input1Value,
@@ -151,16 +155,16 @@ class ExercisesTab extends React.Component {
             });
         }
     }
-	
-	handleChangePatternSolution(event){
-		console.log(event);
-		this.setState(patternSolution: event);
-	}
-	
-	handleChangeTemplate(event){
-		console.log(event);
-		this.setState(template: event);
-	}
+
+    handleChangePatternSolution(event) {
+        console.log(event);
+        this.setState({solutionPattern: event});
+    }
+
+    handleChangeTemplate(event) {
+        console.log(event);
+        this.setState({template: event});
+    }
 
     render() {
         return (
