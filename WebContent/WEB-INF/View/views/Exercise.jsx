@@ -52,11 +52,13 @@ class Content extends React.Component {
             open: true,
 			opendialog: false,
             value: 1,
-            java: 0
+            java: 0,
+			solution: ''
         };
 		this.handleChange = this.handleChange.bind(this);
 		this.handleOpenDialog = this.handleOpenDialog.bind(this);
 		this.handleCloseDialog = this.handleCloseDialog.bind(this);
+		this.handleChangeSolution = this.handleChangeSolution.bind(this);
     }		
 		handleChange(event, index, value) {
 		this.setState({java: value});
@@ -77,6 +79,10 @@ class Content extends React.Component {
         this.setState({ java: value });
     }
 
+	handleChangeSolution(event){
+		console.log(event);
+		this.setState(solution: event);
+	}
     render() {
         return (
             <div id="content" className="content">
@@ -127,7 +133,7 @@ class Content extends React.Component {
 									/>
                                    
                                     <Paper zDepth={4}>
-                                        <EditorAce />
+                                        <EditorAce handleChange={this.handleChangeSolution}/>
                                     </Paper>
                                 </CardText>
                                 <CardActions className="footer">
