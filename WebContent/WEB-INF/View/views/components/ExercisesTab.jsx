@@ -21,12 +21,22 @@ class ExercisesTab extends React.Component {
             open: true,
             opendialog: false,
             selectedProgrammingLanguage: 1,
+            selectedCase1Type: 1,
+            selectedCase2Type: 1,
             value: 1,
+            dialog: '',
+            case1: '',
+            case2: '',
+            case1Type: 1,
+            case2Type: 1,
             language: 'javascript'
         };
         this.handleChangeProgrammingLanguage = this.handleChangeProgrammingLanguage.bind(this);
         this.handleOpenDialog = this.handleOpenDialog.bind(this);
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
+        this.handleCreateExercise = this.handleCreateExercise.bind(this);
+        this.handleChangeCase1Type = this.handleChangeCase1Type.bind(this);
+        this.handleChangeCase2Type = this.handleChangeCase2Type.bind(this);
     }
 
     handleChangeProgrammingLanguage(event, index, value) {
@@ -38,6 +48,39 @@ class ExercisesTab extends React.Component {
             this.setState({ language: 'java' });
         }
     }
+
+    handleChangeCase1Type(event, index, value) {
+        this.setState({ selectedCase1Type: value});
+        if (value === 1) {
+            this.setState({ case1Type: 'String' });
+        }
+        else if (value === 2) {
+            this.setState({ case1Type: 'int' });
+        }
+        else if (value === 3) {
+            this.setState({ case1Type: 'boolean' });
+        }
+        else if (value === 4) {
+            this.setState({ case1Type: 'long' });
+        }
+    }
+
+    handleChangeCase2Type(event, index, value) {
+        this.setState({ selectedCase2Type: value});
+        if (value === 1) {
+            this.setState({ case2Type: 'String' });
+        }
+        else if (value === 2) {
+            this.setState({ case2Type: 'int' });
+        }
+        else if (value === 3) {
+            this.setState({ case2Type: 'boolean' });
+        }
+        else if (value === 4) {
+            this.setState({ case2Type: 'long' });
+        }
+    }
+
     handleOpenDialog(event, index, value) {
         this.setState({ opendialog: true });
     }
@@ -45,31 +88,64 @@ class ExercisesTab extends React.Component {
         this.setState({ opendialog: false });
     }
 
-    handleCreateExercise() {
+    handleCreateExercise(e) {
         var title = $("#title")[0].value.toString();
         var description = $("#description")[0].value.toString();
         var language = $("#language").text();
         var youtube = $("#youtube")[0].value.toString();
         //var patternSolution = $("#patternSolution")[0].value.toString();
         //var template = $("#template")[0].value.toString();
+        var input1Value = $("#case1")[0].value.toString();
+        var input1Type = this.state.case1Type;
+        var input2Value = $("#case2")[0].value.toString();
+        var input2Type = this.state.case2Type;
 
-
-        $.ajax({
-            url: "http://localhost:8080/exercise",
-            dataType: 'json',
-            method: 'POST',
-            data: JSON.stringify({
-                "title": title,
-                "description": description,
-                "language" : language,
-                //"patternSolution": patternSolution
-                //"template": template,
-                "youtube": youtube
-            }),
-            success: function (response) {
-
-            }.bind(this)
-        });
+        if ((title || description || input1Value || input2Value) == "") {
+            if ((title || description) == "") {
+                this.setState({
+                    opendialog: true,
+                    dialog: "Please fill in a title and a description"
+                });
+            }
+            else if ((testcase1 || testcase2) === "") {
+                this.setState({
+                    opendialog: true,
+                    dialog: "Please fill in at least two testcases"
+                });
+            }
+        }
+        else {
+            $.ajax({
+                url: "http://localhost:8080/exercise",
+                dataType: 'json',
+                method: 'POST',
+                data: JSON.stringify({
+                    "title": title,
+                    "description": description,
+                    "language": language,
+                    //"patternSolution": patternSolution,
+                    //"template": template,
+                    "youtube": youtube,
+                    "input1Value": input1Value,
+                    "input1Type": input1Type,
+                    "input2Value": input2Value,
+                    "input2Type": input2Type
+                }),
+                success: function (response) {
+                    this.setState({
+                        opendialog: true,
+                        dialog: "Exercise successfully created"
+                    });
+                    //setStates to ''
+                }.bind(this),
+                error: function (error) {
+                    this.setState({
+                        opendialog: true,
+                        dialog: "An error has occoured. Please make sure that you are logged in and have the permission to create new exercises."
+                    });
+                }.bind(this)
+            });
+        }
     }
 
     render() {
@@ -85,7 +161,7 @@ class ExercisesTab extends React.Component {
                                     <tr>
                                         <td style={{ width: "50%", padding: "6px", paddingTop: "0" }}>
                                             <TextField
-                                                id = "title"
+                                                id="title"
                                                 floatingLabelText="Title"
                                                 fullWidth={false}
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
@@ -102,7 +178,7 @@ class ExercisesTab extends React.Component {
                                     <tr>
                                         <td style={{ width: "50%", padding: "6px" }}>
                                             <TextField
-                                             id = "description"
+                                                id="description"
                                                 floatingLabelText="Description"
                                                 multiLine={true}
                                                 rows={3}
@@ -113,7 +189,7 @@ class ExercisesTab extends React.Component {
                                         </td>
                                         <td style={{ width: "50%", padding: "6px", verticalAlign: "bottom" }}>
                                             <TextField
-                                             id = "youtube"
+                                                id="youtube"
                                                 floatingLabelText="Youtube-Link"
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
@@ -132,13 +208,13 @@ class ExercisesTab extends React.Component {
                                     <td style={{ width: "50%", padding: "6px", paddingLeft: "0px" }}>
                                         <h4>Pattern Solution</h4>
                                         <Paper zDepth={4}>
-                                            <EditorAce mode={this.state.language}  id = "patternSolution" />
+                                            <EditorAce mode={this.state.language} id="patternSolution" />
                                         </Paper>
                                     </td>
                                     <td style={{ width: "50%", padding: "6px", paddingRight: "0px" }}>
                                         <h4>Template</h4>
                                         <Paper zDepth={4}>
-                                            <EditorAce mode={this.state.language}   id = "template"/>
+                                            <EditorAce mode={this.state.language} id="template" />
                                         </Paper>
                                     </td>
                                 </tr>
@@ -149,9 +225,21 @@ class ExercisesTab extends React.Component {
                             <table className="paper" width="100%">
                                 <tbody>
                                     <tr>
+                                        <td>
+                                        </td>
+                                        <td style={{ width: "33%", padding: "6px" }}>
+                                            Type:
+                                            &nbsp;
+                                            <DropDownMenu className="language" id="case1Type" value={this.state.selectedCase1Type} onChange={this.handleChangeCase1Type}>
+                                                <MenuItem value={1} primaryText="String" />
+                                                <MenuItem value={2} primaryText="int" />
+                                                <MenuItem value={3} primaryText="boolean" />
+                                                <MenuItem value={4} primaryText="long" />
+                                            </DropDownMenu>
+                                        </td>
                                         <td style={{ width: "33%", padding: "6px" }}>
                                             <TextField
-                                             id = "case1"
+                                                id="case1"
                                                 floatingLabelText="Case 1: Input"
                                                 fullWidth={false}
                                                 width="12%"
@@ -159,9 +247,25 @@ class ExercisesTab extends React.Component {
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                                             />
                                         </td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td style={{ width: "33%", padding: "6px" }}>
+                                            Type:
+                                            &nbsp;
+                                            <DropDownMenu className="language" id="case2Type" value={this.state.selectedCase2Type} onChange={this.handleChangeCase2Type}>
+                                                <MenuItem value={1} primaryText="String" />
+                                                <MenuItem value={2} primaryText="int" />
+                                                <MenuItem value={3} primaryText="boolean" />
+                                                <MenuItem value={4} primaryText="long" />
+                                            </DropDownMenu>
+                                        </td>
                                         <td style={{ width: "33%", padding: "6px" }}>
                                             <TextField
-                                             id = "case2"
+                                                id="case2"
                                                 floatingLabelText="Case 2: Input"
                                                 fullWidth={false}
                                                 width="12%"
@@ -169,16 +273,7 @@ class ExercisesTab extends React.Component {
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                                             />
                                         </td>
-
-                                        <td style={{ width: "33%", padding: "6px" }}>
-                                            <TextField
-                                             id = "case3"
-                                                floatingLabelText="Case 3: Input"
-                                                fullWidth={false}
-                                                width="12%"
-                                                underlineFocusStyle={{ 'borderColor': '#bd051f' }}
-                                                floatingLabelFocusStyle={{ 'color': '#bd051f' }}
-                                            />
+                                        <td>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -192,13 +287,13 @@ class ExercisesTab extends React.Component {
                             backgroundColor="#bd051f"
                             labelColor="#FFFFFF" />
                         <Dialog
-                            title="Dialog With Actions"
+                            title="Information"
                             modal={false}
                             open={this.state.opendialog}
                             onRequestClose={this.handleCloseDialog}
                         >
-                            The actions in this window were passed in as an array of React objects.
-						</Dialog>
+                            {this.state.dialog}
+                        </Dialog>
                     </CardActions>
                 </Card>
             </div>
