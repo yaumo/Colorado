@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.colorado.denver.services.SecurityServiceImpl;
@@ -61,8 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// .permitAll()
 		// .successHandler(successHandler);
 
-		http.addFilterBefore(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class)
-				.addFilterBefore(new CORSFilter(), ChannelProcessingFilter.class);
+		http.addFilterBefore(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
+		// .addFilterBefore(new CORSFilter(), ChannelProcessingFilter.class);
 	}
 
 	@Override
