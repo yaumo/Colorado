@@ -38,6 +38,7 @@ public class UserService {
 	public static User getCurrentUser() {
 		// Find out username and retrieve the user from DB
 		// We do NOT use the user object returned by the Token!!!!s
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth == null) {
 			LOGGER.error("NO Authentification found!");
@@ -122,20 +123,25 @@ public class UserService {
 	}
 
 	public static boolean isCurrentUserDocent() {
-		User currentUser = getCurrentUser();
-		Collection<Role> roles = currentUser.getRoles();
 
-		Iterator<Role> iterator = roles.iterator();
+		try {
+			User currentUser = getCurrentUser();
+			Collection<Role> roles = currentUser.getRoles();
+			Iterator<Role> iterator = roles.iterator();
 
-		boolean isDocent = false;
-		while (iterator.hasNext()) {
-			if (iterator.next().getRoleName().equals("ROLE_DOCENT")) {
-				isDocent = true;
-				break;
+			while (iterator.hasNext()) {
+				if (iterator.next().getRoleName().equals("ROLE_DOCENT")) {
+					return true;
+				}
 			}
-		}
 
-		return isDocent;
+			return false;
+		} catch (Exception e) {
+			LOGGER.error("Error evaluating if current User is Docent!");
+			LOGGER.error(SecurityContextHolder.getContext().getAuthentication().toString());
+			e.printStackTrace();
+			return false;
+		}
 
 	}
 

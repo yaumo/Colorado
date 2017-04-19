@@ -4,7 +4,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Set;
 
@@ -168,11 +167,11 @@ public class UserController extends ObjectOperationController {
 	}
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USERS, method = RequestMethod.GET)
-	public List<User> getAllUsers() throws AccessDeniedException {
+	public List<User> getAllUsers() {
 		if (UserService.isCurrentUserDocent()) {
 			return UserService.allUsers();
 		} else {
-			throw new AccessDeniedException(DenverConstants.STUDENT_ACCES_DENIED);
+			return null;
 		}
 
 	}
