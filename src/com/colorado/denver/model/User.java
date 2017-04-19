@@ -14,7 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -48,7 +47,7 @@ public class User extends BaseEntity<User> {
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "lectures_users", joinColumns = { @JoinColumn(name = "lectures_id") }, inverseJoinColumns = { @JoinColumn(name = "users_id") })
-	@JsonBackReference
+	@JsonManagedReference
 	public Set<Lecture> getLectures() {
 		return lectures;
 	}
@@ -68,7 +67,7 @@ public class User extends BaseEntity<User> {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "courseID")
-	@JsonBackReference
+	@JsonManagedReference
 	public Course getCourse() {
 		return course;
 	}
