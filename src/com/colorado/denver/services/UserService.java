@@ -3,6 +3,7 @@ package com.colorado.denver.services;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -122,6 +123,24 @@ public class UserService {
 		HibernateController hibCtrl = new HibernateController();
 		User usr = (User) hibCtrl.getEntity(id);
 		return usr;
+	}
+
+	public static boolean isCurrentUserDocent() {
+		User currentUser = getCurrentUser();
+		Collection<Role> roles = currentUser.getRoles();
+
+		Iterator<Role> iterator = roles.iterator();
+
+		boolean isDocent = false;
+		while (iterator.hasNext()) {
+			if (iterator.next().getRoleName().equals("ROLE_DOCENT")) {
+				isDocent = true;
+				break;
+			}
+		}
+
+		return isDocent;
+
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.colorado.denver.controller.entityController;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,10 +25,12 @@ import com.colorado.denver.model.Lecture;
 import com.colorado.denver.model.Role;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
+import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.tools.DenverConstants;
 import com.colorado.denver.tools.GraphAdapterBuilder;
 import com.colorado.denver.view.GsonExclusionStrategy;
+import com.google.common.collect.Iterables;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -41,7 +44,7 @@ public class ObjectOperationController extends HttpServlet {
 
 	private User workingUser = null;
 
-	public String checkRequest(HttpServletRequest request, String mode) throws ReflectionException, IOException, JSONException {
+	public String checkRequest(HttpServletRequest request, String mode, String className) throws ReflectionException, IOException, JSONException {
 		// This Method should be generic!!
 		// init
 
@@ -93,6 +96,69 @@ public class ObjectOperationController extends HttpServlet {
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
 
+		User currentUser = UserService.getCurrentUser();
+		System.out.println(currentUser.getUsername());
+
+		this.workingUser = UserService.getCurrentUser();
+		Collection<Role> roles = this.workingUser.getRoles();
+		Role role = Iterables.get(roles, 1);
+
+		boolean allowed = false;
+
+		if (mode.equals(DenverConstants.POST)) {
+			switch (className) {
+			case "Solution":
+				if (UserService.isCurrentUserDocent() == false) {
+					allowed = true;
+				}
+				break;
+			case "Lecture":
+				if (UserService.isCurrentUserDocent()) {
+					allowed = true;
+				}
+				break;
+			case "Exercise":
+				if (UserService.isCurrentUserDocent()) {
+					allowed = true;
+				}
+				break;
+			case "User":
+				if (UserService.isCurrentUserDocent()) {
+					allowed = true;
+				}
+				break;
+
+			}
+		} else if (mode.equals(DenverConstants.PATCH)) {
+			switch (className) {
+			case "Solution":
+				if (UserService.isCurrentUserDocent() == false) {
+					allowed = true;
+				}
+				break;
+			case "Lecture":
+				if (UserService.isCurrentUserDocent()) {
+					allowed = true;
+				}
+				break;
+			case "Exercise":
+				if (UserService.isCurrentUserDocent()) {
+					allowed = true;
+				}
+				break;
+			case "User":
+				if (UserService.isCurrentUserDocent() == false) {
+					allowed = true;
+				}
+				break;
+			}
+		} else if (mode.equals("GET")) {
+
+		}
+
+		if (allowed == false) {
+			throw new HttpServerErrorException(HttpStatus.FORBIDDEN);
+		}
 		// TODO: Security checks here Nele!! Based on current user (You can parse via method declaration and the operation and entity!
 		// Write user in "workingUser", see class at top
 		// do security check

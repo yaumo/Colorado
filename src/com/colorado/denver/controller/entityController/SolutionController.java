@@ -1,5 +1,7 @@
 package com.colorado.denver.controller.entityController;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,11 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpServerErrorException;
 
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Solution;
@@ -44,10 +48,14 @@ public class SolutionController extends ObjectOperationController {
 		UserService.authorizeSystemuser();
 		String jsonString = DenverConstants.ERROR;
 		try {
-			jsonString = super.checkRequest(request, DenverConstants.POST);// Add request Method from DenverConstants
+			jsonString = super.checkRequest(request, DenverConstants.POST, Solution.SOLUTION);// Add request Method from DenverConstants
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
+		} catch (HttpServerErrorException e) {
+			LOGGER.error("Not authorized to handle request:" + request.toString());
+			e.printStackTrace();
+			response.setStatus(403);
 		}
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
@@ -124,4 +132,33 @@ public class SolutionController extends ObjectOperationController {
 		return sols;
 	}
 
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Solution.SOLUTION, method = RequestMethod.PATCH)
+	public Solution solutionPatch(HttpServletRequest request, HttpServletResponse response) throws ReflectionException, IOException {
+		UserService.authorizeSystemuser();
+
+		String jsonString = "";
+		try {
+			jsonString = super.checkRequest(request, DenverConstants.PATCH, Solution.SOLUTION);
+		} catch (JSONException e) {
+			LOGGER.error("Error in OOC while handling the request:" + request.toString());
+			e.printStackTrace();
+		} catch (HttpServerErrorException e) {
+			LOGGER.error("Not authorized to handle request:" + request.toString());
+			e.printStackTrace();
+			response.setStatus(403);
+		}
+
+		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.serializeNulls();
+		Gson gson = gb.create();
+
+		Solution entity = gson.fromJson(jsonString, Solution.class);
+
+		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.PATCH);
+		entity = null;
+		Solution entityAfterPatch = gson.fromJson(jsonResponse, Solution.class);
+		Link selfLink = linkTo(SolutionController.class).withSelfRel();
+		entityAfterPatch.add(selfLink);
+		return entityAfterPatch;
+	}
 }

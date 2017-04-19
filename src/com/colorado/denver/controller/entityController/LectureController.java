@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpServerErrorException;
 
 import com.colorado.denver.model.Lecture;
 import com.colorado.denver.services.UserService;
@@ -39,10 +40,14 @@ public class LectureController extends ObjectOperationController {
 		// JSONObject theObject = super.handleRequest(request, response);
 		String jsonString = "";
 		try {
-			jsonString = super.checkRequest(request, DenverConstants.POST);
+			jsonString = super.checkRequest(request, DenverConstants.POST, Lecture.LECTURE);
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
+		} catch (HttpServerErrorException e) {
+			LOGGER.error("Not authorized to handle request:" + request.toString());
+			e.printStackTrace();
+			response.setStatus(403);
 		}
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
@@ -66,10 +71,14 @@ public class LectureController extends ObjectOperationController {
 		String jsonString = "";
 
 		try {
-			jsonString = super.checkRequest(request, DenverConstants.PATCH);
+			jsonString = super.checkRequest(request, DenverConstants.PATCH, Lecture.LECTURE);
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request:" + request.toString());
 			e.printStackTrace();
+		} catch (HttpServerErrorException e) {
+			LOGGER.error("Not authorized to handle request:" + request.toString());
+			e.printStackTrace();
+			response.setStatus(403);
 		}
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();

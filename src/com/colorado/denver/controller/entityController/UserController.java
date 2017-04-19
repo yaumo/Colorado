@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpServerErrorException;
 
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Role;
@@ -43,13 +44,17 @@ public class UserController extends ObjectOperationController {
 		UserService.authorizeSystemuser();// For testing. Use requesting user instead!
 		String jsonString = "";
 		try {
-			jsonString = super.checkRequest(request, DenverConstants.POST);
+			jsonString = super.checkRequest(request, DenverConstants.POST, User.USER);
 			// TODO: Parse the "objectClass" like this: super.checkRequest(request, DenverConstants.POST, User.USER)
 			// same in "doOperation down below and other controllers please"
 			// We remove the "objectClass from the entities to make it more RESTful.. >.<
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
+		} catch (HttpServerErrorException e) {
+			LOGGER.error("Not authorized to handle request:" + request.toString());
+			e.printStackTrace();
+			response.setStatus(403);
 		}
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
@@ -73,10 +78,14 @@ public class UserController extends ObjectOperationController {
 		// JSONObject theObject = super.handleRequest(request, response);
 		String jsonString = "";
 		try {
-			jsonString = super.checkRequest(request, DenverConstants.PATCH);
+			jsonString = super.checkRequest(request, DenverConstants.PATCH, User.USER);
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
+		} catch (HttpServerErrorException e) {
+			LOGGER.error("Not authorized to handle request:" + request.toString());
+			e.printStackTrace();
+			response.setStatus(403);
 		}
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
@@ -100,10 +109,14 @@ public class UserController extends ObjectOperationController {
 		// JSONObject theObject = super.handleRequest(request, response);
 		String jsonString = "";
 		try {
-			jsonString = super.checkRequest(request, DenverConstants.DELETE);
+			jsonString = super.checkRequest(request, DenverConstants.DELETE, User.USER);
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
+		} catch (HttpServerErrorException e) {
+			LOGGER.error("Not authorized to handle request:" + request.toString());
+			e.printStackTrace();
+			response.setStatus(403);
 		}
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
