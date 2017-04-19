@@ -43,7 +43,6 @@ public class SolutionController extends ObjectOperationController {
 	@ResponseBody
 	public void handleSolutionRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
-		UserService.authorizeSystemuser();
 		String jsonString = DenverConstants.ERROR;
 		try {
 			jsonString = super.checkRequest(request, DenverConstants.POST, Solution.SOLUTION);// Add request Method from DenverConstants

@@ -1,8 +1,7 @@
 package com.colorado.denver.controller.entityController;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.management.ReflectionException;
@@ -11,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
@@ -43,7 +42,6 @@ public class ExerciseController extends ObjectOperationController {
 	public void handleExerciseRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
 
-		UserService.authorizeSystemuser();
 		// JSONObject theObject = super.handleRequest(request, response);
 		String jsonString = "";
 		try {
@@ -98,9 +96,19 @@ public class ExerciseController extends ObjectOperationController {
 		return ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getHibId());
 	}
 
+	@RequestMapping(value = "/exercise", method = RequestMethod.GET)
+	public Exercise getExerciseForUser(@RequestParam(value = "exeId", required = true) String exeId) {
+		Set<Exercise> exercises = ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getHibId());
+		for (Iterator iterator = exercises.iterator(); iterator.hasNext();) {
+			Exercise exercise = (Exercise) iterator.next();
+			if (exercise.getHibId().equals(exeId))
+				return exercise;
+		}
+		return null;
+	}
+
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Exercise.EXERCISE, method = RequestMethod.PATCH)
 	public Exercise exercisePatch(HttpServletRequest request, HttpServletResponse response) throws ReflectionException, IOException {
-		UserService.authorizeSystemuser();
 
 		String jsonString = "";
 
@@ -120,14 +128,9 @@ public class ExerciseController extends ObjectOperationController {
 		Gson gson = gb.create();
 
 		Exercise entity = gson.fromJson(jsonString, Exercise.class);
-
-		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.PATCH);
-		entity = null;
-		Exercise entityAfterPatch = gson.fromJson(jsonResponse, Exercise.class);
-		Link selfLink = linkTo(ExerciseController.class).withSelfRel();
-		entityAfterPatch.add(selfLink);
-		return entityAfterPatch;
-
+		String id = entity.getHibId();
+		super.doOperation(entity, jsonString, DenverConstants.PATCH);
+		return getExerciseForUser(id);
 	}
 
 }

@@ -41,7 +41,6 @@ public class UserController extends ObjectOperationController {
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.POST)
 	public User userPost(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
-		UserService.authorizeSystemuser();// For testing. Use requesting user instead!
 		String jsonString = "";
 		try {
 			jsonString = super.checkRequest(request, DenverConstants.POST, User.USER);
@@ -74,7 +73,6 @@ public class UserController extends ObjectOperationController {
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.PATCH)
 	public User userPatch(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
-		UserService.authorizeSystemuser();
 		// JSONObject theObject = super.handleRequest(request, response);
 		String jsonString = "";
 		try {
@@ -105,7 +103,6 @@ public class UserController extends ObjectOperationController {
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.DELETE)
 	public User userDelete(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
-		UserService.authorizeSystemuser();
 		// JSONObject theObject = super.handleRequest(request, response);
 		String jsonString = "";
 		try {

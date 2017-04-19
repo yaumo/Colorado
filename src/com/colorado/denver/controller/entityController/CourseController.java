@@ -40,7 +40,6 @@ public class CourseController extends ObjectOperationController {
 	@ResponseBody
 	public void handleCourseRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ReflectionException, IOException {
-		UserService.authorizeSystemuser();
 		String jsonString = DenverConstants.ERROR;
 		try {
 			jsonString = super.checkRequest(request, DenverConstants.POST, Course.COURSE);
