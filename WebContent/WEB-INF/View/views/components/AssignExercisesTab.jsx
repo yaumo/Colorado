@@ -46,7 +46,6 @@ class AssignExercisesTab extends React.Component {
             url: "http://localhost:8080/exercises",
             dataType: 'json',
             method: 'GET',
-            data: 'owner=2',
             success: function (exercises) {
                 this.setState({ exercisesTableData: exercises });
             }.bind(this)

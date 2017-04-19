@@ -18,21 +18,6 @@ import Dialog from 'material-ui/Dialog';
 
 
 var courseJSON;
-function getCurrentCourse() {
-    fetch('http://localhost:8080/course', {
-        method: 'GET',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json'
-        }
-    }).then(function (response) {
-        return response.json();
-    }).then(function (course) {
-        courseJSON = course;
-    }).catch(function (err) {
-        console.log(err);
-    });
-}
 
 export class Exercise extends React.Component {
     render() {
@@ -68,11 +53,6 @@ class Content extends React.Component {
 			this.setState({opendialog: false});
 		}
         
-
-    componentWillMount() {
-        getCurrentCourse();
-    }
-
     handleChange(event, index, value) {
         this.setState({ java: value });
     }
@@ -120,7 +100,7 @@ class Content extends React.Component {
                                 <CardText className="loginbody">
 									<TextField
 										floatingLabelText="JavaScript"
-										fullWidth={true}
+										fullWidth={false}
 										disabled={true}
 										underlineShow={false}
 										floatingLabelStyle={{'color':'#000000'}}

@@ -26,6 +26,7 @@ const courselist = [];
 const lecturelist = [];
 const exerciselist = [];
 const userlist = [];
+const overviewlist = [];
 
 
 class OverviewTab extends React.Component {
@@ -44,7 +45,8 @@ class OverviewTab extends React.Component {
 			lecturelist: [],
 			exerciselist: [],
 			userlist: [],
-			allUsers:''
+			overviewlist: [<TableRow><TableRowColumn>Please select a Course, Lecture and an Exercise</TableRowColumn></TableRow>],
+			allUsers: ''
 		};
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
 		this.handleChangeCourse = this.handleChangeCourse.bind(this);
@@ -72,7 +74,7 @@ class OverviewTab extends React.Component {
 						lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[j - 1].title} />);
 					}
 				}
-				if (exerciselist.length === 0){
+				if (exerciselist.length === 0) {
 					exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
 				}
 				this.setState({ courselist: courselist });
@@ -81,7 +83,7 @@ class OverviewTab extends React.Component {
 			}.bind(this)
 		});
 
-
+/*
 		$.ajax({
 			url: "http://localhost:8080/users",
 			dataType: 'json',
@@ -89,14 +91,14 @@ class OverviewTab extends React.Component {
 
 			success: function (allUsers) {
 				allUsersJSON = allUsers;
-				this.setState({allUsers: allUsersJSON});
+				this.setState({ allUsers: allUsersJSON });
 				if (userlist.length === 0) {
 					var x = 0;
 					for (var i = 0; i < allUsersJSON.length; i++) {
 						for (var j = 0; j < allUsersJSON[i].solutions.length; j++) {
 							userlist.push(
 								<TableRow key={x}>
-									<TableRowColumn>{"WWI14SEA"}</TableRowColumn>
+									<TableRowColumn>{allUsersJSON[i].course.title}</TableRowColumn>
 									<TableRowColumn>{allUsersJSON[i].username}</TableRowColumn>
 									<TableRowColumn>{allUsersJSON[i].solutions[j].exercise.title}</TableRowColumn>
 									<TableRowColumn>{allUsersJSON[i].username}</TableRowColumn>
@@ -115,10 +117,11 @@ class OverviewTab extends React.Component {
 						}
 					}
 				}
-				this.setState({ userlist: userlist});
-				
+				this.setState({ userlist: userlist });
+
 			}.bind(this)
 		});
+		*/
 	}
 
 
@@ -170,15 +173,15 @@ class OverviewTab extends React.Component {
 
 	handleClickViewCode(event, index, value) {
 		$.ajax({
-            url: "http://localhost:8080/solution",
-            dataType: 'json',
-            method: 'GET',
-            data: 'owner=2',
-            success: function (solution) {
-                //handle SolutionCode
-            }.bind(this)
-        });
-		
+			url: "http://localhost:8080/solution",
+			dataType: 'json',
+			method: 'GET',
+			//data: 'owner=2 exerciseID=1',
+			success: function (solution) {
+				//handle SolutionCode
+			}.bind(this)
+		});
+
 		lecture = event.currentTarget.parentElement.parentElement.cells[1].innerText;
 		exercise = event.currentTarget.parentElement.parentElement.cells[2].innerText;
 		name = event.currentTarget.parentElement.parentElement.cells[3].innerText;
@@ -192,7 +195,7 @@ class OverviewTab extends React.Component {
 		this.setState({ open: false });
 	}
 
-	handleClickSearch(e){
+	handleClickSearch(e) {
 		console.log('Trest');
 		/*
 		var selectedCourseText=this.refs.DropDownCourse.props.children[this.refs.DropDownCourse.props.value].props.primaryText;
@@ -302,12 +305,28 @@ class OverviewTab extends React.Component {
 									</TableRow>
 								</TableHeader>
 								<TableBody displayRowCheckbox={false} style={{ background: "#d1d1d1" }}>
-									{this.state.userlist}
+									{this.state.overviewlist.map((row, index) => (
+										<TableRow key={index} selected={row.selected}>
+											<TableRowColumn>{this.state.selectedCourse}</TableRowColumn>
+											<TableRowColumn>{this.state.selectedLecture}</TableRowColumn>
+											<TableRowColumn>{this.state.selectedExercise}</TableRowColumn>
+											<TableRowColumn>{row.name}</TableRowColumn>
+											<TableRowColumn>{row.status}</TableRowColumn>
+											<TableRowColumn>
+												<IconButton onClick={this.handleClickViewCode}>
+													<ActionCode />
+												</IconButton>
+											</TableRowColumn>
+											<TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
+											<TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
+											<TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
+										</TableRow>
+									))}
 								</TableBody>
 							</Table>
 							<Popover
 								open={this.state.open}
-								style={{ marginTop: '20%', marginLeft: '35%', width: 'auto', height: 'auto' }}
+								style={{ marginTop: '10%', marginLeft: '35%', width: 'auto', height: 'auto' }}
 								onRequestClose={this.handleRequestClose}
 							>
 
