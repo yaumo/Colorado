@@ -29,7 +29,9 @@ class ExercisesTab extends React.Component {
             case2: '',
             case1Type: 1,
             case2Type: 1,
-            language: 'javascript'
+            language: 'javascript',
+			template: '',
+			solutionpattern: ''
         };
         this.handleChangeProgrammingLanguage = this.handleChangeProgrammingLanguage.bind(this);
         this.handleOpenDialog = this.handleOpenDialog.bind(this);
@@ -37,6 +39,8 @@ class ExercisesTab extends React.Component {
         this.handleCreateExercise = this.handleCreateExercise.bind(this);
         this.handleChangeCase1Type = this.handleChangeCase1Type.bind(this);
         this.handleChangeCase2Type = this.handleChangeCase2Type.bind(this);
+		this.handleChangePatternSolution = this.handleChangePatternSolution.bind(this);
+		this.handleChangeTemplate = this.handleChangeTemplate.bind(this);
     }
 
     handleChangeProgrammingLanguage(event, index, value) {
@@ -147,6 +151,16 @@ class ExercisesTab extends React.Component {
             });
         }
     }
+	
+	handleChangePatternSolution(event){
+		console.log(event);
+		this.setState(patternSolution: event);
+	}
+	
+	handleChangeTemplate(event){
+		console.log(event);
+		this.setState(template: event);
+	}
 
     render() {
         return (
@@ -207,14 +221,14 @@ class ExercisesTab extends React.Component {
                                 <tr>
                                     <td style={{ width: "50%", padding: "6px", paddingLeft: "0px" }}>
                                         <h4>Pattern Solution</h4>
-                                        <Paper zDepth={4}>
-                                            <EditorAce mode={this.state.language} id="patternSolution" />
+                                        <Paper zDepth={4} value='test'>
+                                            <EditorAce mode={this.state.language} handleChange={this.handleChangePatternSolution} id="patternSolution" />
                                         </Paper>
                                     </td>
                                     <td style={{ width: "50%", padding: "6px", paddingRight: "0px" }}>
                                         <h4>Template</h4>
                                         <Paper zDepth={4}>
-                                            <EditorAce mode={this.state.language} id="template" />
+                                            <EditorAce mode={this.state.language} handleChange={this.handleChangeTemplate} id="template" />
                                         </Paper>
                                     </td>
                                 </tr>

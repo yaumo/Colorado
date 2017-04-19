@@ -23,6 +23,7 @@ class EditorAce extends React.Component {
                 theme="chrome"
                 name="code"
                 width="100%"
+				onChange={this.props.handleChange}
                 minLines={16}
                 maxLines={16}
                 ref="ace"

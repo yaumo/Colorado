@@ -1,9 +1,6 @@
 package com.colorado.denver.controller.entityController;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.management.ReflectionException;
@@ -12,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.Link;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,42 +61,25 @@ public class CourseController extends ObjectOperationController {
 		response.getWriter().flush();
 	}
 
-	public Course getCourseForUser() {
-		String hibId = UserService.getCurrentUser().getHibId();
-		return getCourseForUser(hibId);
-	}
-
 	@RequestMapping(value = "/course", method = RequestMethod.GET)
 	public Course getCourseForUser(@RequestParam(value = "user", required = false) String hibId) {
-		// Check docent level rights here!
 		if (hibId == null) {
-			return getCourseForUser();
+			return UserService.getCurrentUser().getCourse();
+		} else if (UserService.isCurrentUserDocent()) {
+			return UserService.getUserById(hibId).getCourse();
+		} else {
+			throw new AccessDeniedException(DenverConstants.STUDENT_ACCES_DENIED);
 		}
-
-		Course course = CourseService.getCourseForUser(hibId);
-		if (course != null) {
-			Link selfLink = linkTo(UserController.class).slash(Course.COURSE).withSelfRel();
-			course.add(selfLink);
-		}
-
-		return course;
 	}
 
 	@RequestMapping(value = "/courses", method = RequestMethod.GET)
 	public List<Course> getAllCourses() {
-		// Add docent security!
-		List<Course> courses = CourseService.getAllCourses();
-
-		if (!courses.isEmpty()) {
-			for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
-				Course course = (Course) iterator.next();
-				Link selfLink = linkTo(CourseController.class).withSelfRel();
-				course.add(selfLink);
-
-			}
+		if (UserService.isCurrentUserDocent()) {
+			return CourseService.getAllCourses();
+		} else {
+			throw new AccessDeniedException(DenverConstants.STUDENT_ACCES_DENIED);
 		}
 
-		return courses;
 	}
 
 }

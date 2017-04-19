@@ -45,7 +45,7 @@ public class UserService {
 		} else {
 
 			String name = getLoginNameFromAuthentication(auth);
-			LOGGER.info("Getting User from DB: " + name);
+			LOGGER.info("Getting Current User from DB: " + name);
 			return getUserByLoginName(name);
 		}
 
@@ -75,16 +75,12 @@ public class UserService {
 	}
 
 	public static User getUserByLoginName(String loginName) {
-		LOGGER.info("Trying to get user from DB: " + loginName);
 		// we query Database directly. no use of chache!
 		List<User> u = null;
 		Session session = SessionTools.sessionFactory.openSession();
 		session.beginTransaction();
 		u = session.createCriteria(User.class).setComment("getUser '" + loginName + "'")
 				.add(Restrictions.eq(User.USERNAME, loginName).ignoreCase()).list();
-		for (User user : u) {
-			LOGGER.info("Sucessfully received user from database: " + user.getUsername());
-		}
 		session.flush();
 		session.close();
 		if (!u.isEmpty()) {
