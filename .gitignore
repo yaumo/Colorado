@@ -237,3 +237,11 @@ WebContent/WEB-INF/node_modules/webpack/node_modules/acorn/src/tokentype.js
 WebContent/WEB-INF/node_modules/webpack/node_modules/acorn/src/util.js
 WebContent/WEB-INF/node_modules/webpack/node_modules/acorn/src/walk/index.js
 WebContent/WEB-INF/node_modules/webpack/node_modules/acorn/src/whitespace.js
+.settings/org.eclipse.core.resources.prefs
+resources/SpringBeans.xml
+resources/application.properties
+resources/hibernate.cfg.xml
+resources/postgresql.conf
+resources/repo-scan.xml
+resources/simplelogger.properties
+resources/validation.properties
