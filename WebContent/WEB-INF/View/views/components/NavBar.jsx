@@ -48,6 +48,9 @@ class NavBar extends React.Component {
             url: "http://localhost:8080/course",
             dataType: 'json',
             method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
             success: function (course) {
                 courseJSON = course;
                 if (lecturelist.length === 0) {

@@ -127,6 +127,9 @@ class ExercisesTab extends React.Component {
                 url: "http://localhost:8080/exercise",
                 dataType: 'json',
                 method: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
                 data: JSON.stringify({
                     "title": title,
                     "description": description,
@@ -157,11 +160,11 @@ class ExercisesTab extends React.Component {
     }
 
     handleChangePatternSolution(event) {
-        this.setState({solutionPattern: event});
+        this.setState({ solutionPattern: event });
     }
 
     handleChangeTemplate(event) {
-        this.setState({template: event});
+        this.setState({ template: event });
     }
 
     render() {

@@ -87,11 +87,9 @@ class Content extends React.Component {
 
     fetch('http://localhost:8080/login', {
       method: 'GET',
-
       credentials: 'same-origin',
       headers: {
         'Authorization': 'Basic ' + btoa(username + ':' + password),
-        'Accept': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded'
       }
 

@@ -46,6 +46,9 @@ class AssignExercisesTab extends React.Component {
             url: "http://localhost:8080/exercises",
             dataType: 'json',
             method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
             success: function (exercises) {
                 this.setState({ exercisesTableData: exercises });
             }.bind(this)
@@ -55,6 +58,9 @@ class AssignExercisesTab extends React.Component {
             url: "http://localhost:8080/courses",
             dataType: 'json',
             method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
             success: function (courses) {
                 coursesJSON = courses;
                 if (courselist.length === 0) {
