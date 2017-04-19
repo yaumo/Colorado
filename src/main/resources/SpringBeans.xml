@@ -12,6 +12,10 @@
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd">
 
 
+	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
+		lazy-init="default" primary="false" scope="singleton">
+	</bean>
+	
 
 
   
@@ -19,6 +23,7 @@
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="packagesToScan" value="com.colorado"></property>
+		<property name="dataSource" ref="dataSource"></property>
 		<property name="jpaProperties">
 		        <props>
             <prop key="hibernate.show_sql">true</prop>
