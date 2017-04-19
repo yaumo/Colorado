@@ -113,6 +113,9 @@ class AssignExercisesTab extends React.Component {
             url: "http://localhost:8080/lecture",
             dataType: 'json',
             method: 'POST',
+            xhrFields: {
+                    withCredentials: true
+            },
             data: JSON.stringify({
                 "exercises" : exercises,
                 "courseId": courseId,

@@ -89,6 +89,9 @@ class Content extends React.Component {
       url: "http://localhost:8080/user",
       dataType: 'json',
       method: 'GET',
+      xhrFields: {
+        withCredentials: true
+      },
       success: function (currentUser) {
         currentUserJSON = currentUser;
         this.setState({
@@ -133,6 +136,9 @@ class Content extends React.Component {
         url: "http://localhost:8080/user",
         dataType: 'json',
         method: 'PATCH',
+        xhrFields: {
+          withCredentials: true
+        },
         data: JSON.stringify({
           "password": this.state.oldPassword,
           "newPassword": this.state.newPassword
