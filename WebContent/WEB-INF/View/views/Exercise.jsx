@@ -60,8 +60,7 @@ class Content extends React.Component {
     }
 
 	handleChangeSolution(event){
-		console.log(event);
-		this.setState(solution: event);
+		this.setState({solution: event});
 	}
     render() {
         return (
@@ -113,7 +112,7 @@ class Content extends React.Component {
 									/>
                                    
                                     <Paper zDepth={4}>
-                                        <EditorAce handleChange={this.handleChangeSolution}/>
+                                        <EditorAce value={this.state.solution} handleChange={this.handleChangeSolution}/>
                                     </Paper>
                                 </CardText>
                                 <CardActions className="footer">

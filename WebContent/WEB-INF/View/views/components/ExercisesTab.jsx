@@ -157,12 +157,10 @@ class ExercisesTab extends React.Component {
     }
 
     handleChangePatternSolution(event) {
-        console.log(event);
         this.setState({solutionPattern: event});
     }
 
     handleChangeTemplate(event) {
-        console.log(event);
         this.setState({template: event});
     }
 
@@ -226,13 +224,13 @@ class ExercisesTab extends React.Component {
                                     <td style={{ width: "50%", padding: "6px", paddingLeft: "0px" }}>
                                         <h4>Pattern Solution</h4>
                                         <Paper zDepth={4} value='test'>
-                                            <EditorAce mode={this.state.language} handleChange={this.handleChangePatternSolution} id="patternSolution" />
+                                            <EditorAce mode={this.state.language} value={this.state.solutionPattern} handleChange={this.handleChangePatternSolution} id="patternSolution" />
                                         </Paper>
                                     </td>
                                     <td style={{ width: "50%", padding: "6px", paddingRight: "0px" }}>
                                         <h4>Template</h4>
                                         <Paper zDepth={4}>
-                                            <EditorAce mode={this.state.language} handleChange={this.handleChangeTemplate} id="template" />
+                                            <EditorAce mode={this.state.language} value={this.state.template} handleChange={this.handleChangeTemplate} id="template" />
                                         </Paper>
                                     </td>
                                 </tr>
