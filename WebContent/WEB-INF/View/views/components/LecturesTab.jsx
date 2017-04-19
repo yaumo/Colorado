@@ -61,7 +61,6 @@ class LecturesTab extends React.Component {
             url: "http://localhost:8080/users",
             dataType: 'json',
             method: 'GET',
-            data: 'docent = true',
             success: function (allDocents) {
                 this.setState({ tableData: allDocents });
             }.bind(this)
