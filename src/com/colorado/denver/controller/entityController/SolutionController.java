@@ -1,13 +1,12 @@
 package com.colorado.denver.controller.entityController;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.management.ReflectionException;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -112,6 +110,20 @@ public class SolutionController extends ObjectOperationController {
 	}
 
 	@RequestMapping(value = "/solution", method = RequestMethod.GET)
+	public Solution getSolutionForUser(@RequestParam(value = "solId", required = true) String solId) {
+		User usr = UserService.getCurrentUser();
+		Set<Solution> sols = usr.getSolutions();
+
+		for (Iterator iterator = sols.iterator(); iterator.hasNext();) {
+			Solution solution = (Solution) iterator.next();
+			if (solution.getHibId().equals(solId))
+				return solution;
+		}
+
+		return null;
+	}
+
+	@RequestMapping(value = "/solutions", method = RequestMethod.GET)
 	public Set<Solution> getSolutionsForUser(@RequestParam(value = "excId", required = false) String excId,
 			@RequestParam(value = "usrId", required = false) String usrId) {
 		User usr = UserService.getCurrentUser();
@@ -134,7 +146,6 @@ public class SolutionController extends ObjectOperationController {
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Solution.SOLUTION, method = RequestMethod.PATCH)
 	public Solution solutionPatch(HttpServletRequest request, HttpServletResponse response) throws ReflectionException, IOException {
-		UserService.authorizeSystemuser();
 
 		String jsonString = "";
 		try {
@@ -153,12 +164,8 @@ public class SolutionController extends ObjectOperationController {
 		Gson gson = gb.create();
 
 		Solution entity = gson.fromJson(jsonString, Solution.class);
-
-		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.PATCH);
-		entity = null;
-		Solution entityAfterPatch = gson.fromJson(jsonResponse, Solution.class);
-		Link selfLink = linkTo(SolutionController.class).withSelfRel();
-		entityAfterPatch.add(selfLink);
-		return entityAfterPatch;
+		String id = entity.getHibId();
+		super.doOperation(entity, jsonString, DenverConstants.PATCH);
+		return getSolutionForUser(id);
 	}
 }

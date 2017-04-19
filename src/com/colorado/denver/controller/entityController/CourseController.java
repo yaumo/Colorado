@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpServerErrorException;
 
 import com.colorado.denver.model.Course;
 import com.colorado.denver.services.CourseService;
@@ -42,10 +43,14 @@ public class CourseController extends ObjectOperationController {
 		UserService.authorizeSystemuser();
 		String jsonString = DenverConstants.ERROR;
 		try {
-			jsonString = super.checkRequest(request, DenverConstants.POST);
+			jsonString = super.checkRequest(request, DenverConstants.POST, Course.COURSE);
 		} catch (JSONException e) {
 			LOGGER.error("Error in OOC while handling the request: " + request.toString());
 			e.printStackTrace();
+		} catch (HttpServerErrorException e) {
+			LOGGER.error("Not authorized to handle request:" + request.toString());
+			e.printStackTrace();
+			response.setStatus(403);
 		}
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();

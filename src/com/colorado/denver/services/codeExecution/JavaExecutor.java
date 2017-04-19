@@ -6,8 +6,6 @@ import java.lang.reflect.Method;
 
 import org.slf4j.LoggerFactory;
 
-import com.colorado.denver.tools.DenverConstants;
-
 import groovy.lang.GroovyClassLoader;
 
 public interface JavaExecutor {
@@ -27,78 +25,72 @@ public interface JavaExecutor {
 			String className = scriptClass.getSimpleName();
 			Object scriptInstance = scriptClass.newInstance();
 			Method[] methods = scriptClass.getDeclaredMethods();
-			Object[] params = new Object[1];
+			Object[] params = null;
+			int[] paramsInt = null;
 
-			int inputInt = 0;
+			int inputInt = -7864;
 			String inputString = "";
 			boolean inputBoolean = false;
-			Long inputLong = 0L;
+			Long inputLong = -179561792L;
 			switch (inputType) {
 			case "int":
 				inputInt = Integer.parseInt(excInput);
-
 				break;
 
 			case "String":
-				inputString = excInput;
+				// params[0] = excInput;
 				break;
 
 			case "boolean":
 				inputBoolean = Boolean.getBoolean(excInput);
+				// params[0] = inputBoolean;
 				break;
 
 			case "Long":
 				inputLong = Long.parseLong(excInput);
+				// params[0] = inputLong;
 				break;
 
 			default:
 				break;
 			}
 
-			for (int i = 0; i < methods.length; i++) {
+			Method theMethod = getMethod(methods);
+			theMethod.getParameterTypes();
+			if (theMethod != null) {
+				Class[] types = theMethod.getParameterTypes();
+				Class type = types[0];
 				try {
-
-					switch (methods[i].getReturnType().getSimpleName()) {
+					Object resultObj = null;
+					switch (type.getName()) {
 					case "int":
-
-						int res = (int) methods[i].invoke(scriptInstance, new Object[] { inputInt });
-						result = res + "";
+						resultObj = theMethod.invoke(scriptInstance, new Object[] { inputInt });
 						break;
+
 					case "String":
-						result = (String) methods[i].invoke(scriptInstance, new Object[] { inputString });
+						resultObj = theMethod.invoke(scriptInstance, new Object[] { inputString });
 						break;
 
 					case "boolean":
-
-						boolean resultBool = (boolean) methods[i].invoke(scriptInstance, new Object[] { inputBoolean });
-						if (resultBool) {
-							result = "true";
-						} else {
-							result = "false";
-						}
-
+						resultObj = theMethod.invoke(scriptInstance, new Object[] { inputBoolean });
 						break;
 
-					case "long":
-						long resultLong = (long) methods[i].invoke(scriptInstance, new Object[] { inputLong });
-						result = resultLong + "";
-
+					case "Long":
+						resultObj = theMethod.invoke(scriptInstance, new Object[] { inputLong });
 						break;
 
 					default:
-
+						resultObj = theMethod.invoke(scriptInstance, null);
+						break;
 					}
-					System.out.println("Method name is: " + methods[i].getName());
-					System.out.println("---");
-
+					result = resultObj.toString();
 				} catch (Exception e) {
-					result = DenverConstants.JAVA_EXCEPTION_THROWN;
-					result = result + "\n" + e.getMessage();
+					LOGGER.error("Exception thrown in Method " + theMethod.getName());
 					e.printStackTrace();
+					result = e.getMessage();
 				}
 
 			}
-
 			// int result = (int) scriptClass.getDeclaredMethod("fibonacci", int.class).invoke(scriptInstance, new Object[] { excInput });
 
 			gcl.close();
@@ -124,5 +116,17 @@ public interface JavaExecutor {
 		}
 		System.out.println("Result is: " + result);
 		return result;
+	}
+
+	public static Method getMethod(Method[] methods) {
+		for (int i = 0; i < methods.length; i++) {
+			String methodReturnType = methods[i].getReturnType().getSimpleName();
+			if (methodReturnType.equals("int") || methodReturnType.equals("String") || methodReturnType.equals("boolean") || methodReturnType.equals("Long")) {
+				LOGGER.info("Returning found method: " + methods[i].getName());
+				return methods[i];
+			}
+
+		}
+		return null;
 	}
 }

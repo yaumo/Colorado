@@ -1,7 +1,6 @@
 package com.colorado.denver.controller.entityController;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +29,6 @@ import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.tools.DenverConstants;
 import com.colorado.denver.tools.GraphAdapterBuilder;
 import com.colorado.denver.view.GsonExclusionStrategy;
-import com.google.common.collect.Iterables;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -96,33 +94,26 @@ public class ObjectOperationController extends HttpServlet {
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
 
-		User currentUser = UserService.getCurrentUser();
-		System.out.println(currentUser.getUsername());
-
-		this.workingUser = UserService.getCurrentUser();
-		Collection<Role> roles = this.workingUser.getRoles();
-		Role role = Iterables.get(roles, 1);
-
 		boolean allowed = false;
 
 		if (mode.equals(DenverConstants.POST)) {
 			switch (className) {
-			case "Solution":
+			case Solution.SOLUTION:
 				if (UserService.isCurrentUserDocent() == false) {
 					allowed = true;
 				}
 				break;
-			case "Lecture":
+			case Lecture.LECTURE:
 				if (UserService.isCurrentUserDocent()) {
 					allowed = true;
 				}
 				break;
-			case "Exercise":
+			case Exercise.EXERCISE:
 				if (UserService.isCurrentUserDocent()) {
 					allowed = true;
 				}
 				break;
-			case "User":
+			case User.USER:
 				if (UserService.isCurrentUserDocent()) {
 					allowed = true;
 				}
@@ -131,25 +122,21 @@ public class ObjectOperationController extends HttpServlet {
 			}
 		} else if (mode.equals(DenverConstants.PATCH)) {
 			switch (className) {
-			case "Solution":
-				if (UserService.isCurrentUserDocent() == false) {
-					allowed = true;
-				}
+			case Solution.SOLUTION:
+				allowed = true;
 				break;
-			case "Lecture":
+			case Lecture.LECTURE:
 				if (UserService.isCurrentUserDocent()) {
 					allowed = true;
 				}
 				break;
-			case "Exercise":
+			case Exercise.EXERCISE:
 				if (UserService.isCurrentUserDocent()) {
 					allowed = true;
 				}
 				break;
-			case "User":
-				if (UserService.isCurrentUserDocent() == false) {
-					allowed = true;
-				}
+			case User.USER:
+				allowed = true;
 				break;
 			}
 		} else if (mode.equals("GET")) {
