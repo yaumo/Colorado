@@ -241,14 +241,18 @@ class ExercisesTab extends React.Component {
                         </table>
                         <h4>Testcases</h4>
                         <Paper zDepth={2} className="paper" width="100%">
-                            <table className="paper" width="100%">
+                            <table className="paper" style={{ width: "100%", verticalAlign: "top" }}>
                                 <tbody>
                                     <tr>
-                                        <td>
-                                        </td>
-                                        <td style={{ width: "33%", padding: "6px" }}>
+										<td style={{ width: "50%"}}>
                                             Type:
-                                            &nbsp;
+										</td>
+										<td style={{ width: "50%"}}>
+											Value:
+										</td>
+									</tr>
+									<tr>
+										<td style={{ width: "50%"}}>
                                             <DropDownMenu className="language" id="case1Type" value={this.state.selectedCase1Type} onChange={this.handleChangeCase1Type}>
                                                 <MenuItem value={1} primaryText="String" />
                                                 <MenuItem value={2} primaryText="int" />
@@ -256,25 +260,26 @@ class ExercisesTab extends React.Component {
                                                 <MenuItem value={4} primaryText="long" />
                                             </DropDownMenu>
                                         </td>
-                                        <td style={{ width: "33%", padding: "6px" }}>
+                                        <td style={{ width: "50%"}}>
                                             <TextField
-                                                id="case1"
+                                                id="case2"
                                                 floatingLabelText="Case 1: Input"
-                                                fullWidth={false}
-                                                width="12%"
+                                                fullWidth={true}
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                                             />
                                         </td>
-                                        <td>
-                                        </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                        </td>
-                                        <td style={{ width: "33%", padding: "6px" }}>
+                                   <tr>
+										<td style={{ width: "50%"}}>
                                             Type:
-                                            &nbsp;
+										</td>
+										<td style={{ width: "50%"}}>
+											Value:
+										</td>
+									</tr>
+									<tr>
+										<td style={{ width: "50%"}}>
                                             <DropDownMenu className="language" id="case2Type" value={this.state.selectedCase2Type} onChange={this.handleChangeCase2Type}>
                                                 <MenuItem value={1} primaryText="String" />
                                                 <MenuItem value={2} primaryText="int" />
@@ -282,17 +287,14 @@ class ExercisesTab extends React.Component {
                                                 <MenuItem value={4} primaryText="long" />
                                             </DropDownMenu>
                                         </td>
-                                        <td style={{ width: "33%", padding: "6px" }}>
+                                        <td style={{ width: "50%"}}>
                                             <TextField
                                                 id="case2"
                                                 floatingLabelText="Case 2: Input"
-                                                fullWidth={false}
-                                                width="12%"
+                                                fullWidth={true}
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                                             />
-                                        </td>
-                                        <td>
                                         </td>
                                     </tr>
                                 </tbody>
