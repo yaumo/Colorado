@@ -14,6 +14,7 @@ import Dialog from 'material-ui/Dialog';
 
 var coursesJSON;
 const courselist = [];
+const courseids = [];
 var tableData = [];
 var allDocentsJSON;
 
@@ -29,6 +30,7 @@ class LecturesTab extends React.Component {
             opendialog: false,
             value: 1,
             selectedCourse: 0,
+			selectedcourseid: '',
             courselist: [],
             tableData: []
         };
@@ -53,6 +55,7 @@ class LecturesTab extends React.Component {
                 if (courselist.length === 0) {
                     for (var i = 0; i < coursesJSON.length; i++) {
                         courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
+						//courseids.push(coursesJSON[i].id);
                     }
                 }
                 this.setState({ courselist: courselist });
@@ -81,7 +84,12 @@ class LecturesTab extends React.Component {
     }
     handleClick(e) {
 
-    };
+    }
+	
+	handleChangeCourse(event, index, value){
+		this.setState({selectedCourse: value});
+		//this.setState({selectedcourseid: courseids[value]});
+	}
 
     render() {
         return (
