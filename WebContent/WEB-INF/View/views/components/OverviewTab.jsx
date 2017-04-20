@@ -29,6 +29,10 @@ const lecturelist = [];
 const exerciselist = [];
 const userlist = [];
 const overviewlist = [];
+const lectureids = [];
+const courseids = [];
+const exerciseids = [];
+
 
 
 class OverviewTab extends React.Component {
@@ -44,8 +48,11 @@ class OverviewTab extends React.Component {
 			row: 0,
 			tableData: [],
 			courselist: [],
+			selectedcourseid: '',
 			lecturelist: [],
+			selectedlectureid: '',
 			exerciselist: [],
+			selectedexercisid: '',
 			userlist: [],
 			overviewlist: [{
 				name: "Please select a course,",
@@ -74,16 +81,23 @@ class OverviewTab extends React.Component {
 				if (courselist.length === 0) {
 					for (var i = 0; i < coursesJSON.length; i++) {
 						courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
+						//courseids.push(courseJSON[i].courseid);
+						//this.setState({selectedcourseid: courseids[0]});
 					}
 				}
 				if (lecturelist.length === 0) {
 					lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
+					//lectureids.push('');
 					for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
 						lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[j - 1].title} />);
+						//lectureids.push(courseJSON[0].lecture[j - 1].id);
+						//this.setState({selectedlectureid: lectureids[0]});
 					}
 				}
 				if (exerciselist.length === 0) {
 					exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+					//exerciseids.push('');
+					//this.setState({selectedexercisid: exerciseids[0]});
 				}
 				this.setState({ courselist: courselist });
 				this.setState({ lecturelist: lecturelist });
@@ -99,17 +113,25 @@ class OverviewTab extends React.Component {
 
 		for (var i = 0; i < countLectures; i++) {
 			lecturelist.pop();
+			//lectureids.pop();
 		}
 		for (var i = 0; i < countExercises; i++) {
 			exerciselist.pop();
+			//exerciseids.pop();
 		}
 		lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
+		//lectureids.push('');
 		for (var j = 1; j <= coursesJSON[value].lectures.length; j++) {
 			lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
+			//lectureids.push(courseJSON[value].lecture[j - 1].id);
+			//this.setState({selectedlectureid: lectureids[0]});
 		}
 
 		exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+		//exerciseids.push('');
+		//this.setState({selectedexercisid: exerciseids[0]});
 
+		//this.setState({selectedcourseid: courseids[value]});
 		this.setState({ selectedCourse: value });
 		this.setState({ selectedLecture: 0 });
 		this.setState({ selectedExercise: 0 });
@@ -119,24 +141,30 @@ class OverviewTab extends React.Component {
 		var count = exerciselist.length;
 		for (var i = 0; i < count; i++) {
 			exerciselist.pop();
+			//exerciseids.pop();
 		}
 		if (value != 0) {
 			exerciselist.push(<MenuItem value={0} key={0} primaryText={'All Exercises'} />);
+			//exerciseids.push('');
 			this.setState({ disabledDropDownExercise: false });
 			for (var k = 1; k <= coursesJSON[this.state.selectedCourse].lectures[value - 1].exercises.length; k++) {
 				exerciselist.push(<MenuItem value={k} key={k} primaryText={coursesJSON[this.state.selectedCourse].lectures[value - 1].exercises[k - 1].title} />);
+				//exerciseids.push(this.state.selectedCourse].lectures[value - 1].exercises[k - 1].id)
 			}
 		}
 		else {
 			exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
 			this.setState({ disabledDropDownExercise: true });
+			//exerciseids.push('');
 		}
 		this.setState({ selectedLecture: value });
 		this.setState({ selectedExercise: 0 });
+		//this.setState({selectedexercisid: exerciseids[0]});
 	}
 
 	handleChangeExercise(event, index, value) {
 		this.setState({ selectedExercise: value });
+		//this.setState({ selectedexercisid: exerciseids[value]});
 	}
 
 	handleClickViewCode(event, index, value) {
