@@ -11,13 +11,11 @@
 - Navigate to YourNginxFolder/conf/nginx.conf
 - Add below the default server setting:
 
-    server {
+        server {
         listen       8181;
         server_name  localhost;
 
-        #charset koi8-r;
-
-        #access_log  logs/host.access.log  main;
+ 
 
                 location /frontend {
             proxy_pass         http://localhost:8081;
