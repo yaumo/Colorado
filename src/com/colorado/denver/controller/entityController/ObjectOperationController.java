@@ -26,6 +26,7 @@ import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
+import com.colorado.denver.services.security.SecurityCheckRole;
 import com.colorado.denver.tools.DenverConstants;
 import com.colorado.denver.tools.GraphAdapterBuilder;
 import com.colorado.denver.view.GsonExclusionStrategy;
@@ -156,6 +157,60 @@ public class ObjectOperationController extends HttpServlet {
 		 */
 		return jsonObject.getString(DenverConstants.JSON);
 
+	}
+
+	public boolean checkRequest2(String className, String mode) {
+		boolean allowed = false;
+		allowed = SecurityCheckRole.checkRole(className, mode);
+		this.workingUser = UserService.getCurrentUser();
+		return allowed;
+	}
+
+	public void doOperation2(BaseEntity<?> entity, String mode) {
+		// init
+		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.setExclusionStrategies(new GsonExclusionStrategy());
+		gb.serializeNulls();
+
+		new GraphAdapterBuilder()
+				.addType(Exercise.class)
+				.addType(Solution.class)
+				.addType(Lecture.class)
+				.addType(Course.class)
+				.addType(Role.class)
+				.addType(User.class)
+				.registerOn(gb);
+		Gson gson = gb.create();
+
+		String id = DenverConstants.ERROR;
+		try {
+			id = entity.getHibId();
+
+		} catch (Exception e) {
+			LOGGER.error("Error extraxting information from the Object(FromJSON): " + entity.getId());
+			e.printStackTrace();
+		}
+
+		String jsonResponse = DenverConstants.ERROR;
+		switch (mode) {
+		case "POST":
+			String newId = create(entity);
+			entity.setHibId(newId);
+			jsonResponse = gson.toJson(read(newId));
+			break;
+		case "PATCH":
+			jsonResponse = gson.toJson(update(entity));
+			break;
+		case "DELETE":
+			delete(id);
+			jsonResponse = "SUCCESS";
+			break;
+
+		default:
+			LOGGER.error("ERROR IN ASSERTING A OPERTAION!! VALUE: " + mode);
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);// last resort
+		}
+		workingUser = null;
 	}
 
 	public String doOperation(BaseEntity<?> entity, String jsonString, String mode) {
