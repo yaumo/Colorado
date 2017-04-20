@@ -1,13 +1,7 @@
 package com.colorado.denver.controller.entityController;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.management.ReflectionException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.json.JSONException;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +15,7 @@ import com.colorado.denver.model.Course;
 import com.colorado.denver.services.CourseService;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.tools.DenverConstants;
+import com.colorado.denver.tools.GenericTools;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -35,30 +30,40 @@ public class CourseController extends ObjectOperationController {
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Course.COURSE, method = RequestMethod.POST)
 	@ResponseBody
-	public void handleCourseRequest(HttpServletRequest request,
-			HttpServletResponse response) throws ReflectionException, IOException {
-		String jsonString = DenverConstants.ERROR;
-		try {
-			jsonString = super.checkRequest(request, DenverConstants.POST, Course.COURSE);
-		} catch (JSONException e) {
-			LOGGER.error("Error in OOC while handling the request: " + request.toString());
-			e.printStackTrace();
-		} catch (HttpServerErrorException e) {
-			LOGGER.error("Not authorized to handle request:" + request.toString());
-			e.printStackTrace();
-			response.setStatus(403);
-		}
+	public Course handleCoursePostRequest() {
+
+		String jsonString = GenericTools.getRequestBody();
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.serializeNulls();
 		Gson gson = gb.create();
 
 		Course entity = gson.fromJson(jsonString, Course.class);
-		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.POST);
-		entity = null; // Let GC run over this quickly
-		response.setStatus(200);
-		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.getWriter().write(jsonResponse);
-		response.getWriter().flush();
+		try {
+			super.checkAccess(Course.COURSE, DenverConstants.POST);
+		} catch (HttpServerErrorException e) {
+			e.printStackTrace();
+		}
+		return (Course) super.doDatabaseOperation(entity, DenverConstants.POST);
+	}
+
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Course.COURSE, method = RequestMethod.PATCH)
+	@ResponseBody
+	public Course handleCoursePatchRequest() {
+
+		String jsonString = GenericTools.getRequestBody();
+
+		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.serializeNulls();
+		Gson gson = gb.create();
+
+		Course entity = gson.fromJson(jsonString, Course.class);
+		try {
+			super.checkAccess(Course.COURSE, DenverConstants.PATCH);
+		} catch (HttpServerErrorException e) {
+			e.printStackTrace();
+		}
+		return (Course) super.doDatabaseOperation(entity, DenverConstants.PATCH);
 	}
 
 	@RequestMapping(value = "/course", method = RequestMethod.GET)

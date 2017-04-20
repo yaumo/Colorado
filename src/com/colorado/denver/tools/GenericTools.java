@@ -1,13 +1,16 @@
 package com.colorado.denver.tools;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.management.ReflectionException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.colorado.denver.model.BaseEntity;
 
@@ -39,6 +44,23 @@ public class GenericTools implements ApplicationContextAware {
 		Objects.requireNonNull(context,
 				"Unable to get Spring Application!");
 		return context;
+	}
+
+	public static HttpServletRequest getCurrentRequest() {
+		ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		return sra.getRequest();
+
+	}
+
+	public static String getRequestBody() {
+
+		try {
+			return getCurrentRequest().getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+		} catch (IOException e) {
+			LOGGER.error("Error reading Request body! " + getCurrentRequest().toString());
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public static <T extends Object> Set<Class<? extends T>> getSubTypesOf(Class<T> clazz) {
@@ -135,6 +157,7 @@ public class GenericTools implements ApplicationContextAware {
 		return sessionFactory.getCurrentSession();
 	} // initTransAction
 
+	@Override
 	public void setApplicationContext(ApplicationContext ctx) throws BeansException {
 		context = ctx;
 

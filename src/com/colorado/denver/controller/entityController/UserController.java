@@ -3,15 +3,9 @@ package com.colorado.denver.controller.entityController;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import javax.management.ReflectionException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.json.JSONException;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.Link;
 import org.springframework.ui.Model;
@@ -26,6 +20,7 @@ import com.colorado.denver.model.User;
 import com.colorado.denver.services.ExerciseService;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.tools.DenverConstants;
+import com.colorado.denver.tools.GenericTools;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -39,95 +34,39 @@ public class UserController extends ObjectOperationController {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.POST)
-	public User userPost(HttpServletRequest request,
-			HttpServletResponse response) throws ReflectionException, IOException {
-		String jsonString = "";
-		try {
-			jsonString = super.checkRequest(request, DenverConstants.POST, User.USER);
-			// TODO: Parse the "objectClass" like this: super.checkRequest(request, DenverConstants.POST, User.USER)
-			// same in "doOperation down below and other controllers please"
-			// We remove the "objectClass from the entities to make it more RESTful.. >.<
-		} catch (JSONException e) {
-			LOGGER.error("Error in OOC while handling the request: " + request.toString());
-			e.printStackTrace();
-		} catch (HttpServerErrorException e) {
-			LOGGER.error("Not authorized to handle request:" + request.toString());
-			e.printStackTrace();
-			response.setStatus(403);
-		}
+	public User handleUserPostRequest() {
+
+		String jsonString = GenericTools.getRequestBody();
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
 		gb.serializeNulls();
 		Gson gson = gb.create();
 
 		User entity = gson.fromJson(jsonString, User.class);
-
-		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.POST);
-		entity = null;
-		User entityAfterPost = gson.fromJson(jsonResponse, User.class);
-		Link selfLink = linkTo(UserController.class).withSelfRel();
-		entityAfterPost.add(selfLink);
-		return entityAfterPost;
+		try {
+			super.checkAccess(User.USER, DenverConstants.POST);
+		} catch (HttpServerErrorException e) {
+			e.printStackTrace();
+		}
+		return (User) super.doDatabaseOperation(entity, DenverConstants.POST);
 	}
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.PATCH)
-	public User userPatch(HttpServletRequest request,
-			HttpServletResponse response) throws ReflectionException, IOException {
-		// JSONObject theObject = super.handleRequest(request, response);
-		String jsonString = "";
-		try {
-			jsonString = super.checkRequest(request, DenverConstants.PATCH, User.USER);
-		} catch (JSONException e) {
-			LOGGER.error("Error in OOC while handling the request: " + request.toString());
-			e.printStackTrace();
-		} catch (HttpServerErrorException e) {
-			LOGGER.error("Not authorized to handle request:" + request.toString());
-			e.printStackTrace();
-			response.setStatus(403);
-		}
+	public User handleUserPatchRequest() {
+
+		String jsonString = GenericTools.getRequestBody();
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
 		gb.serializeNulls();
 		Gson gson = gb.create();
 
 		User entity = gson.fromJson(jsonString, User.class);
-
-		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.PATCH);
-		entity = null;
-		User entityAfterPost = gson.fromJson(jsonResponse, User.class);
-		Link selfLink = linkTo(UserController.class).withSelfRel();
-		entityAfterPost.add(selfLink);
-		return entityAfterPost;
-	}
-
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.DELETE)
-	public User userDelete(HttpServletRequest request,
-			HttpServletResponse response) throws ReflectionException, IOException {
-		// JSONObject theObject = super.handleRequest(request, response);
-		String jsonString = "";
 		try {
-			jsonString = super.checkRequest(request, DenverConstants.DELETE, User.USER);
-		} catch (JSONException e) {
-			LOGGER.error("Error in OOC while handling the request: " + request.toString());
-			e.printStackTrace();
+			super.checkAccess(User.USER, DenverConstants.PATCH);
 		} catch (HttpServerErrorException e) {
-			LOGGER.error("Not authorized to handle request:" + request.toString());
 			e.printStackTrace();
-			response.setStatus(403);
 		}
-
-		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
-		gb.serializeNulls();
-		Gson gson = gb.create();
-
-		User entity = gson.fromJson(jsonString, User.class);
-
-		String jsonResponse = super.doOperation(entity, jsonString, DenverConstants.DELETE);
-		entity = null;
-		User entityAfterPost = gson.fromJson(jsonResponse, User.class);
-		Link selfLink = linkTo(UserController.class).withSelfRel();
-		entityAfterPost.add(selfLink);
-		return entityAfterPost;
+		return (User) super.doDatabaseOperation(entity, DenverConstants.PATCH);
 	}
 
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)
