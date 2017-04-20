@@ -13,7 +13,9 @@ import Dialog from 'material-ui/Dialog';
 
 
 const courselist = [];
+const courseids = [];
 const lecturelist = [];
+const lectureids = [];
 var exercisesTableData = [];
 var exercisesJSON;
 var coursesJSON;
@@ -29,8 +31,10 @@ class AssignExercisesTab extends React.Component {
             value: 1,
             selectedLecture: 0,
             selectedCourse: 0,
+			selectedcourseid: '',
             exerciselist: [],
             lecturelist: [],
+			selectedlectureid: '',
             exercisesTableData: []
         };
 
@@ -66,14 +70,19 @@ class AssignExercisesTab extends React.Component {
                 if (courselist.length === 0) {
                     for (var i = 0; i < coursesJSON.length; i++) {
                         courselist.push(<MenuItem value={i} key={coursesJSON[i].hibId} primaryText={coursesJSON[i].title} />);
+						//courseids.push(coursesJSON[i].id);
                     }
                 }
                 if (lecturelist.length === 0) {
                     lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+					//lectureids.push('');
                     for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
                         lecturelist.push(<MenuItem value={j} key={j} id={coursesJSON[0].lectures.hibId} primaryText={coursesJSON[0].lectures[j - 1].title} />);
+						//lectureids.push(coursesJSON[0].lectures[j - 1].id);
                     }
                 }
+				//this.setState({ selectedcourseid: courseids[0]});
+				//this.setState({ selectedlectureid: lectureids[0]});
                 this.setState({ courselist: courselist });
                 this.setState({ lecturelist: lecturelist });
             }.bind(this)
@@ -84,17 +93,24 @@ class AssignExercisesTab extends React.Component {
         var count = lecturelist.length;
         for (var i = 0; i < count; i++) {
             lecturelist.pop();
+			//lectureids.pop();
         }
-        for (var j = 0; j < lecturesjson.course[value].lectures.length; j++) {
-            lecturelist.push(<MenuItem value={j} key={j} primaryText={lecturesjson.course[value].lectures[j].lecture_title} />);
+		lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+		//lectureids.push('');
+        for (var j = 0; j < coursesJSON[value].lectures.length; j++) {
+            lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
+			//lectureids.push(coursesJSON[value].lectures[j - 1].id);
         }
-
+		
+		//this.setState({selectedlectureid: lectureids[0]});
         this.setState({ selectedLecture: 0 });
+		//this.setState({ selectedcourseid: courseids[value]});
         this.setState({ selectedCourse: value });
     }
 
     handleChangeLecture(event, index, value) {
         this.setState({ selectedLecture: value });
+		//this.setState({ selectedlectureid: lectureids[value]});
     }
     handleOpenDialog(event, index, value) {
         this.setState({ opendialog: true });
