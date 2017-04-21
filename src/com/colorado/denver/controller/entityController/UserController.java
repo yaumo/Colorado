@@ -9,7 +9,6 @@ import java.util.Set;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.Link;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -72,13 +71,6 @@ public class UserController extends ObjectOperationController {
 			e.printStackTrace();
 		}
 		return (User) super.doDatabaseOperation(entity, DenverConstants.PATCH);
-	}
-
-	@RequestMapping(value = "/registration", method = RequestMethod.GET)
-	public String registration(Model model) {
-		model.addAttribute("userForm", new User());
-
-		return "registration";
 	}
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.GET)
