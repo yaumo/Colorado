@@ -12,15 +12,19 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import com.colorado.denver.DenverApplication;
 
+import ch.qos.logback.classic.Level;
+
 public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverApplication.class);
 
 	@Override
 	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+		Tools.setLoggingLevel(Level.DEBUG);
 		traceRequest(request, body);
 		ClientHttpResponse response = execution.execute(request, body);
 		traceResponse(response);
+		Tools.setLoggingLevel(Level.ERROR);
 		return response;
 	}
 
