@@ -16,7 +16,7 @@ import com.colorado.denver.model.EducationEntity;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
-import com.colorado.denver.services.security.SecurityCheckRole;
+import com.colorado.denver.services.security.SecurityCheckPrivilege;
 import com.colorado.denver.tools.DenverConstants;
 
 public class ObjectOperationController {
@@ -30,7 +30,7 @@ public class ObjectOperationController {
 
 	public boolean checkAccess(String className, String mode) {
 		boolean allowed = false;
-		allowed = SecurityCheckRole.checkRole(className, mode);
+		allowed = SecurityCheckPrivilege.checkPrivilege(className, mode);
 		this.workingUser = UserService.getCurrentUser();
 		return allowed;
 	}

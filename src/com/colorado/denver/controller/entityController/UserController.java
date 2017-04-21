@@ -8,14 +8,18 @@ import java.util.Set;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.Link;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 
+import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
-import com.colorado.denver.model.Role;
+import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.ExerciseService;
 import com.colorado.denver.services.UserService;
@@ -24,6 +28,7 @@ import com.colorado.denver.tools.GenericTools;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+@CrossOrigin
 @RestController
 public class UserController extends ObjectOperationController {
 
@@ -115,14 +120,34 @@ public class UserController extends ObjectOperationController {
 
 	}
 
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout() {
+
+		return "logout";
+	}
+
+	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	public String registration(@RequestParam(value = "username", required = true) String username,
+			@RequestParam(value = "password", required = false) String password) {
+		User usr = new User();
+		usr.setUsername(username);
+
+		String salt = BCrypt.gensalt(12);
+		usr.setPassword(BCrypt.hashpw(password, salt));
+
+		HibernateController hibCtrl = new HibernateController();
+		hibCtrl.addEntity(usr);
+		return "Created User: " + usr.getUsername() + "password: " + usr.getPassword();
+	}
+
 	public Set<Exercise> getExersisesForUser(String hibId) {
 		return ExerciseService.getAllExercisesForUser(hibId);
 	}
 
-	public static Role calculateRoleBasedOnUser(User usr) {
+	public static Privilege calculatePrivilegeBasedOnUser(User usr) {
 		// Get the correct role!
-		Role role = new Role();
-		role.setRoleName("TestRole");// TODO: DELETE THIS!
+		Privilege role = new Privilege();
+		role.setPrivilegeName("TestPrivilege");// TODO: DELETE THIS!
 		return role;
 	}
 }

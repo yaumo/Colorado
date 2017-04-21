@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.colorado.denver.services.UserService;
@@ -26,6 +28,8 @@ import ch.qos.logback.classic.Level;
 @EnableWebMvc
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
+@Configuration
+@ComponentScan("com.colorado")
 public class DenverApplication extends SpringBootServletInitializer {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverApplication.class);

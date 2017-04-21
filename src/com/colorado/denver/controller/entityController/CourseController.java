@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import com.colorado.denver.tools.GenericTools;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+@CrossOrigin
 @RestController
 public class CourseController extends ObjectOperationController {
 

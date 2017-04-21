@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,9 @@ import com.colorado.denver.model.User;
 
 @Service
 @Component("AuthenticationProvider")
-public class SecurityServiceImpl implements AuthenticationProvider {
+public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SecurityServiceImpl.class);
+	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
 
 	public Authentication authenticate(String username, String password) throws AuthenticationException {
 
@@ -28,11 +29,11 @@ public class SecurityServiceImpl implements AuthenticationProvider {
 			throw new BadCredentialsException("Username not found.");
 		}
 
-		if (!password.equals(user.getPassword())) {
+		if (!BCrypt.checkpw(password, user.getPassword())) {
 			throw new BadCredentialsException("Wrong password.");
 		}
 
-		Collection<? extends GrantedAuthority> authorities = user.getRoles();
+		Collection<? extends GrantedAuthority> authorities = user.getPrivileges();
 		LOGGER.info("Successful user login! " + user.getUsername());
 		return new UsernamePasswordAuthenticationToken(user, password, authorities);
 	}
@@ -52,11 +53,11 @@ public class SecurityServiceImpl implements AuthenticationProvider {
 				throw new BadCredentialsException("Username not found." + user.getUsername() + " Name on authentication:" + username);
 			}
 
-			if (!password.equals(user.getPassword())) {
+			if (!BCrypt.checkpw(password, user.getPassword())) {
 				throw new BadCredentialsException("Wrong password.");
 			}
 
-			Collection<? extends GrantedAuthority> authorities = user.getRoles();
+			Collection<? extends GrantedAuthority> authorities = user.getPrivileges();
 
 			return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), authorities);
 		}

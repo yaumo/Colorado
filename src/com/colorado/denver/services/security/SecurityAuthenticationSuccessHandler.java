@@ -16,6 +16,7 @@ public class SecurityAuthenticationSuccessHandler implements AuthenticationSucce
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException, ServletException {
+		System.out.println("I'M IN HANDLER ");
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 

@@ -13,14 +13,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.controller.HibernateController;
-import com.colorado.denver.controller.entityController.RoleController;
+import com.colorado.denver.controller.entityController.PrivilegeController;
 import com.colorado.denver.model.Course;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Lecture;
-import com.colorado.denver.model.Role;
+import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
@@ -157,10 +158,12 @@ public class PopulateDBWithTestData {
 	private User createUser(String name, String password, String roleName) {
 		User usr = new User();
 		usr.setUsername(name);
-		usr.setPassword(password);
-		Set<Role> roles = new HashSet<Role>();
-		roles.add(RoleController.getRoleByName(roleName));
-		usr.setRoles(roles);
+
+		String salt = BCrypt.gensalt(12);
+		usr.setPassword(BCrypt.hashpw(password, salt));
+		Set<Privilege> roles = new HashSet<Privilege>();
+		roles.add(PrivilegeController.getPrivilegeByName(roleName));
+		usr.setPrivileges(roles);
 		hibCtrl.addEntity(usr);
 		return usr;
 	}

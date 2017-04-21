@@ -18,8 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.colorado.denver.controller.HibernateController;
-import com.colorado.denver.controller.entityController.RoleController;
-import com.colorado.denver.model.Role;
+import com.colorado.denver.controller.entityController.PrivilegeController;
+import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.DenverConstants;
@@ -53,13 +53,13 @@ public class UserService {
 	}
 
 	public static UsernamePasswordAuthenticationToken authorizeSystemuser() {
-		Role role = RoleController.getRoleByName(ROLE_ADMIN);
-		List<Role> roles = new ArrayList<>();
+		Privilege role = PrivilegeController.getPrivilegeByName(ROLE_ADMIN);
+		List<Privilege> roles = new ArrayList<>();
 		roles.add(role);
 		return authorizeUserByLoginName(DenverConstants.SYSTEM, "password", roles);
 	}
 
-	public static UsernamePasswordAuthenticationToken authorizeUserByLoginName(String username, String password, Collection<Role> roles) {
+	public static UsernamePasswordAuthenticationToken authorizeUserByLoginName(String username, String password, Collection<Privilege> roles) {
 
 		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, roles);
 
@@ -100,7 +100,7 @@ public class UserService {
 	public void save(User user) {
 		LOGGER.info("Security Save for user: " + user.getUsername() + " and password: " + user.getPassword());
 		user.setPassword(passWordEncoder.encode(user.getPassword()));
-		user.setRoles(new HashSet<>());// TODO: Not
+		user.setPrivileges(new HashSet<>());// TODO: Not
 										// clean!
 
 		// Hibernate save for user!
@@ -126,11 +126,11 @@ public class UserService {
 
 		try {
 			User currentUser = getCurrentUser();
-			Collection<Role> roles = currentUser.getRoles();
-			Iterator<Role> iterator = roles.iterator();
+			Collection<Privilege> roles = currentUser.getPrivileges();
+			Iterator<Privilege> iterator = roles.iterator();
 
 			while (iterator.hasNext()) {
-				if (iterator.next().getRoleName().equals("ROLE_DOCENT")) {
+				if (iterator.next().getPrivilegeName().equals("ROLE_DOCENT")) {
 					return true;
 				}
 			}

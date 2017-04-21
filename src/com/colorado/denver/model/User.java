@@ -1,6 +1,5 @@
 package com.colorado.denver.model;
 
-import java.util.Collection;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -34,7 +33,7 @@ public class User extends BaseEntity<User> {
 	public static final String PASSWORD = "password";
 	public static final String SALT = "salt";
 	public static final String ENABLED = "enabled";
-	public static final String ROLES = "roles";
+	public static final String PRIVILEGES = "privileges";
 
 	private String username;
 	private Set<Lecture> lectures;
@@ -47,7 +46,7 @@ public class User extends BaseEntity<User> {
 
 	private Course course;
 	private Set<Solution> solutions;
-	private Collection<Role> roles;
+	private Set<Privilege> privileges;
 
 	public User() {
 	}
@@ -108,24 +107,24 @@ public class User extends BaseEntity<User> {
 	}
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "users_roles", joinColumns = { @JoinColumn(name = "roles_id") }, inverseJoinColumns = { @JoinColumn(name = "users_id") })
+	@JoinTable(name = "users_privileges", joinColumns = { @JoinColumn(name = "privileges_id") }, inverseJoinColumns = { @JoinColumn(name = "users_id") })
 	@JsonManagedReference
-	public Collection<Role> getRoles() {
-		return roles;
+	public Set<Privilege> getPrivileges() {
+		return privileges;
 	}
 
-	public void setRoles(Collection<Role> roles) {
-		this.roles = roles;
+	public void setPrivileges(Set<Privilege> Privileges) {
+		this.privileges = Privileges;
 	}
 
 	// public Collection<GrantedAuthority> getAuthorities() {
-	// // make everyone ROLE_GLOBAL_ADMINISTRATOR
+	// // make everyone Privilege_GLOBAL_ADMINISTRATOR
 	// Collection<GrantedAuthority> grantedAuthorities = new ArraySet<GrantedAuthority>();
 	// GrantedAuthority grantedAuthority = new GrantedAuthority() {
 	// // anonymous inner type
 	// @Override
 	// public String getAuthority() {
-	// return UserService.ROLE_GLOBAL_ADMINISTRATOR;
+	// return UserService.Privilege_GLOBAL_ADMINISTRATOR;
 	// }
 	// };
 	// grantedAuthorities.add(grantedAuthority);

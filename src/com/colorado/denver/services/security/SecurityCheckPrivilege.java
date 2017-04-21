@@ -7,9 +7,9 @@ import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.tools.DenverConstants;
 
-public class SecurityCheckRole {
+public class SecurityCheckPrivilege {
 
-	public static boolean checkRole(String className, String mode) {
+	public static boolean checkPrivilege(String className, String mode) {
 		boolean allowed = false;
 
 		if (mode.equals(DenverConstants.POST)) {
