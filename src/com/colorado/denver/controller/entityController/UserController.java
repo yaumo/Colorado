@@ -84,12 +84,6 @@ public class UserController extends ObjectOperationController {
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.GET)
 	public User getUser() {
 		User usr = UserService.getCurrentUser();
-
-		Link selfLink = linkTo(methodOn(UserController.class).getUser()).withSelfRel();
-		usr.add(selfLink);
-
-		Link courseLink = linkTo(methodOn(CourseController.class).getCourseForUser(usr.getHibId())).withRel("course");
-		usr.add(courseLink);
 		return usr;
 	}
 

@@ -94,14 +94,24 @@ public class UserService {
 	}
 
 	public static String getLoginNameFromAuthentication(Authentication auth) {
-		return auth.getPrincipal().toString();
+		LOGGER.info("Principal on auth is: " + auth.getPrincipal().toString());
+
+		Object princ = auth.getPrincipal();
+		if (princ instanceof MyUserPrincipal) {
+			MyUserPrincipal myPrinc = (MyUserPrincipal) princ;
+			return myPrinc.getUsername();
+		} else {
+			LOGGER.error("Wrong Principal is used to get User?!!!" + auth.toString());
+			return princ.toString();
+		}
+
 	}
 
 	public void save(User user) {
 		LOGGER.info("Security Save for user: " + user.getUsername() + " and password: " + user.getPassword());
 		user.setPassword(passWordEncoder.encode(user.getPassword()));
 		user.setPrivileges(new HashSet<>());// TODO: Not
-										// clean!
+		// clean!
 
 		// Hibernate save for user!
 		LOGGER.info("Security Save for user: " + user.getUsername() + "sucessful! newPassword: " + user.getPassword());
