@@ -67,17 +67,6 @@ class Content extends React.Component {
   }
   handleClick(e) {
     e.preventDefault();
-    //this.setState({ errorText: '' })
-    //console.log('The link was clicked.');
-    /*if (this.state.value === 's12345') {
-      browserHistory.push('/exercise');
-    }
-    else if (this.state.value === 'd12345') {
-      browserHistory.push('/docent');
-    }
-    else {
-      alert("Username does not exist!");
-    }*/
     var username = this.state.username;
     var password = this.state.password;
     console.log(username);
@@ -85,7 +74,7 @@ class Content extends React.Component {
     var obj = "username=" + username + "&password=" + password;
 
 
-    fetch('http://localhost:8080/login', {
+    fetch('http://localhost:8181/login', {
       method: 'GET',
       credentials: 'same-origin',
       headers: {
@@ -94,7 +83,7 @@ class Content extends React.Component {
       }
 
     }).then(function (response) {
-
+      //browserHistory.push('/docent');
     }).catch(function (err) {
       console.log(err)
     });

@@ -70,8 +70,9 @@ class OverviewTab extends React.Component {
 
 	componentDidMount() {
 		$.ajax({
-			url: "http://localhost:8080/courses",
-			dataType: 'json',
+			url: "http://localhost:8181/courses",
+			dataType: 'jsonp',
+			jsonp: 'callback',
 			method: 'GET',
 			xhrFields: {
                     withCredentials: true
@@ -169,7 +170,7 @@ class OverviewTab extends React.Component {
 
 	handleClickViewCode(event, index, value) {
 		$.ajax({
-			url: "http://localhost:8080/docent/solution",
+			url: "http://localhost:8181/docent/solution",
 			dataType: 'json',
 			method: 'GET',
 			xhrFields: {
@@ -199,8 +200,9 @@ class OverviewTab extends React.Component {
 
 	handleClickSearch(e) {
 		$.ajax({
-			url: "http://localhost:8080/docent/solutions",
-			dataType: 'json',
+			url: "http://localhost:8181/docent/solutions",
+			dataType: 'jsonp',
+			jsonp: 'callback',
 			method: 'GET',
 			xhrFields: {
 				withCredentials: true

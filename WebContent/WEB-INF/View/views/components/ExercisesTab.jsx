@@ -124,8 +124,9 @@ class ExercisesTab extends React.Component {
         }
         else {
             $.ajax({
-                url: "http://localhost:8080/exercise",
-                dataType: 'json',
+                url: "http://localhost:8181/exercise",
+                dataType: 'jsonp',
+                jsonp: 'callback',
                 method: 'POST',
                 xhrFields: {
                     withCredentials: true

@@ -44,8 +44,9 @@ class LecturesTab extends React.Component {
 
     componentDidMount() {
         $.ajax({
-            url: "http://localhost:8080/courses",
-            dataType: 'json',
+            url: "http://localhost:8181/courses",
+            dataType: 'jsonp',
+			jsonp: 'callback',
             method: 'GET',
             xhrFields: {
                 withCredentials: true
@@ -64,8 +65,9 @@ class LecturesTab extends React.Component {
 
 
         $.ajax({
-            url: "http://localhost:8080/users",
-            dataType: 'json',
+            url: "http://localhost:8181/users",
+            dataType: 'jsonp',
+			jsonp: 'callback',
             method: 'GET',
             xhrFields: {
                 withCredentials: true
