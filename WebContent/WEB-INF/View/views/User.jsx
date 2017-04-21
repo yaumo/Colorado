@@ -86,9 +86,8 @@ class Content extends React.Component {
 
   componentDidMount() {
     $.ajax({
-      url: "http://localhost:8080/user",
-      dataType: 'jsonp',
-			jsonp: 'callback',
+      url: "http://localhost:8181/user",
+      dataType: 'json',
       method: 'GET',
       xhrFields: {
         withCredentials: true
@@ -134,7 +133,7 @@ class Content extends React.Component {
     }
     else {
       $.ajax({
-        url: "http://localhost:8080/user",
+        url: "http://localhost:8181/user",
         dataType: 'json',
         method: 'PATCH',
         xhrFields: {

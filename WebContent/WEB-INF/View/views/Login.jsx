@@ -74,8 +74,8 @@ class Content extends React.Component {
     var obj = "username=" + username + "&password=" + password;
 
 
-    fetch('http://localhost:8181/login', {
-      method: 'GET',
+    fetch('http://localhost:8181', {
+      method: 'POST',
       credentials: 'same-origin',
       headers: {
         'Authorization': 'Basic ' + btoa(username + ':' + password),

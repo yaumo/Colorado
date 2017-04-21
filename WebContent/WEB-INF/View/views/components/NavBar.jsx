@@ -45,8 +45,8 @@ class NavBar extends React.Component {
 
     componentDidMount() {
         $.ajax({
-            url: "http://localhost:8080/course",
-            ddataType: 'jsonp',
+            url: "http://localhost:8181/course",
+            ddataType: 'json',
 			jsonp: 'callback',
             method: 'GET',
             xhrFields: {
@@ -76,7 +76,7 @@ class NavBar extends React.Component {
         //exerciseID auslesen!
 
          $.ajax({
-            url: "http://localhost:8080/exercise",
+            url: "http://localhost:8181/exercise",
             dataType: 'json',
             method: 'GET',
             data: {
