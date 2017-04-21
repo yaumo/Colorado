@@ -40,7 +40,7 @@ public class SolutionExecutor implements JavaExecutor, JavaScriptExecutor {
 			answer = executeJavaScript(inputType, outputType, excInput, code);
 		}
 
-		if (sol.getExercise().setAnswer().equals(answer)) {
+		if (sol.getExercise().getAnswer().equals(answer)) {
 			sol.setCorrect(true);
 			LOGGER.info("Answer for entity " + sol.getId() + " correct with value: " + answer);
 			message = DenverConstants.JAVA_RESULT_CORRECT;

@@ -13,14 +13,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.controller.HibernateController;
-import com.colorado.denver.controller.entityController.RoleController;
+import com.colorado.denver.controller.entityController.PrivilegeController;
 import com.colorado.denver.model.Course;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Lecture;
-import com.colorado.denver.model.Role;
+import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.UserService;
@@ -78,7 +79,9 @@ public class PopulateDBWithTestData {
 		student.setCourse(course2);
 		student.setCourse(course2);
 		student.setCourse(course3);
-
+		UserService.authorizeSystemuser();
+		User system = UserService.getCurrentUser();
+		system.setCourse(course);
 		Lecture lecture = createLecture("Programmieren I");
 		Lecture lecture2 = createLecture("Programmieren II");
 		Lecture lecture3 = createLecture("Programmieren III");
@@ -101,9 +104,15 @@ public class PopulateDBWithTestData {
 		lectures.add(lecture3);
 
 		Exercise exercise = createExercise("Fibonacci");
+		exercise.setInput("11");
+		exercise.setInputType("int");
+		exercise.setOutputType("int");
+		exercise.setAnswer("89");
+		exercise.setLanguage("java");
+
 		Set<Exercise> exercises = new HashSet<Exercise>();
 		exercises.add(exercise);
-
+		system.setLectures(lectures);
 		Solution solution = createSolution("Fibonacci Loesung");
 		Set<Solution> solutions = new HashSet<Solution>();
 		solutions.add(solution);
@@ -142,15 +151,19 @@ public class PopulateDBWithTestData {
 		hibCtrl.mergeEntity(lecture2);
 		hibCtrl.mergeEntity(lecture3);
 		hibCtrl.mergeEntity(lecture4);
+		hibCtrl.mergeEntity(system);
+
 	}
 
 	private User createUser(String name, String password, String roleName) {
 		User usr = new User();
 		usr.setUsername(name);
-		usr.setPassword(password);
-		Set<Role> roles = new HashSet<Role>();
-		roles.add(RoleController.getRoleByName(roleName));
-		usr.setRoles(roles);
+
+		String salt = BCrypt.gensalt(12);
+		usr.setPassword(BCrypt.hashpw(password, salt));
+		Set<Privilege> roles = new HashSet<Privilege>();
+		roles.add(PrivilegeController.getPrivilegeByName(roleName));
+		usr.setPrivileges(roles);
 		hibCtrl.addEntity(usr);
 		return usr;
 	}

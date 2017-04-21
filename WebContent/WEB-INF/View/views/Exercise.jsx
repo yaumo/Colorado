@@ -13,7 +13,11 @@ import NavBar from './components/NavBar.jsx';
 import Paper from 'material-ui/Paper';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import EditorAce from './components/EditorAce.jsx';
+import TextField from 'material-ui/TextField';
+import Dialog from 'material-ui/Dialog';
 
+
+var courseJSON;
 
 export class Exercise extends React.Component {
     render() {
@@ -31,15 +35,33 @@ class Content extends React.Component {
         super();
         this.state = {
             open: true,
+			opendialog: false,
             value: 1,
-			java: 0
+            java: 0,
+			solution: ''
         };
 		this.handleChange = this.handleChange.bind(this);
+		this.handleOpenDialog = this.handleOpenDialog.bind(this);
+		this.handleCloseDialog = this.handleCloseDialog.bind(this);
+		this.handleChangeSolution = this.handleChangeSolution.bind(this);
     }		
 		handleChange(event, index, value) {
 		this.setState({java: value});
-	}
+		}
+		handleOpenDialog(event, index, value) {
+			this.setState({opendialog: true});
+		}
+		handleCloseDialog(event, index, value) {
+			this.setState({opendialog: false});
+		}
+        
+    handleChange(event, index, value) {
+        this.setState({ java: value });
+    }
 
+	handleChangeSolution(event){
+		this.setState({solution: event});
+	}
     render() {
         return (
             <div id="content" className="content">
@@ -50,7 +72,7 @@ class Content extends React.Component {
                                 <CardHeader
                                     title="Exercise 1"
                                     className="loginheader"
-									titleColor="white"
+                                    titleColor="white"
                                 />
                                 <Divider />
                                 <CardText className="loginbody">
@@ -75,25 +97,38 @@ class Content extends React.Component {
                                 <CardHeader
                                     title="Solution"
                                     className="loginheader"
-									titleColor="white"
+                                    titleColor="white"
                                 >
-                                <div style={{textAlign: "right"}}>In Progress</div>
+                                    <div style={{ textAlign: "right" }}>In Progress</div>
                                 </CardHeader>
                                 <Divider />
                                 <CardText className="loginbody">
-                                    <DropDownMenu disabled={true} value={this.state.java} onChange={this.handleChange}>
-                                        <MenuItem value={0} primaryText="JavaScript" />
-                                        <MenuItem value={1} primaryText="Java" />
-                                    </DropDownMenu>
+									<TextField
+										floatingLabelText="JavaScript"
+										fullWidth={false}
+										disabled={true}
+										underlineShow={false}
+										floatingLabelStyle={{'color':'#000000'}}
+									/>
+                                   
                                     <Paper zDepth={4}>
-                                        <EditorAce />
+                                        <EditorAce value={this.state.solution} handleChange={this.handleChangeSolution}/>
                                     </Paper>
                                 </CardText>
                                 <CardActions className="footer">
                                     <RaisedButton label="Check"
 									backgroundColor="#bd051f"
-									labelColor="#FFFFFF"/>
-                                </CardActions>    
+									labelColor="#FFFFFF"
+									onClick={this.handleOpenDialog}/>
+									 <Dialog
+									  title="Dialog With Actions"
+									  modal={false}
+									  open={this.state.opendialog}
+									  onRequestClose={this.handleCloseDialog}
+									>
+									  The actions in this window were passed in as an array of React objects.
+									</Dialog>
+                                </CardActions>
                             </Card>
                         </div>
                     </div>

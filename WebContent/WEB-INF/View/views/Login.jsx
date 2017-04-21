@@ -16,25 +16,6 @@ import Avatar from 'material-ui/Avatar';
 
 injectTapEventPlugin();
 
-function handleClick(e) {
-    fetch('http://localhost:8080/login', {
-        method: 'POST',
-        mode: 'no-cors',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            objectClass: 'login',
-        })
-    }).then(function (response) {
-      
-    }).catch(function (err) {
-        console.log(err)
-    });
-};
-
 export class Login extends React.Component {
   render() {
     return (
@@ -62,13 +43,13 @@ class Header extends React.Component {
       <div style={{ 'margin': '0' }}>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <div>
-            <AppBar 
-			title="Colorado-Login" 
-			iconElementLeft={<Avatar
+            <AppBar
+              title="Colorado-Login"
+              iconElementLeft={<Avatar
                 src="images/colorado.jpg"
                 size={45}
-			/>}
-			style={{ 'backgroundColor': '#bd051f' }}  />
+              />}
+              style={{ 'backgroundColor': '#bd051f' }} />
           </div>
         </MuiThemeProvider>
       </div>
@@ -79,25 +60,41 @@ class Header extends React.Component {
 class Content extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: '' };
+    this.state = { username: '', password: '' };
     this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleChangePassword = this.handleChangePassword.bind(this);
   }
   handleClick(e) {
     e.preventDefault();
-    //console.log('The link was clicked.');
-    if (this.state.value === 's12345') {
-      browserHistory.push('/exercise');
-    }
-    else if (this.state.value === 'd12345') {
-      browserHistory.push('/docent');
-    }
-    else {
-      alert("Username does not exist!");
-    }
+    var username = this.state.username;
+    var password = this.state.password;
+    console.log(username);
+    console.log(password);
+    var obj = "username=" + username + "&password=" + password;
+
+
+    fetch('http://localhost:8181', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Authorization': 'Basic ' + btoa(username + ':' + password),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+
+    }).then(function (response) {
+      //browserHistory.push('/docent');
+    }).catch(function (err) {
+      console.log(err)
+    });
+
   }
   handleChange(event) {
-    this.setState({ value: event.target.value });
+    this.setState({ username: event.target.value });
+  }
+
+  handleChangePassword(event) {
+    this.setState({ password: event.target.value });
   }
   /*componentWillMount() {
      console.log('Component WILL MOUNT!')
@@ -111,8 +108,8 @@ class Content extends React.Component {
               <Avatar
                 src="images/colorado.jpg"
                 size={60}
-				className="coloradologo"
-                />
+                className="coloradologo"
+              />
             </CardHeader>
             />
         <Divider />
@@ -123,33 +120,40 @@ class Content extends React.Component {
                   floatingLabelText="Username"
                   type='text'
                   id="username"
-                  value={this.state.value}
+                  name="username"
+                  value={this.state.username}
                   onChange={this.handleChange}
-                  underlineFocusStyle={{ 'borderColor': '#bd051f' }}
-                  floatingLabelFocusStyle={{ 'color': '#bd051f' }}
-                  style={{'width': '98%', 'fontSize': '150%' }}
-                  />
+                  floatingLabelStyle={{ 'color': '#000000' }}
+                  underlineFocusStyle={{ 'borderColor': '#000000' }}
+                  floatingLabelFocusStyle={{ 'color': '#000000' }}
+                  errorStyle={{ 'color': '#bd051f' }}
+                  style={{ 'width': '98%', 'fontSize': '150%' }}
+                />
                 <br />
                 <br />
                 <TextField
                   floatingLabelText="Password"
                   type="password"
                   id="password"
-                  underlineFocusStyle={{ 'borderColor': '#bd051f' }}
-                  floatingLabelFocusStyle={{ 'color': '#bd051f' }}
-                  style={{'width': '98%', 'fontSize': '150%' }}
-                  />
+                  name="password"
+                  onChange={this.handleChangePassword}
+                  floatingLabelStyle={{ 'color': '#000000' }}
+                  underlineFocusStyle={{ 'borderColor': '#000000' }}
+                  floatingLabelFocusStyle={{ 'color': '#000000' }}
+                  errorStyle={{ 'color': '#bd051f' }}
+                  style={{ 'width': '98%', 'fontSize': '150%' }}
+                />
                 <br />
                 <br />
-                
+
               </div>
             </CardText>
             <CardActions className="footer">
-              <RaisedButton 
-			  label="Login" 
-			  onClick={this.handleClick}
-			  backgroundColor="#bd051f"
-			  labelColor="#FFFFFF"/>
+              <RaisedButton
+                label="Login"
+                onClick={this.handleClick}
+                backgroundColor="#bd051f"
+                labelColor="#FFFFFF" />
             </CardActions>
           </Card>
         </div>

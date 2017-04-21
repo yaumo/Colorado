@@ -9,37 +9,17 @@ import MenuItem from 'material-ui/MenuItem';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
 
-var lecturesjson;
-const courselist=[];
-const lecturelist=[];
 
-function handleChange(event, index, value) {
-    this.setState({ value });
-};
+const courselist = [];
+const courseids = [];
+const lecturelist = [];
+const lectureids = [];
+var exercisesTableData = [];
+var exercisesJSON;
+var coursesJSON;
 
-function handleClick(e) {
-    fetch('http://localhost:8080/', {
-        method: 'POST',
-        mode: 'no-cors',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            objectClass: 'exercise',
-            crud: '1',
-            title: 'FrontEnd',
-            description: 'Test 1234',
-            code: 'bam bam baaaaam'
-        })
-    }).then(function (response) {
-
-    }).catch(function (err) {
-        console.log(err)
-    });
-};
 
 class AssignExercisesTab extends React.Component {
 
@@ -47,47 +27,144 @@ class AssignExercisesTab extends React.Component {
         super();
         this.state = {
             open: true,
+            opendialog: false,
             value: 1,
-			selectedLecture: 0,
-			selectedCourse:0
+            selectedLecture: 0,
+            selectedCourse: 0,
+			selectedcourseid: '',
+            exerciselist: [],
+            lecturelist: [],
+			selectedlectureid: '',
+            exercisesTableData: []
         };
-		this.handleChangeLecture = this.handleChangeLecture.bind(this);
-		this.handleChangeCourse = this.handleChangeCourse.bind(this);
+
+        this.handleChangeLecture = this.handleChangeLecture.bind(this);
+        this.handleChangeCourse = this.handleChangeCourse.bind(this);
+        this.handleAssignClick = this.handleAssignClick.bind(this);
+        this.handleOpenDialog = this.handleOpenDialog.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }
-	
-	componentWillMount() {
-		var lectures='{"course": [	{"course_title":"WWI14SEA",	 "course_id":"1",	 "lectures":[		{"lecture_title":"Datenbanken",		"lecture_id": "0001",		"exercises": [			{ "exercise_title":"Fibonacci", "exercise_id":"0123123"},			{ "exercise_title":"Test2", "exercise_id":"0123124"},			{ "exercise_title":"Test3", "exercise_id":"0123125"}		]},		{"lecture_title":"Webprogrammierung",		"lecture_id": "0002",		"exercises": [			{ "exercise_title":"WEB1", "exercise_id":"0123123"},			{ "exercise_title":"WEB2", "exercise_id":"1123124"},			{ "exercise_title":"WEB3", "exercise_id":"1123125"}		]},		{"lecture_title":"Test2",		"lecture_id": "0003",		"exercises": [			{ "exercise_title":"Test1", "exercise_id":"2123123"},			{ "exercise_title":"Test2", "exercise_id":"2123124"},			{ "exercise_title":"Test3", "exercise_id":"2123125"}	]}	 ]},	{"course_title":"WWI14AMA",	 "course_id":"1",	 "lectures":[		{"lecture_title":"Datenbanken",		"lecture_id": "0001",		"exercises": [			{ "exercise_title":"Fibonacci", "exercise_id":"0123123"},			{ "exercise_title":"Test2", "exercise_id":"0123124"},			{ "exercise_title":"Test3", "exercise_id":"0123125"}		]},		{"lecture_title":"Webprogrammierung",		"lecture_id": "0002",		"exercises": [			{ "exercise_title":"WEB1", "exercise_id":"0123123"},			{ "exercise_title":"WEB2", "exercise_id":"1123124"},			{ "exercise_title":"WEB3", "exercise_id":"1123125"}		]},		{"lecture_title":"Test",		"lecture_id": "0003",		"exercises": [			{ "exercise_title":"Test1", "exercise_id":"2123123"},			{ "exercise_title":"Test2", "exercise_id":"2123124"},			{ "exercise_title":"Test3", "exercise_id":"2123125"}		]}	 ]}   ]}';
-		lecturesjson= JSON.parse(lectures);
+
+    componentDidMount() {
+        $.ajax({
+            url: "http://localhost:8080/exercises",
+            dataType: 'jsonp',
+			jsonp: 'callback',
+            method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (exercises) {
+                this.setState({ exercisesTableData: exercises });
+            }.bind(this)
+        });
+
+        $.ajax({
+            url: "http://localhost:8080/courses",
+            dataType: 'json',
+            method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (courses) {
+                coursesJSON = courses;
+                if (courselist.length === 0) {
+                    for (var i = 0; i < coursesJSON.length; i++) {
+                        courselist.push(<MenuItem value={i} key={coursesJSON[i].hibId} primaryText={coursesJSON[i].title} />);
+						//courseids.push(coursesJSON[i].id);
+                    }
+                }
+                if (lecturelist.length === 0) {
+                    lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+					//lectureids.push('');
+                    for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
+                        lecturelist.push(<MenuItem value={j} key={j} id={coursesJSON[0].lectures.hibId} primaryText={coursesJSON[0].lectures[j - 1].title} />);
+						//lectureids.push(coursesJSON[0].lectures[j - 1].id);
+                    }
+                }
+				//this.setState({ selectedcourseid: courseids[0]});
+				//this.setState({ selectedlectureid: lectureids[0]});
+                this.setState({ courselist: courselist });
+                this.setState({ lecturelist: lecturelist });
+            }.bind(this)
+        });
+    }
+
+    handleChangeCourse(event, index, value) {
+        var count = lecturelist.length;
+        for (var i = 0; i < count; i++) {
+            lecturelist.pop();
+			//lectureids.pop();
+        }
+		lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+		//lectureids.push('');
+        for (var j = 0; j < coursesJSON[value].lectures.length; j++) {
+            lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
+			//lectureids.push(coursesJSON[value].lectures[j - 1].id);
+        }
 		
-		if(courselist.length===0){
-			for(var i=0;i<lecturesjson.course.length;i++){
-				courselist.push(<MenuItem value={i} key={i} primaryText={lecturesjson.course[i].course_title} />);
-			}
-		}
-		if(lecturelist.length===0){
-			for(var j=0;j<lecturesjson.course[0].lectures.length;j++){
-				lecturelist.push(<MenuItem value={j} key={j} primaryText={lecturesjson.course[0].lectures[j].lecture_title} />);
-			}
-		}
-		console.log(lecturesjson);	
-	}
-	
-	handleChangeCourse(event, index, value){
-		var count = lecturelist.length;
-		for(var i =0;i<count;i++){
-			lecturelist.pop();
-		}
-		for(var j=0;j<lecturesjson.course[value].lectures.length;j++){
-			lecturelist.push(<MenuItem value={j} key={j} primaryText={lecturesjson.course[value].lectures[j].lecture_title} />);
-		}
-		
-		this.setState({selectedLecture: 0});
-		this.setState({selectedCourse: value});
-	}
-	
-	handleChangeLecture(event, index, value){
-		this.setState({selectedLecture: value});	
-	}
+		//this.setState({selectedlectureid: lectureids[0]});
+        this.setState({ selectedLecture: 0 });
+		//this.setState({ selectedcourseid: courseids[value]});
+        this.setState({ selectedCourse: value });
+    }
+
+    handleChangeLecture(event, index, value) {
+        this.setState({ selectedLecture: value });
+		//this.setState({ selectedlectureid: lectureids[value]});
+    }
+    handleOpenDialog(event, index, value) {
+        this.setState({ opendialog: true });
+    }
+    handleCloseDialog(event, index, value) {
+        this.setState({ opendialog: false });
+    }
+
+    handleAssignClick(e){
+        var exercises = [];
+        var courseId;
+        var lectureId;
+        var deadline = $("#deadline").val();
+
+        $.ajax({
+            url: "http://localhost:8080/lecture",
+            dataType: 'json',
+            method: 'POST',
+            xhrFields: {
+                    withCredentials: true
+            },
+            data: JSON.stringify({
+                "exercises" : exercises,
+                "courseId": courseId,
+                "lectureId": lectureId,
+                "deadline": deadline
+            }),
+            success: function (response) {
+                //handle response
+            }.bind(this)
+        });
+    }
+
+
+
+    handleChangeCourse(event, index, value) {
+        var countLectures = lecturelist.length;
+
+        for (var i = 0; i < countLectures; i++) {
+            lecturelist.pop();
+        }
+        lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+        for (var j = 1; j <= coursesJSON[value].lectures.length; j++) {
+            lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
+        }
+
+        this.setState({ selectedCourse: value });
+        this.setState({ selectedLecture: 0 });
+    }
+
+    handleChangeLecture(event, index, value) {
+        this.setState({ selectedLecture: value });
+    }
     render() {
         return (
             <div>
@@ -103,29 +180,18 @@ class AssignExercisesTab extends React.Component {
                                             <TableHeaderColumn>Title</TableHeaderColumn>
                                             <TableHeaderColumn>Language</TableHeaderColumn>
                                             <TableHeaderColumn>Creation Date</TableHeaderColumn>
+                                            <TableHeaderColumn className="hidden">exerciseID</TableHeaderColumn>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody deselectOnClickaway={false} className="paper">
-                                        <TableRow>
-                                            <TableRowColumn>Fibonacci</TableRowColumn>
-                                            <TableRowColumn>Java</TableRowColumn>
-                                            <TableRowColumn>24.11.2011</TableRowColumn>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableRowColumn>Division</TableRowColumn>
-                                            <TableRowColumn>JavaScript</TableRowColumn>
-                                            <TableRowColumn>24.11.2011</TableRowColumn>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableRowColumn>Sum</TableRowColumn>
-                                            <TableRowColumn>JavaScript</TableRowColumn>
-                                            <TableRowColumn>24.11.2011</TableRowColumn>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableRowColumn>Sub</TableRowColumn>
-                                            <TableRowColumn>Java</TableRowColumn>
-                                            <TableRowColumn>24.11.2011</TableRowColumn>
-                                        </TableRow>
+                                            {/*this.state.exerciseTableData.map((row, index) => (
+                                                <TableRow key={index} selected={row.selected}>
+                                                    <TableRowColumn>{row.title}</TableRowColumn>
+                                                    <TableRowColumn>{row.language}</TableRowColumn>
+                                                    <TableRowColumn>{row.creationDate}</TableRowColumn>
+                                                    <TableRowColumn>{row.hibId}</TableRowColumn>
+                                                </TableRow>
+                                            ))*/}
                                     </TableBody>
                                 </Table>
                             </div>
@@ -134,27 +200,35 @@ class AssignExercisesTab extends React.Component {
                         <br />
                         <h4>Step 2: Select Lecture</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
-                            <DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
-                                {courselist}
+                            <DropDownMenu id="appendCourse" value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
+                                {this.state.courselist}
                             </DropDownMenu>
 
-                            <DropDownMenu value={this.state.selectedLecture} onChange={this.handleChangeLecture}>
-                                {lecturelist}
+                            <DropDownMenu id="appendLecture" value={this.state.selectedLecture} onChange={this.handleChangeLecture}>
+                                {this.state.lecturelist}
                             </DropDownMenu>
                         </Paper>
 
                         <br />
                         <h4>Step 3: Select Deadline</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
-                            <DatePicker floatingLabelText="Deadline" mode="landscape"/>
+                            <DatePicker  id="deadline" floatingLabelText="Deadline" mode="landscape"  />
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
-                        <RaisedButton 
-						label="Assign"
-						onClick={handleClick}
-						backgroundColor="#bd051f"
-						labelColor="#FFFFFF"/>
+                        <RaisedButton
+                            label="Assign"
+                            onClick={this.handleAssignClick}
+                            backgroundColor="#bd051f"
+                            labelColor="#FFFFFF" />
+                        <Dialog
+                            title="Dialog With Actions"
+                            modal={false}
+                            open={this.state.opendialog}
+                            onRequestClose={this.handleCloseDialog}
+                        >
+                            The actions in this window were passed in as an array of React objects.
+						</Dialog>
                     </CardActions>
                 </Card>
             </div>

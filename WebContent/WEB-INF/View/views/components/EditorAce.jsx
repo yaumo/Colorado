@@ -12,15 +12,19 @@ import 'brace/theme/monokai';
 import 'brace/theme/solarized_light';
 import 'brace/ext/language_tools';
 
-
 class EditorAce extends React.Component {
+	
     render() {
         return (
-            <AceEditor
-                mode='javascript'
+		<div>
+		
+	            <AceEditor
+                mode={this.props.mode}
                 theme="chrome"
                 name="code"
                 width="100%"
+				onChange={this.props.handleChange}
+				value={this.props.value}
                 minLines={16}
                 maxLines={16}
                 ref="ace"
@@ -30,6 +34,7 @@ class EditorAce extends React.Component {
                     editor.getSession().setUseWrapMode(true);
                 }}
             />
+				</div>
         );
     }
 }

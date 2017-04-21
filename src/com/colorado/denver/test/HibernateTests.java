@@ -58,7 +58,7 @@ public class HibernateTests {
 	public void testUpdateGetEntity() {
 		exc.setDescription("HibernateTestUPDATE");
 
-		hibCtrl.updateEntity(exc);
+		hibCtrl.updateEntity(exc, exc.getHibId());
 		Exercise exc2 = (Exercise) hibCtrl.getEntity(mainExcId);
 		assertEquals("UPDATE Test Failed. Description not updated through DB!", exc.getDescription(), exc2.getDescription());
 
@@ -86,7 +86,7 @@ public class HibernateTests {
 		excToChangeWith.setDescription("Des2");
 
 		excToChangeWith.setOwner(UserService.getCurrentUser());
-		excToChangeWith.setId(id);
+		excToChangeWith.setHibId(id);
 		// Manually. We 'fake' the same entity and parse it via hibernate first for all the fields.
 
 		String jsonExcToChangeWithBeforeMerge = gson.toJson(excToChangeWith);

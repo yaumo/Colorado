@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.colorado.denver.model.Course;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Lecture;
-import com.colorado.denver.model.Role;
+import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
 import com.colorado.denver.tools.HibernateInterceptor;
@@ -48,7 +48,7 @@ public class SessionTools {
 
 			// Create session factory instance
 
-			sessionFactory = configuration.addPackage("com.colorado").addProperties(prop).addAnnotatedClass(Role.class)
+			sessionFactory = configuration.addPackage("com.colorado").addProperties(prop).addAnnotatedClass(Privilege.class)
 					.addAnnotatedClass(User.class).addAnnotatedClass(Exercise.class)
 					.addAnnotatedClass(Lecture.class).addAnnotatedClass(Course.class).addAnnotatedClass(Solution.class)
 					.setInterceptor(new HibernateInterceptor())

@@ -9,12 +9,17 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.tools.GenericTools;
+import com.colorado.denver.tools.Tools;
 import com.google.gson.GsonBuilder;
+
+import ch.qos.logback.classic.Level;
 
 /*
  * Keep this class clean! only main method and temporary experiments!
@@ -23,6 +28,8 @@ import com.google.gson.GsonBuilder;
 @EnableWebMvc
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
+@Configuration
+@ComponentScan("com.colorado")
 public class DenverApplication extends SpringBootServletInitializer {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverApplication.class);
@@ -39,6 +46,7 @@ public class DenverApplication extends SpringBootServletInitializer {
 			GenericTools gt = new GenericTools();
 			gt.setApplicationContext(ctx);
 			UserService.authorizeSystemuser();
+			Tools.setLoggingLevel(Level.ERROR);
 			LOGGER.info("Successfully obtained system user Token. DB and security should be in healthy state");
 
 		} catch (Exception e) {
@@ -58,5 +66,16 @@ public class DenverApplication extends SpringBootServletInitializer {
 		gsonBuilder.create();
 		return json;
 	}
+
+	// useless shit?
+	// @Bean
+	// public WebMvcConfigurer corsConfigurer() {
+	// return new WebMvcConfigurerAdapter() {
+	// @Override
+	// public void addCorsMappings(CorsRegistry registry) {
+	// registry.addMapping("/**").allowedOrigins("http://localhost:8080", "http://localhost:8081");
+	// }
+	// };
+	// }
 
 }

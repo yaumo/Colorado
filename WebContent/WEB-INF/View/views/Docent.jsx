@@ -13,13 +13,16 @@ import OverviewTab from './components/OverviewTab.jsx';
 import LecturesTab from './components/LecturesTab.jsx';
 import DocentBar from './components/DocentBar.jsx';
 
-
+var courseJSON;
+const courselist = [];
+const lecturelist = [];
+const exerciselist = [];
 
 export class Docent extends React.Component {
     render() {
         return (
             <div>
-                <DocentBar/>
+                <DocentBar />
                 <Content />
             </div>
         );
@@ -27,12 +30,16 @@ export class Docent extends React.Component {
 }
 
 class Content extends React.Component {
+    constructor() {
+        super();
+    }
+
     render() {
         return (
             <div id="contentDocent" className="contentDocent">
                 <MuiThemeProvider muiTheme={getMuiTheme({
                     datePicker: { selectColor: '#bd051f' },
-                    flatButton: {primaryTextColor: '#bd051f'}
+                    flatButton: { primaryTextColor: '#bd051f' }
                 }
                 )} >
                     <div>
@@ -49,7 +56,7 @@ class Content extends React.Component {
                             <Tab
                                 style={{ 'backgroundColor': '#bd051f' }}
                                 label="New Lecture"
-                                >
+                            >
                                 <LecturesTab />
                             </Tab>
                         </Tabs>

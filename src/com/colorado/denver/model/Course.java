@@ -13,6 +13,9 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "Course")
 @DynamicUpdate(true)
@@ -37,6 +40,7 @@ public class Course extends EducationEntity {
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@Cascade({ CascadeType.ALL })
+	@JsonManagedReference
 	public Set<Lecture> getLectures() {
 		return lectures;
 	}
@@ -47,6 +51,7 @@ public class Course extends EducationEntity {
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@Cascade({ CascadeType.ALL })
+	@JsonBackReference
 	public Set<User> getUsers() {
 		return users;
 	}

@@ -15,6 +15,8 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "Exercise")
 @DynamicUpdate(true)
@@ -52,6 +54,7 @@ public class Exercise extends EducationEntity {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "lectures_exercises", joinColumns = { @JoinColumn(name = "exercises_id") }, inverseJoinColumns = { @JoinColumn(name = "lectures_id") })
 	// @Cascade({ CascadeType.ALL })
+	@JsonBackReference
 	public Set<Lecture> getLectures() {
 		return lectures;
 	}
@@ -130,7 +133,7 @@ public class Exercise extends EducationEntity {
 		this.input = input;
 	}
 
-	public String setAnswer() {
+	public String getAnswer() {
 		return answer;
 	}
 

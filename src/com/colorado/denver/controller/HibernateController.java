@@ -66,11 +66,9 @@ public class HibernateController {
 	}
 
 	/* Method to UPDATE an entity */
-	public BaseEntity<?> updateEntity(BaseEntity<?> entity) {
+	public BaseEntity<?> updateEntity(BaseEntity<?> entity, String entityID) {
 		Session session = SessionTools.sessionFactory.openSession();
 		Transaction tx = null;
-		String entityID = null;
-		entityID = entity.getId();
 		try {
 			tx = session.beginTransaction();
 
@@ -166,7 +164,7 @@ public class HibernateController {
 		try {
 			tx = session.beginTransaction();
 			returnEnt = (BaseEntity<?>) session.merge(entity);
-			LOGGER.info("Merged Entity: " + entity.getId());
+			LOGGER.info("Merged Entity: " + entity.getHibId());
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)

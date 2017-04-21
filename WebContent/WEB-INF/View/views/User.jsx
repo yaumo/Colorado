@@ -13,7 +13,12 @@ import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
 import NavigationBack from 'material-ui/svg-icons/navigation/arrow-back';
+import Dialog from 'material-ui/Dialog';
 
+
+
+var currentUserJSON;
+var dialog = [];
 
 export class User extends React.Component {
   render() {
@@ -59,16 +64,125 @@ class Header extends React.Component {
 class Content extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: '' };
+    this.state = {
+      value: '',
+      dialog: '',
+      opendialog: false,
+      firstname: '',
+      lastname: '',
+      oldPassword: '',
+      newPassword: '',
+      repeatPassword: '',
+      mail: ''
+    };
     this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleChangeOldPassword = this.handleChangeOldPassword.bind(this);
+    this.handleChangeNewPassword = this.handleChangeNewPassword.bind(this);
+    this.handleChangeRepeatPassword = this.handleChangeRepeatPassword.bind(this);
+    this.handleOpenDialog = this.handleOpenDialog.bind(this);
+    this.handleCloseDialog = this.handleCloseDialog.bind(this);
   }
+
+  componentDidMount() {
+    $.ajax({
+      url: "http://localhost:8181/user",
+      dataType: 'json',
+      method: 'GET',
+      xhrFields: {
+        withCredentials: true
+      },
+      success: function (currentUser) {
+        currentUserJSON = currentUser;
+        this.setState({
+          firstname: currentUserJSON.username,
+          lastname: currentUserJSON.username,
+          mail: currentUserJSON.mail
+        })
+      }.bind(this),
+      error: function (error) {
+        alert(error.responseText);
+      }
+    });
+  }
+
   handleClick(e) {
-    alert("Changed Password!");
+    if (this.state.newPassword.length < 6) {
+      this.setState({
+        opendialog: true,
+        dialog: "Your new password must have at least 6 characters. Please try again.",
+        newPassword: '',
+        repeatPassword: ''
+      });
+    }
+    else if (this.state.oldPassword === this.state.newPassword) {
+      this.setState({
+        opendialog: true,
+        dialog: "New password can not be your old password. Please try another one.",
+        newPassword: '',
+        repeatPassword: ''
+      });
+    }
+    else if (this.state.newPassword !== this.state.repeatPassword) {
+      this.setState({
+        opendialog: true,
+        dialog: "Passwords do not match. Please try again.",
+        newPassword: '',
+        repeatPassword: ''
+      });
+    }
+    else {
+      $.ajax({
+        url: "http://localhost:8181/user",
+        dataType: 'json',
+        method: 'PATCH',
+        xhrFields: {
+          withCredentials: true
+        },
+        data: JSON.stringify({
+          "password": this.state.oldPassword,
+          "newPassword": this.state.newPassword
+        }),
+        success: function (response) {
+          this.setState({
+            opendialog: true,
+            dialog: "Password successfully changed",
+            newPassword: '',
+            repeatPassword: '',
+            oldPassword: ''
+          });
+        }.bind(this),
+        error: function (error) {
+          this.setState({
+            opendialog: true,
+            dialog: "Your old password is incorrect. Please try again.",
+            oldPassword: ''
+          });
+        }.bind(this)
+      });
+    }
+
   }
+
   handleChange(event) {
     this.setState({ value: event.target.value });
   }
+  handleChangeOldPassword(event) {
+    this.setState({ oldPassword: event.target.value });
+  }
+  handleChangeNewPassword(event) {
+    this.setState({ newPassword: event.target.value });
+  }
+  handleChangeRepeatPassword(event) {
+    this.setState({ repeatPassword: event.target.value });
+  }
+  handleOpenDialog(event, index, value) {
+    this.setState({ opendialog: true });
+  }
+  handleCloseDialog(event, index, value) {
+    this.setState({ opendialog: false });
+  }
+
   render() {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -86,7 +200,7 @@ class Content extends React.Component {
                   id="firstName"
                   disabled={true}
                   fullWidth={true}
-                  defaultValue="Nico"
+                  value={this.state.firstname}
                 />
                 <br />
                 <TextField
@@ -94,17 +208,17 @@ class Content extends React.Component {
                   type='text'
                   id="lastName"
                   disabled={true}
-                  defaultValue="Himmelein"
                   fullWidth={true}
+                  value={this.state.lastname}
                 />
                 <br />
                 <TextField
                   floatingLabelText="eMail"
                   type='text'
-                  id="lastName"
+                  id="mail"
                   disabled={true}
                   fullWidth={true}
-                  defaultValue="s12345@student.dhbw-mannheim.de"
+                  value={this.state.mail}
                 />
                 <br />
                 <TextField
@@ -114,6 +228,8 @@ class Content extends React.Component {
                   underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                   floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                   fullWidth={true}
+                  value={this.state.oldPassword}
+                  onChange={this.handleChangeOldPassword}
                 />
                 <br />
                 <TextField
@@ -123,25 +239,37 @@ class Content extends React.Component {
                   underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                   floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                   fullWidth={true}
+                  value={this.state.newPassword}
+                  onChange={this.handleChangeNewPassword}
                 />
                 <br />
                 <TextField
                   floatingLabelText="Repeat New Password"
                   type="password"
-                  id="newPassword"
+                  id="repeatPassword"
                   underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                   floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                   fullWidth={true}
+                  value={this.state.repeatPassword}
+                  onChange={this.handleChangeRepeatPassword}
                 />
 
               </div>
             </CardText>
             <CardActions className="footer">
-              <RaisedButton 
-			  label="Confirm" 
-			  onClick={this.handleClick}
-			  backgroundColor="#bd051f"
-			  labelColor="#FFFFFF"/>
+              <RaisedButton
+                label="Confirm"
+                onClick={this.handleClick}
+                backgroundColor="#bd051f"
+                labelColor="#FFFFFF" />
+              <Dialog
+                title="Information"
+                modal={false}
+                open={this.state.opendialog}
+                onRequestClose={this.handleCloseDialog}
+              >
+                {this.state.dialog}
+              </Dialog>
             </CardActions>
           </Card>
         </div>

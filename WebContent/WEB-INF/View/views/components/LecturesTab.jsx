@@ -9,129 +9,90 @@ import MenuItem from 'material-ui/MenuItem';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
 
 
-function getAllCourses() {
-    fetch('http://localhost:8080/course', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            objectClass: 'course',
-            crud: '2'
-        })
-    }).then(function (response) {
-        return response.json();
-    }).then(function (courses) {
-        console.log(courses);
-        console.log(courses[0]["0x1"].title);
-
-    }).catch(function (err) {
-        console.log(err);
-    });
-}
+var coursesJSON;
+const courselist = [];
+const courseids = [];
+var tableData = [];
+var allDocentsJSON;
 
 
-function getAllLectures() {
-    fetch('http://localhost:8080/lecture', {
-        method: 'POST',
-        mode: 'no-cors',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            objectClass: 'lecture',
-            crud: '2'
-        })
-    }).then(function (response) {
-        return response.json();
-
-    }).catch(function (err) {
-        console.log(err)
-    });
-}
-
-function createNewLecture() {
-    fetch('http://localhost:8080/lecture', {
-        method: 'POST',
-        mode: 'no-cors',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            objectClass: 'lecture',
-            crud: '1',
-            title: 'LectureTest2'
-        })
-    }).then(function (response) {
-
-    }).catch(function (err) {
-        console.log(err)
-    });
-}
-
-function handleClick(e) {
-    getAllCourses();
-    //createNewLecture();
-    //getAllLectures();
-};
-
-const tableData = [
-    {
-        name: 'John Smith',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-    {
-        name: 'Randal White',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-    {
-        name: 'Stephanie Sanders',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-    {
-        name: 'Steve Brown',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-    {
-        name: 'Joyce Whitten',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-    {
-        name: 'Samuel Roberts',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-    {
-        name: 'Adam Moore',
-        mail: 'd12345@docent.dhbw-mannheim.de',
-    },
-];
-
-
-function handleChange(event, index, value) {
-    this.setState({ value });
-};
 
 class LecturesTab extends React.Component {
 
     constructor() {
         super();
+
         this.state = {
             open: true,
+            opendialog: false,
             value: 1,
-			selectedCourse:1
+            selectedCourse: 0,
+			selectedcourseid: '',
+            courselist: [],
+            tableData: []
         };
-		this.handleChangeCourse = this.handleChangeCourse.bind(this);
+        this.handleChangeCourse = this.handleChangeCourse.bind(this);
+        this.handleOpenDialog = this.handleOpenDialog.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }
+    handleChangeCourse(event, index, value) {
+        this.setState({ selectedCourse: value });
+    }
+
+    componentDidMount() {
+        $.ajax({
+            url: "http://localhost:8181/courses",
+            dataType: 'jsonp',
+			jsonp: 'callback',
+            method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (courses) {
+                coursesJSON = courses;
+                if (courselist.length === 0) {
+                    for (var i = 0; i < coursesJSON.length; i++) {
+                        courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
+						//courseids.push(coursesJSON[i].id);
+                    }
+                }
+                this.setState({ courselist: courselist });
+            }.bind(this)
+        });
+
+
+        $.ajax({
+            url: "http://localhost:8181/users",
+            dataType: 'jsonp',
+			jsonp: 'callback',
+            method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (allDocents) {
+                this.setState({ tableData: allDocents });
+            }.bind(this)
+        });
+    }
+
+    handleOpenDialog(event, index, value) {
+        this.setState({ opendialog: true });
+    }
+    handleCloseDialog(event, index, value) {
+        this.setState({ opendialog: false });
+    }
+    handleClick(e) {
+
+    }
+	
 	handleChangeCourse(event, index, value){
 		this.setState({selectedCourse: value});
+		//this.setState({selectedcourseid: courseids[value]});
 	}
+
     render() {
         return (
             <div>
@@ -142,9 +103,7 @@ class LecturesTab extends React.Component {
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <div>
                                 <DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse}>
-                                    <MenuItem value={1} primaryText="WWI14SEA" />
-                                    <MenuItem value={2} primaryText="WWI14AMA" />
-                                    <MenuItem value={3} primaryText="WWI16SEB" />
+                                    {this.state.courselist}
                                 </DropDownMenu>
                             </div>
                         </Paper>
@@ -169,13 +128,15 @@ class LecturesTab extends React.Component {
                                     <TableRow>
                                         <TableHeaderColumn>Name</TableHeaderColumn>
                                         <TableHeaderColumn>E-Mail</TableHeaderColumn>
+                                        <TableHeaderColumn className="hidden">userID</TableHeaderColumn>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody deselectOnClickaway={false}>
-                                    {tableData.map((row, index) => (
+                                    {this.state.tableData.map((row, index) => (
                                         <TableRow key={index} selected={row.selected}>
-                                            <TableRowColumn>{row.name}</TableRowColumn>
+                                            <TableRowColumn>{row.username}</TableRowColumn>
                                             <TableRowColumn>{row.mail}</TableRowColumn>
+                                            <TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -186,9 +147,17 @@ class LecturesTab extends React.Component {
                     <CardActions className="footer">
                         <RaisedButton
                             label="Create"
-                            onClick={handleClick}
+                            onClick={this.handleClick}
                             backgroundColor="#bd051f"
                             labelColor="#FFFFFF" />
+                        <Dialog
+                            title="Dialog With Actions"
+                            modal={false}
+                            open={this.state.opendialog}
+                            onRequestClose={this.handleCloseDialog}
+                        >
+                            The actions in this window were passed in as an array of React objects.
+						</Dialog>
                     </CardActions>
                 </Card>
             </div>
