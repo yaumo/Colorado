@@ -46,7 +46,7 @@ public class DenverApplication extends SpringBootServletInitializer {
 			GenericTools gt = new GenericTools();
 			gt.setApplicationContext(ctx);
 			UserService.authorizeSystemuser();
-			Tools.setLoggingLevel(Level.DEBUG);
+			Tools.setLoggingLevel(Level.ERROR);
 			LOGGER.info("Successfully obtained system user Token. DB and security should be in healthy state");
 
 		} catch (Exception e) {
