@@ -14,9 +14,9 @@ import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.BaseEntity;
 import com.colorado.denver.model.EducationEntity;
 import com.colorado.denver.model.User;
-import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.services.security.SecurityCheckPrivilege;
+import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.DenverConstants;
 
 public class ObjectOperationController {

@@ -1,5 +1,7 @@
 package com.colorado.denver.model;
 
+import java.util.Date;
+
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
@@ -14,10 +16,12 @@ public class EducationEntity extends BaseEntity<EducationEntity> {
 	public static final String OWNER = "owner";
 	public static final String TITLE = "title";
 	public static final String DESCRIPTION = "description";
+	public static final String CREATION_DATE = "creationDate";
 
 	private User owner;
 	private String title;
 	private String description;
+	public Date creationDate;
 
 	public User getOwner() {
 		return owner;
@@ -41,6 +45,14 @@ public class EducationEntity extends BaseEntity<EducationEntity> {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	@Override

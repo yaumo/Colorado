@@ -26,9 +26,9 @@ import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.controller.entityController.PrivilegeController;
 import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.User;
-import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.DenverConstants;
 
 @RunWith(SpringRunner.class)

@@ -1,4 +1,4 @@
-package com.colorado.denver.services;
+package com.colorado.denver.services.user;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

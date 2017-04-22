@@ -13,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import com.colorado.denver.services.MyUserDetailsService;
+import com.colorado.denver.services.user.MyUserDetailsService;
 
 @Configuration
 @EnableWebSecurity

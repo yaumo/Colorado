@@ -19,8 +19,8 @@ import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.SolutionService;
-import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.codeExecution.SolutionExecutor;
+import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.DenverConstants;
 import com.colorado.denver.tools.GenericTools;
 import com.google.gson.Gson;
@@ -48,7 +48,7 @@ public class SolutionController extends ObjectOperationController {
 			try {
 				entity.setCorrect(false); // init with false. Otherwise the value might be set from the frontend in another update
 				// Experimental! We need the code from the itself not from a file on the server
-				InputStream is = new FileInputStream("fibonacci.txt");
+				InputStream is = new FileInputStream("addition.txt");
 				BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 				String line = buf.readLine();
 				StringBuilder sb = new StringBuilder();
@@ -104,7 +104,7 @@ public class SolutionController extends ObjectOperationController {
 			try {
 				entity.setCorrect(false); // init with false. Otherwise the value might be set from the frontend in another update
 				// Experimental! We need the code from the itself not from a file on the server
-				InputStream is = new FileInputStream("fibonacci.txt");
+				InputStream is = new FileInputStream("addition.txt");
 				BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 				String line = buf.readLine();
 				StringBuilder sb = new StringBuilder();

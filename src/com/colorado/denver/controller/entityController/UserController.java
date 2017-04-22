@@ -21,7 +21,7 @@ import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.ExerciseService;
-import com.colorado.denver.services.UserService;
+import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.DenverConstants;
 import com.colorado.denver.tools.GenericTools;
 import com.google.gson.Gson;

@@ -10,13 +10,11 @@ public class ExerciseExecutor implements JavaExecutor, JavaScriptExecutor {
 	Exercise exc;
 	String inputType;
 	String outputType;
-	String excInput;
+	String[] excInput;
 	String code;
 
 	public ExerciseExecutor(Exercise exc) {
 		this.exc = exc;
-		this.inputType = exc.getInputType();
-		this.outputType = exc.getOutputType();
 		this.excInput = exc.getInput();
 		this.code = exc.getSolution_code();
 	}
@@ -26,14 +24,14 @@ public class ExerciseExecutor implements JavaExecutor, JavaScriptExecutor {
 		String message = "";
 		if (exc.getLanguage().equals(DenverConstants.JAVA)) {
 			LOGGER.info("Executing Java code");
-			answer = executeJava(inputType, outputType, excInput, code);
+			answer = executeJava(excInput, code);
 			if (answer.startsWith(DenverConstants.JAVA_EXCEPTION_THROWN)) {
 				answer = DenverConstants.JAVA_EXCEPTION_THROWN;
 				message = answer.replaceAll(DenverConstants.JAVA_EXCEPTION_THROWN, "");
 			}
 		} else {
 			LOGGER.info("Executing JavaScript with code: " + code);
-			answer = executeJavaScript(inputType, outputType, excInput, code);
+			answer = executeJavaScript(excInput, code);
 		}
 		exc.setAnswer(answer);
 

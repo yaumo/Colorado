@@ -1,4 +1,4 @@
-package com.colorado.denver.services;
+package com.colorado.denver.services.user;
 
 import java.util.ArrayList;
 import java.util.Collection;

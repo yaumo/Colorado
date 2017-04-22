@@ -24,9 +24,10 @@ import com.colorado.denver.model.Lecture;
 import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
-import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.user.UserService;
+import com.colorado.denver.tools.DenverConstants;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -104,11 +105,7 @@ public class PopulateDBWithTestData {
 		lectures.add(lecture3);
 
 		Exercise exercise = createExercise("Fibonacci");
-		exercise.setInput("11");
-		exercise.setInputType("int");
-		exercise.setOutputType("int");
-		exercise.setAnswer("89");
-		exercise.setLanguage("java");
+		exercise.setLanguage(DenverConstants.JAVA);
 
 		Set<Exercise> exercises = new HashSet<Exercise>();
 		exercises.add(exercise);
@@ -178,10 +175,6 @@ public class PopulateDBWithTestData {
 	private Exercise createExercise(String title) {
 		Exercise exercise = new Exercise();
 		exercise.setTitle(title);
-		exercise.setAnswer(89 + "");
-		exercise.setInput(11 + "");
-		exercise.setInputType("int");
-		exercise.setOutputType("int");
 		hibCtrl.addEntity(exercise);
 
 		return exercise;

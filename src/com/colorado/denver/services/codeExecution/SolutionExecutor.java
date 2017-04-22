@@ -10,15 +10,11 @@ public class SolutionExecutor implements JavaExecutor, JavaScriptExecutor {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SolutionExecutor.class);
 
 	Solution sol;
-	String inputType;
-	String outputType;
-	String excInput;
+	String[] excInput;
 	String code;
 
 	public SolutionExecutor(Solution sol) {
 		this.sol = sol;
-		this.inputType = sol.getExercise().getInputType();
-		this.outputType = sol.getExercise().getOutputType();
 		this.excInput = sol.getExercise().getInput();
 		this.code = sol.getCode();
 
@@ -30,14 +26,14 @@ public class SolutionExecutor implements JavaExecutor, JavaScriptExecutor {
 		String message = "";
 		if (sol.getExercise().getLanguage().equals(DenverConstants.JAVA)) {
 			LOGGER.info("Executing Java");
-			answer = executeJava(inputType, outputType, excInput, code);
+			answer = executeJava(excInput, code);
 			if (answer.startsWith(DenverConstants.JAVA_EXCEPTION_THROWN)) {
 				answer = DenverConstants.JAVA_EXCEPTION_THROWN;
 				message = answer.replaceAll(DenverConstants.JAVA_EXCEPTION_THROWN, "");
 			}
 		} else {
 			LOGGER.info("Executing JavaScriptx");
-			answer = executeJavaScript(inputType, outputType, excInput, code);
+			answer = executeJavaScript(excInput, code);
 		}
 
 		if (sol.getExercise().getAnswer().equals(answer)) {

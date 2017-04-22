@@ -13,7 +13,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import com.colorado.denver.model.Course;
 import com.colorado.denver.model.Lecture;
 import com.colorado.denver.services.CourseService;
-import com.colorado.denver.services.UserService;
+import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.DenverConstants;
 import com.colorado.denver.tools.GenericTools;
 import com.google.gson.Gson;

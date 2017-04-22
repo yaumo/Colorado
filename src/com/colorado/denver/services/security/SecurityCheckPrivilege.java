@@ -4,7 +4,7 @@ import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Lecture;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
-import com.colorado.denver.services.UserService;
+import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.DenverConstants;
 
 public class SecurityCheckPrivilege {

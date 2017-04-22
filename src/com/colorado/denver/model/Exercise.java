@@ -42,9 +42,7 @@ public class Exercise extends EducationEntity {
 	// template code
 	private String code;
 	private String solution_code;
-	private String inputType;
-	private String outputType;
-	private String input;
+	private String[] input;
 	private String language;
 
 	public Exercise() {
@@ -109,27 +107,11 @@ public class Exercise extends EducationEntity {
 		return getPrefix();
 	}
 
-	public String getInputType() {
-		return inputType;
-	}
-
-	public void setInputType(String inputType) {
-		this.inputType = inputType;
-	}
-
-	public String getOutputType() {
-		return outputType;
-	}
-
-	public void setOutputType(String outputType) {
-		this.outputType = outputType;
-	}
-
-	public String getInput() {
+	public String[] getInput() {
 		return input;
 	}
 
-	public void setInput(String input) {
+	public void setInput(String[] input) {
 		this.input = input;
 	}
 

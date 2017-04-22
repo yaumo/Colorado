@@ -1,4 +1,4 @@
-package com.colorado.denver.services;
+package com.colorado.denver.services.user;
 
 import com.colorado.denver.model.User;
 

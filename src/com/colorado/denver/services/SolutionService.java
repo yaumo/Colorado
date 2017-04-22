@@ -10,6 +10,7 @@ import com.colorado.denver.model.Course;
 import com.colorado.denver.model.Lecture;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
+import com.colorado.denver.services.user.UserService;
 
 public class SolutionService {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SolutionService.class);

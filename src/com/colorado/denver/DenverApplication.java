@@ -13,8 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.GenericTools;
 import com.colorado.denver.tools.Tools;
 import com.google.gson.GsonBuilder;

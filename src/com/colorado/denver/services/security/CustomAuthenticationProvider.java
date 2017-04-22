@@ -1,4 +1,4 @@
-package com.colorado.denver.services;
+package com.colorado.denver.services.security;
 
 import java.util.Collection;
 
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.colorado.denver.model.User;
+import com.colorado.denver.services.user.UserService;
 
 @Service
 @Component("AuthenticationProvider")

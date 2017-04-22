@@ -15,6 +15,8 @@ public final class DenverConstants {
 	public static final String ERROR_NO_ID_FROM_REQUEST = "ERROR_NO_ID_FROM_REQUEST";
 	public static final String ERROR = "ERROR";
 	public static final String STUDENT_ACCES_DENIED = "As a student you are not eligible to make this request!";
+	public static final String U_ERROR = "UNKNOWN ERROR";
+	public static final String EXC_THROWN = "EXCEPTION THROWN: ";
 
 	public static final String ID_CREATE_MODE = "ID_CREATE_MODE";
 	public static final String ID_READ_ALL_MODE = "ID_READ_ALL_MODE";

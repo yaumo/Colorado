@@ -1,7 +1,6 @@
 package com.colorado.denver.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -20,14 +19,8 @@ public abstract class BaseEntity<T> extends ResourceSupport implements Serializa
 	 */
 	private static final long serialVersionUID = 2741548100143780881L;
 	public static final String HIB_ID = "hibId";
-	public static final String OBJECT_CLASS = "objectClass";
-	public static final String CREATION_DATE = "creationDate";
 
-	public transient Date creationDate;
-
-	// Important for identifying the used object. This property is set during Hibernate create
-	public String objectClass;
-	private String hibId;// Because someone wants REST and self linking is only possible for this task with HATEOS
+	private String hibId;
 
 	public BaseEntity() {
 
@@ -43,22 +36,6 @@ public abstract class BaseEntity<T> extends ResourceSupport implements Serializa
 
 	public void setHibId(String hibId) {
 		this.hibId = hibId;
-	}
-
-	public String getObjectClass() {
-		return objectClass;
-	}
-
-	public void setObjectClass(String objectClass) {
-		this.objectClass = objectClass;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
 	}
 
 	@Transient

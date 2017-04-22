@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.colorado.denver.model.BaseEntity;
 import com.colorado.denver.model.EducationEntity;
-import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.GenericTools;
 
 public class HibernateController {
@@ -24,11 +24,13 @@ public class HibernateController {
 
 		// If EducationEntity set Owner!!!!
 		if (UserService.getCurrentUser() == null) {
-			LOGGER.error("Saved NULL CREATOR for entity: " + entity.getObjectClass());
+			LOGGER.error("Saved NULL CREATOR for entity: " + entity.getHibId());
+			entity.setCreationDate(new Date());
 		} else {
 			LOGGER.info("Trying to get User from Authentication: " + UserService.getCurrentUser().getUsername());
 
-			LOGGER.info("Setting user on Education entity: " + UserService.getCurrentUser().getUsername() + " " + entity.getObjectClass());
+			LOGGER.info("Setting user on Education entity: " + UserService.getCurrentUser().getUsername());
+			entity.setCreationDate(new Date());
 			entity.setOwner(UserService.getCurrentUser());
 		}
 
@@ -47,9 +49,6 @@ public class HibernateController {
 				LOGGER.info("Setting creation information on EducationEntity");
 				setCreationInformation((EducationEntity) entity);
 			}
-
-			entity.setObjectClass(GenericTools.returnClassName(entity).toLowerCase());
-			entity.setCreationDate(new Date());
 
 			LOGGER.info("Saving entity: " + entity.getClass().getName());
 			entityID = (String) session.save(entity);
