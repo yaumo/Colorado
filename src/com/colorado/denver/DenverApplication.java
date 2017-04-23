@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.persistence.HibernateSession;
 import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.GenericTools;
 import com.colorado.denver.tools.Tools;
@@ -41,7 +41,7 @@ public class DenverApplication extends SpringBootServletInitializer {
 			ApplicationContext ctx = SpringApplication.run(DenverApplication.class, args);
 			// True = Use the update routine
 			// If you want to rebuild the DB with CREATE use DenverDBSetupTest.java
-			SessionTools.createSessionFactory(true);
+			HibernateSession.createSessionFactory(true);
 			GenericTools gt = new GenericTools();
 			gt.setApplicationContext(ctx);
 			UserService.authorizeSystemuser();

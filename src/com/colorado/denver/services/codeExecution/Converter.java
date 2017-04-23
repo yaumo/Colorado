@@ -17,7 +17,7 @@ public class Converter {
 		return obj;
 	}
 
-	public static Object[] convertForJavaInput(Class[] types, String[] inputs) throws Exception {
+	public static Object[] convertForJavaInput(@SuppressWarnings("rawtypes") Class[] types, String[] inputs) throws Exception {
 
 		if (types.length != inputs.length) {
 			throw new Exception("Your parameters are not matching the method declaration!");

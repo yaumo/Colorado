@@ -1,9 +1,7 @@
 package com.colorado.denver.controller.entityController;
 
-import java.util.Iterator;
 import java.util.Set;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,12 +21,6 @@ import com.google.gson.GsonBuilder;
 @CrossOrigin
 @RestController
 public class LectureController extends ObjectOperationController {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8572242416817684426L;
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LectureController.class);
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Lecture.LECTURE, method = RequestMethod.POST)
 	public Lecture handleLecturePostRequest() {
@@ -63,27 +55,6 @@ public class LectureController extends ObjectOperationController {
 		} catch (HttpServerErrorException e) {
 			e.printStackTrace();
 		}
-		return (Lecture) super.doDatabaseOperation(entity, DenverConstants.PATCH);
-	}
-
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Lecture.LECTURE, method = RequestMethod.PUT)
-	public Lecture handleLecturePutRequest() {
-
-		String jsonString = GenericTools.getRequestBody();
-
-		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
-		gb.serializeNulls();
-		Gson gson = gb.create();
-
-		Lecture entity = gson.fromJson(jsonString, Lecture.class);
-
-		try {
-			super.checkAccess(Lecture.LECTURE, DenverConstants.PATCH);
-		} catch (HttpServerErrorException e) {
-			e.printStackTrace();
-		}
-		entity = (Lecture) super.doDatabaseOperation(entity, DenverConstants.PATCH);
-
 		entity = CourseService.createSolutionsForCourseAsssignment(entity);
 
 		return entity;
@@ -93,11 +64,11 @@ public class LectureController extends ObjectOperationController {
 	public Lecture getLectureForUser(@RequestParam(value = "lectureId", required = true) String lecId) {
 		Course course = CourseService.getCourseForUser(UserService.getCurrentUser().getId());
 		Set<Lecture> lectures = course.getLectures();
-		for (Iterator iterator = lectures.iterator(); iterator.hasNext();) {
-			Lecture lecture = (Lecture) iterator.next();
+		for (Lecture lecture : lectures) {
 			if (lecture.getId().equals(lecId))
 				return lecture;
 		}
+
 		return null;
 	}
 }

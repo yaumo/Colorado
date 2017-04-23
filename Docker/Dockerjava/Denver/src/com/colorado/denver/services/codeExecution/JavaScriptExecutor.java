@@ -11,10 +11,10 @@ import jdk.nashorn.api.scripting.ClassFilter;
 import jdk.nashorn.api.scripting.JSObject;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
+@SuppressWarnings("restriction")
 public interface JavaScriptExecutor {
 	final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(JavaExecutor.class);
 
-	@SuppressWarnings("restriction")
 	public default String executeJavaScript(String[] excInput, String code) {
 		String result = "";
 		try {
@@ -31,12 +31,12 @@ public interface JavaScriptExecutor {
 			LOGGER.error("Error executing script itself" + result);
 
 			e.printStackTrace();
-			result = e.toString();
+			result = DenverConstants.EXC_THROWN + e.toString();
 		} catch (Exception e) {
 			LOGGER.error("generic error in JS executor!");
 
 			e.printStackTrace();
-			result = DenverConstants.U_ERROR;
+			result = DenverConstants.EXC_THROWN + DenverConstants.U_ERROR + e.getMessage();
 		}
 
 		return result;

@@ -9,39 +9,42 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.hateoas.ResourceSupport;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //There should be NO instance of this entity! Create children of this entity instead!
 @MappedSuperclass
-public abstract class BaseEntity<T> extends ResourceSupport implements Serializable, Cloneable {
+public abstract class BaseEntity<T> implements Serializable, Cloneable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2741548100143780881L;
-	public static final String HIB_ID = "hibId";
+	public static final String ID = "Id";
 
-	private String hibId;
+	private String id;
 
 	public BaseEntity() {
 
 	}
 
 	@Id
-	@GenericGenerator(name = "custom_hibId", strategy = "com.colorado.denver.services.persistence.HibernateIdGenerator")
-	@GeneratedValue(generator = "custom_hibId")
-	@Column(name = "hibId")
-	public String getHibId() {
-		return hibId;
+	@GenericGenerator(name = "custom_id", strategy = "com.colorado.denver.services.persistence.HibernateIdGenerator")
+	@GeneratedValue(generator = "custom_id")
+	@Column(name = ID)
+	public String getId() {
+		return id;
 	}
 
-	public void setHibId(String hibId) {
-		this.hibId = hibId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	@Transient
+	@JsonIgnore
 	public abstract String getPrefix();
 
 	@Transient
+	@JsonIgnore
 	public abstract String setPrefix();
 
 }

@@ -19,7 +19,10 @@ import com.colorado.denver.model.User;
 public class ExerciseService {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ExerciseService.class);
 
+	@SuppressWarnings("unchecked")
 	public static Set<Exercise> getAllExercisesForUser(String hibId) {
+
+		@SuppressWarnings("rawtypes")
 		Set<Exercise> exercises = new HashSet();
 		try {
 			HibernateController hibCtrl = new HibernateController();

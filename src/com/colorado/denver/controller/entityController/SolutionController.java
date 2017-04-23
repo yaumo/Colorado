@@ -1,6 +1,5 @@
 package com.colorado.denver.controller.entityController;
 
-import java.util.Iterator;
 import java.util.Set;
 
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,6 @@ import com.google.gson.GsonBuilder;
 // @RequestMapping(DenverConstants.FORWARD_SLASH + Solution.SOLUTION)
 public class SolutionController extends ObjectOperationController {
 
-	private static final long serialVersionUID = 4974547446418316745L;
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SolutionController.class);
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Solution.SOLUTION, method = RequestMethod.PATCH)
@@ -70,13 +68,10 @@ public class SolutionController extends ObjectOperationController {
 	public Solution getSolutionForUser(@RequestParam(value = "solId", required = true) String solId) {
 		User usr = UserService.getCurrentUser();
 		Set<Solution> sols = usr.getSolutions();
-
-		for (Iterator iterator = sols.iterator(); iterator.hasNext();) {
-			Solution solution = (Solution) iterator.next();
+		for (Solution solution : sols) {
 			if (solution.getId().equals(solId))
 				return solution;
 		}
-
 		return null;
 	}
 

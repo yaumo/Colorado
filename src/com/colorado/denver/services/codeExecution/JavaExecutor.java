@@ -27,6 +27,7 @@ public interface JavaExecutor {
 			Method theMethod = getMethod(methods, entryMethod);
 
 			if (theMethod != null) {
+				@SuppressWarnings("rawtypes")
 				Class[] types = theMethod.getParameterTypes();
 				Object[] inputObj = Converter.convertForJavaInput(types, excInput);
 

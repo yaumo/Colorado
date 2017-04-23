@@ -79,10 +79,6 @@ public class ObjectOperationController {
 		return hibCtrl.getEntity(id);
 	}
 
-	private List<BaseEntity<?>> read(BaseEntity<?> entities) {
-		return hibCtrl.getEntityList(entities.getClass());
-	}
-
 	private BaseEntity<?> update(BaseEntity<?> entity) {
 		if (entity instanceof EducationEntity) {
 			((EducationEntity) entity).setOwner(workingUser);

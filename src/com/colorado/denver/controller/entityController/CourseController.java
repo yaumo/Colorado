@@ -2,7 +2,6 @@ package com.colorado.denver.controller.entityController;
 
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +22,6 @@ import com.google.gson.GsonBuilder;
 @CrossOrigin
 @RestController
 public class CourseController extends ObjectOperationController {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2330023617204647488L;
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Course.COURSE, method = RequestMethod.POST)
 	@ResponseBody

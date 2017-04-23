@@ -1,6 +1,5 @@
 package com.colorado.denver.model;
 
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -16,11 +15,13 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "Exercise")
 @DynamicUpdate(true)
 @DynamicInsert(true)
+@JsonIgnoreProperties({ "owner" })
 public class Exercise extends EducationEntity {
 	/**
 	 * 
@@ -28,20 +29,29 @@ public class Exercise extends EducationEntity {
 	private static final long serialVersionUID = 7599837012217952314L;
 	public static final String EXERCISE = "exercise";
 	public static final String CODE = "code";
-	public static final String SOLUTION_CODE = "solution_code";
+	public static final String PATTERN_SOLUTION = "patternSolution";
+	public static final String TEMPLATE = "template";
 	public static final String ANSWER = "answer";
 	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
+	public static final String ENTRY_METHOD = "entryMethod";
 	public static final String LANGUAGE = "language";
+	public static final String MESSAGE = "message";
 
 	private Set<Lecture> lectures;
 
-	private Date deadline;
+	private String deadline;
 	private String answer;
+
+	@Transient
 	private boolean hasBeenModified;
+
+	@Transient
+	private String message;
+
 	private String videoLink;
-	// template code
-	private String code;
-	private String solution_code;
+	private String patternSolution;
+	private String entryMethod;
+	private String template;
 	private String[] input;
 	private String language;
 
@@ -61,11 +71,11 @@ public class Exercise extends EducationEntity {
 		this.lectures = lectures;
 	}
 
-	public Date getDeadline() {
+	public String getDeadline() {
 		return deadline;
 	}
 
-	public void setDeadline(Date deadline) {
+	public void setDeadline(String deadline) {
 		this.deadline = deadline;
 	}
 
@@ -77,22 +87,13 @@ public class Exercise extends EducationEntity {
 		this.videoLink = videoLink;
 	}
 
-	@Column(name = Exercise.CODE, columnDefinition = "TEXT")
-	public String getCode() {
-		return code;
+	@Column(name = Exercise.PATTERN_SOLUTION, columnDefinition = "TEXT")
+	public String getPatternSolution() {
+		return patternSolution;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	@Column(name = Exercise.SOLUTION_CODE, columnDefinition = "TEXT")
-	public String getSolution_code() {
-		return solution_code;
-	}
-
-	public void setSolution_code(String solution_code) {
-		this.solution_code = solution_code;
+	public void setPatternSolution(String solution_code) {
+		this.patternSolution = solution_code;
 	}
 
 	@Override
@@ -137,6 +138,31 @@ public class Exercise extends EducationEntity {
 
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+
+	@Column(name = TEMPLATE, columnDefinition = "TEXT")
+	public String getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(String template) {
+		this.template = template;
+	}
+
+	public String getEntryMethod() {
+		return entryMethod;
+	}
+
+	public void setEntryMethod(String entryMethod) {
+		this.entryMethod = entryMethod;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }

@@ -3,7 +3,6 @@ package com.colorado.denver.controller.entityController;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 
 import com.colorado.denver.model.Exercise;
-import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.ExerciseService;
 import com.colorado.denver.services.user.UserService;
@@ -23,12 +21,6 @@ import com.google.gson.GsonBuilder;
 @CrossOrigin
 @RestController
 public class UserController extends ObjectOperationController {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8278059823813912457L;
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USER, method = RequestMethod.POST)
 	public User handleUserPostRequest() {
@@ -82,6 +74,7 @@ public class UserController extends ObjectOperationController {
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USERS, method = RequestMethod.GET)
 	public List<User> getAllUsers() {
 		if (UserService.isCurrentUserDocent()) {
+
 			return UserService.allUsers();
 		} else {
 			return null;
@@ -93,10 +86,4 @@ public class UserController extends ObjectOperationController {
 		return ExerciseService.getAllExercisesForUser(hibId);
 	}
 
-	public static Privilege calculatePrivilegeBasedOnUser(User usr) {
-		// Get the correct role!
-		Privilege role = new Privilege();
-		role.setPrivilegeName("TestPrivilege");// TODO: DELETE THIS!
-		return role;
-	}
 }

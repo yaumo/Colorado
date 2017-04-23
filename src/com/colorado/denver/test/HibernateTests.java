@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
-import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.persistence.HibernateSession;
 import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.Tools;
 import com.google.gson.Gson;
@@ -33,8 +33,8 @@ public class HibernateTests {
 	@Before
 	public void prepareTest() {
 		// Activate Hibernate:
-		SessionTools.createSessionFactory(true);// TRUE due to UPDATE!!!
-		hibSession = SessionTools.sessionFactory.getCurrentSession();
+		HibernateSession.createSessionFactory(true);// TRUE due to UPDATE!!!
+		hibSession = HibernateSession.sessionFactory.getCurrentSession();
 		assertNotNull(hibSession);
 		exc = new Exercise();
 		exc.setTitle("HibTest");
