@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.colorado.denver.model.BaseEntity;
 import com.colorado.denver.model.EducationEntity;
-import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.persistence.HibernateSession;
 import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.GenericTools;
 
@@ -42,7 +42,7 @@ public class HibernateController {
 
 	public String addEntity(BaseEntity<?> entity) {
 
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		String entityID = null;
 		try {
@@ -70,7 +70,7 @@ public class HibernateController {
 
 	/* Method to UPDATE an entity */
 	public BaseEntity<?> updateEntity(BaseEntity<?> entity, String entityID) {
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -91,7 +91,7 @@ public class HibernateController {
 
 	/* Method to DELETE an entity from the records */
 	public void deleteEntity(BaseEntity<?> entity) {
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -109,7 +109,7 @@ public class HibernateController {
 	/* Method to DELETE an entity from the records by id */
 	public void deleteEntity(String id) {
 		BaseEntity<?> entity = getEntity(id);
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -140,7 +140,7 @@ public class HibernateController {
 			e.printStackTrace();
 		}
 
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -159,7 +159,7 @@ public class HibernateController {
 	}
 
 	public BaseEntity<?> mergeEntity(BaseEntity<?> entity) {
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		// BaseEntity<?> toUpdate = getEntity(entity.getId());
 		// toUpdate = Updater.updater(toUpdate, entity);
@@ -185,7 +185,7 @@ public class HibernateController {
 	@SuppressWarnings("unchecked")
 	public List<BaseEntity<?>> getEntityList(Class<?> c) {
 		List<BaseEntity<?>> entityList = null;
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();

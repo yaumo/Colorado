@@ -25,7 +25,7 @@ import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
-import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.persistence.HibernateSession;
 import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.DenverConstants;
 
@@ -41,7 +41,7 @@ public class PopulateDBWithTestData {
 
 		boolean useUpdate = true;
 		LOGGER.info("Creating session factory..");
-		SessionTools.createSessionFactory(useUpdate);
+		HibernateSession.createSessionFactory(useUpdate);
 		LOGGER.info("Done Creating session factory.");
 
 	}
@@ -71,10 +71,10 @@ public class PopulateDBWithTestData {
 		usersStudentsC1.add(student3);
 		usersStudentsC3.add(student4);
 
-		Course course = createCourse("Course 1");
-		Course course2 = createCourse("Course 2");
-		Course course3 = createCourse("Course 3");
-		Course course4 = createCourse("Course 4");
+		Course course = createCourse("WWI 14 SEA");
+		Course course2 = createCourse("WWI 15 SEA");
+		Course course3 = createCourse("IMBIT 14 A");
+		Course course4 = createCourse("AI 16 C");
 
 		student.setCourse(course);
 		student2.setCourse(course);

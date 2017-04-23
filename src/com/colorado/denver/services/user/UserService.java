@@ -21,7 +21,7 @@ import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.controller.entityController.PrivilegeController;
 import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.User;
-import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.persistence.HibernateSession;
 import com.colorado.denver.tools.DenverConstants;
 
 @Service
@@ -75,10 +75,11 @@ public class UserService {
 		return context;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static User getUserByLoginName(String loginName) {
 		// we query Database directly. no use of chache!
 		List<User> u = null;
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		session.beginTransaction();
 		u = session.createCriteria(User.class).setComment("getUser '" + loginName + "'")
 				.add(Restrictions.eq(User.USERNAME, loginName).ignoreCase()).list();
@@ -118,6 +119,7 @@ public class UserService {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<User> allUsers() {
 		LOGGER.info("I AM GETTING ALL USERS");
 		HibernateController hibCtrl = new HibernateController();

@@ -20,21 +20,23 @@ public class ExerciseExecutor implements JavaExecutor, JavaScriptExecutor {
 	}
 
 	public Exercise execute() {
-		String answer = "";
-		String message = "";
+		String answer;
+		String message = "Code executed sucessfully!";
 		if (exc.getLanguage().equals(DenverConstants.JAVA)) {
 			LOGGER.info("Executing Java code");
 			answer = executeJava(excInput, code, entryMethod);
 			if (answer.startsWith(DenverConstants.JAVA_EXCEPTION_THROWN) || answer.startsWith(DenverConstants.EXC_THROWN)) {
-				answer = DenverConstants.JAVA_EXCEPTION_THROWN;
 				message = answer;
 			}
 		} else {
 			LOGGER.info("Executing JavaScript with code: " + code);
 			answer = executeJavaScript(excInput, code);
+			if (answer.startsWith(DenverConstants.EXC_THROWN)) {
+				message = answer;
+			}
 		}
 		exc.setAnswer(answer);
-
+		exc.setMessage(message);
 		LOGGER.info("Answer for exercise " + exc.getId() + "  with value: " + answer);
 
 		// Reset

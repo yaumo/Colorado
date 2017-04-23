@@ -19,6 +19,7 @@ public class CourseService {
 		return usr.getCourse();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<Course> getAllCourses() {
 		HibernateController hibCtrl = new HibernateController();
 

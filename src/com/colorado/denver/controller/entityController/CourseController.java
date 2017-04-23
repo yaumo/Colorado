@@ -1,8 +1,10 @@
 package com.colorado.denver.controller.entityController;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +25,6 @@ import com.google.gson.GsonBuilder;
 @CrossOrigin
 @RestController
 public class CourseController extends ObjectOperationController {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2330023617204647488L;
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Course.COURSE, method = RequestMethod.POST)
 	@ResponseBody
@@ -82,7 +78,11 @@ public class CourseController extends ObjectOperationController {
 	@RequestMapping(value = "/courses", method = RequestMethod.GET)
 	public List<Course> getAllCourses() {
 		if (UserService.isCurrentUserDocent()) {
-			return CourseService.getAllCourses();
+			List<Course> coursesList = CourseService.getAllCourses();
+			Set<Course> set = new HashSet<Course>(coursesList);
+			List<Course> list = new ArrayList<Course>(set);
+
+			return list;
 		} else {
 			throw new AccessDeniedException(DenverConstants.STUDENT_ACCES_DENIED);
 		}

@@ -1,6 +1,5 @@
 package com.colorado.denver.controller.entityController;
 
-import java.util.Iterator;
 import java.util.Set;
 
 import org.slf4j.LoggerFactory;
@@ -27,10 +26,6 @@ import com.google.gson.GsonBuilder;
 @RestController
 public class ExerciseController extends ObjectOperationController {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6133518159703299316L;
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ExerciseController.class);
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Exercise.EXERCISE, method = RequestMethod.POST)
@@ -73,11 +68,11 @@ public class ExerciseController extends ObjectOperationController {
 	@RequestMapping(value = "/exercise", method = RequestMethod.GET)
 	public Exercise getExerciseForUser(@RequestParam(value = "exeId", required = true) String exeId) {
 		Set<Exercise> exercises = ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getId());
-		for (Iterator iterator = exercises.iterator(); iterator.hasNext();) {
-			Exercise exercise = (Exercise) iterator.next();
+		for (Exercise exercise : exercises) {
 			if (exercise.getId().equals(exeId))
 				return exercise;
 		}
+
 		return null;
 	}
 
