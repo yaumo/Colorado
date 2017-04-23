@@ -63,10 +63,24 @@
         </dependency>
         
         <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <scope>test</scope>
-        </dependency>
+ 		 <groupId>com.fasterxml.jackson.core</groupId>
+ 			 <artifactId>jackson-core</artifactId>
+ 			 <version>2.5.3</version>
+		</dependency>
+
+		<dependency>
+  			<groupId>com.fasterxml.jackson.core</groupId>
+  			<artifactId>jackson-annotations</artifactId>
+ 			 <version>2.5.3</version>
+		</dependency>
+
+		<dependency>
+  			<groupId>com.fasterxml.jackson.core</groupId>
+  			<artifactId>jackson-databind</artifactId>
+  			<version>2.5.3</version>
+		</dependency>
+        
+        
 		<!-- End of Insert-->
 		<dependency>
 		    <groupId>org.postgresql</groupId>
@@ -110,19 +124,7 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
-		<dependency>
-  			<groupId>com.googlecode.json-simple</groupId>
-    		<artifactId>json-simple</artifactId>
-    		<version>1.1</version>
-		</dependency>
-		
-		<dependency>
-    		<groupId>org.json</groupId>
-    		<artifactId>json</artifactId>
-    		<version>20090211</version>
-		</dependency>
-		
+	
 		<dependency>
     <groupId>com.thetransactioncompany</groupId>
     <artifactId>cors-filter</artifactId>

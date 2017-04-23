@@ -58,7 +58,7 @@ public class HibernateTests {
 	public void testUpdateGetEntity() {
 		exc.setDescription("HibernateTestUPDATE");
 
-		hibCtrl.updateEntity(exc, exc.getHibId());
+		hibCtrl.updateEntity(exc, exc.getId());
 		Exercise exc2 = (Exercise) hibCtrl.getEntity(mainExcId);
 		assertEquals("UPDATE Test Failed. Description not updated through DB!", exc.getDescription(), exc2.getDescription());
 
@@ -71,7 +71,7 @@ public class HibernateTests {
 		gb.serializeNulls();
 		Gson gson = gb.create();
 		Exercise excToChange = new Exercise();
-		excToChange.setCode("Default code before save");
+		excToChange.setPatternSolution("Default code before save");
 		String id = hibCtrl.addEntity(excToChange);
 		excToChange = (Exercise) hibCtrl.getEntity(id);
 
@@ -82,11 +82,11 @@ public class HibernateTests {
 
 		UserService.authorizeSystemuser();
 		Exercise excToChangeWith = new Exercise();
-		excToChangeWith.setCode("THis is the new code");
+		excToChangeWith.setPatternSolution("THis is the new code");
 		excToChangeWith.setDescription("Des2");
 
 		excToChangeWith.setOwner(UserService.getCurrentUser());
-		excToChangeWith.setHibId(id);
+		excToChangeWith.setId(id);
 		// Manually. We 'fake' the same entity and parse it via hibernate first for all the fields.
 
 		String jsonExcToChangeWithBeforeMerge = gson.toJson(excToChangeWith);

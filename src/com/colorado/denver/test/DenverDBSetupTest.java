@@ -124,7 +124,7 @@ public class DenverDBSetupTest {
 		systemUser.setPrivileges(systemPrivileges);
 
 		hibCtrl.addEntity(systemUser);
-		hibCtrl.updateEntity(systemPrivilege, systemPrivilege.getHibId());
+		hibCtrl.updateEntity(systemPrivilege, systemPrivilege.getId());
 		LOGGER.info("Sucessful systemuser Save(Database)");
 		UsernamePasswordAuthenticationToken returnedToken = UserService.authorizeSystemuser();
 		User returnedU = UserService.getUserByLoginName(returnedToken.getPrincipal().toString());

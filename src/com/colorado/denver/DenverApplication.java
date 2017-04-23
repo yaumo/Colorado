@@ -17,7 +17,6 @@ import com.colorado.denver.services.persistence.SessionTools;
 import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.GenericTools;
 import com.colorado.denver.tools.Tools;
-import com.google.gson.GsonBuilder;
 
 import ch.qos.logback.classic.Level;
 
@@ -59,12 +58,6 @@ public class DenverApplication extends SpringBootServletInitializer {
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(DenverApplication.class);
-	}
-
-	public static String toJson(String json) {
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.create();
-		return json;
 	}
 
 	// useless shit?

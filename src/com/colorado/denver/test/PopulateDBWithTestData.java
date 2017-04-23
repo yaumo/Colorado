@@ -54,8 +54,8 @@ public class PopulateDBWithTestData {
 		User tutor2 = createUser("Tim Tutor L2", "password", UserService.ROLE_TUTOR);
 
 		User student = createUser("Peter Student C1", "password", UserService.ROLE_STUDENT);
-		User student2 = createUser("Klaus Student C2", "password", UserService.ROLE_STUDENT);
-		User student3 = createUser("Tom Student C2", "password", UserService.ROLE_STUDENT);
+		User student2 = createUser("Klaus Student C1", "password", UserService.ROLE_STUDENT);
+		User student3 = createUser("Tom Student C1", "password", UserService.ROLE_STUDENT);
 		User student4 = createUser("Karsten Student C3", "password", UserService.ROLE_STUDENT);
 
 		Set<User> usersTutors = new HashSet<User>();
@@ -67,8 +67,8 @@ public class PopulateDBWithTestData {
 		Set<User> usersStudentsC3 = new HashSet<User>();
 
 		usersStudentsC1.add(student);
-		usersStudentsC2.add(student2);
-		usersStudentsC2.add(student3);
+		usersStudentsC1.add(student2);
+		usersStudentsC1.add(student3);
 		usersStudentsC3.add(student4);
 
 		Course course = createCourse("Course 1");
@@ -77,9 +77,9 @@ public class PopulateDBWithTestData {
 		Course course4 = createCourse("Course 4");
 
 		student.setCourse(course);
-		student.setCourse(course2);
-		student.setCourse(course2);
-		student.setCourse(course3);
+		student2.setCourse(course);
+		student3.setCourse(course);
+		student4.setCourse(course2);
 		UserService.authorizeSystemuser();
 		User system = UserService.getCurrentUser();
 		system.setCourse(course);
@@ -119,7 +119,6 @@ public class PopulateDBWithTestData {
 		// student.setLectures(lectures);
 		// student.setExercises(exercises);
 		student.setSolutions(solutions);
-		student.setCourse(course);
 
 		exercise.setOwner(docent);
 		exercise.setLectures(lectures); // setting on both entities gives error: lecture.setExercises(exercises); +

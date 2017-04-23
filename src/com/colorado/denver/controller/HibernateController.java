@@ -1,5 +1,7 @@
 package com.colorado.denver.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,15 +26,17 @@ public class HibernateController {
 
 		// If EducationEntity set Owner!!!!
 		if (UserService.getCurrentUser() == null) {
-			LOGGER.error("Saved NULL CREATOR for entity: " + entity.getHibId());
-			entity.setCreationDate(new Date());
+			LOGGER.error("Saved NULL CREATOR for entity: " + entity.getId());
 		} else {
 			LOGGER.info("Trying to get User from Authentication: " + UserService.getCurrentUser().getUsername());
-
 			LOGGER.info("Setting user on Education entity: " + UserService.getCurrentUser().getUsername());
-			entity.setCreationDate(new Date());
 			entity.setOwner(UserService.getCurrentUser());
 		}
+		Date today = Calendar.getInstance().getTime();
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String dateString = sdf.format(today);
+		entity.setCreationDate(dateString);
 
 	}
 
@@ -163,7 +167,7 @@ public class HibernateController {
 		try {
 			tx = session.beginTransaction();
 			returnEnt = (BaseEntity<?>) session.merge(entity);
-			LOGGER.info("Merged Entity: " + entity.getHibId());
+			LOGGER.info("Merged Entity: " + entity.getId());
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
