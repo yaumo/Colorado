@@ -1,6 +1,10 @@
 package com.colorado.denver.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -12,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.colorado.denver.model.BaseEntity;
 import com.colorado.denver.model.EducationEntity;
-import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.persistence.HibernateSession;
 import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.GenericTools;
 
@@ -24,21 +28,23 @@ public class HibernateController {
 
 		// If EducationEntity set Owner!!!!
 		if (UserService.getCurrentUser() == null) {
-			LOGGER.error("Saved NULL CREATOR for entity: " + entity.getHibId());
-			entity.setCreationDate(new Date());
+			LOGGER.error("Saved NULL CREATOR for entity: " + entity.getId());
 		} else {
 			LOGGER.info("Trying to get User from Authentication: " + UserService.getCurrentUser().getUsername());
-
 			LOGGER.info("Setting user on Education entity: " + UserService.getCurrentUser().getUsername());
-			entity.setCreationDate(new Date());
 			entity.setOwner(UserService.getCurrentUser());
 		}
+		Date today = Calendar.getInstance().getTime();
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String dateString = sdf.format(today);
+		entity.setCreationDate(dateString);
 
 	}
 
 	public String addEntity(BaseEntity<?> entity) {
 
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		String entityID = null;
 		try {
@@ -66,7 +72,7 @@ public class HibernateController {
 
 	/* Method to UPDATE an entity */
 	public BaseEntity<?> updateEntity(BaseEntity<?> entity, String entityID) {
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -87,7 +93,7 @@ public class HibernateController {
 
 	/* Method to DELETE an entity from the records */
 	public void deleteEntity(BaseEntity<?> entity) {
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -105,7 +111,7 @@ public class HibernateController {
 	/* Method to DELETE an entity from the records by id */
 	public void deleteEntity(String id) {
 		BaseEntity<?> entity = getEntity(id);
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -136,7 +142,7 @@ public class HibernateController {
 			e.printStackTrace();
 		}
 
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -155,7 +161,7 @@ public class HibernateController {
 	}
 
 	public BaseEntity<?> mergeEntity(BaseEntity<?> entity) {
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		// BaseEntity<?> toUpdate = getEntity(entity.getId());
 		// toUpdate = Updater.updater(toUpdate, entity);
@@ -163,7 +169,7 @@ public class HibernateController {
 		try {
 			tx = session.beginTransaction();
 			returnEnt = (BaseEntity<?>) session.merge(entity);
-			LOGGER.info("Merged Entity: " + entity.getHibId());
+			LOGGER.info("Merged Entity: " + entity.getId());
 			tx.commit();
 		} catch (HibernateException e) {
 			if (tx != null)
@@ -181,7 +187,7 @@ public class HibernateController {
 	@SuppressWarnings("unchecked")
 	public List<BaseEntity<?>> getEntityList(Class<?> c) {
 		List<BaseEntity<?>> entityList = null;
-		Session session = SessionTools.sessionFactory.openSession();
+		Session session = HibernateSession.sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
@@ -194,7 +200,13 @@ public class HibernateController {
 		} finally {
 			session.close();
 		}
-		return entityList;
+		return uniquifyList(entityList);
+	}
+
+	// We need unique results and Jackson cannot parse Sets... WTF Jackson? Get your shit together
+	private List<BaseEntity<?>> uniquifyList(List<BaseEntity<?>> list) {
+		return new ArrayList<BaseEntity<?>>(new HashSet<BaseEntity<?>>(list));
+
 	}
 
 }

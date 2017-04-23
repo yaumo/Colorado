@@ -26,11 +26,11 @@ public final class DenverConstants {
 	public static final String DELETE = "DELETE";
 
 	// Data
-	public static final String JAVASCRIPT = "javaScript";
-	public static final String JAVA = "java";
+	public static final String JAVASCRIPT = "JavaScript";
+	public static final String JAVA = "Java";
 
 	// Messages
 	public static final String JAVA_EXCEPTION_THROWN = "Java exception thrown!";
-	public static final String JAVA_RESULT_CORRECT = "Congratulations! You have submitted the correct java code!";
-	public static final String JAVA_RESULT_WRONG = "Too bad! Your proposed solution is not correct!";
+	public static final String RESULT_CORRECT = "Congratulations! You have submitted the correct code!";
+	public static final String RESULT_WRONG = "Too bad! Your proposed solution is not correct!";
 }

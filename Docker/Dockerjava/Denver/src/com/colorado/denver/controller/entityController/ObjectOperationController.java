@@ -39,21 +39,21 @@ public class ObjectOperationController {
 
 		String id = DenverConstants.ERROR;
 		try {
-			id = entity.getHibId();
+			id = entity.getId();
 
 		} catch (Exception e) {
 			LOGGER.error("Error extraxting information from the Object(FromJSON): " + entity.getId());
 			e.printStackTrace();
 		}
 		switch (mode) {
-		case "POST":
+		case DenverConstants.POST:
 			id = create(entity);
-			entity.setHibId(id);
+			entity.setId(id);
 			break;
-		case "PATCH":
+		case DenverConstants.PATCH:
 			update(entity);
 			break;
-		case "DELETE":
+		case DenverConstants.DELETE:
 			delete(id);
 			break;
 
@@ -79,10 +79,6 @@ public class ObjectOperationController {
 		return hibCtrl.getEntity(id);
 	}
 
-	private List<BaseEntity<?>> read(BaseEntity<?> entities) {
-		return hibCtrl.getEntityList(entities.getClass());
-	}
-
 	private BaseEntity<?> update(BaseEntity<?> entity) {
 		if (entity instanceof EducationEntity) {
 			((EducationEntity) entity).setOwner(workingUser);
@@ -95,7 +91,7 @@ public class ObjectOperationController {
 			e.printStackTrace();
 			LOGGER.error("MERGE failed! Trying update");
 
-			return hibCtrl.updateEntity(entity, entity.getHibId());
+			return hibCtrl.updateEntity(entity, entity.getId());
 		}
 
 	}

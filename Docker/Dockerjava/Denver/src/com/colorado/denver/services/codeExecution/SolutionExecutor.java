@@ -9,13 +9,15 @@ public class SolutionExecutor implements JavaExecutor, JavaScriptExecutor {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SolutionExecutor.class);
 
-	Solution sol;
-	String[] excInput;
-	String code;
+	private Solution sol;
+	private String[] excInput;
+	private String code;
+	private String entryMethod;
 
 	public SolutionExecutor(Solution sol) {
 		this.sol = sol;
 		this.excInput = sol.getExercise().getInput();
+		this.entryMethod = sol.getExercise().getEntryMethod();
 		this.code = sol.getCode();
 
 	}
@@ -26,10 +28,10 @@ public class SolutionExecutor implements JavaExecutor, JavaScriptExecutor {
 		String message = "";
 		if (sol.getExercise().getLanguage().equals(DenverConstants.JAVA)) {
 			LOGGER.info("Executing Java");
-			answer = executeJava(excInput, code);
-			if (answer.startsWith(DenverConstants.JAVA_EXCEPTION_THROWN)) {
+			answer = executeJava(excInput, code, entryMethod);
+			if (answer.startsWith(DenverConstants.JAVA_EXCEPTION_THROWN) || answer.startsWith(DenverConstants.EXC_THROWN)) {
 				answer = DenverConstants.JAVA_EXCEPTION_THROWN;
-				message = answer.replaceAll(DenverConstants.JAVA_EXCEPTION_THROWN, "");
+				message = answer;
 			}
 		} else {
 			LOGGER.info("Executing JavaScriptx");
@@ -39,13 +41,13 @@ public class SolutionExecutor implements JavaExecutor, JavaScriptExecutor {
 		if (sol.getExercise().getAnswer().equals(answer)) {
 			sol.setCorrect(true);
 			LOGGER.info("Answer for entity " + sol.getId() + " correct with value: " + answer);
-			message = DenverConstants.JAVA_RESULT_CORRECT;
+			message = DenverConstants.RESULT_CORRECT;
 		} else {
 			LOGGER.info("Answer for entity " + sol.getId() + " NOT correct with value: " + answer);
-			message = DenverConstants.JAVA_RESULT_WRONG;
+			message = DenverConstants.RESULT_WRONG;
 			sol.setCorrect(false);
 		}
-		sol.setAnswer(answer);
+		sol.setResult(answer);
 		sol.setMessage(message);
 		// Reset
 		sol.setHasBeenModified(false);

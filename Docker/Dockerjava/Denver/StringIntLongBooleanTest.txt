@@ -1,0 +1,13 @@
+public class Checks {
+
+	public static String everythingTest(String a, int b, Long c, int y, boolean d, int x) {
+		System.out.println("Hallo das ist ein String Test " + a);
+		System.out.println("Hallo das ist ein int Test " + b);
+				System.out.println("Hallo das ist ein int3 Test " + x);
+						System.out.println("Hallo das ist4 ein int Test " + y);
+		System.out.println("Hallo das ist ein Long Test " + c);
+		System.out.println("Hallo das ist ein boolean Test " + d);
+		return a;
+	}
+
+}

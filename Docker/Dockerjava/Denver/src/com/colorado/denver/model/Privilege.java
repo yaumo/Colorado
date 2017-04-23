@@ -14,8 +14,6 @@ import javax.persistence.Transient;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "privilege")
@@ -28,14 +26,12 @@ public class Privilege extends BaseEntity<Privilege> implements GrantedAuthority
 	public static final String PRIVILEGE = "privilege";
 	public static final String PRIVILEGE_NAME = "privilegeName";
 
-	@JsonProperty(access = Access.WRITE_ONLY)
 	private String privilegeName;
 
 	public Privilege() {
 
 	}
 
-	@JsonProperty(access = Access.WRITE_ONLY)
 	private transient Set<User> users;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -59,7 +55,6 @@ public class Privilege extends BaseEntity<Privilege> implements GrantedAuthority
 
 	@Override
 	@Transient
-	@JsonProperty(access = Access.WRITE_ONLY)
 	public String getPrefix() {
 
 		return PRIVILEGE;
@@ -80,7 +75,7 @@ public class Privilege extends BaseEntity<Privilege> implements GrantedAuthority
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append("Privilege [id=").append(this.getHibId()).append(", name=").append(this.getPrivilegeName()).append("]");
+		builder.append("Privilege [id=").append(this.getId()).append(", name=").append(this.getPrivilegeName()).append("]");
 		return builder.toString();
 	}
 
@@ -88,7 +83,7 @@ public class Privilege extends BaseEntity<Privilege> implements GrantedAuthority
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((this.getHibId() == null) ? 0 : this.getHibId().hashCode());
+		result = (prime * result) + ((this.getId() == null) ? 0 : this.getId().hashCode());
 		result = (prime * result) + ((this.getPrivilegeName() == null) ? 0 : this.getPrivilegeName().hashCode());
 		return result;
 	}
@@ -105,11 +100,11 @@ public class Privilege extends BaseEntity<Privilege> implements GrantedAuthority
 			return false;
 		}
 		final Privilege other = (Privilege) obj;
-		if (this.getHibId() == null) {
-			if (other.getHibId() != null) {
+		if (this.getId() == null) {
+			if (other.getId() != null) {
 				return false;
 			}
-		} else if (!this.getHibId().equals(other.getHibId())) {
+		} else if (!this.getId().equals(other.getId())) {
 			return false;
 		}
 		if (this.getPrivilegeName() == null) {

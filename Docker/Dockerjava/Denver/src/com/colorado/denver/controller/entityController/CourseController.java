@@ -2,8 +2,8 @@ package com.colorado.denver.controller.entityController;
 
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,14 +19,9 @@ import com.colorado.denver.tools.GenericTools;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+@CrossOrigin
 @RestController
 public class CourseController extends ObjectOperationController {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2330023617204647488L;
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Course.COURSE, method = RequestMethod.POST)
 	@ResponseBody
@@ -67,11 +62,11 @@ public class CourseController extends ObjectOperationController {
 	}
 
 	@RequestMapping(value = "/course", method = RequestMethod.GET)
-	public Course getCourseForUser(@RequestParam(value = "user", required = false) String id) {
-		if (id == null) {
+	public Course getCourseForUser(@RequestParam(value = "user", required = false) String hibId) {
+		if (hibId == null) {
 			return UserService.getCurrentUser().getCourse();
 		} else if (UserService.isCurrentUserDocent()) {
-			return UserService.getUserById(id).getCourse();
+			return UserService.getUserById(hibId).getCourse();
 		} else {
 			throw new AccessDeniedException(DenverConstants.STUDENT_ACCES_DENIED);
 		}

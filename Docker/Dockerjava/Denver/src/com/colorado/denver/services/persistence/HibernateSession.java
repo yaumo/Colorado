@@ -17,13 +17,13 @@ import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
 import com.colorado.denver.tools.HibernateInterceptor;
 
-public class SessionTools {
+public class HibernateSession {
 
 	public static SessionFactory sessionFactory;// SINGLETON!
 	private static ServiceRegistry serviceRegistry;
 	public static Session session;
 
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SessionTools.class);
+	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HibernateSession.class);
 
 	public static void createSessionFactory(boolean useUpdateRoutine) {
 		try {

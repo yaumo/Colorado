@@ -25,7 +25,7 @@ import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
-import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.persistence.HibernateSession;
 import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.DenverConstants;
 
@@ -41,7 +41,7 @@ public class PopulateDBWithTestData {
 
 		boolean useUpdate = true;
 		LOGGER.info("Creating session factory..");
-		SessionTools.createSessionFactory(useUpdate);
+		HibernateSession.createSessionFactory(useUpdate);
 		LOGGER.info("Done Creating session factory.");
 
 	}
@@ -54,8 +54,8 @@ public class PopulateDBWithTestData {
 		User tutor2 = createUser("Tim Tutor L2", "password", UserService.ROLE_TUTOR);
 
 		User student = createUser("Peter Student C1", "password", UserService.ROLE_STUDENT);
-		User student2 = createUser("Klaus Student C2", "password", UserService.ROLE_STUDENT);
-		User student3 = createUser("Tom Student C2", "password", UserService.ROLE_STUDENT);
+		User student2 = createUser("Klaus Student C1", "password", UserService.ROLE_STUDENT);
+		User student3 = createUser("Tom Student C1", "password", UserService.ROLE_STUDENT);
 		User student4 = createUser("Karsten Student C3", "password", UserService.ROLE_STUDENT);
 
 		Set<User> usersTutors = new HashSet<User>();
@@ -67,19 +67,19 @@ public class PopulateDBWithTestData {
 		Set<User> usersStudentsC3 = new HashSet<User>();
 
 		usersStudentsC1.add(student);
-		usersStudentsC2.add(student2);
-		usersStudentsC2.add(student3);
+		usersStudentsC1.add(student2);
+		usersStudentsC1.add(student3);
 		usersStudentsC3.add(student4);
 
-		Course course = createCourse("Course 1");
-		Course course2 = createCourse("Course 2");
-		Course course3 = createCourse("Course 3");
-		Course course4 = createCourse("Course 4");
+		Course course = createCourse("WWI 14 SEA");
+		Course course2 = createCourse("WWI 15 SEA");
+		Course course3 = createCourse("IMBIT 14 A");
+		Course course4 = createCourse("AI 16 C");
 
 		student.setCourse(course);
-		student.setCourse(course2);
-		student.setCourse(course2);
-		student.setCourse(course3);
+		student2.setCourse(course);
+		student3.setCourse(course);
+		student4.setCourse(course2);
 		UserService.authorizeSystemuser();
 		User system = UserService.getCurrentUser();
 		system.setCourse(course);
@@ -119,7 +119,6 @@ public class PopulateDBWithTestData {
 		// student.setLectures(lectures);
 		// student.setExercises(exercises);
 		student.setSolutions(solutions);
-		student.setCourse(course);
 
 		exercise.setOwner(docent);
 		exercise.setLectures(lectures); // setting on both entities gives error: lecture.setExercises(exercises); +

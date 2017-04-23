@@ -28,7 +28,7 @@ public class SolutionService {
 		for (User user : users) {
 			Set<Solution> userSolution = user.getSolutions();
 			for (Solution solution : userSolution) {
-				if (solution.getExercise().getHibId().equals(excId)) {
+				if (solution.getExercise().getId().equals(excId)) {
 					sols.add(solution);
 				}
 			}
@@ -40,7 +40,7 @@ public class SolutionService {
 		User usr = UserService.getUserById(userId);
 		Set<Solution> sols = usr.getSolutions();
 		for (Solution solution : sols) {
-			if (solution.getExercise().getHibId().equals(excId)) {
+			if (solution.getExercise().getId().equals(excId)) {
 				return solution;
 			}
 

@@ -55,27 +55,6 @@ public class LectureController extends ObjectOperationController {
 		} catch (HttpServerErrorException e) {
 			e.printStackTrace();
 		}
-		return (Lecture) super.doDatabaseOperation(entity, DenverConstants.PATCH);
-	}
-
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Lecture.LECTURE, method = RequestMethod.PUT)
-	public Lecture handleLecturePutRequest() {
-
-		String jsonString = GenericTools.getRequestBody();
-
-		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
-		gb.serializeNulls();
-		Gson gson = gb.create();
-
-		Lecture entity = gson.fromJson(jsonString, Lecture.class);
-
-		try {
-			super.checkAccess(Lecture.LECTURE, DenverConstants.PATCH);
-		} catch (HttpServerErrorException e) {
-			e.printStackTrace();
-		}
-		entity = (Lecture) super.doDatabaseOperation(entity, DenverConstants.PATCH);
-
 		entity = CourseService.createSolutionsForCourseAsssignment(entity);
 
 		return entity;

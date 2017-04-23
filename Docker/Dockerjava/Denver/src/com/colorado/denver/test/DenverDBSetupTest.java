@@ -27,7 +27,7 @@ import com.colorado.denver.controller.entityController.PrivilegeController;
 import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
-import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.persistence.HibernateSession;
 import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.DenverConstants;
 
@@ -43,7 +43,7 @@ public class DenverDBSetupTest {
 		boolean useUpdate = false;
 		LOGGER.info("Creating session factory..");
 		dropAllSequences();
-		SessionTools.createSessionFactory(useUpdate);
+		HibernateSession.createSessionFactory(useUpdate);
 		LOGGER.info("Done Creating session factory.");
 
 	}
@@ -62,7 +62,7 @@ public class DenverDBSetupTest {
 
 	@After
 	public void after() {
-		SessionTools.sessionFactory.close();
+		HibernateSession.sessionFactory.close();
 
 	}
 
@@ -124,7 +124,7 @@ public class DenverDBSetupTest {
 		systemUser.setPrivileges(systemPrivileges);
 
 		hibCtrl.addEntity(systemUser);
-		hibCtrl.updateEntity(systemPrivilege, systemPrivilege.getHibId());
+		hibCtrl.updateEntity(systemPrivilege, systemPrivilege.getId());
 		LOGGER.info("Sucessful systemuser Save(Database)");
 		UsernamePasswordAuthenticationToken returnedToken = UserService.authorizeSystemuser();
 		User returnedU = UserService.getUserByLoginName(returnedToken.getPrincipal().toString());

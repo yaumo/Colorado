@@ -17,12 +17,14 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "Lecture")
 @DynamicUpdate(true)
 @DynamicInsert(true)
+@JsonIgnoreProperties({ "owner" })
 public class Lecture extends EducationEntity {
 	/**
 	 * 
