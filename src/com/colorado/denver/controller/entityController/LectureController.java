@@ -66,13 +66,36 @@ public class LectureController extends ObjectOperationController {
 		return (Lecture) super.doDatabaseOperation(entity, DenverConstants.PATCH);
 	}
 
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Lecture.LECTURE, method = RequestMethod.PUT)
+	public Lecture handleLecturePutRequest() {
+
+		String jsonString = GenericTools.getRequestBody();
+
+		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
+		gb.serializeNulls();
+		Gson gson = gb.create();
+
+		Lecture entity = gson.fromJson(jsonString, Lecture.class);
+
+		try {
+			super.checkAccess(Lecture.LECTURE, DenverConstants.PATCH);
+		} catch (HttpServerErrorException e) {
+			e.printStackTrace();
+		}
+		entity = (Lecture) super.doDatabaseOperation(entity, DenverConstants.PATCH);
+
+		entity = CourseService.createSolutionsForCourseAsssignment(entity);
+
+		return entity;
+	}
+
 	@RequestMapping(value = "/lecture", method = RequestMethod.GET)
 	public Lecture getLectureForUser(@RequestParam(value = "lectureId", required = true) String lecId) {
-		Course course = CourseService.getCourseForUser(UserService.getCurrentUser().getHibId());
+		Course course = CourseService.getCourseForUser(UserService.getCurrentUser().getId());
 		Set<Lecture> lectures = course.getLectures();
 		for (Iterator iterator = lectures.iterator(); iterator.hasNext();) {
 			Lecture lecture = (Lecture) iterator.next();
-			if (lecture.getHibId().equals(lecId))
+			if (lecture.getId().equals(lecId))
 				return lecture;
 		}
 		return null;

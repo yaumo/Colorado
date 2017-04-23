@@ -56,55 +56,6 @@ public class Converter {
 		return obj;
 	}
 
-	public static Boolean[] convertBolArray(String[] arr) {
-
-		Boolean[] results = new Boolean[arr.length];
-
-		for (int i = 0; i < arr.length; i++) {
-			try {
-				if (arr[i].equals("true")) {
-					results[i] = true;
-				} else {
-					results[i] = false;
-				}
-			} catch (NumberFormatException nfe) {
-				nfe.printStackTrace();
-				System.out.println("DAMN BOL");
-			} ;
-		}
-		return results;
-	}
-
-	public static Long[] convertLongArray(String[] arr) {
-
-		Long[] results = new Long[arr.length];
-
-		for (int i = 0; i < arr.length; i++) {
-			try {
-				results[i] = Long.parseLong(arr[i]);
-			} catch (Exception nfe) {
-				nfe.printStackTrace();
-				System.out.println("DAMN LONG");
-			} ;
-		}
-		return results;
-	}
-
-	public static Integer[] convertIntArray(String[] arr) {
-
-		Integer[] results = new Integer[arr.length];
-
-		for (int i = 0; i < arr.length; i++) {
-			try {
-				results[i] = Integer.parseInt(arr[i]);
-			} catch (Exception nfe) {
-				nfe.printStackTrace();
-				System.out.println("DAMN INT");
-			} ;
-		}
-		return results;
-	}
-
 	public static Boolean convertBol(String arr) {
 
 		if (arr.equals("true")) {

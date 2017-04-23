@@ -13,9 +13,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "UserDenver")
@@ -34,18 +34,25 @@ public class User extends BaseEntity<User> {
 	public static final String SALT = "salt";
 	public static final String ENABLED = "enabled";
 	public static final String PRIVILEGES = "privileges";
+	public static final String FIRST_NAME = "firstName";
+	public static final String LAST_NAME = "lastName";
 
 	private String username;
+
+	@JsonIgnore
 	private Set<Lecture> lectures;
-
-	@JsonProperty(access = Access.WRITE_ONLY)
+	@JsonIgnore
 	private transient String password;
-
-	@JsonProperty(access = Access.WRITE_ONLY)
-	protected transient boolean enabled;
-
+	@JsonIgnore
+	private transient boolean enabled;
 	private Course course;
+	private String lastName;
+	private String firstName;
+
+	@JsonIgnore
 	private Set<Solution> solutions;
+
+	@JsonIgnore
 	private Set<Privilege> privileges;
 
 	public User() {
@@ -90,18 +97,22 @@ public class User extends BaseEntity<User> {
 		this.username = username;
 	}
 
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
 
+	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	@JsonIgnore
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+	@JsonProperty
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
@@ -156,6 +167,22 @@ public class User extends BaseEntity<User> {
 	@Transient
 	public String setPrefix() {
 		return getPrefix();
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
 }

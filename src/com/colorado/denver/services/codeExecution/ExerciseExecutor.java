@@ -7,16 +7,16 @@ import com.colorado.denver.tools.DenverConstants;
 
 public class ExerciseExecutor implements JavaExecutor, JavaScriptExecutor {
 	final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ExerciseExecutor.class);
-	Exercise exc;
-	String inputType;
-	String outputType;
-	String[] excInput;
-	String code;
+	private Exercise exc;
+	private String[] excInput;
+	private String code;
+	private String entryMethod;
 
 	public ExerciseExecutor(Exercise exc) {
 		this.exc = exc;
 		this.excInput = exc.getInput();
-		this.code = exc.getSolution_code();
+		this.code = exc.getPatternSolution();
+		this.entryMethod = exc.getEntryMethod();
 	}
 
 	public Exercise execute() {
@@ -24,10 +24,10 @@ public class ExerciseExecutor implements JavaExecutor, JavaScriptExecutor {
 		String message = "";
 		if (exc.getLanguage().equals(DenverConstants.JAVA)) {
 			LOGGER.info("Executing Java code");
-			answer = executeJava(excInput, code);
-			if (answer.startsWith(DenverConstants.JAVA_EXCEPTION_THROWN)) {
+			answer = executeJava(excInput, code, entryMethod);
+			if (answer.startsWith(DenverConstants.JAVA_EXCEPTION_THROWN) || answer.startsWith(DenverConstants.EXC_THROWN)) {
 				answer = DenverConstants.JAVA_EXCEPTION_THROWN;
-				message = answer.replaceAll(DenverConstants.JAVA_EXCEPTION_THROWN, "");
+				message = answer;
 			}
 		} else {
 			LOGGER.info("Executing JavaScript with code: " + code);

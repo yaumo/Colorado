@@ -26,8 +26,8 @@ public final class DenverConstants {
 	public static final String DELETE = "DELETE";
 
 	// Data
-	public static final String JAVASCRIPT = "javaScript";
-	public static final String JAVA = "java";
+	public static final String JAVASCRIPT = "JavaScript";
+	public static final String JAVA = "Java";
 
 	// Messages
 	public static final String JAVA_EXCEPTION_THROWN = "Java exception thrown!";

@@ -1,13 +1,9 @@
 package com.colorado.denver.controller.entityController;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import java.util.List;
 import java.util.Set;
 
 import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -79,11 +75,7 @@ public class UserController extends ObjectOperationController {
 	@RequestMapping(value = "/docent", method = RequestMethod.GET)
 	public User getDocent() {
 
-		User usr = UserService.getCurrentUser();
-		Link selfLink = linkTo(methodOn(UserController.class).getDocent()).withSelfRel();
-		usr.add(selfLink);
-
-		return usr;
+		return UserService.getCurrentUser();
 
 	}
 

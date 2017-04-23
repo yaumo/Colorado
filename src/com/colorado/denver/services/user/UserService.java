@@ -27,7 +27,7 @@ import com.colorado.denver.tools.DenverConstants;
 @Service
 public class UserService {
 
-	BCryptPasswordEncoder passWordEncoder = new BCryptPasswordEncoder();
+	private BCryptPasswordEncoder passWordEncoder = new BCryptPasswordEncoder();
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 	public static final String ROLE_STUDENT = "ROLE_STUDENT";

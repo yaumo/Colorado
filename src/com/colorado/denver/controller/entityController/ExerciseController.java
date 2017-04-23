@@ -44,26 +44,22 @@ public class ExerciseController extends ObjectOperationController {
 
 		Exercise entity = gson.fromJson(jsonString, Exercise.class);
 
-		if (entity.isHasBeenModified()) {
-			try {
-				entity.setCode(Tools.unescape_string((entity.getCode())));
-				entity.setSolution_code(Tools.unescape_string((entity.getSolution_code())));
+		try {
+			entity.setPatternSolution(Tools.unescape_string((entity.getPatternSolution())));
 
-				// Get real entity from db:
-				HibernateController hibCtrl = new HibernateController();
-				Exercise exc = (Exercise) hibCtrl.getEntity(entity.getHibId());
-				ExerciseExecutor excExcutor = new ExerciseExecutor(exc);
-				entity = excExcutor.execute();
-				entity.setAnswer(exc.getAnswer());
+			// Get real entity from db:
+			HibernateController hibCtrl = new HibernateController();
+			Exercise exc = (Exercise) hibCtrl.getEntity(entity.getId());
+			ExerciseExecutor excExcutor = new ExerciseExecutor(exc);
+			entity = excExcutor.execute();
+			entity.setAnswer(exc.getAnswer());
 
-				// Back to fronted:
-				entity.setSolution_code(Tools.quote(entity.getSolution_code()));
-			} catch (Exception e) {
-				LOGGER.error("Executing Ecercise failed! : " + entity.getHibId());
-				LOGGER.error("Executing Ecercise failed with code: " + entity.getSolution_code());
-				e.printStackTrace();
-			}
-
+			// Back to fronted:
+			entity.setPatternSolution(Tools.quote(entity.getPatternSolution()));
+		} catch (Exception e) {
+			LOGGER.error("Executing Ecercise failed! : " + entity.getId());
+			LOGGER.error("Executing Ecercise failed with code: " + entity.getPatternSolution());
+			e.printStackTrace();
 		}
 
 		try {
@@ -74,52 +70,12 @@ public class ExerciseController extends ObjectOperationController {
 		return (Exercise) super.doDatabaseOperation(entity, DenverConstants.POST);
 	}
 
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Exercise.EXERCISE, method = RequestMethod.PATCH)
-	public Exercise handleExercisePatchRequest() {
-		String jsonString = GenericTools.getRequestBody();
-
-		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
-		gb.serializeNulls();
-		Gson gson = gb.create();
-
-		Exercise entity = gson.fromJson(jsonString, Exercise.class);
-
-		if (entity.isHasBeenModified()) {
-			try {
-				entity.setCode(Tools.unescape_string((entity.getCode())));
-				entity.setSolution_code(Tools.unescape_string((entity.getSolution_code())));
-
-				// Get real entity from db:
-				HibernateController hibCtrl = new HibernateController();
-				Exercise exc = (Exercise) hibCtrl.getEntity(entity.getHibId());
-				ExerciseExecutor excExcutor = new ExerciseExecutor(exc);
-				entity = excExcutor.execute();
-				entity.setAnswer(exc.getAnswer());
-
-				// Back to fronted:
-				entity.setSolution_code(Tools.quote(entity.getSolution_code()));
-			} catch (Exception e) {
-				LOGGER.error("Executing Ecercise failed! : " + entity.getHibId());
-				LOGGER.error("Executing Ecercise failed with code: " + entity.getSolution_code());
-				e.printStackTrace();
-			}
-
-		}
-
-		try {
-			super.checkAccess(Exercise.EXERCISE, DenverConstants.PATCH);
-		} catch (HttpServerErrorException e) {
-			e.printStackTrace();
-		}
-		return (Exercise) super.doDatabaseOperation(entity, DenverConstants.PATCH);
-	}
-
 	@RequestMapping(value = "/exercise", method = RequestMethod.GET)
 	public Exercise getExerciseForUser(@RequestParam(value = "exeId", required = true) String exeId) {
-		Set<Exercise> exercises = ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getHibId());
+		Set<Exercise> exercises = ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getId());
 		for (Iterator iterator = exercises.iterator(); iterator.hasNext();) {
 			Exercise exercise = (Exercise) iterator.next();
-			if (exercise.getHibId().equals(exeId))
+			if (exercise.getId().equals(exeId))
 				return exercise;
 		}
 		return null;
@@ -127,7 +83,7 @@ public class ExerciseController extends ObjectOperationController {
 
 	@RequestMapping(value = "/exercises", method = RequestMethod.GET)
 	public Set<Exercise> getAllExercisesForUser() {
-		return ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getHibId());
+		return ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getId());
 
 	}
 

@@ -67,11 +67,11 @@ public class CourseController extends ObjectOperationController {
 	}
 
 	@RequestMapping(value = "/course", method = RequestMethod.GET)
-	public Course getCourseForUser(@RequestParam(value = "user", required = false) String hibId) {
-		if (hibId == null) {
+	public Course getCourseForUser(@RequestParam(value = "user", required = false) String id) {
+		if (id == null) {
 			return UserService.getCurrentUser().getCourse();
 		} else if (UserService.isCurrentUserDocent()) {
-			return UserService.getUserById(hibId).getCourse();
+			return UserService.getUserById(id).getCourse();
 		} else {
 			throw new AccessDeniedException(DenverConstants.STUDENT_ACCES_DENIED);
 		}
