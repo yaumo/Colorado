@@ -40,12 +40,13 @@ public class UserInteractionController {
 		return UserService.isCurrentUserDocent();
 	}
 	
-	public String changePassword(@RequestParam(value = "oldPassword", required = true) String oldPW,
+	@RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
+	public Boolean changePassword(@RequestParam(value = "oldPassword", required = true) String oldPW,
 			@RequestParam(value = "newPassword", required = true) String newPW) {
 		User usr = UserService.getCurrentUser();
 		
 		if (!BCrypt.checkpw(oldPW, usr.getPassword())) {
-			throw new BadCredentialsException("Wrong password.");			
+			return false;	
 		} else{
 			String salt = BCrypt.gensalt(12);
 			usr.setPassword(BCrypt.hashpw(newPW, salt));
@@ -53,7 +54,7 @@ public class UserInteractionController {
 			HibernateController hibCtrl = new HibernateController();
 			hibCtrl.mergeEntity(usr);
 			
-			return "Changed password of user: " + usr.getUsername();
+			return true;
 		}
 	}
 
