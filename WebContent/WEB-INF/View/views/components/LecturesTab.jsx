@@ -58,7 +58,7 @@ class LecturesTab extends React.Component {
                 if (courselist.length === 0) {
                     for (var i = 0; i < coursesJSON.length; i++) {
                         courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
-						courseids.push(coursesJSON[i].hibId);
+						courseids.push(coursesJSON[i].id);
                     }
                 }
                 this.setState({ courselist: courselist });
@@ -148,7 +148,9 @@ class LecturesTab extends React.Component {
                             >
                                 <TableHeader displaySelectAll={false} >
                                     <TableRow>
-                                        <TableHeaderColumn>Name</TableHeaderColumn>
+                                        <TableHeaderColumn>Last Name</TableHeaderColumn>
+                                        <TableHeaderColumn>First Name</TableHeaderColumn>
+                                        <TableHeaderColumn>Username</TableHeaderColumn>
                                         <TableHeaderColumn>E-Mail</TableHeaderColumn>
                                         <TableHeaderColumn className="hidden">userID</TableHeaderColumn>
                                     </TableRow>
@@ -156,9 +158,11 @@ class LecturesTab extends React.Component {
                                 <TableBody deselectOnClickaway={false}>
                                     {this.state.tableData.map((row, index) => (
                                         <TableRow key={index} selected={row.selected}>
+                                            <TableRowColumn>{row.lastName}</TableRowColumn>
+                                            <TableRowColumn>{row.firstName}</TableRowColumn>
                                             <TableRowColumn>{row.username}</TableRowColumn>
                                             <TableRowColumn>{row.mail}</TableRowColumn>
-                                            <TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
+                                            <TableRowColumn className="hidden">{row.id}</TableRowColumn>
                                         </TableRow>
                                     ))}
                                 </TableBody>

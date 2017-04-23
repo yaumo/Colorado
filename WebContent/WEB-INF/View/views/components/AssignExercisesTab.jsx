@@ -73,20 +73,20 @@ class AssignExercisesTab extends React.Component {
                 coursesJSON = courses;
                 if (courselist.length === 0) {
                     for (var i = 0; i < coursesJSON.length; i++) {
-                        courselist.push(<MenuItem value={i} key={coursesJSON[i].hibId} primaryText={coursesJSON[i].title} />);
-						//courseids.push(coursesJSON[i].id);
+                        courselist.push(<MenuItem value={i} key={coursesJSON[i]} primaryText={coursesJSON[i].title} />);
+						courseids.push(coursesJSON[i].id);
                     }
                 }
                 if (lecturelist.length === 0) {
                     lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
-					//lectureids.push('');
+					lectureids.push('');
                     for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
-                        lecturelist.push(<MenuItem value={j} key={j} id={coursesJSON[0].lectures.hibId} primaryText={coursesJSON[0].lectures[j - 1].title} />);
-						//lectureids.push(coursesJSON[0].lectures[j - 1].id);
+                        lecturelist.push(<MenuItem value={j} key={j} id={coursesJSON[0].lectures.id} primaryText={coursesJSON[0].lectures[j - 1].title} />);
+						lectureids.push(coursesJSON[0].lectures[j - 1].id);
                     }
                 }
-				//this.setState({ selectedcourseid: courseids[0]});
-				//this.setState({ selectedlectureid: lectureids[0]});
+				this.setState({ selectedcourseid: courseids[0]});
+				this.setState({ selectedlectureid: lectureids[0]});
                 this.setState({ courselist: courselist });
                 this.setState({ lecturelist: lecturelist });
             }.bind(this)
@@ -97,24 +97,24 @@ class AssignExercisesTab extends React.Component {
         var count = lecturelist.length;
         for (var i = 0; i < count; i++) {
             lecturelist.pop();
-			//lectureids.pop();
+			lectureids.pop();
         }
 		lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
-		//lectureids.push('');
+		lectureids.push('');
         for (var j = 0; j < coursesJSON[value].lectures.length; j++) {
             lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
-			//lectureids.push(coursesJSON[value].lectures[j - 1].id);
+			lectureids.push(coursesJSON[value].lectures[j - 1].id);
         }
 		
-		//this.setState({selectedlectureid: lectureids[0]});
+		this.setState({selectedlectureid: lectureids[0]});
         this.setState({ selectedLecture: 0 });
-		//this.setState({ selectedcourseid: courseids[value]});
+		this.setState({ selectedcourseid: courseids[value]});
         this.setState({ selectedCourse: value });
     }
 
     handleChangeLecture(event, index, value) {
         this.setState({ selectedLecture: value });
-		//this.setState({ selectedlectureid: lectureids[value]});
+	    this.setState({ selectedlectureid: lectureids[value]});
     }
     handleOpenDialog(event, index, value) {
         this.setState({ opendialog: true });
@@ -125,9 +125,15 @@ class AssignExercisesTab extends React.Component {
 
     handleAssignClick(e){
         var exercises = [];
-        var courseId = "";
-        var lectureId = "";
+        var courseId = this.state.selectedcourseid;
+        var lectureId = this.state.selectedlectureid;
         var deadline = $("#deadline").val();
+        var data = JSON.stringify({
+                "exercises" : exercises,
+                "courseId": courseId,
+                "lectureId": lectureId,
+                "deadline": deadline
+            });
 
         $.ajax({
             url: "http://localhost:8181/lecture",
@@ -136,12 +142,7 @@ class AssignExercisesTab extends React.Component {
             xhrFields: {
                     withCredentials: true
             },
-            data: JSON.stringify({
-                "exercises" : exercises,
-                "courseId": courseId,
-                "lectureId": lectureId,
-                "deadline": deadline
-            }),
+            data: data,
             success: function (response) {
                 //handle response
             }.bind(this)
@@ -163,10 +164,6 @@ class AssignExercisesTab extends React.Component {
 
         this.setState({ selectedCourse: value });
         this.setState({ selectedLecture: 0 });
-    }
-
-    handleChangeLecture(event, index, value) {
-        this.setState({ selectedLecture: value });
     }
     render() {
         return (
@@ -192,7 +189,7 @@ class AssignExercisesTab extends React.Component {
                                                     <TableRowColumn>{row.title}</TableRowColumn>
                                                     <TableRowColumn>{row.language}</TableRowColumn>
                                                     <TableRowColumn>{row.creationDate}</TableRowColumn>
-                                                    <TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
+                                                    <TableRowColumn className="hidden">{row.id}</TableRowColumn>
                                                 </TableRow>
                                             ))}
                                     </TableBody>

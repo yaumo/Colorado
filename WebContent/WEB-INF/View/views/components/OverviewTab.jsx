@@ -81,7 +81,7 @@ class OverviewTab extends React.Component {
 				if (courselist.length === 0) {
 					for (var i = 0; i < coursesJSON.length; i++) {
 						courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
-						courseids.push(coursesJSON[i].hibId);
+						courseids.push(coursesJSON[i].id);
 						this.setState({ selectedcourseid: courseids[0] });
 					}
 				}
@@ -90,7 +90,7 @@ class OverviewTab extends React.Component {
 					lectureids.push('');
 					for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
 						lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[j - 1].title} />);
-						lectureids.push(coursesJSON[0].lectures[j - 1].hibId);
+						lectureids.push(coursesJSON[0].lectures[j - 1].id);
 						this.setState({ selectedlectureid: lectureids[0] });
 					}
 				}
@@ -132,7 +132,7 @@ class OverviewTab extends React.Component {
 		lectureids.push('');
 		for (var j = 1; j <= coursesJSON[value].lectures.length; j++) {
 			lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
-			lectureids.push(coursesJSON[value].lectures[j - 1].hibId);
+			lectureids.push(coursesJSON[value].lectures[j - 1].id);
 			this.setState({ selectedlectureid: lectureids[0] });
 		}
 
@@ -158,7 +158,7 @@ class OverviewTab extends React.Component {
 			this.setState({ disabledDropDownExercise: false });
 			for (var k = 1; k <= coursesJSON[this.state.selectedCourse].lectures[value - 1].exercises.length; k++) {
 				exerciselist.push(<MenuItem value={k} key={k} primaryText={coursesJSON[this.state.selectedCourse].lectures[value - 1].exercises[k - 1].title} />);
-				exerciseids.push(coursesJSON[this.state.selectedCourse].lectures[value - 1].exercises[k - 1].hibId)
+				exerciseids.push(coursesJSON[this.state.selectedCourse].lectures[value - 1].exercises[k - 1].id)
 			}
 		}
 		else {
@@ -232,7 +232,7 @@ class OverviewTab extends React.Component {
 				solutionsJSON = solutions;
 				for (var i = 0; i < solutionsJSON.length; i++) {
 					solutionsJSON[i].username = solutionsJSON[i].owner.username;
-					solutionsJSON[i].id = solutionsJSON[i].owner.hibId;
+					solutionsJSON[i].id = solutionsJSON[i].owner.id;
 					solutionsJSON[i].correct = solutionsJSON[i].correct.toString();
 				}
 				this.setState({

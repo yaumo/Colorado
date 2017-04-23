@@ -61,14 +61,14 @@ class NavBar extends React.Component {
                 if (lecturelist.length === 0) {
                     for (var i = 0; i < course.lecture.length; i++) {
                         lecturelist.push(<MenuItem value={i} key={i} primaryText={course.lectures[i].title} />);
-						//lectureids.push(course.lectures[i].hibId);
+						//lectureids.push(course.lectures[i].id);
                     }
 					//this.setState({selectedlectureid: lectureids[0]});
                 }
                 if (exerciseslist.length === 0) {
                     for (var j = 0; j < course.lecture[0].exercises.length; j++) {
                         exerciseslist.push(<MenuItem value={j} key={j} primaryText={course.lectures[0].exercises[j].title} onClick={this.handleClickOnMenu} />);
-						//exerciseids.push(course.lectures[0].exercises[j].hibId);
+						//exerciseids.push(course.lectures[0].exercises[j].id);
                     }
                 }
             }.bind(this),
@@ -109,7 +109,7 @@ class NavBar extends React.Component {
         }
         for (var j = 0; j < courseJSON.lecture[value].exercises.length; j++) {
             exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lecture[value].exercises[j].title} />);
-			//exerciseids.push(courseJSON.lecture[value].exercises[j].hibId);
+			//exerciseids.push(courseJSON.lecture[value].exercises[j].id);
         }
 
         this.setState({ dropdown: value });
