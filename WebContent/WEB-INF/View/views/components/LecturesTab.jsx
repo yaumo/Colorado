@@ -37,9 +37,12 @@ class LecturesTab extends React.Component {
         this.handleChangeCourse = this.handleChangeCourse.bind(this);
         this.handleOpenDialog = this.handleOpenDialog.bind(this);
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
-    }
+        this.handleClick = this.handleClick.bind(this);
+    } 
     handleChangeCourse(event, index, value) {
         this.setState({ selectedCourse: value });
+        this.setState({ selectedCourse: value });
+        this.setState({ selectedcourseid: courseids[value]});
     }
 
     componentDidMount() {
@@ -55,10 +58,11 @@ class LecturesTab extends React.Component {
                 if (courselist.length === 0) {
                     for (var i = 0; i < coursesJSON.length; i++) {
                         courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
-						//courseids.push(coursesJSON[i].id);
+						courseids.push(coursesJSON[i].hibId);
                     }
                 }
                 this.setState({ courselist: courselist });
+                this.setState({ selectedcourseid: courseids[0] });
             }.bind(this)
         });
 
@@ -83,12 +87,31 @@ class LecturesTab extends React.Component {
         this.setState({ opendialog: false });
     }
     handleClick(e) {
+        var courseID = this.state.selectedcourseid;
+        var title = $("#lectureTitle")[0].value.toString();
+        var tutor = "";
 
+        $.ajax({
+            url: "http://localhost:8181/lecture",
+            dataType: 'json',
+            method: 'POST',
+            data: {
+                "courseID": courseID,
+                "title": title,
+                "tutors": tutor
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (allDocents) {
+                
+            }.bind(this)
+        });
     }
 	
 	handleChangeCourse(event, index, value){
 		this.setState({selectedCourse: value});
-		//this.setState({selectedcourseid: courseids[value]});
+		this.setState({selectedcourseid: courseids[value]});
 	}
 
     render() {
@@ -110,6 +133,7 @@ class LecturesTab extends React.Component {
                         <h4>Step 2: Name Lecture</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <TextField
+                                id = "lectureTitle"
                                 floatingLabelText="Lecture Name"
                                 fullWidth={false}
                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}

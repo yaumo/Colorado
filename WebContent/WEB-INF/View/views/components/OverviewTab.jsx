@@ -52,7 +52,7 @@ class OverviewTab extends React.Component {
 			lecturelist: [],
 			selectedlectureid: '',
 			exerciselist: [],
-			selectedexercisid: '',
+			selectedexerciseid: '',
 			userlist: [],
 			overviewlist: [{
 				name: "Please select a course,",
@@ -74,36 +74,45 @@ class OverviewTab extends React.Component {
 			dataType: 'json',
 			method: 'GET',
 			xhrFields: {
-                    withCredentials: true
-            },
+				withCredentials: true
+			},
 			success: function (courses) {
 				coursesJSON = courses;
 				if (courselist.length === 0) {
 					for (var i = 0; i < coursesJSON.length; i++) {
 						courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
-						//courseids.push(courseJSON[i].courseid);
-						//this.setState({selectedcourseid: courseids[0]});
+						courseids.push(coursesJSON[i].hibId);
+						this.setState({ selectedcourseid: courseids[0] });
 					}
 				}
 				if (lecturelist.length === 0) {
 					lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
-					//lectureids.push('');
+					lectureids.push('');
 					for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
 						lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[j - 1].title} />);
-						//lectureids.push(courseJSON[0].lecture[j - 1].id);
-						//this.setState({selectedlectureid: lectureids[0]});
+						lectureids.push(coursesJSON[0].lectures[j - 1].hibId);
+						this.setState({ selectedlectureid: lectureids[0] });
 					}
 				}
 				if (exerciselist.length === 0) {
 					exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
-					//exerciseids.push('');
-					//this.setState({selectedexercisid: exerciseids[0]});
+					if (coursesJSON[0].lectures[0].exercises) {
+						for (var j = 1; j <= coursesJSON[0].lectures[0].exercises.length; j++) {
+							exerciselist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[0].exercises[1 - j].title} />);
+						}
+					}
+					exerciseids.push('');
+					this.setState({ selectedexerciseid: exerciseids[0] });
 				}
 				this.setState({ courselist: courselist });
 				this.setState({ lecturelist: lecturelist });
 				this.setState({ exerciselist: exerciselist });
+				this.setState({ selectedLecture: 0 });
+				this.setState({ selectedExercise: 0 });
+				this.setState({ disabledDropDownExercise: false });
 			}.bind(this)
 		});
+		this.handleClickSearch();
 	}
 
 
@@ -113,25 +122,25 @@ class OverviewTab extends React.Component {
 
 		for (var i = 0; i < countLectures; i++) {
 			lecturelist.pop();
-			//lectureids.pop();
+			lectureids.pop();
 		}
 		for (var i = 0; i < countExercises; i++) {
 			exerciselist.pop();
-			//exerciseids.pop();
+			exerciseids.pop();
 		}
 		lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
-		//lectureids.push('');
+		lectureids.push('');
 		for (var j = 1; j <= coursesJSON[value].lectures.length; j++) {
 			lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
-			//lectureids.push(courseJSON[value].lecture[j - 1].id);
-			//this.setState({selectedlectureid: lectureids[0]});
+			lectureids.push(coursesJSON[value].lectures[j - 1].hibId);
+			this.setState({ selectedlectureid: lectureids[0] });
 		}
 
 		exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
-		//exerciseids.push('');
-		//this.setState({selectedexercisid: exerciseids[0]});
+		exerciseids.push('');
+		this.setState({ selectedexerciseid: exerciseids[0] });
 
-		//this.setState({selectedcourseid: courseids[value]});
+		this.setState({ selectedcourseid: courseids[value] });
 		this.setState({ selectedCourse: value });
 		this.setState({ selectedLecture: 0 });
 		this.setState({ selectedExercise: 0 });
@@ -141,33 +150,37 @@ class OverviewTab extends React.Component {
 		var count = exerciselist.length;
 		for (var i = 0; i < count; i++) {
 			exerciselist.pop();
-			//exerciseids.pop();
+			exerciseids.pop();
 		}
 		if (value != 0) {
 			exerciselist.push(<MenuItem value={0} key={0} primaryText={'All Exercises'} />);
-			//exerciseids.push('');
+			exerciseids.push('');
 			this.setState({ disabledDropDownExercise: false });
 			for (var k = 1; k <= coursesJSON[this.state.selectedCourse].lectures[value - 1].exercises.length; k++) {
 				exerciselist.push(<MenuItem value={k} key={k} primaryText={coursesJSON[this.state.selectedCourse].lectures[value - 1].exercises[k - 1].title} />);
-				//exerciseids.push(this.state.selectedCourse].lectures[value - 1].exercises[k - 1].id)
+				exerciseids.push(coursesJSON[this.state.selectedCourse].lectures[value - 1].exercises[k - 1].hibId)
 			}
 		}
 		else {
 			exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
 			this.setState({ disabledDropDownExercise: true });
-			//exerciseids.push('');
+			exerciseids.push('');
 		}
 		this.setState({ selectedLecture: value });
 		this.setState({ selectedExercise: 0 });
-		//this.setState({selectedexercisid: exerciseids[0]});
+		this.setState({ selectedlectureid: lectureids[value] });
+		this.setState({ selectedexerciseid: exerciseids[0] });
 	}
 
 	handleChangeExercise(event, index, value) {
 		this.setState({ selectedExercise: value });
-		//this.setState({ selectedexercisid: exerciseids[value]});
+		this.setState({ selectedexerciseid: exerciseids[value] });
 	}
 
 	handleClickViewCode(event, index, value) {
+		var lectureID = "";
+		var exerciseID = "";
+
 		$.ajax({
 			url: "http://localhost:8181/docent/solution",
 			dataType: 'json',
@@ -175,7 +188,10 @@ class OverviewTab extends React.Component {
 			xhrFields: {
 				withCredentials: true
 			},
-			//data: 'owner=2 exerciseID=1',
+			data: {
+				"lectureID": lectureID,
+				"exerciseID": exerciseID
+			},
 			success: function (solution) {
 				solutionJSON = solution;
 				lecture = event.currentTarget.parentElement.parentElement.cells[1].innerText;
@@ -198,6 +214,9 @@ class OverviewTab extends React.Component {
 	}
 
 	handleClickSearch(e) {
+		var lectureID = this.state.selectedlectureid;
+		var exerciseID = this.state.selectedexerciseid;
+
 		$.ajax({
 			url: "http://localhost:8181/docent/solutions",
 			dataType: 'json',
@@ -205,9 +224,17 @@ class OverviewTab extends React.Component {
 			xhrFields: {
 				withCredentials: true
 			},
-			//data: 'lectureID=2 exerciseID=1',
+			data: {
+				"lectureId": lectureID,
+				"exerciseId": exerciseID
+			},
 			success: function (solutions) {
-				solutionsJSON = solution;
+				solutionsJSON = solutions;
+				for (var i = 0; i < solutionsJSON.length; i++) {
+					solutionsJSON[i].username = solutionsJSON[i].owner.username;
+					solutionsJSON[i].id = solutionsJSON[i].owner.hibId;
+					solutionsJSON[i].correct = solutionsJSON[i].correct.toString();
+				}
 				this.setState({
 					overviewlist: solutionsJSON
 				});
@@ -246,33 +273,27 @@ class OverviewTab extends React.Component {
 										</TableHeaderColumn>
 									</TableRow>
 									<TableRow style={{ background: "#d1d1d1" }}>
-										<TableHeaderColumn>Course</TableHeaderColumn>
-										<TableHeaderColumn>Lecture</TableHeaderColumn>
-										<TableHeaderColumn>Exercise</TableHeaderColumn>
 										<TableHeaderColumn>Name</TableHeaderColumn>
 										<TableHeaderColumn>Status</TableHeaderColumn>
 										<TableHeaderColumn>View Code</TableHeaderColumn>
-										<TableHeaderColumn className="hidden">exerciseID</TableHeaderColumn>
-										<TableHeaderColumn className="hidden">userID</TableHeaderColumn>
-										<TableHeaderColumn className="hidden">lectureID</TableHeaderColumn>
+										<TableHeaderColumn >exerciseID</TableHeaderColumn>
+										<TableHeaderColumn >userID</TableHeaderColumn>
+										<TableHeaderColumn >lectureID</TableHeaderColumn>
 									</TableRow>
 								</TableHeader>
 								<TableBody displayRowCheckbox={false} style={{ background: "#d1d1d1" }}>
 									{this.state.overviewlist.map((row, index) => (
 										<TableRow key={index} selected={row.selected}>
-											<TableRowColumn>{this.state.selectedCourse}</TableRowColumn>
-											<TableRowColumn>{this.state.selectedLecture}</TableRowColumn>
-											<TableRowColumn>{this.state.selectedExercise}</TableRowColumn>
-											<TableRowColumn>{row.name}</TableRowColumn>
-											<TableRowColumn>{row.status}</TableRowColumn>
+											<TableRowColumn>{row.username}</TableRowColumn>
+											<TableRowColumn>{row.correct}</TableRowColumn>
 											<TableRowColumn>
 												<IconButton onClick={this.handleClickViewCode}>
 													<ActionCode />
 												</IconButton>
 											</TableRowColumn>
-											<TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
-											<TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
-											<TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
+											<TableRowColumn >{this.state.selectedexerciseid}</TableRowColumn>
+											<TableRowColumn >{row.id}</TableRowColumn>
+											<TableRowColumn >{this.state.selectedlectureid}</TableRowColumn>
 										</TableRow>
 									))}
 								</TableBody>

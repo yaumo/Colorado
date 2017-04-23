@@ -99,6 +99,8 @@ class ExercisesTab extends React.Component {
         var youtube = $("#youtube")[0].value.toString();
         var patternSolution = escape(this.state.solutionPattern);
         var template = escape(this.state.template);
+        var inputArray = $("#inputArray")[0].value.toString();;
+        var entryMethod = $("#entryMethod")[0].value.toString();;
 
         if ((title || description) == "") {
             this.setState({
@@ -132,12 +134,14 @@ class ExercisesTab extends React.Component {
                     "language": language,
                     "patternSolution": patternSolution,
                     "template": template,
-                    "youtube": youtube
+                    "videoLink": youtube,
+                    "input": inputArray,
+                    "entryMethod": entryMethod
                 }),
                 success: function (response) {
                     this.setState({
                         opendialog: true,
-                        dialog: "Exercise successfully created"
+                        dialog: response.message.toString()
                     });
                     //setStates to ''
                 }.bind(this),
@@ -235,57 +239,25 @@ class ExercisesTab extends React.Component {
                         <Paper zDepth={2} className="paper" width="100%">
                             <table className="paper" style={{ width: "100%", verticalAlign: "top" }}>
                                 <tbody>
-                                    <tr>
-										<td style={{ width: "50%"}}>
-                                            Type:
-										</td>
-										<td style={{ width: "50%"}}>
-											Value:
-										</td>
-									</tr>
 									<tr>
-										<td style={{ width: "50%"}}>
-                                            <DropDownMenu className="language" id="case1Type" value={this.state.selectedCase1Type} onChange={this.handleChangeCase1Type}>
-                                                <MenuItem value={1} primaryText="String" />
-                                                <MenuItem value={2} primaryText="int" />
-                                                <MenuItem value={3} primaryText="boolean" />
-                                                <MenuItem value={4} primaryText="long" />
-                                            </DropDownMenu>
-                                        </td>
-                                        <td style={{ width: "50%"}}>
+										<td style={{ width: "45%"}}>
                                             <TextField
-                                                id="case2"
-                                                floatingLabelText="Case 1: Input"
-                                                fullWidth={true}
+                                                id="entryMethod"
+                                                floatingLabelText="Name of the entry-method by Java"
+                                                fullWidth={false}
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                                             />
                                         </td>
-                                    </tr>
-                                   <tr>
-										<td style={{ width: "50%"}}>
-                                            Type:
-										</td>
-										<td style={{ width: "50%"}}>
-											Value:
-										</td>
-									</tr>
-									<tr>
-										<td style={{ width: "50%"}}>
-                                            <DropDownMenu className="language" id="case2Type" value={this.state.selectedCase2Type} onChange={this.handleChangeCase2Type}>
-                                                <MenuItem value={1} primaryText="String" />
-                                                <MenuItem value={2} primaryText="int" />
-                                                <MenuItem value={3} primaryText="boolean" />
-                                                <MenuItem value={4} primaryText="long" />
-                                            </DropDownMenu>
-                                        </td>
-                                        <td style={{ width: "50%"}}>
+                                        
+                                        <td style={{ width: "48%"}}>
                                             <TextField
-                                                id="case2"
-                                                floatingLabelText="Case 2: Input"
+                                                id="inputArray"
+                                                floatingLabelText="Test-Inputdata"
                                                 fullWidth={true}
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
+                                                hintText='"input1", "input2", "input3"' 
                                             />
                                         </td>
                                     </tr>

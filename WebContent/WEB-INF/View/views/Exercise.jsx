@@ -59,6 +59,36 @@ class Content extends React.Component {
         this.setState({ java: value });
     }
 
+    handleCheck(event, index, value) {
+        var solutionCode = this.getState().solution;
+
+
+		$.ajax({
+                url: "http://localhost:8181/solution",
+                dataType: 'json',
+                method: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify({
+                    "solution": solution
+                }),
+                success: function (response) {
+                    this.setState({
+                        opendialog: true,
+                        dialog: response.message.toString()
+                    });
+                    //setStates to ''
+                }.bind(this),
+                error: function (error) {
+                    this.setState({
+                        opendialog: true,
+                        dialog: "An error has occoured. Please make sure that you are logged in ."
+                    });
+                }.bind(this)
+            });
+	}
+
 	handleChangeSolution(event){
 		this.setState({solution: event});
 	}
@@ -119,7 +149,7 @@ class Content extends React.Component {
                                     <RaisedButton label="Check"
 									backgroundColor="#bd051f"
 									labelColor="#FFFFFF"
-									onClick={this.handleOpenDialog}/>
+									onClick={this.onCheck}/>
 									 <Dialog
 									  title="Dialog With Actions"
 									  modal={false}

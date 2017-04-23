@@ -54,6 +54,10 @@ class AssignExercisesTab extends React.Component {
                 withCredentials: true
             },
             success: function (exercises) {
+                for (var i = 0; i < exercises.length; i++) {
+                        var d = new Date(exercises[i].creationDate);
+                        exercises[i].creationDate = d.toDateString();
+                }
                 this.setState({ exercisesTableData: exercises });
             }.bind(this)
         });
@@ -121,14 +125,14 @@ class AssignExercisesTab extends React.Component {
 
     handleAssignClick(e){
         var exercises = [];
-        var courseId;
-        var lectureId;
+        var courseId = "";
+        var lectureId = "";
         var deadline = $("#deadline").val();
 
         $.ajax({
             url: "http://localhost:8181/lecture",
             dataType: 'json',
-            method: 'POST',
+            method: 'PUT',
             xhrFields: {
                     withCredentials: true
             },
@@ -183,14 +187,14 @@ class AssignExercisesTab extends React.Component {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody deselectOnClickaway={false} className="paper">
-                                            {/*this.state.exerciseTableData.map((row, index) => (
+                                            {this.state.exercisesTableData.map((row, index) => (
                                                 <TableRow key={index} selected={row.selected}>
                                                     <TableRowColumn>{row.title}</TableRowColumn>
                                                     <TableRowColumn>{row.language}</TableRowColumn>
                                                     <TableRowColumn>{row.creationDate}</TableRowColumn>
-                                                    <TableRowColumn>{row.hibId}</TableRowColumn>
+                                                    <TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
                                                 </TableRow>
-                                            ))*/}
+                                            ))}
                                     </TableBody>
                                 </Table>
                             </div>
