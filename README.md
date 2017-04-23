@@ -43,3 +43,6 @@ server {
      - nginx.exe -s reload
 
      - Every connection to localhost:8181/frontend is now mapped to the frontend and every connection to localhost:8181/backend to the backend
+
+##Starting the Docker Application
+- Open your Docker Quickstart Terminal
