@@ -29,10 +29,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.csrf().disable()
 				.authorizeRequests()
+				.antMatchers("/registration").permitAll()
 				.antMatchers("/**").hasRole("STUDENT")
+				// .antMatchers("/docent/**").hasRole("DOCENT")
+				// .antMatchers("/docent/**").hasRole("ADMIN")
+				.anyRequest().authenticated()
 				.and().httpBasic()
 				.and().sessionManagement()
-				.invalidSessionUrl("/invalidSession")
+				.invalidSessionUrl("/logout")
 				.and().addFilterAfter(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
 
 		super.configure(http);

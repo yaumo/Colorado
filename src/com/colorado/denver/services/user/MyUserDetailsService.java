@@ -14,10 +14,10 @@ public class MyUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) {
 		System.out.println("Login getting user: " + username);
 		User user = UserService.getUserByLoginName(username);
-		System.out.println("Returning User:" + user.getUsername());
 		if (user == null) {
 			throw new UsernameNotFoundException(username);
 		}
+		System.out.println("Returning User:" + user.getUsername());
 
 		return new MyUserPrincipal(user);
 	}

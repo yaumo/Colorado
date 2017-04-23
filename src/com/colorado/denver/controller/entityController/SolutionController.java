@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,7 @@ import com.colorado.denver.tools.GenericTools;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+@CrossOrigin
 @RestController
 // @RequestMapping(DenverConstants.FORWARD_SLASH + Solution.SOLUTION)
 public class SolutionController extends ObjectOperationController {

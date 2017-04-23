@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.colorado.denver.model.Privilege;
 import com.colorado.denver.services.persistence.SessionTools;
 
+@CrossOrigin
 @RestController
 public class PrivilegeController extends ObjectOperationController {
 
