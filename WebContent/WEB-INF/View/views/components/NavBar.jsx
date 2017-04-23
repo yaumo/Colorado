@@ -41,13 +41,13 @@ class NavBar extends React.Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleClickOnMenu = this.handleClickOnMenu.bind(this);
+        this.onClick = this.onClick.bind(this);
     }
 
     componentDidMount() {
         $.ajax({
             url: "http://localhost:8181/course",
             ddataType: 'json',
-			jsonp: 'callback',
             method: 'GET',
             xhrFields: {
                 withCredentials: true
@@ -110,7 +110,22 @@ class NavBar extends React.Component {
         if (e.target.textContent == "Settings") {
             browserHistory.push('/user');
         }
-        else browserHistory.push('/');
+        else {
+            $.ajax({
+                url: "http://localhost:8181/logout",
+                dataType: 'json',
+                method: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    browserHistory.push('/');
+                }.bind(this),
+                error: function (error) {
+                    alert(error.responseText);
+                }
+            });
+        }
     }
 
 

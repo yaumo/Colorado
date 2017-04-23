@@ -81,9 +81,12 @@ class Content extends React.Component {
         'Authorization': 'Basic ' + btoa(username + ':' + password),
         'Content-Type': 'application/x-www-form-urlencoded'
       }
-
     }).then(function (response) {
-      //browserHistory.push('/docent');
+      return response.json();
+    }).then(function (response) {
+      if (response === true) {
+        browserHistory.push('/docent');
+      }
     }).catch(function (err) {
       console.log(err)
     });

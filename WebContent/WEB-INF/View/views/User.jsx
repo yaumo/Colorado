@@ -133,24 +133,33 @@ class Content extends React.Component {
     }
     else {
       $.ajax({
-        url: "http://localhost:8181/user",
+        url: "http://localhost:8181/updatePassword",
         dataType: 'json',
-        method: 'PATCH',
+        method: 'POST',
         xhrFields: {
           withCredentials: true
         },
         data: JSON.stringify({
-          "password": this.state.oldPassword,
-          "newPassword": this.state.newPassword
+          "oldpw": this.state.oldPassword,
+          "newpw": this.state.newPassword
         }),
         success: function (response) {
-          this.setState({
-            opendialog: true,
-            dialog: "Password successfully changed",
-            newPassword: '',
-            repeatPassword: '',
-            oldPassword: ''
-          });
+          if (response === true) {
+            this.setState({
+              opendialog: true,
+              dialog: "Password successfully changed",
+              newPassword: '',
+              repeatPassword: '',
+              oldPassword: ''
+            });
+          }
+          else {
+            this.setState({
+              opendialog: true,
+              dialog: "Your old password is incorrect. Please try again.",
+              oldPassword: ''
+            });
+          }
         }.bind(this),
         error: function (error) {
           this.setState({

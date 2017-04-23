@@ -200,8 +200,7 @@ class OverviewTab extends React.Component {
 	handleClickSearch(e) {
 		$.ajax({
 			url: "http://localhost:8181/docent/solutions",
-			dataType: 'jsonp',
-			jsonp: 'callback',
+			dataType: 'json',
 			method: 'GET',
 			xhrFields: {
 				withCredentials: true

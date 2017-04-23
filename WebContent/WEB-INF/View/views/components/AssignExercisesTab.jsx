@@ -48,8 +48,7 @@ class AssignExercisesTab extends React.Component {
     componentDidMount() {
         $.ajax({
             url: "http://localhost:8080/exercises",
-            dataType: 'jsonp',
-			jsonp: 'callback',
+            dataType: 'json',
             method: 'GET',
             xhrFields: {
                 withCredentials: true

@@ -97,12 +97,8 @@ class ExercisesTab extends React.Component {
         var description = $("#description")[0].value.toString();
         var language = $("#language").text();
         var youtube = $("#youtube")[0].value.toString();
-        var patternSolution = this.state.solutionPattern;
-        var template = this.state.template;
-        var input1Value = $("#case1")[0].value.toString();
-        var input1Type = this.state.case1Type;
-        var input2Value = $("#case2")[0].value.toString();
-        var input2Type = this.state.case2Type;
+        var patternSolution = escape(this.state.solutionPattern);
+        var template = escape(this.state.template);
 
         if ((title || description) == "") {
             this.setState({
@@ -110,12 +106,12 @@ class ExercisesTab extends React.Component {
                 dialog: "Please fill in a title and a description"
             });
         }
-        else if ((input1Value || input2Value) == "") {
+       /* else if ((input1Value || input2Value) == "") {
             this.setState({
                 opendialog: true,
                 dialog: "Please fill in at least two testcases"
             });
-        }
+        }*/
         else if (patternSolution == "") {
             this.setState({
                 opendialog: true,
@@ -125,8 +121,7 @@ class ExercisesTab extends React.Component {
         else {
             $.ajax({
                 url: "http://localhost:8181/exercise",
-                dataType: 'jsonp',
-                jsonp: 'callback',
+                dataType: 'json',
                 method: 'POST',
                 xhrFields: {
                     withCredentials: true
@@ -135,13 +130,9 @@ class ExercisesTab extends React.Component {
                     "title": title,
                     "description": description,
                     "language": language,
-                    //"patternSolution": solutionpattern,
-                    //"template": template,
-                    "youtube": youtube,
-                    "input1Value": input1Value,
-                    "input1Type": input1Type,
-                    "input2Value": input2Value,
-                    "input2Type": input2Type
+                    "patternSolution": patternSolution,
+                    "template": template,
+                    "youtube": youtube
                 }),
                 success: function (response) {
                     this.setState({
