@@ -1,9 +1,6 @@
 package com.colorado.denver.controller.entityController;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -78,11 +75,7 @@ public class CourseController extends ObjectOperationController {
 	@RequestMapping(value = "/courses", method = RequestMethod.GET)
 	public List<Course> getAllCourses() {
 		if (UserService.isCurrentUserDocent()) {
-			List<Course> coursesList = CourseService.getAllCourses();
-			Set<Course> set = new HashSet<Course>(coursesList);
-			List<Course> list = new ArrayList<Course>(set);
-
-			return list;
+			return CourseService.getAllCourses();
 		} else {
 			throw new AccessDeniedException(DenverConstants.STUDENT_ACCES_DENIED);
 		}

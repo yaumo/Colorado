@@ -1,8 +1,10 @@
 package com.colorado.denver.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -198,7 +200,13 @@ public class HibernateController {
 		} finally {
 			session.close();
 		}
-		return entityList;
+		return uniquifyList(entityList);
+	}
+
+	// We need unique results and Jackson cannot parse Sets... WTF Jackson? Get your shit together
+	private List<BaseEntity<?>> uniquifyList(List<BaseEntity<?>> list) {
+		return new ArrayList<BaseEntity<?>>(new HashSet<BaseEntity<?>>(list));
+
 	}
 
 }

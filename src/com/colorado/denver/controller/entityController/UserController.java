@@ -1,7 +1,5 @@
 package com.colorado.denver.controller.entityController;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -77,11 +75,7 @@ public class UserController extends ObjectOperationController {
 	public List<User> getAllUsers() {
 		if (UserService.isCurrentUserDocent()) {
 
-			List<User> usersList = UserService.allUsers();
-			Set<User> set = new HashSet<User>(usersList);
-			List<User> list = new ArrayList<User>(set);
-
-			return list;
+			return UserService.allUsers();
 		} else {
 			return null;
 		}
