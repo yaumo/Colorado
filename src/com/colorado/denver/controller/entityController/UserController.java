@@ -8,15 +8,12 @@ import java.util.Set;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.Link;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 
-import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.User;
@@ -79,12 +76,6 @@ public class UserController extends ObjectOperationController {
 		return usr;
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login() {
-
-		return "login";
-	}
-
 	@RequestMapping(value = "/docent", method = RequestMethod.GET)
 	public User getDocent() {
 
@@ -104,26 +95,6 @@ public class UserController extends ObjectOperationController {
 			return null;
 		}
 
-	}
-
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout() {
-
-		return "logout";
-	}
-
-	@RequestMapping(value = "/registration", method = RequestMethod.POST)
-	public String registration(@RequestParam(value = "username", required = true) String username,
-			@RequestParam(value = "password", required = false) String password) {
-		User usr = new User();
-		usr.setUsername(username);
-
-		String salt = BCrypt.gensalt(12);
-		usr.setPassword(BCrypt.hashpw(password, salt));
-
-		HibernateController hibCtrl = new HibernateController();
-		hibCtrl.addEntity(usr);
-		return "Created User: " + usr.getUsername() + "password: " + usr.getPassword();
 	}
 
 	public Set<Exercise> getExersisesForUser(String hibId) {
