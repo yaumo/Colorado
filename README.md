@@ -46,3 +46,7 @@ server {
 
 ##Starting the Docker Application
 - Open your Docker Quickstart Terminal
+- Navigate to /Docker/Dockerjava
+- execute: dos2unix entrypoint.sh
+- Naviagte to /Docker
+- execute: docker-compose up --build
