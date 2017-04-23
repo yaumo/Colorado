@@ -14,7 +14,7 @@ import com.colorado.denver.services.user.UserService;
 @CrossOrigin
 @RestController
 public class UserInteractionController {
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	@RequestMapping(value = "/logout", method = RequestMethod.POST)
 	public String logout() {
 
 		return "logout";
