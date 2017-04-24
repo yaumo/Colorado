@@ -56,9 +56,6 @@ class AssignExercisesTab extends React.Component {
             url: "http://localhost:8181/docent/exercises",
             dataType: 'json',
             method: 'GET',
-            xhrFields: {
-                withCredentials: true
-            },
             success: function (exercises) {
                 for (var i = 0; i < exercises.length; i++) {
                     var d = new Date(exercises[i].creationDate);
@@ -72,9 +69,6 @@ class AssignExercisesTab extends React.Component {
             url: "http://localhost:8181/docent/courses",
             dataType: 'json',
             method: 'GET',
-            xhrFields: {
-                withCredentials: true
-            },
             success: function (courses) {
                 coursesJSON = courses;
                 if (courselist.length === 0) {
@@ -139,9 +133,6 @@ class AssignExercisesTab extends React.Component {
             url: "http://localhost:8181/docent/courses",
             dataType: 'json',
             method: 'GET',
-            xhrFields: {
-                withCredentials: true
-            },
             success: function (courses) {
                 coursesJSON = courses;
                 if (courselist.length === 0) {
@@ -210,9 +201,6 @@ class AssignExercisesTab extends React.Component {
                 url: "http://localhost:8181/docent/lecture",
                 dataType: 'json',
                 method: 'PATCH',
-                xhrFields: {
-                    withCredentials: true
-                },
                 data: data,
                 success: function (response) {
                     this.setState({ selection: [] });

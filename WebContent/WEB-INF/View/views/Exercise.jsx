@@ -55,9 +55,6 @@ export class Exercise extends React.Component {
             url: "http://localhost:8181/solution",
             dataType: 'json',
             method: 'GET',
-            xhrFields: {
-                withCredentials: true
-            },
             data:{
                 "id": exerciseJSON.id
             },
@@ -98,9 +95,6 @@ export class Exercise extends React.Component {
             url: "http://localhost:8181/solution",
             dataType: 'json',
             method: 'POST',
-            xhrFields: {
-                withCredentials: true
-            },
             data: JSON.stringify({
                 "id": exerciseJSON.id,
                 "solution": solution

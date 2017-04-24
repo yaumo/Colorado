@@ -53,9 +53,6 @@ class NavBar extends React.Component {
             url: "http://localhost:8181/course",
             ddataType: 'json',
             method: 'GET',
-            xhrFields: {
-                withCredentials: true
-            },
             success: function (course) {
                 courseJSON = course;
                 if (lecturelist.length === 0) {
@@ -131,9 +128,6 @@ class NavBar extends React.Component {
                 url: "http://localhost:8181/logout",
                 dataType: 'json',
                 method: 'POST',
-                xhrFields: {
-                    withCredentials: true
-                },
                 success: function (response) {
                     browserHistory.push('/');
                 }.bind(this),

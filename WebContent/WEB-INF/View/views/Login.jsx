@@ -87,7 +87,7 @@ class Content extends React.Component {
   }
 
   componentDidMount() {
-    $.ajax({
+    /*$.ajax({
       url: "http://localhost:8181/registration",
       dataType: 'json',
       method: 'GET',
@@ -102,7 +102,7 @@ class Content extends React.Component {
         this.setState({ courselist: courselist });
         this.setState({ selectedcourseid: courseids[0] });
       }.bind(this)
-    });
+    });*/
   }
 
 
