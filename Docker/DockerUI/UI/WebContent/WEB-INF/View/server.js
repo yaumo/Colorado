@@ -201,9 +201,9 @@ app.get('/EditProfile', responseAdminCallback);
 app.get('/CreateProfile', responseAdminCallback);
 
 app.get('/AdminProfil', responseAdminCallback);
-
+*/
 //logout
-app.get('/Logout', (req, res) => {
+app.get('/logout', (req, res) => {
     req.session.destroy(function (err) {
         if (err) {
             console.log(err);
@@ -214,16 +214,13 @@ app.get('/Logout', (req, res) => {
 
 // using restInterfaceServer for creating REST Endpoints
 //app.use('/api',restInterfaceServer)
-*/
+
 app.all("/api/**", function(req, res) {
     req.url = '/' + req.url.split('/').slice(2).join('/');
     console.log('redirecting to Server1');
     apiProxy.web(req, res, {target: serverOne});
 });
 
-app.get('/User', (req, res) =>{
-     res.sendFile(path.join(__dirname, 'public', 'index.html'));
-})
 const httpsServer = https.createServer(options,app); 
 
 const PORT = process.env.PORT || 8081
