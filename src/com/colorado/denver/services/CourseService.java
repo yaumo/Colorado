@@ -43,6 +43,8 @@ public class CourseService {
 				sol.setTitle(title);
 				sol.setCode(template);
 				sol.setCorrect(false);
+				sol.setExercise(exc);
+				sol.setOwner(user);
 				user.getSolutions().add(sol);
 
 			}

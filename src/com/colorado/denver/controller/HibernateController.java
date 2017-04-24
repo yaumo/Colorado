@@ -27,8 +27,9 @@ public class HibernateController {
 	public void setCreationInformation(EducationEntity entity) {
 
 		// If EducationEntity set Owner!!!!
-		if (UserService.getCurrentUser() == null) {
-			LOGGER.error("Saved NULL CREATOR for entity: " + entity.getId());
+		if (UserService.getCurrentUser() == null || entity.getOwner() != null) {
+			// do nothing. Owner was already set somewhere else
+			LOGGER.error("No Owner saved on entity in HibCtrl!: " + entity.getId());
 		} else {
 			LOGGER.info("Trying to get User from Authentication: " + UserService.getCurrentUser().getUsername());
 			LOGGER.info("Setting user on Education entity: " + UserService.getCurrentUser().getUsername());
