@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.colorado.denver.services.user.MyUserDetailsService;
 
@@ -26,11 +28,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/registration", "/").permitAll()
 				.antMatchers("/docent/**").hasRole("DOCENT")
-				.anyRequest().authenticated()
+				.antMatchers("/docent/**").hasRole("ADMIN")
 				.and().httpBasic()
 				.and().sessionManagement()
-				.invalidSessionUrl("/logout");
-		// .and().addFilterAfter(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
+				.invalidSessionUrl("/logout")
+				.and().addFilterBefore(new BasicAuthenticationFilter(authenticationManagerBean()), UsernamePasswordAuthenticationFilter.class);
 
 		super.configure(http);
 	}
