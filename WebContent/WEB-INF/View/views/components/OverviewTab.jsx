@@ -190,6 +190,7 @@ class OverviewTab extends React.Component {
 	handleClickViewCode(event, index, value) {
 		var lectureID = this.state.selectedlectureid;
 		var exerciseID = this.state.selectedexerciseid;
+		var userID = event.currentTarget.parentElement.parentElement.cells[4].innerText;
 
 		$.ajax({
 			url: "http://localhost:8181/docent/solution",
@@ -199,14 +200,14 @@ class OverviewTab extends React.Component {
 				withCredentials: true
 			},
 			data: {
-				"lectureID": lectureID,
-				"exerciseID": exerciseID
+				"excId": exerciseID,
+				"usrId": userID
 			},
 			success: function (solution) {
 				solutionJSON = solution;
-				lecture = event.currentTarget.parentElement.parentElement.cells[1].innerText;
-				exercise = event.currentTarget.parentElement.parentElement.cells[2].innerText;
-				name = event.currentTarget.parentElement.parentElement.cells[3].innerText;
+				//lecture = event.currentTarget.parentElement.parentElement.cells[1].innerText;
+				//exercise = event.currentTarget.parentElement.parentElement.cells[2].innerText;
+				name = event.currentTarget.parentElement.parentElement.cells[0].innerText;
 
 				this.setState({
 					open: true
