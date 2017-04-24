@@ -92,7 +92,7 @@ export class Exercise extends React.Component {
 
     handleCheck(event, index, value) {
         var solutionCode = this.getState().solution;
-        //this.props.exerciseJSON
+        var exerciseJSON = this.getState().exerciseJSON;
 
         $.ajax({
             url: "http://localhost:8181/solution",
@@ -102,6 +102,7 @@ export class Exercise extends React.Component {
                 withCredentials: true
             },
             data: JSON.stringify({
+                "id": exerciseJSON.id,
                 "solution": solution
             }),
             success: function (response) {
