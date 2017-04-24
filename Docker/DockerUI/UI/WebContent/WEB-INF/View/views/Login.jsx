@@ -190,6 +190,7 @@ class Content extends React.Component {
     else {
 
       $.ajax({
+        url: "https://192.168.99.100:8081/api/registration",
         dataType: 'json',
         method: 'POST',
         data: JSON.stringify({
