@@ -72,7 +72,7 @@ class NavBar extends React.Component {
                     }
                 }
                 this.setState({
-                    
+
                 });
             }.bind(this),
             error: function (error) {
@@ -136,7 +136,7 @@ class NavBar extends React.Component {
                     browserHistory.push('/');
                 }.bind(this),
                 error: function (error) {
-                    alert(error.responseText);
+                    browserHistory.push('/');
                 }
             });
         }
