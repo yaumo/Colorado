@@ -67,13 +67,14 @@ public class ObjectOperationController {
 
 	private String create(BaseEntity<?> entity) {
 		try {
+			// Merge on create because the entities we want to create may already contain peristet and attached ones.
 			return hibCtrl.mergeEntity(entity).getId();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error("MERGE failed! Trying update");
 
-			return hibCtrl.updateEntity(entity, entity.getId()).getId();
+			return hibCtrl.addEntity(entity);
 		}
 
 	}

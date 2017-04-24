@@ -1,6 +1,8 @@
 package com.colorado.denver.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.colorado.denver.controller.entityController.ObjectOperationController;
 import com.colorado.denver.controller.entityController.PrivilegeController;
 import com.colorado.denver.model.Course;
+import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.CourseService;
 import com.colorado.denver.services.user.UserService;
@@ -50,7 +53,10 @@ public class UserInteractionController extends ObjectOperationController {
 			String salt = BCrypt.gensalt(12);
 			usr.setPassword(BCrypt.hashpw(usr.getPassword(), salt));
 
-			usr.getPrivileges().add(PrivilegeController.getPrivilegeByName(UserService.ROLE_STUDENT));
+			Privilege privl = PrivilegeController.getPrivilegeByName(UserService.ROLE_STUDENT);
+			Set<Privilege> priv = new HashSet<>();
+			priv.add(privl);
+			usr.setPrivileges(priv);
 
 			HibernateController hibCtrl = new HibernateController();
 			hibCtrl.addEntity(usr);

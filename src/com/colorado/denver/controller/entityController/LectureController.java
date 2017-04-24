@@ -42,6 +42,8 @@ public class LectureController extends ObjectOperationController {
 			e.printStackTrace();
 		}
 		entity = (Lecture) super.doDatabaseOperation(entity, DenverConstants.POST);
+		// We need to enforce the Casacading of the 1-n , n-1 relationship. (It's special)
+		// Hibernate can not resolve this on its own therefore put on both directions.
 		Course crs = entity.getCourse();
 
 		crs.getLectures().add(entity);
