@@ -33,7 +33,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/**").hasRole("STUDENT")
 				.anyRequest().authenticated();
 
-		super.configure(http);
 	}
 
 	@Override
