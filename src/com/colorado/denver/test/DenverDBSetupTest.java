@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,15 +19,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.controller.HibernateController;
-import com.colorado.denver.controller.entityController.RoleController;
-import com.colorado.denver.model.Role;
+import com.colorado.denver.controller.entityController.PrivilegeController;
+import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.User;
-import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
-import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.persistence.HibernateSession;
+import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.DenverConstants;
 
 @RunWith(SpringRunner.class)
@@ -43,7 +43,7 @@ public class DenverDBSetupTest {
 		boolean useUpdate = false;
 		LOGGER.info("Creating session factory..");
 		dropAllSequences();
-		SessionTools.createSessionFactory(useUpdate);
+		HibernateSession.createSessionFactory(useUpdate);
 		LOGGER.info("Done Creating session factory.");
 
 	}
@@ -51,22 +51,22 @@ public class DenverDBSetupTest {
 	@Test
 	public void setupDatabase() {
 
-		Role roleAdmin = createRole(UserService.ROLE_ADMIN);
-		Role roleStudent = createRole(UserService.ROLE_STUDENT);
-		Role roleDocent = createRole(UserService.ROLE_DOCENT);
-		Role roleTutor = createRole(UserService.ROLE_TUTOR);
-		User systemUser = createSystemUser();
+		Privilege roleAdmin = createPrivilege(UserService.ROLE_ADMIN);
+		Privilege roleStudent = createPrivilege(UserService.ROLE_STUDENT);
+		Privilege roleDocent = createPrivilege(UserService.ROLE_DOCENT);
+		Privilege roleTutor = createPrivilege(UserService.ROLE_TUTOR);
+		User systemUser = createSystemUser("password");
 
-		updateRoles(roleAdmin, roleStudent, roleDocent, roleTutor, systemUser);
+		updatePrivileges(roleAdmin, roleStudent, roleDocent, roleTutor, systemUser);
 	}
 
 	@After
 	public void after() {
-		SessionTools.sessionFactory.close();
+		HibernateSession.sessionFactory.close();
 
 	}
 
-	private boolean updateRoles(Role roleAdmin, Role roleStudent, Role roleDocent, Role roleTutor, User systemUser) {
+	private boolean updatePrivileges(Privilege roleAdmin, Privilege roleStudent, Privilege roleDocent, Privilege roleTutor, User systemUser) {
 		Set<User> systemUsers = new HashSet<>();
 		systemUsers.add(systemUser);
 		roleAdmin.setUsers(systemUsers);
@@ -87,41 +87,44 @@ public class DenverDBSetupTest {
 		}
 	}
 
-	private Role createRole(String name) {
+	private Privilege createPrivilege(String name) {
 		LOGGER.info(
-				"Creating new Role in Database CREATE! If you try to create roles during 'update' YOU'LL FUCK EVERYTHING UP");
+				"Creating new roles in Database CREATE! If you try to create roles during 'update' YOU'LL FUCK EVERYTHING UP");
 		LOGGER.info("Database Update mode not supported. (DIY)");
-		Role role = new Role();
-		role.setRoleName(name);
+		Privilege role = new Privilege();
+		role.setPrivilegeName(name);
 		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 		hibCtrl.addEntity(role);
 
 		return role;
 	}
 
-	private static User createSystemUser() { // Creating system user
+	private static User createSystemUser(String password) { // Creating system user
 
 		User systemUser = new User();
 		systemUser.setUsername(DenverConstants.SYSTEM);
-		systemUser.setPassword("password");
+
+		String salt = BCrypt.gensalt(12);
+		systemUser.setPassword(BCrypt.hashpw(password, salt));
+
 		LOGGER.info("Created System User");
 
 		// Hib save HibernateController hibCtrl =
 		HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 
-		Role systemRole = RoleController.getRoleByName(UserService.ROLE_ADMIN);
+		Privilege systemPrivilege = PrivilegeController.getPrivilegeByName(UserService.ROLE_ADMIN);
 
-		LOGGER.info("Got Role:" + systemRole.getRoleName());
-		ArrayList<Role> systemRoles = new ArrayList<Role>(0);
+		LOGGER.info("Got Privilege:" + systemPrivilege.getPrivilegeName());
+		Set<Privilege> systemPrivileges = new HashSet<Privilege>();
 		Set<User> systemUsers = new HashSet<User>();
 		systemUsers.add(systemUser);
-		systemRole.setUsers(systemUsers);
+		systemPrivilege.setUsers(systemUsers);
 
-		systemRoles.add(systemRole);
-		systemUser.setRoles(systemRoles);
+		systemPrivileges.add(systemPrivilege);
+		systemUser.setPrivileges(systemPrivileges);
 
 		hibCtrl.addEntity(systemUser);
-		hibCtrl.updateEntity(systemRole, systemRole.getHibId());
+		hibCtrl.updateEntity(systemPrivilege, systemPrivilege.getId());
 		LOGGER.info("Sucessful systemuser Save(Database)");
 		UsernamePasswordAuthenticationToken returnedToken = UserService.authorizeSystemuser();
 		User returnedU = UserService.getUserByLoginName(returnedToken.getPrincipal().toString());
@@ -168,7 +171,7 @@ public class DenverDBSetupTest {
 		if (connection != null) {
 			try {
 				Statement stmt = connection.createStatement();
-				String sql = "drop sequence if exists course_sequence;drop sequence if exists exercise_sequence;drop sequence if exists lecture_sequence;drop sequence if exists role_sequence;drop sequence if exists solution_sequence;drop sequence if exists user_sequence;";
+				String sql = "drop sequence if exists course_sequence;drop sequence if exists exercise_sequence;drop sequence if exists lecture_sequence;drop sequence if exists privilege_sequence;drop sequence if exists solution_sequence;drop sequence if exists user_sequence;";
 				stmt.executeUpdate(sql);
 				if (connection != null)
 					connection.close();

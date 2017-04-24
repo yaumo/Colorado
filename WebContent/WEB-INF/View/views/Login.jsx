@@ -67,17 +67,6 @@ class Content extends React.Component {
   }
   handleClick(e) {
     e.preventDefault();
-    //this.setState({ errorText: '' })
-    //console.log('The link was clicked.');
-    /*if (this.state.value === 's12345') {
-      browserHistory.push('/exercise');
-    }
-    else if (this.state.value === 'd12345') {
-      browserHistory.push('/docent');
-    }
-    else {
-      alert("Username does not exist!");
-    }*/
     var username = this.state.username;
     var password = this.state.password;
     console.log(username);
@@ -85,16 +74,19 @@ class Content extends React.Component {
     var obj = "username=" + username + "&password=" + password;
 
 
-    fetch('http://localhost:8080/login', {
-      method: 'GET',
+    fetch('http://localhost:8181', {
+      method: 'POST',
       credentials: 'same-origin',
       headers: {
         'Authorization': 'Basic ' + btoa(username + ':' + password),
         'Content-Type': 'application/x-www-form-urlencoded'
       }
-
     }).then(function (response) {
-
+      return response.json();
+    }).then(function (response) {
+      if (response === true) {
+        browserHistory.push('/docent');
+      }
     }).catch(function (err) {
       console.log(err)
     });

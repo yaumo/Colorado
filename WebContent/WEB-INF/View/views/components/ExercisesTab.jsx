@@ -93,16 +93,14 @@ class ExercisesTab extends React.Component {
     }
 
     handleCreateExercise(e) {
-        var title = $("#title")[0].value.toString();
-        var description = $("#description")[0].value.toString();
-        var language = $("#language").text();
-        var youtube = $("#youtube")[0].value.toString();
-        var patternSolution = this.state.solutionPattern;
-        var template = this.state.template;
-        var input1Value = $("#case1")[0].value.toString();
-        var input1Type = this.state.case1Type;
-        var input2Value = $("#case2")[0].value.toString();
-        var input2Type = this.state.case2Type;
+        var title = $("#title")[0].value.toString().trim();
+        var description = $("#description")[0].value.toString().trim();
+        var language = $("#language").text().trim();
+        var youtube = $("#youtube")[0].value.toString().trim();
+        var patternSolution = escape(this.state.solutionPattern);
+        var template = escape(this.state.template);
+        var inputArray = "["+$("#inputArray")[0].value.toString()+"]";
+        var entryMethod = $("#entryMethod")[0].value.toString().trim();
 
         if ((title || description) == "") {
             this.setState({
@@ -110,10 +108,10 @@ class ExercisesTab extends React.Component {
                 dialog: "Please fill in a title and a description"
             });
         }
-        else if ((input1Value || input2Value) == "") {
+       else if ((inputArray || entryMethod) == "") {
             this.setState({
                 opendialog: true,
-                dialog: "Please fill in at least two testcases"
+                dialog: "Please fill testcases and entryMethod"
             });
         }
         else if (patternSolution == "") {
@@ -124,7 +122,7 @@ class ExercisesTab extends React.Component {
         }
         else {
             $.ajax({
-                url: "http://localhost:8080/exercise",
+                url: "http://localhost:8181/exercise",
                 dataType: 'json',
                 method: 'POST',
                 xhrFields: {
@@ -134,18 +132,16 @@ class ExercisesTab extends React.Component {
                     "title": title,
                     "description": description,
                     "language": language,
-                    //"patternSolution": solutionpattern,
-                    //"template": template,
-                    "youtube": youtube,
-                    "input1Value": input1Value,
-                    "input1Type": input1Type,
-                    "input2Value": input2Value,
-                    "input2Type": input2Type
+                    "patternSolution": patternSolution,
+                    "template": template,
+                    "videoLink": youtube,
+                    "input": inputArray,
+                    "entryMethod": entryMethod
                 }),
                 success: function (response) {
                     this.setState({
                         opendialog: true,
-                        dialog: "Exercise successfully created"
+                        dialog: response.message.toString()
                     });
                     //setStates to ''
                 }.bind(this),
@@ -241,58 +237,28 @@ class ExercisesTab extends React.Component {
                         </table>
                         <h4>Testcases</h4>
                         <Paper zDepth={2} className="paper" width="100%">
-                            <table className="paper" width="100%">
+                            <table className="paper" style={{ width: "100%", verticalAlign: "top" }}>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                        </td>
-                                        <td style={{ width: "33%", padding: "6px" }}>
-                                            Type:
-                                            &nbsp;
-                                            <DropDownMenu className="language" id="case1Type" value={this.state.selectedCase1Type} onChange={this.handleChangeCase1Type}>
-                                                <MenuItem value={1} primaryText="String" />
-                                                <MenuItem value={2} primaryText="int" />
-                                                <MenuItem value={3} primaryText="boolean" />
-                                                <MenuItem value={4} primaryText="long" />
-                                            </DropDownMenu>
-                                        </td>
-                                        <td style={{ width: "33%", padding: "6px" }}>
+									<tr>
+										<td style={{ width: "45%"}}>
                                             <TextField
-                                                id="case1"
-                                                floatingLabelText="Case 1: Input"
+                                                id="entryMethod"
+                                                floatingLabelText="Name of the entry-method by Java"
                                                 fullWidth={false}
-                                                width="12%"
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                                             />
                                         </td>
-                                        <td>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                        </td>
-                                        <td style={{ width: "33%", padding: "6px" }}>
-                                            Type:
-                                            &nbsp;
-                                            <DropDownMenu className="language" id="case2Type" value={this.state.selectedCase2Type} onChange={this.handleChangeCase2Type}>
-                                                <MenuItem value={1} primaryText="String" />
-                                                <MenuItem value={2} primaryText="int" />
-                                                <MenuItem value={3} primaryText="boolean" />
-                                                <MenuItem value={4} primaryText="long" />
-                                            </DropDownMenu>
-                                        </td>
-                                        <td style={{ width: "33%", padding: "6px" }}>
+                                        
+                                        <td style={{ width: "48%"}}>
                                             <TextField
-                                                id="case2"
-                                                floatingLabelText="Case 2: Input"
-                                                fullWidth={false}
-                                                width="12%"
+                                                id="inputArray"
+                                                floatingLabelText="Test-Inputdata"
+                                                fullWidth={true}
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
+                                                hintText='"input1", "input2", "input3"' 
                                             />
-                                        </td>
-                                        <td>
                                         </td>
                                     </tr>
                                 </tbody>

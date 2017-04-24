@@ -13,19 +13,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.colorado.denver.controller.HibernateController;
-import com.colorado.denver.controller.entityController.RoleController;
+import com.colorado.denver.controller.entityController.PrivilegeController;
 import com.colorado.denver.model.Course;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.model.Lecture;
-import com.colorado.denver.model.Role;
+import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.Solution;
 import com.colorado.denver.model.User;
-import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
-import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.persistence.HibernateSession;
+import com.colorado.denver.services.user.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,7 +40,7 @@ public class PopulateDBWithTestData {
 
 		boolean useUpdate = true;
 		LOGGER.info("Creating session factory..");
-		SessionTools.createSessionFactory(useUpdate);
+		HibernateSession.createSessionFactory(useUpdate);
 		LOGGER.info("Done Creating session factory.");
 
 	}
@@ -52,8 +53,8 @@ public class PopulateDBWithTestData {
 		User tutor2 = createUser("Tim Tutor L2", "password", UserService.ROLE_TUTOR);
 
 		User student = createUser("Peter Student C1", "password", UserService.ROLE_STUDENT);
-		User student2 = createUser("Klaus Student C2", "password", UserService.ROLE_STUDENT);
-		User student3 = createUser("Tom Student C2", "password", UserService.ROLE_STUDENT);
+		User student2 = createUser("Klaus Student C1", "password", UserService.ROLE_STUDENT);
+		User student3 = createUser("Tom Student C1", "password", UserService.ROLE_STUDENT);
 		User student4 = createUser("Karsten Student C3", "password", UserService.ROLE_STUDENT);
 
 		Set<User> usersTutors = new HashSet<User>();
@@ -65,19 +66,19 @@ public class PopulateDBWithTestData {
 		Set<User> usersStudentsC3 = new HashSet<User>();
 
 		usersStudentsC1.add(student);
-		usersStudentsC2.add(student2);
-		usersStudentsC2.add(student3);
+		usersStudentsC1.add(student2);
+		usersStudentsC1.add(student3);
 		usersStudentsC3.add(student4);
 
-		Course course = createCourse("Course 1");
-		Course course2 = createCourse("Course 2");
-		Course course3 = createCourse("Course 3");
-		Course course4 = createCourse("Course 4");
+		Course course = createCourse("WWI 14 SEA");
+		Course course2 = createCourse("WWI 15 SEA");
+		Course course3 = createCourse("IMBIT 14 A");
+		Course course4 = createCourse("AI 16 C");
 
 		student.setCourse(course);
-		student.setCourse(course2);
-		student.setCourse(course2);
-		student.setCourse(course3);
+		student2.setCourse(course);
+		student3.setCourse(course);
+		student4.setCourse(course2);
 		UserService.authorizeSystemuser();
 		User system = UserService.getCurrentUser();
 		system.setCourse(course);
@@ -102,38 +103,15 @@ public class PopulateDBWithTestData {
 		lectures.add(lecture2);
 		lectures.add(lecture3);
 
-		Exercise exercise = createExercise("Fibonacci");
-		exercise.setInput("11");
-		exercise.setInputType("int");
-		exercise.setOutputType("int");
-		exercise.setAnswer("89");
-		exercise.setLanguage("java");
-
-		Set<Exercise> exercises = new HashSet<Exercise>();
-		exercises.add(exercise);
 		system.setLectures(lectures);
-		Solution solution = createSolution("Fibonacci Loesung");
-		Set<Solution> solutions = new HashSet<Solution>();
-		solutions.add(solution);
-
-		solution.setExercise(exercise);
-
 		// student.setLectures(lectures);
 		// student.setExercises(exercises);
-		student.setSolutions(solutions);
-		student.setCourse(course);
-
-		exercise.setOwner(docent);
-		exercise.setLectures(lectures); // setting on both entities gives error: lecture.setExercises(exercises); +
-										// exercise.setLectures(lectures);
 
 		course.setLectures(lectures);
 		course.setOwner(docent);
 
-		lecture.setExercises(exercises);
 		lecture.setOwner(docent);
 
-		hibCtrl.mergeEntity(solution);
 		hibCtrl.mergeEntity(student);
 		hibCtrl.mergeEntity(student2);
 		hibCtrl.mergeEntity(student3);
@@ -141,7 +119,6 @@ public class PopulateDBWithTestData {
 		hibCtrl.mergeEntity(docent);
 		hibCtrl.mergeEntity(tutor1);
 		hibCtrl.mergeEntity(tutor2);
-		hibCtrl.mergeEntity(exercise);
 		hibCtrl.mergeEntity(course);
 		hibCtrl.mergeEntity(course2);
 		hibCtrl.mergeEntity(course3);
@@ -157,10 +134,12 @@ public class PopulateDBWithTestData {
 	private User createUser(String name, String password, String roleName) {
 		User usr = new User();
 		usr.setUsername(name);
-		usr.setPassword(password);
-		Set<Role> roles = new HashSet<Role>();
-		roles.add(RoleController.getRoleByName(roleName));
-		usr.setRoles(roles);
+
+		String salt = BCrypt.gensalt(12);
+		usr.setPassword(BCrypt.hashpw(password, salt));
+		Set<Privilege> roles = new HashSet<Privilege>();
+		roles.add(PrivilegeController.getPrivilegeByName(roleName));
+		usr.setPrivileges(roles);
 		hibCtrl.addEntity(usr);
 		return usr;
 	}
@@ -175,10 +154,6 @@ public class PopulateDBWithTestData {
 	private Exercise createExercise(String title) {
 		Exercise exercise = new Exercise();
 		exercise.setTitle(title);
-		exercise.setAnswer(89 + "");
-		exercise.setInput(11 + "");
-		exercise.setInputType("int");
-		exercise.setOutputType("int");
 		hibCtrl.addEntity(exercise);
 
 		return exercise;

@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+ 
+<hibernate-configuration>
+    <session-factory>
+ 		<!-- 104.40.217.248:5432 -->
+        <!-- Connection settings -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://postgres:5432/Denver</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">password</property>
+    
+  <!--hibernateuser -->
+   <!--breckenridge -->       
+ <!--104.40.217.248:5432 -->
+
+        <!-- Print executed SQL to stdout -->
+        <property name="show_sql">false</property>
+        <property name="format_sql">false</property>
+		<property name="use_sql_comments">false</property>
+
+ 		<property name="hibernate.current_session_context_class">thread</property>
+        <!-- Update all database on startup -->
+  
+ 
+
+    </session-factory>
+</hibernate-configuration>

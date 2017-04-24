@@ -14,10 +14,14 @@ public class EducationEntity extends BaseEntity<EducationEntity> {
 	public static final String OWNER = "owner";
 	public static final String TITLE = "title";
 	public static final String DESCRIPTION = "description";
+	public static final String CREATION_DATE = "creationDate";
 
 	private User owner;
+	// We need this relation but not the actual JSON in the frontend.
+
 	private String title;
 	private String description;
+	private String creationDate;
 
 	public User getOwner() {
 		return owner;
@@ -41,6 +45,14 @@ public class EducationEntity extends BaseEntity<EducationEntity> {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(String creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	@Override

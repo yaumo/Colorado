@@ -1,0 +1,72 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+}
+
+.loginPaperStyle {
+    height: 300px;
+    width: 300px;
+    text-Align: center;
+    display: inline-block;
+}
+
+.loginBackground {
+    background-image: url("feb79baf6d83331b3f47828934c6e9f9.jpg");
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-size: 100% 100%;
+    width: 100%;
+    height: 100%;
+}
+
+.cardMargin{
+    /*beschreibt den Abstand der Cards zueinander*/
+    margin-top: 25px;
+}
+.speedDialButtonMargin{
+    /*setzt den hinzufügen Button  für den Dozent etwas nach unten. Muss ggf. wieder entfernt werden, wenn Daten eingefügt wurden.*/
+    margin-top: 100px;
+}
+.profilLayoutPaperStyle {
+    text-Align: center;
+    width: 400px;
+    display: inline-block;
+}
+
+.paperStyleCoding {
+    width: 100%;
+    display: inline-block;
+}
+
+.mainRow {
+    padding-top: 5em;
+}
+
+.bodyRow {
+    padding-top: 1.5em;
+}
+
+.centeredRow {
+    text-align: center;
+}
+
+.textfieldRow {
+    display: block;
+}
+
+.saveButton {
+    margin-bottom: 30px;
+}
+
+.iconStyles{
+    margin-right: 24px;
+}
+.toolbarSettings{
+    position:fixed;
+    bottom:0;
+}
+html{
+    background-color: #F1F1F1;
+}
