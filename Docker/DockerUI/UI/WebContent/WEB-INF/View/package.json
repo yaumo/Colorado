@@ -1,7 +1,7 @@
 {
-  "name": "sec-frontend",
+  "name": "Colorado",
   "version": "1.0.0",
-  "description": "Frontend-SEC for DHBW Project",
+  "description": "Colorado Frontend",
   "main": "index.jsx",
   "scripts": {
     "start": "webpack && babel-node server.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nbollmann/sec-frontend.git"
+        "url": "git+https://github.com/yaumo/Denver.git"
   },
   "author": "SEC",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nbollmann/sec-frontend/issues"
+    "url": "https://github.com/yaumo/Denver/tree/hateos"
   },
-  "homepage": "https://github.com/nbollmann/sec-frontend#readme",
+  "homepage": "https://github.com/yaumo/Denver/tree/hateos",
   "dependencies": {
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",

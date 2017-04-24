@@ -3,7 +3,7 @@ import request from 'request'
 
 // create Router
 const router = express.Router();
-const url = 'http://backend:8080'
+/*const url = 'http://backend:8080'
 let options = {rejectUnauthorized: false}
 let sess
 
@@ -685,5 +685,5 @@ router.route('/users')
 	}) 
 
 //TODO: ChangePassword
-
+*/
 export default router 

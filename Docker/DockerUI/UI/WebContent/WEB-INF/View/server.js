@@ -47,7 +47,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 let sess;
 
-const users = [
+/*const users = [
     {"username": "s123456", "password": "studentPassword", "isStudent": true, "isAdmin": false},
     {"username": "student", "password": "student", "isStudent": true, "isAdmin": false},
     {"username": "dozent", "password": "dozent", "isStudent": false, "isAdmin": false},
@@ -55,10 +55,10 @@ const users = [
     {"username": "admin", "password": "admin", "isStudent": false, "isAdmin": true},
     {"username": "Mustermann", "password": "Achhhff-35667", "isStudent": false, "isAdmin": false}
   ];
-
+*/
 // serve our static stuff like index.css
 app.use(express.static(path.join(__dirname, 'public')));
-
+/*
 const responseStudentCallback = (req, res) => {
   sess = req.session;
 
@@ -214,7 +214,8 @@ app.get('/Logout', (req, res) => {
 
 // using restInterfaceServer for creating REST Endpoints
 //app.use('/api',restInterfaceServer)
-app.all("/api/*", function(req, res) {
+*/
+app.all("/api/**", function(req, res) {
     req.url = '/' + req.url.split('/').slice(2).join('/');
     console.log('redirecting to Server1');
     apiProxy.web(req, res, {target: serverOne});
