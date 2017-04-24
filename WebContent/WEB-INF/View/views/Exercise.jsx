@@ -36,7 +36,7 @@ export class Exercise extends React.Component {
         return (
             <div>
                 <NavBar setExerciseJSON={this.setState}/>
-                <Content />
+                <Content exerciseJSON={this.state.exerciseJSON} />
             </div>
         );
     }
