@@ -49,7 +49,7 @@ class LecturesTab extends React.Component {
 
     componentDidMount() {
         $.ajax({
-            url: "http://localhost:8181/courses",
+            url: "http://localhost:8181/docent/courses",
             dataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -70,7 +70,7 @@ class LecturesTab extends React.Component {
 
 
         $.ajax({
-            url: "http://localhost:8181/users",
+            url: "http://localhost:8181/docent/users",
             dataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -106,7 +106,7 @@ class LecturesTab extends React.Component {
             });
         } else {
             $.ajax({
-                url: "http://localhost:8181/lecture",
+                url: "http://localhost:8181/docent/lecture",
                 dataType: 'json',
                 method: 'POST',
                 data: {
