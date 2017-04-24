@@ -12,7 +12,6 @@ import org.springframework.web.client.HttpServerErrorException;
 
 import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.BaseEntity;
-import com.colorado.denver.model.EducationEntity;
 import com.colorado.denver.model.User;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.services.security.SecurityCheckPrivilege;
@@ -67,12 +66,16 @@ public class ObjectOperationController {
 	}
 
 	private String create(BaseEntity<?> entity) {
-		if (entity instanceof EducationEntity) {
-			((EducationEntity) entity).setOwner(workingUser);
+		try {
+			return hibCtrl.mergeEntity(entity).getId();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error("MERGE failed! Trying update");
+
+			return hibCtrl.updateEntity(entity, entity.getId()).getId();
 		}
 
-		String id = hibCtrl.addEntity(entity);
-		return id;
 	}
 
 	private BaseEntity<?> read(String id) {
@@ -80,9 +83,6 @@ public class ObjectOperationController {
 	}
 
 	private BaseEntity<?> update(BaseEntity<?> entity) {
-		if (entity instanceof EducationEntity) {
-			((EducationEntity) entity).setOwner(workingUser);
-		}
 
 		try {
 			return hibCtrl.mergeEntity(entity);

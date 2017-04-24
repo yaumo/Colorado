@@ -158,7 +158,7 @@ public class DenverDBSetupTest {
 		try {
 
 			connection = DriverManager.getConnection(
-					"jdbc:postgresql://localhost/Denver", "postgres", "password");
+					"jdbc:postgresql://postgres:5432/Denver", "postgres", "password");
 
 		} catch (SQLException e) {
 
