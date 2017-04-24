@@ -13,7 +13,6 @@ import 'brace/theme/solarized_light';
 import 'brace/ext/language_tools';
 
 class EditorAce extends React.Component {
-	
     render() {
         return (
 		<div>

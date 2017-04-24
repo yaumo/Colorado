@@ -150,6 +150,9 @@
 	<build>
 	<!-- Insert for Jenkins -->
 	<sourceDirectory> ${basedir}/src </sourceDirectory>
+<!--Insert1> -->
+	 <testSourceDirectory>src/test/resources</testSourceDirectory>
+	 <!-- Insert1 end -->
 	<!-- End Insert -->
 	<resources>
     	<resource>
@@ -157,6 +160,13 @@
       	  <filtering>true</filtering>
     	</resource>
 	</resources>
+			<!--Insert 2-->
+		<testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
+    </testResources>
+	<!--Insert2 end -->
 		<plugins>
 		
 			<plugin>

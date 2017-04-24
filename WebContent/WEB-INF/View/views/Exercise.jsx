@@ -20,11 +20,23 @@ import Dialog from 'material-ui/Dialog';
 var courseJSON;
 
 export class Exercise extends React.Component {
+	constructor() {
+        super();
+		this.state = {
+			exerciseJSON: ''
+		};
+		this.setState = this.setState.bind(this);
+	}
+	
+	setState(value){
+		this.setState({exerciseJSON: value});
+	}
+	
     render() {
         return (
             <div>
-                <NavBar />
-                <Content />
+                <NavBar setExerciseJSON={this.setState}/>
+                <Content exerciseJSON={this.state.exerciseJSON} />
             </div>
         );
     }

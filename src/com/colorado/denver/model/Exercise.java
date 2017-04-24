@@ -11,6 +11,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -61,7 +63,7 @@ public class Exercise extends EducationEntity {
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "lectures_exercises", joinColumns = { @JoinColumn(name = "exercises_id") }, inverseJoinColumns = { @JoinColumn(name = "lectures_id") })
-	// @Cascade({ CascadeType.ALL })
+	@Cascade({ CascadeType.ALL })
 	@JsonBackReference
 	public Set<Lecture> getLectures() {
 		return lectures;

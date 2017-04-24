@@ -3,8 +3,6 @@ package com.colorado.denver.model;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @MappedSuperclass
 public class EducationEntity extends BaseEntity<EducationEntity> {
 
@@ -18,7 +16,6 @@ public class EducationEntity extends BaseEntity<EducationEntity> {
 	public static final String DESCRIPTION = "description";
 	public static final String CREATION_DATE = "creationDate";
 
-	@JsonIgnore
 	private User owner;
 	// We need this relation but not the actual JSON in the frontend.
 

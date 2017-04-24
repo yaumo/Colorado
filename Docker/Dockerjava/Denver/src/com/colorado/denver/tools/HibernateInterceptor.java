@@ -27,6 +27,7 @@ public class HibernateInterceptor extends EmptyInterceptor {
 		LOGGER.debug("Interceptor working in update!");
 		boolean worked = false;
 		if (entity instanceof BaseEntity<?>) {
+			LOGGER.debug("Working on entity: " + entity.toString());
 			for (int i = 0; i < propertyNames.length; i++) {
 
 				LOGGER.debug("I'm in: " + i + " for property: " + propertyNames[i]);

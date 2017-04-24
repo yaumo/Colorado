@@ -41,7 +41,7 @@ class NavBar extends React.Component {
             value: 1,
             dropdown: 0,
 			selectedlectureid: '',
-			selectedexerciseid: '',
+			selectedexerciseid: ''
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleClickOnMenu = this.handleClickOnMenu.bind(this);
@@ -66,7 +66,7 @@ class NavBar extends React.Component {
 					this.setState({selectedlectureid: lectureids[0]});
                 }
                 if (exerciseslist.length === 0) {
-                    for (var j = 0; j < coucourseJSON.lectures[0].exercises.length; j++) {
+                    for (var j = 0; j < courseJSON.lectures[0].exercises.length; j++) {
                         exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lectures[0].exercises[j].title} onClick={this.handleClickOnMenu} />);
 						exerciseids.push(courseJSON.lectures[0].exercises[j].id);
                     }
@@ -95,6 +95,7 @@ class NavBar extends React.Component {
             },
             success: function (currentExercise) {
                 currentExerciseJSON = currentExercise;
+				this.props.setExerciseJSON(currentExerciseJSON);
                 //Daten aus der Component müssen in Component Exercise 
             }.bind(this),
             error: function (error) {

@@ -30,21 +30,27 @@ class LecturesTab extends React.Component {
             opendialog: false,
             value: 1,
             selectedCourse: 0,
-			selectedcourseid: '',
+            selectedcourseid: '',
+            dialog: '',
             courselist: [],
-            tableData: []
+            tableData: [],
+            selection: []
         };
         this.handleChangeCourse = this.handleChangeCourse.bind(this);
         this.handleOpenDialog = this.handleOpenDialog.bind(this);
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.handleRowSelection = this.handleRowSelection.bind(this);
     }
     handleChangeCourse(event, index, value) {
         this.setState({ selectedCourse: value });
+        this.setState({ selectedCourse: value });
+        this.setState({ selectedcourseid: courseids[value] });
     }
 
     componentDidMount() {
         $.ajax({
-            url: "http://localhost:8181/courses",
+            url: "https://192.168.99.100:8081/api/courses",
             dataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -55,16 +61,17 @@ class LecturesTab extends React.Component {
                 if (courselist.length === 0) {
                     for (var i = 0; i < coursesJSON.length; i++) {
                         courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
-						//courseids.push(coursesJSON[i].id);
+                        courseids.push(coursesJSON[i].id);
                     }
                 }
                 this.setState({ courselist: courselist });
+                this.setState({ selectedcourseid: courseids[0] });
             }.bind(this)
         });
 
 
         $.ajax({
-            url: "http://localhost:8181/users",
+            url: "https://192.168.99.100:8081/api/users",
             dataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -83,13 +90,55 @@ class LecturesTab extends React.Component {
         this.setState({ opendialog: false });
     }
     handleClick(e) {
+        var courseID = this.state.selectedcourseid;
+        var title = $("#lectureTitle")[0].value.toString();
+        var tutors = this.state.selection;
+        var tutorJSON = [];
 
+        for (var i = 0; i < tutors.length; i++) {
+            var userId = this.state.tableData[tutors[i]].id;
+            tutorJSON[i] = { "userId": userId };
+        }
+
+        if (title === "") {
+            this.setState({
+                opendialog: true,
+                dialog: "Please select a title"
+            });
+        } else {
+            $.ajax({
+                url: "https://192.168.99.100:8081/api/lecture",
+                dataType: 'json',
+                method: 'POST',
+                data: {
+                    "courseId": courseID,
+                    "title": title,
+                    "tutors": tutorJSON
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    this.setState({
+                        opendialog: true,
+                        dialog: "Lecture successfully created"
+                    });
+                }.bind(this),
+                error: function (error) {
+                    console.log("läuft nicht")
+                }.bind(this),
+            });
+        }
     }
-	
-	handleChangeCourse(event, index, value){
-		this.setState({selectedCourse: value});
-		//this.setState({selectedcourseid: courseids[value]});
-	}
+
+    handleChangeCourse(event, index, value) {
+        this.setState({ selectedCourse: value });
+        this.setState({ selectedcourseid: courseids[value] });
+    }
+
+    handleRowSelection(key) {
+        this.setState({ selection: key });
+    }
 
     render() {
         return (
@@ -110,6 +159,7 @@ class LecturesTab extends React.Component {
                         <h4>Step 2: Name Lecture</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <TextField
+                                id="lectureTitle"
                                 floatingLabelText="Lecture Name"
                                 fullWidth={false}
                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
@@ -121,10 +171,13 @@ class LecturesTab extends React.Component {
                         <h4>Step 3: Select Tutors</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <Table multiSelectable={true} style={{ textAlign: "center", background: "#d1d1d1" }}
+                                onRowSelection={this.handleRowSelection}
                             >
                                 <TableHeader displaySelectAll={false} >
                                     <TableRow>
-                                        <TableHeaderColumn>Name</TableHeaderColumn>
+                                        <TableHeaderColumn>Last Name</TableHeaderColumn>
+                                        <TableHeaderColumn>First Name</TableHeaderColumn>
+                                        <TableHeaderColumn>Username</TableHeaderColumn>
                                         <TableHeaderColumn>E-Mail</TableHeaderColumn>
                                         <TableHeaderColumn className="hidden">userID</TableHeaderColumn>
                                     </TableRow>
@@ -132,9 +185,11 @@ class LecturesTab extends React.Component {
                                 <TableBody deselectOnClickaway={false}>
                                     {this.state.tableData.map((row, index) => (
                                         <TableRow key={index} selected={row.selected}>
+                                            <TableRowColumn>{row.lastName}</TableRowColumn>
+                                            <TableRowColumn>{row.firstName}</TableRowColumn>
                                             <TableRowColumn>{row.username}</TableRowColumn>
                                             <TableRowColumn>{row.mail}</TableRowColumn>
-                                            <TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
+                                            <TableRowColumn className="hidden">{row.id}</TableRowColumn>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -149,13 +204,13 @@ class LecturesTab extends React.Component {
                             backgroundColor="#bd051f"
                             labelColor="#FFFFFF" />
                         <Dialog
-                            title="Dialog With Actions"
+                            title="Information"
                             modal={false}
                             open={this.state.opendialog}
                             onRequestClose={this.handleCloseDialog}
                         >
-                            The actions in this window were passed in as an array of React objects.
-						</Dialog>
+                            {this.state.dialog}
+                        </Dialog>
                     </CardActions>
                 </Card>
             </div>

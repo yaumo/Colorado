@@ -16,6 +16,7 @@ import EditorAce from './EditorAce.jsx';
 import Menu from 'material-ui/Menu';
 import Avatar from 'material-ui/Avatar';
 import TextField from 'material-ui/TextField';
+import Dialog from 'material-ui/Dialog';
 
 var lecture = '';
 var exercise = '';
@@ -40,6 +41,7 @@ class OverviewTab extends React.Component {
 		super();
 		this.state = {
 			open: false,
+            opendialog: false,
 			value: 1,
 			selectedLecture: 0,
 			selectedCourse: 0,
@@ -52,12 +54,10 @@ class OverviewTab extends React.Component {
 			lecturelist: [],
 			selectedlectureid: '',
 			exerciselist: [],
-			selectedexercisid: '',
+			selectedexerciseid: '',
 			userlist: [],
-			overviewlist: [{
-				name: "Please select a course,",
-				status: "lecture and an exercise"
-			}],
+			dialog: [],
+			overviewlist: [],
 			allUsers: ''
 		};
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
@@ -66,42 +66,54 @@ class OverviewTab extends React.Component {
 		this.handleClickViewCode = this.handleClickViewCode.bind(this);
 		this.handleRequestClose = this.handleRequestClose.bind(this);
 		this.handleClickSearch = this.handleClickSearch.bind(this);
+		this.handleOpenDialog = this.handleOpenDialog.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
 	}
 
 	componentDidMount() {
 		$.ajax({
-			url: "http://localhost:8181/courses",
+			url: "https://192.168.99.100:8081/api/courses",
 			dataType: 'json',
 			method: 'GET',
 			xhrFields: {
-                    withCredentials: true
-            },
+				withCredentials: true
+			},
 			success: function (courses) {
 				coursesJSON = courses;
 				if (courselist.length === 0) {
 					for (var i = 0; i < coursesJSON.length; i++) {
 						courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
-						//courseids.push(courseJSON[i].courseid);
-						//this.setState({selectedcourseid: courseids[0]});
+						courseids.push(coursesJSON[i].id);
+						this.setState({ selectedcourseid: courseids[0] });
 					}
 				}
 				if (lecturelist.length === 0) {
 					lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
-					//lectureids.push('');
+					lectureids.push('');
 					for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
 						lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[j - 1].title} />);
-						//lectureids.push(courseJSON[0].lecture[j - 1].id);
-						//this.setState({selectedlectureid: lectureids[0]});
+						lectureids.push(coursesJSON[0].lectures[j - 1].id);
+						this.setState({ selectedlectureid: lectureids[0] });
 					}
 				}
 				if (exerciselist.length === 0) {
 					exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
-					//exerciseids.push('');
-					//this.setState({selectedexercisid: exerciseids[0]});
+					if (coursesJSON[0].lectures[0]) {
+						if (coursesJSON[0].lectures[0].exercises) {
+							for (var j = 1; j <= coursesJSON[0].lectures[0].exercises.length; j++) {
+								exerciselist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[0].exercises[1 - j].title} />);
+							}
+						}
+					}
+					exerciseids.push('');
+					this.setState({ selectedexerciseid: exerciseids[0] });
 				}
 				this.setState({ courselist: courselist });
 				this.setState({ lecturelist: lecturelist });
 				this.setState({ exerciselist: exerciselist });
+				this.setState({ selectedLecture: 0 });
+				this.setState({ selectedExercise: 0 });
+				this.setState({ disabledDropDownExercise: false });
 			}.bind(this)
 		});
 	}
@@ -113,25 +125,25 @@ class OverviewTab extends React.Component {
 
 		for (var i = 0; i < countLectures; i++) {
 			lecturelist.pop();
-			//lectureids.pop();
+			lectureids.pop();
 		}
 		for (var i = 0; i < countExercises; i++) {
 			exerciselist.pop();
-			//exerciseids.pop();
+			exerciseids.pop();
 		}
 		lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
-		//lectureids.push('');
+		lectureids.push('');
 		for (var j = 1; j <= coursesJSON[value].lectures.length; j++) {
 			lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
-			//lectureids.push(courseJSON[value].lecture[j - 1].id);
-			//this.setState({selectedlectureid: lectureids[0]});
+			lectureids.push(coursesJSON[value].lectures[j - 1].id);
+			this.setState({ selectedlectureid: lectureids[0] });
 		}
 
 		exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
-		//exerciseids.push('');
-		//this.setState({selectedexercisid: exerciseids[0]});
+		exerciseids.push('');
+		this.setState({ selectedexerciseid: exerciseids[0] });
 
-		//this.setState({selectedcourseid: courseids[value]});
+		this.setState({ selectedcourseid: courseids[value] });
 		this.setState({ selectedCourse: value });
 		this.setState({ selectedLecture: 0 });
 		this.setState({ selectedExercise: 0 });
@@ -141,46 +153,61 @@ class OverviewTab extends React.Component {
 		var count = exerciselist.length;
 		for (var i = 0; i < count; i++) {
 			exerciselist.pop();
-			//exerciseids.pop();
+			exerciseids.pop();
 		}
 		if (value != 0) {
 			exerciselist.push(<MenuItem value={0} key={0} primaryText={'All Exercises'} />);
-			//exerciseids.push('');
+			exerciseids.push('');
 			this.setState({ disabledDropDownExercise: false });
 			for (var k = 1; k <= coursesJSON[this.state.selectedCourse].lectures[value - 1].exercises.length; k++) {
 				exerciselist.push(<MenuItem value={k} key={k} primaryText={coursesJSON[this.state.selectedCourse].lectures[value - 1].exercises[k - 1].title} />);
-				//exerciseids.push(this.state.selectedCourse].lectures[value - 1].exercises[k - 1].id)
+				exerciseids.push(coursesJSON[this.state.selectedCourse].lectures[value - 1].exercises[k - 1].id)
 			}
 		}
 		else {
 			exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
 			this.setState({ disabledDropDownExercise: true });
-			//exerciseids.push('');
+			exerciseids.push('');
 		}
 		this.setState({ selectedLecture: value });
 		this.setState({ selectedExercise: 0 });
-		//this.setState({selectedexercisid: exerciseids[0]});
+		this.setState({ selectedlectureid: lectureids[value] });
+		this.setState({ selectedexerciseid: exerciseids[0] });
 	}
 
 	handleChangeExercise(event, index, value) {
 		this.setState({ selectedExercise: value });
-		//this.setState({ selectedexercisid: exerciseids[value]});
+		this.setState({ selectedexerciseid: exerciseids[value] });
 	}
 
+	handleOpenDialog(event, index, value) {
+        this.setState({ opendialog: true });
+    }
+    handleCloseDialog(event, index, value) {
+        this.setState({ opendialog: false });
+    }
+
 	handleClickViewCode(event, index, value) {
+		var lectureID = this.state.selectedlectureid;
+		var exerciseID = this.state.selectedexerciseid;
+		var userID = event.currentTarget.parentElement.parentElement.cells[4].innerText;
+
 		$.ajax({
-			url: "http://localhost:8181/docent/solution",
+			url: "https://192.168.99.100:8081/api/docent/solution",
 			dataType: 'json',
 			method: 'GET',
 			xhrFields: {
 				withCredentials: true
 			},
-			//data: 'owner=2 exerciseID=1',
+			data: {
+				"excId": exerciseID,
+				"usrId": userID
+			},
 			success: function (solution) {
 				solutionJSON = solution;
-				lecture = event.currentTarget.parentElement.parentElement.cells[1].innerText;
-				exercise = event.currentTarget.parentElement.parentElement.cells[2].innerText;
-				name = event.currentTarget.parentElement.parentElement.cells[3].innerText;
+				//lecture = event.currentTarget.parentElement.parentElement.cells[1].innerText;
+				//exercise = event.currentTarget.parentElement.parentElement.cells[2].innerText;
+				name = event.currentTarget.parentElement.parentElement.cells[0].innerText;
 
 				this.setState({
 					open: true
@@ -198,24 +225,49 @@ class OverviewTab extends React.Component {
 	}
 
 	handleClickSearch(e) {
-		$.ajax({
-			url: "http://localhost:8181/docent/solutions",
-			dataType: 'json',
-			method: 'GET',
-			xhrFields: {
-				withCredentials: true
-			},
-			//data: 'lectureID=2 exerciseID=1',
-			success: function (solutions) {
-				solutionsJSON = solution;
-				this.setState({
-					overviewlist: solutionsJSON
-				});
-			}.bind(this),
-			error: function (error) {
-				//handle error
-			}.bind(this)
-		});
+		var lectureID = this.state.selectedlectureid;
+		var exerciseID = this.state.selectedexerciseid;
+
+		if (lectureID === "") {
+			this.setState({
+				opendialog: true,
+				dialog: "Please select a Lecture"
+			});
+		}
+		else if (exerciseID === "") {
+			this.setState({
+				opendialog: true,
+				dialog: "Please select a Exercise"
+			});
+		}
+		else {
+			$.ajax({
+				url: "https://192.168.99.100:8081/api/docent/solutions",
+				dataType: 'json',
+				method: 'GET',
+				xhrFields: {
+					withCredentials: true
+				},
+				data: {
+					"lectureId": lectureID,
+					"exerciseId": exerciseID
+				},
+				success: function (solutions) {
+					solutionsJSON = solutions;
+					for (var i = 0; i < solutionsJSON.length; i++) {
+						solutionsJSON[i].username = solutionsJSON[i].owner.username;
+						solutionsJSON[i].id = solutionsJSON[i].owner.id;
+						solutionsJSON[i].correct = solutionsJSON[i].correct.toString();
+					}
+					this.setState({
+						overviewlist: solutionsJSON
+					});
+				}.bind(this),
+				error: function (error) {
+					//handle error
+				}.bind(this)
+			});
+		}
 	}
 
 	render() {
@@ -246,33 +298,27 @@ class OverviewTab extends React.Component {
 										</TableHeaderColumn>
 									</TableRow>
 									<TableRow style={{ background: "#d1d1d1" }}>
-										<TableHeaderColumn>Course</TableHeaderColumn>
-										<TableHeaderColumn>Lecture</TableHeaderColumn>
-										<TableHeaderColumn>Exercise</TableHeaderColumn>
 										<TableHeaderColumn>Name</TableHeaderColumn>
 										<TableHeaderColumn>Status</TableHeaderColumn>
 										<TableHeaderColumn>View Code</TableHeaderColumn>
-										<TableHeaderColumn className="hidden">exerciseID</TableHeaderColumn>
-										<TableHeaderColumn className="hidden">userID</TableHeaderColumn>
-										<TableHeaderColumn className="hidden">lectureID</TableHeaderColumn>
+										<TableHeaderColumn >exerciseID</TableHeaderColumn>
+										<TableHeaderColumn >userID</TableHeaderColumn>
+										<TableHeaderColumn >lectureID</TableHeaderColumn>
 									</TableRow>
 								</TableHeader>
 								<TableBody displayRowCheckbox={false} style={{ background: "#d1d1d1" }}>
 									{this.state.overviewlist.map((row, index) => (
 										<TableRow key={index} selected={row.selected}>
-											<TableRowColumn>{this.state.selectedCourse}</TableRowColumn>
-											<TableRowColumn>{this.state.selectedLecture}</TableRowColumn>
-											<TableRowColumn>{this.state.selectedExercise}</TableRowColumn>
-											<TableRowColumn>{row.name}</TableRowColumn>
-											<TableRowColumn>{row.status}</TableRowColumn>
+											<TableRowColumn>{row.username}</TableRowColumn>
+											<TableRowColumn>{row.correct}</TableRowColumn>
 											<TableRowColumn>
 												<IconButton onClick={this.handleClickViewCode}>
 													<ActionCode />
 												</IconButton>
 											</TableRowColumn>
-											<TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
-											<TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
-											<TableRowColumn className="hidden">{row.hibId}</TableRowColumn>
+											<TableRowColumn >{this.state.selectedexerciseid}</TableRowColumn>
+											<TableRowColumn >{row.id}</TableRowColumn>
+											<TableRowColumn >{this.state.selectedlectureid}</TableRowColumn>
 										</TableRow>
 									))}
 								</TableBody>
@@ -342,6 +388,13 @@ class OverviewTab extends React.Component {
 						</Paper>
 					</CardText>
 					<CardActions className="footer">
+						<Dialog
+                            title="Information"
+                            modal={false}
+                            open={this.state.opendialog}
+                            onRequestClose={this.handleCloseDialog}>
+                            {this.state.dialog}
+                        </Dialog>
 					</CardActions>
 				</Card>
 			</div>

@@ -27,7 +27,6 @@ import com.colorado.denver.model.User;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
 import com.colorado.denver.services.persistence.HibernateSession;
 import com.colorado.denver.services.user.UserService;
-import com.colorado.denver.tools.DenverConstants;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -80,9 +79,6 @@ public class PopulateDBWithTestData {
 		student2.setCourse(course);
 		student3.setCourse(course);
 		student4.setCourse(course2);
-		UserService.authorizeSystemuser();
-		User system = UserService.getCurrentUser();
-		system.setCourse(course);
 		Lecture lecture = createLecture("Programmieren I");
 		Lecture lecture2 = createLecture("Programmieren II");
 		Lecture lecture3 = createLecture("Programmieren III");
@@ -104,33 +100,11 @@ public class PopulateDBWithTestData {
 		lectures.add(lecture2);
 		lectures.add(lecture3);
 
-		Exercise exercise = createExercise("Fibonacci");
-		exercise.setLanguage(DenverConstants.JAVA);
-
-		Set<Exercise> exercises = new HashSet<Exercise>();
-		exercises.add(exercise);
-		system.setLectures(lectures);
-		Solution solution = createSolution("Fibonacci Loesung");
-		Set<Solution> solutions = new HashSet<Solution>();
-		solutions.add(solution);
-
-		solution.setExercise(exercise);
-
-		// student.setLectures(lectures);
-		// student.setExercises(exercises);
-		student.setSolutions(solutions);
-
-		exercise.setOwner(docent);
-		exercise.setLectures(lectures); // setting on both entities gives error: lecture.setExercises(exercises); +
-										// exercise.setLectures(lectures);
-
 		course.setLectures(lectures);
 		course.setOwner(docent);
 
-		lecture.setExercises(exercises);
 		lecture.setOwner(docent);
 
-		hibCtrl.mergeEntity(solution);
 		hibCtrl.mergeEntity(student);
 		hibCtrl.mergeEntity(student2);
 		hibCtrl.mergeEntity(student3);
@@ -138,7 +112,6 @@ public class PopulateDBWithTestData {
 		hibCtrl.mergeEntity(docent);
 		hibCtrl.mergeEntity(tutor1);
 		hibCtrl.mergeEntity(tutor2);
-		hibCtrl.mergeEntity(exercise);
 		hibCtrl.mergeEntity(course);
 		hibCtrl.mergeEntity(course2);
 		hibCtrl.mergeEntity(course3);
@@ -147,7 +120,6 @@ public class PopulateDBWithTestData {
 		hibCtrl.mergeEntity(lecture2);
 		hibCtrl.mergeEntity(lecture3);
 		hibCtrl.mergeEntity(lecture4);
-		hibCtrl.mergeEntity(system);
 
 	}
 
