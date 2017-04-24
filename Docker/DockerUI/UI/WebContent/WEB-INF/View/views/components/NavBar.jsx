@@ -41,7 +41,7 @@ class NavBar extends React.Component {
             value: 1,
             dropdown: 0,
 			selectedlectureid: '',
-			selectedexerciseid: '',
+			selectedexerciseid: ''
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleClickOnMenu = this.handleClickOnMenu.bind(this);
@@ -50,7 +50,7 @@ class NavBar extends React.Component {
 
     componentDidMount() {
         $.ajax({
-            url: "https://192.168.99.100:8081/api/course",
+            url: "https://192.168.99.100:8081/course",
             ddataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -87,7 +87,7 @@ class NavBar extends React.Component {
 		
 
          $.ajax({
-            url: "https://192.168.99.100:8081/api/exercise",
+            url: "https://192.168.99.100:8081/exercise",
             dataType: 'json',
             method: 'GET',
             data: {
@@ -95,6 +95,7 @@ class NavBar extends React.Component {
             },
             success: function (currentExercise) {
                 currentExerciseJSON = currentExercise;
+				this.props.setExerciseJSON(currentExerciseJSON);
                 //Daten aus der Component müssen in Component Exercise 
             }.bind(this),
             error: function (error) {
@@ -126,7 +127,7 @@ class NavBar extends React.Component {
         }
         else {
             $.ajax({
-                url: "https://192.168.99.100:8081/api/logout",
+                url: "https://192.168.99.100:8081/logout",
                 dataType: 'json',
                 method: 'POST',
                 xhrFields: {

@@ -122,12 +122,9 @@ class ExercisesTab extends React.Component {
         }
         else {
             $.ajax({
-                url: "https:192.168.99.100:8081/api/exercise",
+                url: "https://192.168.99.100:8081/docent/exercise",
                 dataType: 'json',
                 method: 'POST',
-                xhrFields: {
-                    withCredentials: true
-                },
                 data: JSON.stringify({
                     "title": title,
                     "description": description,
@@ -148,7 +145,7 @@ class ExercisesTab extends React.Component {
                 error: function (error) {
                     this.setState({
                         opendialog: true,
-                        dialog: "An error has occoured. Please make sure that you are logged in and have the permission to create new exercises."
+                        dialog: "An error has occurred. Please make sure that you are logged in and have the permission to create new exercises."
                     });
                 }.bind(this)
             });
