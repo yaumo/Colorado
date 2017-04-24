@@ -177,7 +177,6 @@ class LecturesTab extends React.Component {
                                         <TableHeaderColumn>Last Name</TableHeaderColumn>
                                         <TableHeaderColumn>First Name</TableHeaderColumn>
                                         <TableHeaderColumn>Username</TableHeaderColumn>
-                                        <TableHeaderColumn>E-Mail</TableHeaderColumn>
                                         <TableHeaderColumn className="hidden">userID</TableHeaderColumn>
                                     </TableRow>
                                 </TableHeader>
@@ -187,7 +186,6 @@ class LecturesTab extends React.Component {
                                             <TableRowColumn>{row.lastName}</TableRowColumn>
                                             <TableRowColumn>{row.firstName}</TableRowColumn>
                                             <TableRowColumn>{row.username}</TableRowColumn>
-                                            <TableRowColumn>{row.mail}</TableRowColumn>
                                             <TableRowColumn className="hidden">{row.id}</TableRowColumn>
                                         </TableRow>
                                     ))}
