@@ -61,6 +61,7 @@ public class SecurityConfig {
 		public void configure(WebSecurity web) throws Exception {
 			web.debug(true);
 		}
+
 	}
 
 	@Configuration
