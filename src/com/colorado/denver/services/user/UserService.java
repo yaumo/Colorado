@@ -52,6 +52,13 @@ public class UserService {
 
 	}
 
+	public static UsernamePasswordAuthenticationToken authorizeUser(User user) {
+		Privilege role = PrivilegeController.getPrivilegeByName(ROLE_STUDENT);
+		List<Privilege> roles = new ArrayList<>();
+		roles.add(role);
+		return authorizeUserByLoginName(user.getUsername(), user.getPassword(), roles);
+	}
+
 	public static UsernamePasswordAuthenticationToken authorizeSystemuser() {
 		Privilege role = PrivilegeController.getPrivilegeByName(ROLE_ADMIN);
 		List<Privilege> roles = new ArrayList<>();

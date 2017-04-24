@@ -31,7 +31,7 @@ public class LectureController extends ObjectOperationController {
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
 		// gb.serializeNulls();
-		gb.generateNonExecutableJson();
+		gb.serializeNulls();
 		Gson gson = gb.create();
 		System.out.println(jsonString);
 
@@ -41,7 +41,15 @@ public class LectureController extends ObjectOperationController {
 		} catch (HttpServerErrorException e) {
 			e.printStackTrace();
 		}
-		return (Lecture) super.doDatabaseOperation(entity, DenverConstants.POST);
+		entity = (Lecture) super.doDatabaseOperation(entity, DenverConstants.POST);
+		Course crs = entity.getCourse();
+
+		crs.getLectures().add(entity);
+		System.out.println("Updateing course");
+		super.doDatabaseOperation(crs, DenverConstants.PATCH);
+
+		System.out.println("Updated course succesfully");
+		return entity;
 	}
 
 	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Lecture.LECTURE, method = RequestMethod.PATCH)
@@ -50,7 +58,7 @@ public class LectureController extends ObjectOperationController {
 		String jsonString = GenericTools.getRequestBody();
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
-		gb.generateNonExecutableJson();
+		gb.serializeNulls();
 		Gson gson = gb.create();
 		System.out.println(jsonString);
 		Lecture entity = gson.fromJson(jsonString, Lecture.class);
@@ -61,7 +69,7 @@ public class LectureController extends ObjectOperationController {
 		}
 
 		LOGGER.error("the request is: " + jsonString);
-
+		entity = (Lecture) super.doDatabaseOperation(entity, DenverConstants.PATCH);
 		entity = CourseService.createSolutionsForCourseAsssignment(entity);
 		entity = (Lecture) super.doDatabaseOperation(entity, DenverConstants.PATCH);
 		return entity;
