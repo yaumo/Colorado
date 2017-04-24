@@ -30,8 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.addFilterBefore(new BasicAuthenticationFilter(authenticationManagerBean()), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests()
 				.antMatchers("/docent/**").hasRole("DOCENT")
+				.antMatchers("/login").permitAll()
 				.antMatchers("/**").hasRole("STUDENT")
-				.anyRequest().authenticated();
+				.anyRequest().authenticated()
+				.and().httpBasic();
 
 	}
 
