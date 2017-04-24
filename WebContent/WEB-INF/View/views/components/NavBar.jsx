@@ -72,8 +72,9 @@ class NavBar extends React.Component {
                     }
                 }
                 this.setState({
-
+                    selectedexerciseid: exerciseids[0]
                 });
+                handleClick(0);
             }.bind(this),
             error: function (error) {
 
@@ -81,7 +82,7 @@ class NavBar extends React.Component {
         });
     }
 
-    handleClickOnMenu(event, index, value){
+    handleClickOnMenu(value){
         var exerciseID = exerciseids[value];
         //exerciseID auslesen!
 		

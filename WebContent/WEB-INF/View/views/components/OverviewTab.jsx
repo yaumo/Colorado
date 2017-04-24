@@ -237,7 +237,7 @@ class OverviewTab extends React.Component {
 		else if (exerciseID === "") {
 			this.setState({
 				opendialog: true,
-				dialog: "Please select a Exercise"
+				dialog: "Please select an Exercise"
 			});
 		}
 		else {
