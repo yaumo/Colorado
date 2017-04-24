@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.colorado.denver.services.user.MyUserDetailsService;
 
@@ -30,8 +29,8 @@ public class SecurityConfig {
 					.antMatchers("/docent/**").hasRole("DOCENT")
 					.and().httpBasic()
 					.and().sessionManagement()
-					.invalidSessionUrl("/logout")
-					.and().addFilterAfter(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
+					.invalidSessionUrl("/logout");
+			// .and().addFilterAfter(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
 
 			super.configure(http);
 		}
@@ -49,10 +48,10 @@ public class SecurityConfig {
 		protected void configure(HttpSecurity http) throws Exception {
 			http.csrf().disable()
 					.authorizeRequests()
-					.antMatchers("/registration").permitAll()
+					.antMatchers("/**").hasRole("STUDENT")
 					.and().httpBasic()
-					.and().sessionManagement().invalidSessionUrl("/logout")
-					.and().addFilterAfter(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
+					.and().sessionManagement().invalidSessionUrl("/logout");
+			// .and().addFilterAfter(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
 
 			super.configure(http);
 		}
@@ -66,69 +65,26 @@ public class SecurityConfig {
 
 	@Configuration
 	public static class StudentSecurityConfig extends WebSecurityConfigurerAdapter {
+
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.csrf().disable()
 					.authorizeRequests()
-					.antMatchers("/**").hasRole("STUDENT")
+					.antMatchers("/registration").permitAll()
+					.anyRequest().authenticated()
 					.and().httpBasic()
-					.and().sessionManagement().invalidSessionUrl("/logout")
-					.and().addFilterAfter(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
+					.and().sessionManagement().invalidSessionUrl("/logout");
+			// .and().addFilterAfter(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
 
 			super.configure(http);
 		}
 
 		@Override
 		public void configure(WebSecurity web) throws Exception {
+
 			web.debug(true);
 		}
 	}
-
-	/*
-	 * @Override
-	 * protected void configure(HttpSecurity http) throws Exception {
-	 * 
-	 * http.csrf().disable()
-	 * .authorizeRequests()
-	 * .antMatchers("/registration").permitAll()
-	 * .antMatchers("/docent/**").hasRole("DOCENT")
-	 * .antMatchers("/**").hasRole("STUDENT")
-	 * // .antMatchers("/docent/**").hasRole("ADMIN")
-	 * .anyRequest().authenticated()
-	 * .and().httpBasic()
-	 * .and().sessionManagement()
-	 * .invalidSessionUrl("/logout")
-	 * .and().addFilterAfter(new BasicAuthenticationFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
-	 * 
-	 * super.configure(http);
-	 * // .authorizeRequests()
-	 * // .anyRequest().authenticated()
-	 * // .formLogin()
-	 * // .loginPage("/login")
-	 * // .permitAll()
-	 * // .loginProcessingUrl("/login")
-	 * // .usernameParameter("username")
-	 * // .passwordParameter("password")
-	 * // .defaultSuccessUrl("/exercise")
-	 * // .successHandler(customSuccessHandler)
-	 * // .failureUrl("/login?error")
-	 * // .and()
-	 * // .logout()
-	 * // .logoutSuccessUrl("/login?logout");
-	 * 
-	 * // http.csrf().disable().authorizeRequests()
-	 * //
-	 * // .anyRequest()
-	 * // .authenticated()
-	 * // .and()
-	 * // .formLogin()
-	 * // .loginPage("/login")
-	 * // .permitAll()
-	 * // .successHandler(successHandler);
-	 * 
-	 * // .addFilterBefore(new CORSFilter(), ChannelProcessingFilter.class);
-	 * }
-	 */
 
 	@Autowired
 	MyUserDetailsService userDetailsService;
