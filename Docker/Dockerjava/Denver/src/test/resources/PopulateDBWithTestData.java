@@ -30,7 +30,7 @@ import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.DenverConstants;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = DenverApplicationTests.class)
+@SpringBootTest(classes = PopulateDBWithTestData.class)
 public class PopulateDBWithTestData {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PopulateDBWithTestData.class);
