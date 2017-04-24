@@ -79,9 +79,6 @@ public class PopulateDBWithTest {
 		student2.setCourse(course);
 		student3.setCourse(course);
 		student4.setCourse(course2);
-		UserService.authorizeSystemuser();
-		User system = UserService.getCurrentUser();
-		system.setCourse(course);
 		Lecture lecture = createLecture("Programmieren I");
 		Lecture lecture2 = createLecture("Programmieren II");
 		Lecture lecture3 = createLecture("Programmieren III");
@@ -103,10 +100,6 @@ public class PopulateDBWithTest {
 		lectures.add(lecture2);
 		lectures.add(lecture3);
 
-		system.setLectures(lectures);
-		// student.setLectures(lectures);
-		// student.setExercises(exercises);
-
 		course.setLectures(lectures);
 		course.setOwner(docent);
 
@@ -127,7 +120,6 @@ public class PopulateDBWithTest {
 		hibCtrl.mergeEntity(lecture2);
 		hibCtrl.mergeEntity(lecture3);
 		hibCtrl.mergeEntity(lecture4);
-		//hibCtrl.mergeEntity(system);
 
 	}
 

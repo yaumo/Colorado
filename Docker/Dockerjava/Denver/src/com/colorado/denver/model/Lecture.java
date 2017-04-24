@@ -17,14 +17,12 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "Lecture")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-@JsonIgnoreProperties({ "owner" })
+// @JsonIgnoreProperties({ "owner" })
 public class Lecture extends EducationEntity {
 	/**
 	 * 
@@ -56,8 +54,8 @@ public class Lecture extends EducationEntity {
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "lectures_exercises", joinColumns = { @JoinColumn(name = "lectures_id") }, inverseJoinColumns = { @JoinColumn(name = "exercises_id") })
-	// @Cascade({ CascadeType.ALL })
-	@JsonManagedReference
+	@Cascade({ CascadeType.ALL })
+	// @JsonManagedReference
 	public Set<Exercise> getExercises() {
 		return exercises;
 	}

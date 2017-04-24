@@ -37,7 +37,7 @@ public class DenverDBSetupTest {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverDBSetupTest.class);
 
-	@Before
+		@Before
 	public void before() {
 		// Using hibernate config file!
 		boolean useUpdate = false;
@@ -89,7 +89,7 @@ public class DenverDBSetupTest {
 
 	private Privilege createPrivilege(String name) {
 		LOGGER.info(
-				"Creating new Privilege in Database CREATE! If you try to create roles during 'update' YOU'LL FUCK EVERYTHING UP");
+				"Creating new roles in Database CREATE! If you try to create roles during 'update' YOU'LL FUCK EVERYTHING UP");
 		LOGGER.info("Database Update mode not supported. (DIY)");
 		Privilege role = new Privilege();
 		role.setPrivilegeName(name);
@@ -158,7 +158,7 @@ public class DenverDBSetupTest {
 		try {
 
 			connection = DriverManager.getConnection(
-					"jdbc:postgresql://postgres:5432/Denver", "postgres", "password");
+					"jdbc:postgresql://localhost/Denver", "postgres", "password");
 
 		} catch (SQLException e) {
 
@@ -171,7 +171,7 @@ public class DenverDBSetupTest {
 		if (connection != null) {
 			try {
 				Statement stmt = connection.createStatement();
-				String sql = "drop sequence if exists course_sequence;drop sequence if exists exercise_sequence;drop sequence if exists lecture_sequence;drop sequence if exists role_sequence;drop sequence if exists solution_sequence;drop sequence if exists user_sequence;";
+				String sql = "drop sequence if exists course_sequence;drop sequence if exists exercise_sequence;drop sequence if exists lecture_sequence;drop sequence if exists privilege_sequence;drop sequence if exists solution_sequence;drop sequence if exists user_sequence;";
 				stmt.executeUpdate(sql);
 				if (connection != null)
 					connection.close();
