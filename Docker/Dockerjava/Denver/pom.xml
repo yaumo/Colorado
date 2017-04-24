@@ -167,11 +167,6 @@
       </testResource>
     </testResources>
 	<!--Insert2 end -->
-    	<resource>
-      	  <directory>src/main/resources</directory>
-      	  <filtering>true</filtering>
-    	</resource>
-	</resources>
 		<plugins>
 		
 			<plugin>
