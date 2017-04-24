@@ -122,7 +122,7 @@ class ExercisesTab extends React.Component {
         }
         else {
             $.ajax({
-                url: "https://192.168.99.100:8081/docent/exercise",
+                url: "https://192.168.99.100:8081/api/docent/exercise",
                 dataType: 'json',
                 method: 'POST',
                 data: JSON.stringify({

@@ -50,7 +50,7 @@ class NavBar extends React.Component {
 
     componentDidMount() {
         $.ajax({
-            url: "https://192.168.99.100:8081/course",
+            url: "https://192.168.99.100:8081/api/course",
             ddataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -87,7 +87,7 @@ class NavBar extends React.Component {
 		
 
          $.ajax({
-            url: "https://192.168.99.100:8081/exercise",
+            url: "https://192.168.99.100:8081/api/exercise",
             dataType: 'json',
             method: 'GET',
             data: {
@@ -127,7 +127,7 @@ class NavBar extends React.Component {
         }
         else {
             $.ajax({
-                url: "https://192.168.99.100:8081/logout",
+                url: "https://192.168.99.100:8081/api/logout",
                 dataType: 'json',
                 method: 'POST',
                 xhrFields: {

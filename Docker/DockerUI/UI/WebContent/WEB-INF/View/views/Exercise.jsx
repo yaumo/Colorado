@@ -76,7 +76,7 @@ class Content extends React.Component {
 
 
 		$.ajax({
-                url: "https://192.168.99.100:8081/solution",
+                url: "https://192.168.99.100:8081/api/solution",
                 dataType: 'json',
                 method: 'POST',
                 xhrFields: {

@@ -72,7 +72,7 @@ class OverviewTab extends React.Component {
 
 	componentDidMount() {
 		$.ajax({
-			url: "https://192.168.99.100:8081/docent/courses",
+			url: "https://192.168.99.100:8081/api/docent/courses",
 			dataType: 'json',
 			method: 'GET',
 			xhrFields: {
@@ -193,7 +193,7 @@ class OverviewTab extends React.Component {
 		var userID = event.currentTarget.parentElement.parentElement.cells[4].innerText;
 
 		$.ajax({
-			url: "https://192.168.99.100:8081/docent/solution",
+			url: "https://192.168.99.100:8081/api/docent/solution",
 			dataType: 'json',
 			method: 'GET',
 			xhrFields: {
@@ -242,7 +242,7 @@ class OverviewTab extends React.Component {
 		}
 		else {
 			$.ajax({
-				url: "https://192.168.99.100:8081/docent/solutions",
+				url: "https://192.168.99.100:8081/api/docent/solutions",
 				dataType: 'json',
 				method: 'GET',
 				xhrFields: {
