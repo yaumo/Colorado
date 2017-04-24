@@ -50,7 +50,7 @@ class AssignExercisesTab extends React.Component {
 
     componentDidMount() {
         $.ajax({
-            url: "https://192.168.99.100:8081/api/exercises",
+            url: "https://192.168.99.100:8081/docent/exercises",
             dataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -66,7 +66,7 @@ class AssignExercisesTab extends React.Component {
         });
 
         $.ajax({
-            url: "https://192.168.99.100:8081/api/courses",
+            url: "https://192.168.99.100:8081/docent/courses",
             dataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -166,7 +166,7 @@ class AssignExercisesTab extends React.Component {
 
 
             $.ajax({
-                url: "https://192.168.99.100:8081/api/lecture",
+                url: "https://192.168.99.100:8081/docent/lecture",
                 dataType: 'json',
                 method: 'PATCH',
                 xhrFields: {

@@ -44,13 +44,12 @@ class LecturesTab extends React.Component {
     }
     handleChangeCourse(event, index, value) {
         this.setState({ selectedCourse: value });
-        this.setState({ selectedCourse: value });
         this.setState({ selectedcourseid: courseids[value] });
     }
 
     componentDidMount() {
         $.ajax({
-            url: "https://192.168.99.100:8081/api/courses",
+            url: "https://192.168.99.100:8081/docent/courses",
             dataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -71,7 +70,7 @@ class LecturesTab extends React.Component {
 
 
         $.ajax({
-            url: "https://192.168.99.100:8081/api/users",
+            url: "https://192.168.99.100:8081/docent/users",
             dataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -107,7 +106,7 @@ class LecturesTab extends React.Component {
             });
         } else {
             $.ajax({
-                url: "https://192.168.99.100:8081/api/lecture",
+                url: "https://192.168.99.100:8081/docent/lecture",
                 dataType: 'json',
                 method: 'POST',
                 data: {
@@ -178,7 +177,6 @@ class LecturesTab extends React.Component {
                                         <TableHeaderColumn>Last Name</TableHeaderColumn>
                                         <TableHeaderColumn>First Name</TableHeaderColumn>
                                         <TableHeaderColumn>Username</TableHeaderColumn>
-                                        <TableHeaderColumn>E-Mail</TableHeaderColumn>
                                         <TableHeaderColumn className="hidden">userID</TableHeaderColumn>
                                     </TableRow>
                                 </TableHeader>
@@ -188,7 +186,6 @@ class LecturesTab extends React.Component {
                                             <TableRowColumn>{row.lastName}</TableRowColumn>
                                             <TableRowColumn>{row.firstName}</TableRowColumn>
                                             <TableRowColumn>{row.username}</TableRowColumn>
-                                            <TableRowColumn>{row.mail}</TableRowColumn>
                                             <TableRowColumn className="hidden">{row.id}</TableRowColumn>
                                         </TableRow>
                                     ))}

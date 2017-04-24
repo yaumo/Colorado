@@ -32,7 +32,7 @@ public class CourseService {
 	public static Lecture createSolutionsForCourseAsssignment(Lecture entity) {
 		HibernateController hibCtrl = new HibernateController();
 
-		if (entity.getExercises() != null) {
+		if (entity.getExercises() == null) {
 			LOGGER.error("WHY IST THIS NULL???");
 
 			LOGGER.error("entity.getId:" + entity.getId());
