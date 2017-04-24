@@ -75,9 +75,6 @@ class OverviewTab extends React.Component {
 			url: "http://localhost:8181/docent/courses",
 			dataType: 'json',
 			method: 'GET',
-			xhrFields: {
-				withCredentials: true
-			},
 			success: function (courses) {
 				coursesJSON = courses;
 				if (courselist.length === 0) {
@@ -196,9 +193,6 @@ class OverviewTab extends React.Component {
 			url: "http://localhost:8181/docent/solution",
 			dataType: 'json',
 			method: 'GET',
-			xhrFields: {
-				withCredentials: true
-			},
 			data: {
 				"excId": exerciseID,
 				"usrId": userID
@@ -237,7 +231,7 @@ class OverviewTab extends React.Component {
 		else if (exerciseID === "") {
 			this.setState({
 				opendialog: true,
-				dialog: "Please select a Exercise"
+				dialog: "Please select an Exercise"
 			});
 		}
 		else {
@@ -245,9 +239,6 @@ class OverviewTab extends React.Component {
 				url: "http://localhost:8181/docent/solutions",
 				dataType: 'json',
 				method: 'GET',
-				xhrFields: {
-					withCredentials: true
-				},
 				data: {
 					"lectureId": lectureID,
 					"exerciseId": exerciseID

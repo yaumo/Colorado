@@ -99,7 +99,8 @@ class ExercisesTab extends React.Component {
         var youtube = $("#youtube")[0].value.toString().trim();
         var patternSolution = escape(this.state.solutionPattern);
         var template = escape(this.state.template);
-        var inputArray = "["+$("#inputArray")[0].value.toString()+"]";
+        var inputArray = [];
+        inputArray.push($("#inputArray")[0].value.toString());
         var entryMethod = $("#entryMethod")[0].value.toString().trim();
 
         if ((title || description) == "") {
