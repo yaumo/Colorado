@@ -128,6 +128,9 @@ class Content extends React.Component {
       if (response === true) {
         browserHistory.push('/docent');
       }
+      else if (response === false) {
+        browserHistory.push('/exercise');
+      }
     }).catch(function (err) {
       console.log(err)
     });
