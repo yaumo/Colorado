@@ -87,7 +87,7 @@ class Content extends React.Component {
   }
 
   componentDidMount() {
-    $.ajax({
+    /*$.ajax({
       url: "https://192.168.99.100:8081/api/registration",
       dataType: 'json',
       method: 'GET',
@@ -102,7 +102,7 @@ class Content extends React.Component {
         this.setState({ courselist: courselist });
         this.setState({ selectedcourseid: courseids[0] });
       }.bind(this)
-    });
+    });*/
   }
 
 
@@ -115,7 +115,7 @@ class Content extends React.Component {
     var obj = "username=" + username + "&password=" + password;
 
 
-    fetch('https://192.168.99.100:8081/api/', {
+    fetch('https://192.168.99.100:8081/api/login', {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
@@ -193,6 +193,9 @@ class Content extends React.Component {
         url: "https://192.168.99.100:8081/api/registration",
         dataType: 'json',
         method: 'POST',
+        xhrFields: {
+                withCredentials: true
+            },
         data: JSON.stringify({
           "firstName": firstName,
           "lastName": lastName,

@@ -99,7 +99,8 @@ class ExercisesTab extends React.Component {
         var youtube = $("#youtube")[0].value.toString().trim();
         var patternSolution = escape(this.state.solutionPattern);
         var template = escape(this.state.template);
-        var inputArray = "["+$("#inputArray")[0].value.toString()+"]";
+        var inputArray = [];
+        inputArray.push($("#inputArray")[0].value.toString());
         var entryMethod = $("#entryMethod")[0].value.toString().trim();
 
         if ((title || description) == "") {
@@ -108,7 +109,7 @@ class ExercisesTab extends React.Component {
                 dialog: "Please fill in a title and a description"
             });
         }
-       else if ((inputArray || entryMethod) == "") {
+        else if ((inputArray || entryMethod) == "") {
             this.setState({
                 opendialog: true,
                 dialog: "Please fill testcases and entryMethod"
@@ -125,6 +126,9 @@ class ExercisesTab extends React.Component {
                 url: "https://192.168.99.100:8081/api/docent/exercise",
                 dataType: 'json',
                 method: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
                 data: JSON.stringify({
                     "title": title,
                     "description": description,
@@ -236,8 +240,8 @@ class ExercisesTab extends React.Component {
                         <Paper zDepth={2} className="paper" width="100%">
                             <table className="paper" style={{ width: "100%", verticalAlign: "top" }}>
                                 <tbody>
-									<tr>
-										<td style={{ width: "45%"}}>
+                                    <tr>
+                                        <td style={{ width: "45%" }}>
                                             <TextField
                                                 id="entryMethod"
                                                 floatingLabelText="Name of the entry-method by Java"
@@ -246,15 +250,15 @@ class ExercisesTab extends React.Component {
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                                             />
                                         </td>
-                                        
-                                        <td style={{ width: "48%"}}>
+
+                                        <td style={{ width: "48%" }}>
                                             <TextField
                                                 id="inputArray"
                                                 floatingLabelText="Test-Inputdata"
                                                 fullWidth={true}
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
-                                                hintText='"input1", "input2", "input3"' 
+                                                hintText='"input1", "input2", "input3"'
                                             />
                                         </td>
                                     </tr>

@@ -18,163 +18,184 @@ import Dialog from 'material-ui/Dialog';
 
 
 var courseJSON;
+var solutionJSON;
 
 export class Exercise extends React.Component {
-	constructor() {
-        super();
-		this.state = {
-			exerciseJSON: ''
-		};
-		this.setState = this.setState.bind(this);
-	}
-	
-	setState(value){
-		this.setState({exerciseJSON: value});
-	}
-	
-    render() {
-        return (
-            <div>
-                <NavBar setExerciseJSON={this.setState}/>
-                <Content exerciseJSON={this.state.exerciseJSON} />
-            </div>
-        );
-    }
-}
-
-class Content extends React.Component {
     constructor() {
         super();
         this.state = {
             open: true,
-			opendialog: false,
+            opendialog: false,
             value: 1,
             java: 0,
-			solution: ''
+            solution: '',
+            exerciseJSON: '',
+            language: '',
+            title: '',
+            description: 'Please select an exercise',
+            youtube: ''
         };
-		this.handleChange = this.handleChange.bind(this);
-		this.handleOpenDialog = this.handleOpenDialog.bind(this);
-		this.handleCloseDialog = this.handleCloseDialog.bind(this);
-		this.handleChangeSolution = this.handleChangeSolution.bind(this);
-    }		
-		handleChange(event, index, value) {
-		this.setState({java: value});
-		}
-		handleOpenDialog(event, index, value) {
-			this.setState({opendialog: true});
-		}
-		handleCloseDialog(event, index, value) {
-			this.setState({opendialog: false});
-		}
-        
+        this.handleChange = this.handleChange.bind(this);
+        this.handleOpenDialog = this.handleOpenDialog.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
+        this.handleChangeSolution = this.handleChangeSolution.bind(this);
+        this.setState = this.setState.bind(this);
+    }
+
+    setState(value) {
+        this.setState({
+            exerciseJSON: value,
+            language: value.language,
+            title: value.title,
+            description: value.description,
+            youtube: value.youtube
+        });
+
+        $.ajax({
+            url: "https://192.168.99.100:8081/api/solution",
+            dataType: 'json',
+            method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            data: {
+                "id": exerciseJSON.id
+            },
+            success: function (solution) {
+                solutionJSON = solution;
+                this.setState({
+                    solution: solutionJSON.code
+                });
+            }.bind(this),
+            error: function (error) {
+                this.setState({
+                    opendialog: true,
+                    dialog: "An error has occoured. Please make sure that you are logged in ."
+                });
+            }.bind(this)
+        });
+    }
+
+    handleChange(event, index, value) {
+        this.setState({ java: value });
+    }
+    handleOpenDialog(event, index, value) {
+        this.setState({ opendialog: true });
+    }
+    handleCloseDialog(event, index, value) {
+        this.setState({ opendialog: false });
+    }
+
     handleChange(event, index, value) {
         this.setState({ java: value });
     }
 
     handleCheck(event, index, value) {
         var solutionCode = this.getState().solution;
+        var exerciseJSON = this.getState().exerciseJSON;
 
+        $.ajax({
+            url: "https://192.168.99.100:8081/api/solution",
+            dataType: 'json',
+            method: 'POST',
+            xhrFields: {
+                withCredentials: true
+            },
+            data: JSON.stringify({
+                "id": exerciseJSON.id,
+                "solution": solution
+            }),
+            success: function (response) {
+                this.setState({
+                    opendialog: true,
+                    dialog: response.message.toString()
+                });
+                //setStates to ''
+            }.bind(this),
+            error: function (error) {
+                this.setState({
+                    opendialog: true,
+                    dialog: "An error has occoured. Please make sure that you are logged in ."
+                });
+            }.bind(this)
+        });
+    }
 
-		$.ajax({
-                url: "https://192.168.99.100:8081/api/solution",
-                dataType: 'json',
-                method: 'POST',
-                xhrFields: {
-                    withCredentials: true
-                },
-                data: JSON.stringify({
-                    "solution": solution
-                }),
-                success: function (response) {
-                    this.setState({
-                        opendialog: true,
-                        dialog: response.message.toString()
-                    });
-                    //setStates to ''
-                }.bind(this),
-                error: function (error) {
-                    this.setState({
-                        opendialog: true,
-                        dialog: "An error has occoured. Please make sure that you are logged in ."
-                    });
-                }.bind(this)
-            });
-	}
+    handleChangeSolution(event) {
+        this.setState({ solution: event });
+    }
 
-	handleChangeSolution(event){
-		this.setState({solution: event});
-	}
     render() {
         return (
-            <div id="content" className="content">
-                <MuiThemeProvider muiTheme={getMuiTheme()}>
-                    <div>
-                        <div id="exercise">
-                            <Card>
-                                <CardHeader
-                                    title="Exercise 1"
-                                    className="loginheader"
-                                    titleColor="white"
-                                />
-                                <Divider />
-                                <CardText className="loginbody">
-                                    <div>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                    Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                                    Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                                    Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-                                </div>
-                                    <br />
-                                    <div>
-                                        <iframe width="560" height="315" src="https://www.youtube.com/embed/Ztc6_elMg60" frameBorder="0" allowFullScreen></iframe>
-                                    </div>
-                                </CardText>
-                                <CardActions className="footer">
-                                </CardActions>
-                            </Card>
-                        </div>
-                        <br />
-                        <div id="solution">
-                            <Card>
-                                <CardHeader
-                                    title="Solution"
-                                    className="loginheader"
-                                    titleColor="white"
-                                >
-                                    <div style={{ textAlign: "right" }}>In Progress</div>
-                                </CardHeader>
-                                <Divider />
-                                <CardText className="loginbody">
-									<TextField
-										floatingLabelText="JavaScript"
-										fullWidth={false}
-										disabled={true}
-										underlineShow={false}
-										floatingLabelStyle={{'color':'#000000'}}
-									/>
-                                   
-                                    <Paper zDepth={4}>
-                                        <EditorAce value={this.state.solution} handleChange={this.handleChangeSolution}/>
-                                    </Paper>
-                                </CardText>
-                                <CardActions className="footer">
-                                    <RaisedButton label="Check"
-									backgroundColor="#bd051f"
-									labelColor="#FFFFFF"
-									onClick={this.onCheck}/>
-									 <Dialog
-									  title="Dialog With Actions"
-									  modal={false}
-									  open={this.state.opendialog}
-									  onRequestClose={this.handleCloseDialog}
-									>
-									  The actions in this window were passed in as an array of React objects.
+            <div>
+                <NavBar setExerciseJSON={this.setState} />
+                <div id="content" className="content">
+                    <MuiThemeProvider muiTheme={getMuiTheme()}>
+                        <div>
+                            <div id="exercise">
+                                <Card>
+                                    <CardHeader
+                                        title={this.state.title}
+                                        className="loginheader"
+                                        titleColor="white"
+                                    />
+                                    <Divider />
+                                    <CardText className="loginbody">
+                                        <div>
+                                            {this.state.description}
+                                        </div>
+                                        <br />
+                                        <div>
+                                            <iframe width="560" height="315" src={this.state.youtube} frameBorder="0" allowFullScreen></iframe>
+                                        </div>
+                                    </CardText>
+                                    <CardActions className="footer">
+                                    </CardActions>
+                                </Card>
+                            </div>
+                            <br />
+                            <div id="solution">
+                                <Card>
+                                    <CardHeader
+                                        title="Solution"
+                                        className="loginheader"
+                                        titleColor="white"
+                                    >
+                                        <div style={{ textAlign: "right" }}>In Progress</div>
+                                    </CardHeader>
+                                    <Divider />
+                                    <CardText className="loginbody">
+                                        <TextField
+                                            floatingLabelText={this.state.language}
+                                            fullWidth={false}
+                                            disabled={true}
+                                            underlineShow={false}
+                                            floatingLabelStyle={{ 'color': '#000000' }}
+                                        />
+
+                                        <Paper zDepth={4}>
+                                            <EditorAce value={this.state.solution} handleChange={this.handleChangeSolution} mode={this.state.language} />
+                                        </Paper>
+                                    </CardText>
+                                    <CardActions className="footer">
+                                        <RaisedButton label="Check"
+                                            backgroundColor="#bd051f"
+                                            labelColor="#FFFFFF"
+                                            onClick={this.onCheck} />
+                                        <Dialog
+                                            title="Dialog With Actions"
+                                            modal={false}
+                                            open={this.state.opendialog}
+                                            onRequestClose={this.handleCloseDialog}
+                                        >
+                                            The actions in this window were passed in as an array of React objects.
 									</Dialog>
-                                </CardActions>
-                            </Card>
+                                    </CardActions>
+                                </Card>
+                            </div>
                         </div>
-                    </div>
-                </MuiThemeProvider>
+                    </MuiThemeProvider>
+                </div>
             </div>
         );
     }

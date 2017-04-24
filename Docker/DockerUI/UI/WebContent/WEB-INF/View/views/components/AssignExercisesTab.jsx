@@ -10,12 +10,14 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
+import IconButton from 'material-ui/IconButton';
+import ActionHome from 'material-ui/svg-icons/navigation/refresh';
 
 
-const courselist = [];
-const courseids = [];
-const lecturelist = [];
-const lectureids = [];
+var courselist = [];
+var courseids = [];
+var lecturelist = [];
+var lectureids = [];
 var exercisesTableData = [];
 var exercisesJSON;
 var coursesJSON;
@@ -46,6 +48,7 @@ class AssignExercisesTab extends React.Component {
         this.handleAssignClick = this.handleAssignClick.bind(this);
         this.handleOpenDialog = this.handleOpenDialog.bind(this);
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
+        this.handleRefresh = this.handleRefresh.bind(this);
     }
 
     componentDidMount() {
@@ -125,6 +128,44 @@ class AssignExercisesTab extends React.Component {
         this.setState({ opendialog: false });
     }
 
+    handleRefresh() {
+        courselist = [];
+        lecturelist = [];
+        courseids = [];
+        lectureids = [];
+
+
+        $.ajax({
+            url: "https://192.168.99.100:8081/api/docent/courses",
+            dataType: 'json',
+            method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (courses) {
+                coursesJSON = courses;
+                if (courselist.length === 0) {
+                    for (var i = 0; i < coursesJSON.length; i++) {
+                        courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
+                        courseids.push(coursesJSON[i].id);
+                    }
+                }
+                if (lecturelist.length === 0) {
+                    lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+                    lectureids.push('');
+                    for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
+                        lecturelist.push(<MenuItem value={j} key={j} id={coursesJSON[0].lectures.id} primaryText={coursesJSON[0].lectures[j - 1].title} />);
+                        lectureids.push(coursesJSON[0].lectures[j - 1].id);
+                    }
+                }
+                this.setState({ selectedcourseid: courseids[0] });
+                this.setState({ selectedlectureid: lectureids[0] });
+                this.setState({ courselist: courselist });
+                this.setState({ lecturelist: lecturelist });
+            }.bind(this)
+        });
+    }
+
     handleAssignClick(e) {
 
         var exercises = this.state.selection;
@@ -168,16 +209,16 @@ class AssignExercisesTab extends React.Component {
             $.ajax({
                 url: "https://192.168.99.100:8081/api/docent/lecture",
                 dataType: 'json',
-                method: 'PATCH',
                 xhrFields: {
                     withCredentials: true
                 },
+                method: 'PATCH',
                 data: data,
                 success: function (response) {
-                    this.setState({selection: []});
+                    this.setState({ selection: [] });
                 }.bind(this),
                 error: function (error) {
-                    this.setState({selection: []});
+                    this.setState({ selection: [] });
                 }.bind(this)
             });
         }
@@ -229,6 +270,10 @@ class AssignExercisesTab extends React.Component {
                             <DropDownMenu id="appendLecture" value={this.state.selectedLecture} onChange={this.handleChangeLecture}>
                                 {this.state.lecturelist}
                             </DropDownMenu>
+
+                            <IconButton tooltip="Refreseh" onClick={this.handleRefresh}>
+                                <ActionHome />
+                            </IconButton>
                         </Paper>
 
                         <br />
@@ -250,7 +295,7 @@ class AssignExercisesTab extends React.Component {
                             onRequestClose={this.handleCloseDialog}
                         >
                             {this.state.dialog}
-						</Dialog>
+                        </Dialog>
                     </CardActions>
                 </Card>
             </div>

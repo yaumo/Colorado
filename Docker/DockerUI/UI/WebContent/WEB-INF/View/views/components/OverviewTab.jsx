@@ -41,7 +41,7 @@ class OverviewTab extends React.Component {
 		super();
 		this.state = {
 			open: false,
-            opendialog: false,
+			opendialog: false,
 			value: 1,
 			selectedLecture: 0,
 			selectedCourse: 0,
@@ -67,7 +67,7 @@ class OverviewTab extends React.Component {
 		this.handleRequestClose = this.handleRequestClose.bind(this);
 		this.handleClickSearch = this.handleClickSearch.bind(this);
 		this.handleOpenDialog = this.handleOpenDialog.bind(this);
-        this.handleCloseDialog = this.handleCloseDialog.bind(this);
+		this.handleCloseDialog = this.handleCloseDialog.bind(this);
 	}
 
 	componentDidMount() {
@@ -181,11 +181,11 @@ class OverviewTab extends React.Component {
 	}
 
 	handleOpenDialog(event, index, value) {
-        this.setState({ opendialog: true });
-    }
-    handleCloseDialog(event, index, value) {
-        this.setState({ opendialog: false });
-    }
+		this.setState({ opendialog: true });
+	}
+	handleCloseDialog(event, index, value) {
+		this.setState({ opendialog: false });
+	}
 
 	handleClickViewCode(event, index, value) {
 		var lectureID = this.state.selectedlectureid;
@@ -237,7 +237,7 @@ class OverviewTab extends React.Component {
 		else if (exerciseID === "") {
 			this.setState({
 				opendialog: true,
-				dialog: "Please select a Exercise"
+				dialog: "Please select an Exercise"
 			});
 		}
 		else {
@@ -389,12 +389,12 @@ class OverviewTab extends React.Component {
 					</CardText>
 					<CardActions className="footer">
 						<Dialog
-                            title="Information"
-                            modal={false}
-                            open={this.state.opendialog}
-                            onRequestClose={this.handleCloseDialog}>
-                            {this.state.dialog}
-                        </Dialog>
+							title="Information"
+							modal={false}
+							open={this.state.opendialog}
+							onRequestClose={this.handleCloseDialog}>
+							{this.state.dialog}
+						</Dialog>
 					</CardActions>
 				</Card>
 			</div>

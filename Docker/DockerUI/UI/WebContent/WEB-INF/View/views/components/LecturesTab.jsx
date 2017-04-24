@@ -72,10 +72,10 @@ class LecturesTab extends React.Component {
         $.ajax({
             url: "https://192.168.99.100:8081/api/docent/users",
             dataType: 'json',
-            method: 'GET',
             xhrFields: {
                 withCredentials: true
             },
+            method: 'GET',
             success: function (allDocents) {
                 this.setState({ tableData: allDocents });
             }.bind(this)
@@ -108,15 +108,15 @@ class LecturesTab extends React.Component {
             $.ajax({
                 url: "https://192.168.99.100:8081/api/docent/lecture",
                 dataType: 'json',
-                method: 'POST',
-                data: {
-                    "courseId": courseID,
-                    "title": title,
-                    "tutors": tutorJSON
-                },
                 xhrFields: {
                     withCredentials: true
                 },
+                method: 'POST',
+                data: JSON.stringify({
+                    "course": { "id": courseID },
+                    "title": title,
+                    "tutors": tutorJSON
+                }),
                 success: function (response) {
                     this.setState({
                         opendialog: true,
