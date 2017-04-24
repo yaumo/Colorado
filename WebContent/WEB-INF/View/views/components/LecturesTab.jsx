@@ -44,7 +44,6 @@ class LecturesTab extends React.Component {
     }
     handleChangeCourse(event, index, value) {
         this.setState({ selectedCourse: value });
-        this.setState({ selectedCourse: value });
         this.setState({ selectedcourseid: courseids[value] });
     }
 
