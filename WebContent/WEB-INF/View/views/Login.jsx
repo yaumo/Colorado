@@ -198,7 +198,7 @@ class Content extends React.Component {
           "course": {"id": courseId}
         }),
         success: function (response) {
-          if (response == true) {
+          if (response == false) {
             browserHistory.push('/exercise');
           }
         }.bind(this),
