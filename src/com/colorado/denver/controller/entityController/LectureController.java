@@ -30,6 +30,7 @@ public class LectureController extends ObjectOperationController {
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
 		gb.serializeNulls();
 		Gson gson = gb.create();
+		System.out.println(jsonString);
 
 		Lecture entity = gson.fromJson(jsonString, Lecture.class);
 		try {
