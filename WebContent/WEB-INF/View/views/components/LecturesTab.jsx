@@ -31,6 +31,7 @@ class LecturesTab extends React.Component {
             value: 1,
             selectedCourse: 0,
             selectedcourseid: '',
+            dialog: '',
             courselist: [],
             tableData: [],
             selection: []
@@ -96,29 +97,38 @@ class LecturesTab extends React.Component {
 
         for (var i = 0; i < tutors.length; i++) {
             var userId = this.state.tableData[tutors[i]].id;
-            tutorJSON[i] = {"userId": userId };
+            tutorJSON[i] = { "userId": userId };
         }
 
-
-        $.ajax({
-            url: "http://localhost:8181/lecture",
-            dataType: 'json',
-            method: 'POST',
-            data: {
-                "courseID": courseID,
-                "title": title,
-                "tutors": tutorJSON
-            },
-            xhrFields: {
-                withCredentials: true
-            },
-            success: function (response) {
-                console.log("läuft")
-            }.bind(this),
-            error: function (error) {
-                console.log("läuft nicht")
-            }.bind(this),
-        });
+        if (title === "") {
+            this.setState({
+                opendialog: true,
+                dialog: "Please select a title"
+            });
+        } else {
+            $.ajax({
+                url: "http://localhost:8181/lecture",
+                dataType: 'json',
+                method: 'POST',
+                data: {
+                    "courseId": courseID,
+                    "title": title,
+                    "tutors": tutorJSON
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    this.setState({
+                        opendialog: true,
+                        dialog: "Lecture successfully created"
+                    });
+                }.bind(this),
+                error: function (error) {
+                    console.log("läuft nicht")
+                }.bind(this),
+            });
+        }
     }
 
     handleChangeCourse(event, index, value) {
@@ -127,7 +137,7 @@ class LecturesTab extends React.Component {
     }
 
     handleRowSelection(key) {
-        this.setState({ selection: key});
+        this.setState({ selection: key });
     }
 
     render() {
@@ -194,13 +204,13 @@ class LecturesTab extends React.Component {
                             backgroundColor="#bd051f"
                             labelColor="#FFFFFF" />
                         <Dialog
-                            title="Dialog With Actions"
+                            title="Information"
                             modal={false}
                             open={this.state.opendialog}
                             onRequestClose={this.handleCloseDialog}
                         >
-                            The actions in this window were passed in as an array of React objects.
-						</Dialog>
+                            {this.state.dialog}
+                        </Dialog>
                     </CardActions>
                 </Card>
             </div>

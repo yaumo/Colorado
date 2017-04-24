@@ -16,6 +16,7 @@ import EditorAce from './EditorAce.jsx';
 import Menu from 'material-ui/Menu';
 import Avatar from 'material-ui/Avatar';
 import TextField from 'material-ui/TextField';
+import Dialog from 'material-ui/Dialog';
 
 var lecture = '';
 var exercise = '';
@@ -40,6 +41,7 @@ class OverviewTab extends React.Component {
 		super();
 		this.state = {
 			open: false,
+            opendialog: false,
 			value: 1,
 			selectedLecture: 0,
 			selectedCourse: 0,
@@ -54,10 +56,8 @@ class OverviewTab extends React.Component {
 			exerciselist: [],
 			selectedexerciseid: '',
 			userlist: [],
-			overviewlist: [{
-				name: "Please select a course,",
-				status: "lecture and an exercise"
-			}],
+			dialog: [],
+			overviewlist: [],
 			allUsers: ''
 		};
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
@@ -66,6 +66,8 @@ class OverviewTab extends React.Component {
 		this.handleClickViewCode = this.handleClickViewCode.bind(this);
 		this.handleRequestClose = this.handleRequestClose.bind(this);
 		this.handleClickSearch = this.handleClickSearch.bind(this);
+		this.handleOpenDialog = this.handleOpenDialog.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
 	}
 
 	componentDidMount() {
@@ -114,7 +116,6 @@ class OverviewTab extends React.Component {
 				this.setState({ disabledDropDownExercise: false });
 			}.bind(this)
 		});
-		this.handleClickSearch();
 	}
 
 
@@ -179,9 +180,16 @@ class OverviewTab extends React.Component {
 		this.setState({ selectedexerciseid: exerciseids[value] });
 	}
 
+	handleOpenDialog(event, index, value) {
+        this.setState({ opendialog: true });
+    }
+    handleCloseDialog(event, index, value) {
+        this.setState({ opendialog: false });
+    }
+
 	handleClickViewCode(event, index, value) {
-		var lectureID = "";
-		var exerciseID = "";
+		var lectureID = this.state.selectedlectureid;
+		var exerciseID = this.state.selectedexerciseid;
 
 		$.ajax({
 			url: "http://localhost:8181/docent/solution",
@@ -219,32 +227,46 @@ class OverviewTab extends React.Component {
 		var lectureID = this.state.selectedlectureid;
 		var exerciseID = this.state.selectedexerciseid;
 
-		$.ajax({
-			url: "http://localhost:8181/docent/solutions",
-			dataType: 'json',
-			method: 'GET',
-			xhrFields: {
-				withCredentials: true
-			},
-			data: {
-				"lectureId": lectureID,
-				"exerciseId": exerciseID
-			},
-			success: function (solutions) {
-				solutionsJSON = solutions;
-				for (var i = 0; i < solutionsJSON.length; i++) {
-					solutionsJSON[i].username = solutionsJSON[i].owner.username;
-					solutionsJSON[i].id = solutionsJSON[i].owner.id;
-					solutionsJSON[i].correct = solutionsJSON[i].correct.toString();
-				}
-				this.setState({
-					overviewlist: solutionsJSON
-				});
-			}.bind(this),
-			error: function (error) {
-				//handle error
-			}.bind(this)
-		});
+		if (lectureID === "") {
+			this.setState({
+				opendialog: true,
+				dialog: "Please select a Lecture"
+			});
+		}
+		else if (exerciseID === "") {
+			this.setState({
+				opendialog: true,
+				dialog: "Please select a Exercise"
+			});
+		}
+		else {
+			$.ajax({
+				url: "http://localhost:8181/docent/solutions",
+				dataType: 'json',
+				method: 'GET',
+				xhrFields: {
+					withCredentials: true
+				},
+				data: {
+					"lectureId": lectureID,
+					"exerciseId": exerciseID
+				},
+				success: function (solutions) {
+					solutionsJSON = solutions;
+					for (var i = 0; i < solutionsJSON.length; i++) {
+						solutionsJSON[i].username = solutionsJSON[i].owner.username;
+						solutionsJSON[i].id = solutionsJSON[i].owner.id;
+						solutionsJSON[i].correct = solutionsJSON[i].correct.toString();
+					}
+					this.setState({
+						overviewlist: solutionsJSON
+					});
+				}.bind(this),
+				error: function (error) {
+					//handle error
+				}.bind(this)
+			});
+		}
 	}
 
 	render() {
@@ -365,6 +387,13 @@ class OverviewTab extends React.Component {
 						</Paper>
 					</CardText>
 					<CardActions className="footer">
+						<Dialog
+                            title="Information"
+                            modal={false}
+                            open={this.state.opendialog}
+                            onRequestClose={this.handleCloseDialog}>
+                            {this.state.dialog}
+                        </Dialog>
 					</CardActions>
 				</Card>
 			</div>

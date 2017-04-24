@@ -36,7 +36,8 @@ class AssignExercisesTab extends React.Component {
             lecturelist: [],
             selectedlectureid: '',
             exercisesTableData: [],
-            selction: []
+            selction: [],
+            dialog: ''
         };
 
         this.handleChangeLecture = this.handleChangeLecture.bind(this);
@@ -103,11 +104,10 @@ class AssignExercisesTab extends React.Component {
         }
         lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
         lectureids.push('');
-        for (var j = 0; j < coursesJSON[value].lectures.length; j++) {
+        for (var j = 1; j < coursesJSON[value].lectures.length; j++) {
             lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
             lectureids.push(coursesJSON[value].lectures[j - 1].id);
         }
-
         this.setState({ selectedlectureid: lectureids[0] });
         this.setState({ selectedLecture: 0 });
         this.setState({ selectedcourseid: courseids[value] });
@@ -126,57 +126,67 @@ class AssignExercisesTab extends React.Component {
     }
 
     handleAssignClick(e) {
+
         var exercises = this.state.selection;
         var exercisesJSON = [];
-
-        for (var i = 0; i < exercises.length; i++) {
-            var exerciseId = this.state.exercisesTableData[exercises[i]].id;
-            exercisesJSON[i] = { "id": exerciseId };
-        }
-
         var courseId = this.state.selectedcourseid;
         var lectureId = this.state.selectedlectureid;
         var deadline = $("#deadline").val();
-        var data = JSON.stringify({
-            "exercises": exercisesJSON,
-            "courseId": courseId,
-            "lectureId": lectureId,
-            "deadline": deadline
-        });
 
-        $.ajax({
-            url: "http://localhost:8181/lecture",
-            dataType: 'json',
-            method: 'PATCH',
-            xhrFields: {
-                withCredentials: true
-            },
-            data: data,
-            success: function (response) {
-                //handle response
-            }.bind(this)
-        });
+        if (!exercises) {
+            this.setState({
+                opendialog: true,
+                dialog: "Please select a Exercise"
+            });
+        }
+        else if (lectureId === "") {
+            this.setState({
+                opendialog: true,
+                dialog: "Please select a Lecutre"
+            });
+        }
+        else if (deadline === "") {
+            this.setState({
+                opendialog: true,
+                dialog: "Please select a Deadline"
+            });
+        }
+        else {
+            for (var i = 0; i < exercises.length; i++) {
+                var exerciseId = this.state.exercisesTableData[exercises[i]].id;
+                exercisesJSON[i] = { "id": exerciseId };
+            }
+
+
+            var data = JSON.stringify({
+                "exercises": exercisesJSON,
+                "id": lectureId,
+                "deadline": deadline
+            });
+
+
+            $.ajax({
+                url: "http://localhost:8181/lecture",
+                dataType: 'json',
+                method: 'PATCH',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: data,
+                success: function (response) {
+                    this.setState({selection: []});
+                }.bind(this),
+                error: function (error) {
+                    this.setState({selection: []});
+                }.bind(this)
+            });
+        }
     }
 
     handleRowSelection(key) {
         this.setState({ selection: key });
     }
 
-
-    handleChangeCourse(event, index, value) {
-        var countLectures = lecturelist.length;
-
-        for (var i = 0; i < countLectures; i++) {
-            lecturelist.pop();
-        }
-        lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
-        for (var j = 1; j <= coursesJSON[value].lectures.length; j++) {
-            lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
-        }
-
-        this.setState({ selectedCourse: value });
-        this.setState({ selectedLecture: 0 });
-    }
     render() {
         return (
             <div>
@@ -234,12 +244,12 @@ class AssignExercisesTab extends React.Component {
                             backgroundColor="#bd051f"
                             labelColor="#FFFFFF" />
                         <Dialog
-                            title="Dialog With Actions"
+                            title="Information"
                             modal={false}
                             open={this.state.opendialog}
                             onRequestClose={this.handleCloseDialog}
                         >
-                            The actions in this window were passed in as an array of React objects.
+                            {this.state.dialog}
 						</Dialog>
                     </CardActions>
                 </Card>
