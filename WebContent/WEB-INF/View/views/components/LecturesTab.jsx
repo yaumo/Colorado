@@ -109,11 +109,11 @@ class LecturesTab extends React.Component {
                 url: "http://localhost:8181/docent/lecture",
                 dataType: 'json',
                 method: 'POST',
-                data: {
-                    "courseId": courseID,
+                data: JSON.stringify({
+                    "course": {"id": courseID},
                     "title": title,
                     "tutors": tutorJSON
-                },
+                }),
                 xhrFields: {
                     withCredentials: true
                 },
