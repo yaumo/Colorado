@@ -28,7 +28,8 @@ public class ExerciseController extends ObjectOperationController {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ExerciseController.class);
 
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Exercise.EXERCISE, method = RequestMethod.POST)
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + DenverConstants.DOCENT + DenverConstants.FORWARD_SLASH
+			+ Exercise.EXERCISE, method = RequestMethod.POST)
 	@ResponseBody
 	public Exercise handleExercisePostRequest() {
 		String jsonString = GenericTools.getRequestBody();
@@ -76,7 +77,7 @@ public class ExerciseController extends ObjectOperationController {
 		return null;
 	}
 
-	@RequestMapping(value = "/exercises", method = RequestMethod.GET)
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + DenverConstants.DOCENT + "/exercises", method = RequestMethod.GET)
 	public Set<Exercise> getAllExercisesForUser() {
 		return ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getId());
 

@@ -24,14 +24,15 @@ import com.google.gson.GsonBuilder;
 public class LectureController extends ObjectOperationController {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LectureController.class);
 
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Lecture.LECTURE, method = RequestMethod.POST)
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + DenverConstants.DOCENT + DenverConstants.FORWARD_SLASH
+			+ Lecture.LECTURE, method = RequestMethod.POST)
 	public Lecture handleLecturePostRequest() {
 
 		String jsonString = GenericTools.getRequestBody();
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
 		// gb.serializeNulls();
-		gb.generateNonExecutableJson();
+		gb.serializeNulls();
 		Gson gson = gb.create();
 		System.out.println(jsonString);
 
@@ -41,16 +42,27 @@ public class LectureController extends ObjectOperationController {
 		} catch (HttpServerErrorException e) {
 			e.printStackTrace();
 		}
-		return (Lecture) super.doDatabaseOperation(entity, DenverConstants.POST);
+		entity = (Lecture) super.doDatabaseOperation(entity, DenverConstants.POST);
+		// We need to enforce the Casacading of the 1-n , n-1 relationship. (It's special)
+		// Hibernate can not resolve this on its own therefore put on both directions.
+		Course crs = entity.getCourse();
+
+		crs.getLectures().add(entity);
+		System.out.println("Updateing course");
+		super.doDatabaseOperation(crs, DenverConstants.PATCH);
+
+		System.out.println("Updated course succesfully");
+		return entity;
 	}
 
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Lecture.LECTURE, method = RequestMethod.PATCH)
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + DenverConstants.DOCENT + DenverConstants.FORWARD_SLASH
+			+ Lecture.LECTURE, method = RequestMethod.PATCH)
 	public Lecture handleLecturePatchRequest() {
 
 		String jsonString = GenericTools.getRequestBody();
 
 		GsonBuilder gb = new GsonBuilder().setPrettyPrinting();
-		gb.generateNonExecutableJson();
+		gb.serializeNulls();
 		Gson gson = gb.create();
 		System.out.println(jsonString);
 		Lecture entity = gson.fromJson(jsonString, Lecture.class);
@@ -61,7 +73,7 @@ public class LectureController extends ObjectOperationController {
 		}
 
 		LOGGER.error("the request is: " + jsonString);
-
+		entity = (Lecture) super.doDatabaseOperation(entity, DenverConstants.PATCH);
 		entity = CourseService.createSolutionsForCourseAsssignment(entity);
 		entity = (Lecture) super.doDatabaseOperation(entity, DenverConstants.PATCH);
 		return entity;
