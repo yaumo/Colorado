@@ -52,6 +52,9 @@ class LecturesTab extends React.Component {
             url: "http://localhost:8181/docent/courses",
             dataType: 'json',
             method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
             success: function (courses) {
                 coursesJSON = courses;
                 if (courselist.length === 0) {
@@ -69,6 +72,9 @@ class LecturesTab extends React.Component {
         $.ajax({
             url: "http://localhost:8181/docent/users",
             dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
             method: 'GET',
             success: function (allDocents) {
                 this.setState({ tableData: allDocents });
@@ -102,9 +108,12 @@ class LecturesTab extends React.Component {
             $.ajax({
                 url: "http://localhost:8181/docent/lecture",
                 dataType: 'json',
+                xhrFields: {
+                    withCredentials: true
+                },
                 method: 'POST',
                 data: JSON.stringify({
-                    "course": {"id": courseID},
+                    "course": { "id": courseID },
                     "title": title,
                     "tutors": tutorJSON
                 }),

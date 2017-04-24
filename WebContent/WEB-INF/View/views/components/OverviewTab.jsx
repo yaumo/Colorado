@@ -41,7 +41,7 @@ class OverviewTab extends React.Component {
 		super();
 		this.state = {
 			open: false,
-            opendialog: false,
+			opendialog: false,
 			value: 1,
 			selectedLecture: 0,
 			selectedCourse: 0,
@@ -67,7 +67,7 @@ class OverviewTab extends React.Component {
 		this.handleRequestClose = this.handleRequestClose.bind(this);
 		this.handleClickSearch = this.handleClickSearch.bind(this);
 		this.handleOpenDialog = this.handleOpenDialog.bind(this);
-        this.handleCloseDialog = this.handleCloseDialog.bind(this);
+		this.handleCloseDialog = this.handleCloseDialog.bind(this);
 	}
 
 	componentDidMount() {
@@ -75,6 +75,9 @@ class OverviewTab extends React.Component {
 			url: "http://localhost:8181/docent/courses",
 			dataType: 'json',
 			method: 'GET',
+			xhrFields: {
+				withCredentials: true
+			},
 			success: function (courses) {
 				coursesJSON = courses;
 				if (courselist.length === 0) {
@@ -178,11 +181,11 @@ class OverviewTab extends React.Component {
 	}
 
 	handleOpenDialog(event, index, value) {
-        this.setState({ opendialog: true });
-    }
-    handleCloseDialog(event, index, value) {
-        this.setState({ opendialog: false });
-    }
+		this.setState({ opendialog: true });
+	}
+	handleCloseDialog(event, index, value) {
+		this.setState({ opendialog: false });
+	}
 
 	handleClickViewCode(event, index, value) {
 		var lectureID = this.state.selectedlectureid;
@@ -193,6 +196,9 @@ class OverviewTab extends React.Component {
 			url: "http://localhost:8181/docent/solution",
 			dataType: 'json',
 			method: 'GET',
+			xhrFields: {
+				withCredentials: true
+			},
 			data: {
 				"excId": exerciseID,
 				"usrId": userID
@@ -239,6 +245,9 @@ class OverviewTab extends React.Component {
 				url: "http://localhost:8181/docent/solutions",
 				dataType: 'json',
 				method: 'GET',
+				xhrFields: {
+					withCredentials: true
+				},
 				data: {
 					"lectureId": lectureID,
 					"exerciseId": exerciseID
@@ -380,12 +389,12 @@ class OverviewTab extends React.Component {
 					</CardText>
 					<CardActions className="footer">
 						<Dialog
-                            title="Information"
-                            modal={false}
-                            open={this.state.opendialog}
-                            onRequestClose={this.handleCloseDialog}>
-                            {this.state.dialog}
-                        </Dialog>
+							title="Information"
+							modal={false}
+							open={this.state.opendialog}
+							onRequestClose={this.handleCloseDialog}>
+							{this.state.dialog}
+						</Dialog>
 					</CardActions>
 				</Card>
 			</div>

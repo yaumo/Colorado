@@ -55,13 +55,16 @@ export class Exercise extends React.Component {
             url: "http://localhost:8181/solution",
             dataType: 'json',
             method: 'GET',
-            data:{
+            xhrFields: {
+                withCredentials: true
+            },
+            data: {
                 "id": exerciseJSON.id
             },
             success: function (solution) {
                 solutionJSON = solution;
                 this.setState({
-                    solution: solutionJSON.code   
+                    solution: solutionJSON.code
                 });
             }.bind(this),
             error: function (error) {
@@ -95,6 +98,9 @@ export class Exercise extends React.Component {
             url: "http://localhost:8181/solution",
             dataType: 'json',
             method: 'POST',
+            xhrFields: {
+                withCredentials: true
+            },
             data: JSON.stringify({
                 "id": exerciseJSON.id,
                 "solution": solution
@@ -137,7 +143,7 @@ export class Exercise extends React.Component {
                                     <CardText className="loginbody">
                                         <div>
                                             {this.state.description}
-                                    </div>
+                                        </div>
                                         <br />
                                         <div>
                                             <iframe width="560" height="315" src={this.state.youtube} frameBorder="0" allowFullScreen></iframe>
@@ -168,7 +174,7 @@ export class Exercise extends React.Component {
                                         />
 
                                         <Paper zDepth={4}>
-                                            <EditorAce value={this.state.solution} handleChange={this.handleChangeSolution} mode={this.state.language}/>
+                                            <EditorAce value={this.state.solution} handleChange={this.handleChangeSolution} mode={this.state.language} />
                                         </Paper>
                                     </CardText>
                                     <CardActions className="footer">

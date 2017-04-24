@@ -115,7 +115,7 @@ class Content extends React.Component {
     var obj = "username=" + username + "&password=" + password;
 
 
-    fetch('http://localhost:8181', {
+    fetch('http://localhost:8181/login', {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
@@ -193,6 +193,9 @@ class Content extends React.Component {
         url: "http://localhost:8181/registration",
         dataType: 'json',
         method: 'POST',
+        xhrFields: {
+                withCredentials: true
+            },
         data: JSON.stringify({
           "firstName": firstName,
           "lastName": lastName,

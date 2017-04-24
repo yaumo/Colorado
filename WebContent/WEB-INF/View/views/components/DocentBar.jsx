@@ -47,6 +47,9 @@ class DocentBar extends React.Component {
                 url: "http://localhost:8181/logout",
                 dataType: 'json',
                 method: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
                 success: function (response) {
                     browserHistory.push('/');
                 }.bind(this),
