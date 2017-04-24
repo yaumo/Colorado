@@ -33,4 +33,6 @@ public final class DenverConstants {
 	public static final String JAVA_EXCEPTION_THROWN = "Java exception thrown!";
 	public static final String RESULT_CORRECT = "Congratulations! You have submitted the correct code!";
 	public static final String RESULT_WRONG = "Too bad! Your proposed solution is not correct!";
+
+	public static final String DOCENT = "docent";
 }
