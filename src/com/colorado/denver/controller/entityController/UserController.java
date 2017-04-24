@@ -71,7 +71,7 @@ public class UserController extends ObjectOperationController {
 
 	}
 
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + User.USERS, method = RequestMethod.GET)
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + DenverConstants.DOCENT + DenverConstants.FORWARD_SLASH + User.USERS, method = RequestMethod.GET)
 	public List<User> getAllUsers() {
 		if (UserService.isCurrentUserDocent()) {
 

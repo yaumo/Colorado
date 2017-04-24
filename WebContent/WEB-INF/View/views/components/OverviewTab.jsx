@@ -72,7 +72,7 @@ class OverviewTab extends React.Component {
 
 	componentDidMount() {
 		$.ajax({
-			url: "http://localhost:8181/courses",
+			url: "http://localhost:8181/docent/courses",
 			dataType: 'json',
 			method: 'GET',
 			xhrFields: {
