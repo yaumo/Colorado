@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.colorado.denver.services.user.MyUserDetailsService;
 
@@ -23,23 +24,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	MyUserDetailsService userDetailsService;
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-				.authorizeRequests()
-				.antMatchers("/registration", "/").permitAll()
-				.antMatchers("/docent/**").hasRole("DOCENT")
-				.antMatchers("/docent/**").hasRole("ADMIN")
-				.and().httpBasic()
-				.and().sessionManagement()
-				.invalidSessionUrl("/logout")
-				.and().addFilterBefore(new BasicAuthenticationFilter(authenticationManagerBean()), UsernamePasswordAuthenticationFilter.class);
+	protected void configure(final HttpSecurity http) throws Exception {
 
-		super.configure(http);
+		http.csrf().disable()
+				.addFilterBefore(new BasicAuthenticationFilter(authenticationManagerBean()), UsernamePasswordAuthenticationFilter.class)
+				.authorizeRequests()
+				.antMatchers("/docent/**").hasRole("DOCENT")
+				.antMatchers("/login").permitAll()
+				.antMatchers("/**").hasRole("STUDENT")
+				.anyRequest().authenticated()
+				.and().httpBasic();
+
 	}
 
 	@Override
 	public void configure(WebSecurity web) {
+
+		web.ignoring().antMatchers("/");
 		web.debug(true);
+	}
+
+	@Bean
+	public HttpSessionEventPublisher httpSessionEventPublisher() {
+		return new HttpSessionEventPublisher();
 	}
 
 	@Bean
