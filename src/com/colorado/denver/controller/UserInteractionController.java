@@ -49,7 +49,7 @@ public class UserInteractionController extends ObjectOperationController {
 
 			// We can serizalize the user here with the password itself because we use Gson.
 			// The password will never be deserizalized back to Json
-			User usr = (User) gson.fromJson(json, User.class);
+			User usr = gson.fromJson(json, User.class);
 			String salt = BCrypt.gensalt(12);
 			usr.setPassword(BCrypt.hashpw(usr.getPassword(), salt));
 
@@ -73,7 +73,7 @@ public class UserInteractionController extends ObjectOperationController {
 		return message;
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public boolean login() {
 
 		return UserService.isCurrentUserDocent();
