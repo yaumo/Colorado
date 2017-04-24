@@ -58,8 +58,6 @@ public class UserInteractionController extends ObjectOperationController {
 			priv.add(privl);
 			usr.setPrivileges(priv);
 
-			HibernateController hibCtrl = new HibernateController();
-			hibCtrl.addEntity(usr);
 			// Save on DB. User needs to be existent when authorizing them
 			super.doDatabaseOperation(usr, DenverConstants.POST);
 			UserService.authorizeUser(usr);
