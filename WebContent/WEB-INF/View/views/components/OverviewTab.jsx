@@ -113,7 +113,7 @@ class OverviewTab extends React.Component {
 				this.setState({ exerciselist: exerciselist });
 				this.setState({ selectedLecture: 0 });
 				this.setState({ selectedExercise: 0 });
-				this.setState({ disabledDropDownExercise: false });
+				this.setState({ disabledDropDownExercise: true });
 			}.bind(this)
 		});
 	}
