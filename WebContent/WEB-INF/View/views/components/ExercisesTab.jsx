@@ -93,14 +93,14 @@ class ExercisesTab extends React.Component {
     }
 
     handleCreateExercise(e) {
-        var title = $("#title")[0].value.toString();
-        var description = $("#description")[0].value.toString();
-        var language = $("#language").text();
-        var youtube = $("#youtube")[0].value.toString();
+        var title = $("#title")[0].value.toString().trim();
+        var description = $("#description")[0].value.toString().trim();
+        var language = $("#language").text().trim();
+        var youtube = $("#youtube")[0].value.toString().trim();
         var patternSolution = escape(this.state.solutionPattern);
         var template = escape(this.state.template);
-        var inputArray = $("#inputArray")[0].value.toString();;
-        var entryMethod = $("#entryMethod")[0].value.toString();;
+        var inputArray = "["+$("#inputArray")[0].value.toString()+"]";
+        var entryMethod = $("#entryMethod")[0].value.toString().trim();
 
         if ((title || description) == "") {
             this.setState({
@@ -108,12 +108,12 @@ class ExercisesTab extends React.Component {
                 dialog: "Please fill in a title and a description"
             });
         }
-       /* else if ((input1Value || input2Value) == "") {
+       else if ((inputArray || entryMethod) == "") {
             this.setState({
                 opendialog: true,
-                dialog: "Please fill in at least two testcases"
+                dialog: "Please fill testcases and entryMethod"
             });
-        }*/
+        }
         else if (patternSolution == "") {
             this.setState({
                 opendialog: true,

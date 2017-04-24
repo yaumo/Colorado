@@ -54,7 +54,7 @@ class DocentBar extends React.Component {
                     browserHistory.push('/');
                 }.bind(this),
                 error: function (error) {
-                    alert(error.responseText);
+                    browserHistory.push('/');
                 }
             });
         }

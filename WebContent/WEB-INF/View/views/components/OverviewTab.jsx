@@ -96,9 +96,11 @@ class OverviewTab extends React.Component {
 				}
 				if (exerciselist.length === 0) {
 					exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
-					if (coursesJSON[0].lectures[0].exercises) {
-						for (var j = 1; j <= coursesJSON[0].lectures[0].exercises.length; j++) {
-							exerciselist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[0].exercises[1 - j].title} />);
+					if (coursesJSON[0].lectures[0]) {
+						if (coursesJSON[0].lectures[0].exercises) {
+							for (var j = 1; j <= coursesJSON[0].lectures[0].exercises.length; j++) {
+								exerciselist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[0].exercises[1 - j].title} />);
+							}
 						}
 					}
 					exerciseids.push('');

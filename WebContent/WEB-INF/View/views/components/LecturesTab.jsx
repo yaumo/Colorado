@@ -30,19 +30,21 @@ class LecturesTab extends React.Component {
             opendialog: false,
             value: 1,
             selectedCourse: 0,
-			selectedcourseid: '',
+            selectedcourseid: '',
             courselist: [],
-            tableData: []
+            tableData: [],
+            selection: []
         };
         this.handleChangeCourse = this.handleChangeCourse.bind(this);
         this.handleOpenDialog = this.handleOpenDialog.bind(this);
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
         this.handleClick = this.handleClick.bind(this);
-    } 
+        this.handleRowSelection = this.handleRowSelection.bind(this);
+    }
     handleChangeCourse(event, index, value) {
         this.setState({ selectedCourse: value });
         this.setState({ selectedCourse: value });
-        this.setState({ selectedcourseid: courseids[value]});
+        this.setState({ selectedcourseid: courseids[value] });
     }
 
     componentDidMount() {
@@ -58,7 +60,7 @@ class LecturesTab extends React.Component {
                 if (courselist.length === 0) {
                     for (var i = 0; i < coursesJSON.length; i++) {
                         courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
-						courseids.push(coursesJSON[i].id);
+                        courseids.push(coursesJSON[i].id);
                     }
                 }
                 this.setState({ courselist: courselist });
@@ -89,7 +91,14 @@ class LecturesTab extends React.Component {
     handleClick(e) {
         var courseID = this.state.selectedcourseid;
         var title = $("#lectureTitle")[0].value.toString();
-        var tutor = "";
+        var tutors = this.state.selection;
+        var tutorJSON = [];
+
+        for (var i = 0; i < tutors.length; i++) {
+            var userId = this.state.tableData[tutors[i]].id;
+            tutorJSON[i] = {"userId": userId };
+        }
+
 
         $.ajax({
             url: "http://localhost:8181/lecture",
@@ -98,21 +107,28 @@ class LecturesTab extends React.Component {
             data: {
                 "courseID": courseID,
                 "title": title,
-                "tutors": tutor
+                "tutors": tutorJSON
             },
             xhrFields: {
                 withCredentials: true
             },
-            success: function (allDocents) {
-                
-            }.bind(this)
+            success: function (response) {
+                console.log("läuft")
+            }.bind(this),
+            error: function (error) {
+                console.log("läuft nicht")
+            }.bind(this),
         });
     }
-	
-	handleChangeCourse(event, index, value){
-		this.setState({selectedCourse: value});
-		this.setState({selectedcourseid: courseids[value]});
-	}
+
+    handleChangeCourse(event, index, value) {
+        this.setState({ selectedCourse: value });
+        this.setState({ selectedcourseid: courseids[value] });
+    }
+
+    handleRowSelection(key) {
+        this.setState({ selection: key});
+    }
 
     render() {
         return (
@@ -133,7 +149,7 @@ class LecturesTab extends React.Component {
                         <h4>Step 2: Name Lecture</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <TextField
-                                id = "lectureTitle"
+                                id="lectureTitle"
                                 floatingLabelText="Lecture Name"
                                 fullWidth={false}
                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
@@ -145,6 +161,7 @@ class LecturesTab extends React.Component {
                         <h4>Step 3: Select Tutors</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
                             <Table multiSelectable={true} style={{ textAlign: "center", background: "#d1d1d1" }}
+                                onRowSelection={this.handleRowSelection}
                             >
                                 <TableHeader displaySelectAll={false} >
                                     <TableRow>

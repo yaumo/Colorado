@@ -59,18 +59,21 @@ class NavBar extends React.Component {
             success: function (course) {
                 courseJSON = course;
                 if (lecturelist.length === 0) {
-                    for (var i = 0; i < course.lecture.length; i++) {
-                        lecturelist.push(<MenuItem value={i} key={i} primaryText={course.lectures[i].title} />);
-						//lectureids.push(course.lectures[i].id);
+                    for (var i = 0; i < courseJSON.lectures.length; i++) {
+                        lecturelist.push(<MenuItem value={i} key={i} primaryText={courseJSON.lectures[i].title} />);
+						lectureids.push(courseJSON.lectures[i].id);
                     }
-					//this.setState({selectedlectureid: lectureids[0]});
+					this.setState({selectedlectureid: lectureids[0]});
                 }
                 if (exerciseslist.length === 0) {
-                    for (var j = 0; j < course.lecture[0].exercises.length; j++) {
-                        exerciseslist.push(<MenuItem value={j} key={j} primaryText={course.lectures[0].exercises[j].title} onClick={this.handleClickOnMenu} />);
-						//exerciseids.push(course.lectures[0].exercises[j].id);
+                    for (var j = 0; j < coucourseJSON.lectures[0].exercises.length; j++) {
+                        exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lectures[0].exercises[j].title} onClick={this.handleClickOnMenu} />);
+						exerciseids.push(courseJSON.lectures[0].exercises[j].id);
                     }
                 }
+                this.setState({
+                    
+                });
             }.bind(this),
             error: function (error) {
 
@@ -109,11 +112,11 @@ class NavBar extends React.Component {
         }
         for (var j = 0; j < courseJSON.lecture[value].exercises.length; j++) {
             exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lecture[value].exercises[j].title} />);
-			//exerciseids.push(courseJSON.lecture[value].exercises[j].id);
+			exerciseids.push(courseJSON.lecture[value].exercises[j].id);
         }
 
         this.setState({ dropdown: value });
-		//this.setState({ selectedlectureid: lectureids[value]});
+	    this.setState({ selectedlectureid: lectureids[value]});
     }
 
     onClick(e) {

@@ -31,14 +31,16 @@ class AssignExercisesTab extends React.Component {
             value: 1,
             selectedLecture: 0,
             selectedCourse: 0,
-			selectedcourseid: '',
+            selectedcourseid: '',
             exerciselist: [],
             lecturelist: [],
-			selectedlectureid: '',
-            exercisesTableData: []
+            selectedlectureid: '',
+            exercisesTableData: [],
+            selction: []
         };
 
         this.handleChangeLecture = this.handleChangeLecture.bind(this);
+        this.handleRowSelection = this.handleRowSelection.bind(this);
         this.handleChangeCourse = this.handleChangeCourse.bind(this);
         this.handleAssignClick = this.handleAssignClick.bind(this);
         this.handleOpenDialog = this.handleOpenDialog.bind(this);
@@ -55,8 +57,8 @@ class AssignExercisesTab extends React.Component {
             },
             success: function (exercises) {
                 for (var i = 0; i < exercises.length; i++) {
-                        var d = new Date(exercises[i].creationDate);
-                        exercises[i].creationDate = d.toDateString();
+                    var d = new Date(exercises[i].creationDate);
+                    exercises[i].creationDate = d.toDateString();
                 }
                 this.setState({ exercisesTableData: exercises });
             }.bind(this)
@@ -73,20 +75,20 @@ class AssignExercisesTab extends React.Component {
                 coursesJSON = courses;
                 if (courselist.length === 0) {
                     for (var i = 0; i < coursesJSON.length; i++) {
-                        courselist.push(<MenuItem value={i} key={coursesJSON[i]} primaryText={coursesJSON[i].title} />);
-						courseids.push(coursesJSON[i].id);
+                        courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
+                        courseids.push(coursesJSON[i].id);
                     }
                 }
                 if (lecturelist.length === 0) {
                     lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
-					lectureids.push('');
+                    lectureids.push('');
                     for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
                         lecturelist.push(<MenuItem value={j} key={j} id={coursesJSON[0].lectures.id} primaryText={coursesJSON[0].lectures[j - 1].title} />);
-						lectureids.push(coursesJSON[0].lectures[j - 1].id);
+                        lectureids.push(coursesJSON[0].lectures[j - 1].id);
                     }
                 }
-				this.setState({ selectedcourseid: courseids[0]});
-				this.setState({ selectedlectureid: lectureids[0]});
+                this.setState({ selectedcourseid: courseids[0] });
+                this.setState({ selectedlectureid: lectureids[0] });
                 this.setState({ courselist: courselist });
                 this.setState({ lecturelist: lecturelist });
             }.bind(this)
@@ -97,24 +99,24 @@ class AssignExercisesTab extends React.Component {
         var count = lecturelist.length;
         for (var i = 0; i < count; i++) {
             lecturelist.pop();
-			lectureids.pop();
+            lectureids.pop();
         }
-		lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
-		lectureids.push('');
+        lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+        lectureids.push('');
         for (var j = 0; j < coursesJSON[value].lectures.length; j++) {
             lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
-			lectureids.push(coursesJSON[value].lectures[j - 1].id);
+            lectureids.push(coursesJSON[value].lectures[j - 1].id);
         }
-		
-		this.setState({selectedlectureid: lectureids[0]});
+
+        this.setState({ selectedlectureid: lectureids[0] });
         this.setState({ selectedLecture: 0 });
-		this.setState({ selectedcourseid: courseids[value]});
+        this.setState({ selectedcourseid: courseids[value] });
         this.setState({ selectedCourse: value });
     }
 
     handleChangeLecture(event, index, value) {
         this.setState({ selectedLecture: value });
-	    this.setState({ selectedlectureid: lectureids[value]});
+        this.setState({ selectedlectureid: lectureids[value] });
     }
     handleOpenDialog(event, index, value) {
         this.setState({ opendialog: true });
@@ -123,24 +125,31 @@ class AssignExercisesTab extends React.Component {
         this.setState({ opendialog: false });
     }
 
-    handleAssignClick(e){
-        var exercises = [];
+    handleAssignClick(e) {
+        var exercises = this.state.selection;
+        var exercisesJSON = [];
+
+        for (var i = 0; i < exercises.length; i++) {
+            var exerciseId = this.state.exercisesTableData[exercises[i]].id;
+            exercisesJSON[i] = { "id": exerciseId };
+        }
+
         var courseId = this.state.selectedcourseid;
         var lectureId = this.state.selectedlectureid;
         var deadline = $("#deadline").val();
         var data = JSON.stringify({
-                "exercises" : exercises,
-                "courseId": courseId,
-                "lectureId": lectureId,
-                "deadline": deadline
-            });
+            "exercises": exercisesJSON,
+            "courseId": courseId,
+            "lectureId": lectureId,
+            "deadline": deadline
+        });
 
         $.ajax({
             url: "http://localhost:8181/lecture",
             dataType: 'json',
-            method: 'PUT',
+            method: 'PATCH',
             xhrFields: {
-                    withCredentials: true
+                withCredentials: true
             },
             data: data,
             success: function (response) {
@@ -149,6 +158,9 @@ class AssignExercisesTab extends React.Component {
         });
     }
 
+    handleRowSelection(key) {
+        this.setState({ selection: key });
+    }
 
 
     handleChangeCourse(event, index, value) {
@@ -174,7 +186,7 @@ class AssignExercisesTab extends React.Component {
                         <h4>Step 1: Select Exercise(s)</h4>
                         <Paper zDepth={2} className="paper">
                             <div>
-                                <Table multiSelectable={true} className="paper" >
+                                <Table multiSelectable={true} className="paper" onRowSelection={this.handleRowSelection}>
                                     <TableHeader>
                                         <TableRow className="paper">
                                             <TableHeaderColumn>Title</TableHeaderColumn>
@@ -184,14 +196,14 @@ class AssignExercisesTab extends React.Component {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody deselectOnClickaway={false} className="paper">
-                                            {this.state.exercisesTableData.map((row, index) => (
-                                                <TableRow key={index} selected={row.selected}>
-                                                    <TableRowColumn>{row.title}</TableRowColumn>
-                                                    <TableRowColumn>{row.language}</TableRowColumn>
-                                                    <TableRowColumn>{row.creationDate}</TableRowColumn>
-                                                    <TableRowColumn className="hidden">{row.id}</TableRowColumn>
-                                                </TableRow>
-                                            ))}
+                                        {this.state.exercisesTableData.map((row, index) => (
+                                            <TableRow key={index} selected={row.selected}>
+                                                <TableRowColumn>{row.title}</TableRowColumn>
+                                                <TableRowColumn>{row.language}</TableRowColumn>
+                                                <TableRowColumn>{row.creationDate}</TableRowColumn>
+                                                <TableRowColumn className="hidden">{row.id}</TableRowColumn>
+                                            </TableRow>
+                                        ))}
                                     </TableBody>
                                 </Table>
                             </div>
@@ -212,7 +224,7 @@ class AssignExercisesTab extends React.Component {
                         <br />
                         <h4>Step 3: Select Deadline</h4>
                         <Paper zDepth={2} style={{ textAlign: "center", background: "#d1d1d1" }}>
-                            <DatePicker  id="deadline" floatingLabelText="Deadline" mode="landscape"  />
+                            <DatePicker id="deadline" floatingLabelText="Deadline" mode="landscape" />
                         </Paper>
                     </CardText>
                     <CardActions className="footer">
