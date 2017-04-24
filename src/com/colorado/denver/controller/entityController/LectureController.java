@@ -55,8 +55,10 @@ public class LectureController extends ObjectOperationController {
 		} catch (HttpServerErrorException e) {
 			e.printStackTrace();
 		}
-		entity = CourseService.createSolutionsForCourseAsssignment(entity);
 
+		entity = (Lecture) super.doDatabaseOperation(entity, DenverConstants.PATCH);
+		entity = CourseService.createSolutionsForCourseAsssignment(entity);
+		entity = (Lecture) super.doDatabaseOperation(entity, DenverConstants.PATCH);
 		return entity;
 	}
 
