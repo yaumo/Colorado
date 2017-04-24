@@ -50,7 +50,7 @@ class NavBar extends React.Component {
 
     componentDidMount() {
         $.ajax({
-            url: "http://localhost:8181/course",
+            url: "https://192.168.99.100:8081/api/course",
             ddataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -59,18 +59,21 @@ class NavBar extends React.Component {
             success: function (course) {
                 courseJSON = course;
                 if (lecturelist.length === 0) {
-                    for (var i = 0; i < course.lecture.length; i++) {
-                        lecturelist.push(<MenuItem value={i} key={i} primaryText={course.lectures[i].title} />);
-						//lectureids.push(course.lectures[i].id);
+                    for (var i = 0; i < courseJSON.lectures.length; i++) {
+                        lecturelist.push(<MenuItem value={i} key={i} primaryText={courseJSON.lectures[i].title} />);
+						lectureids.push(courseJSON.lectures[i].id);
                     }
-					//this.setState({selectedlectureid: lectureids[0]});
+					this.setState({selectedlectureid: lectureids[0]});
                 }
                 if (exerciseslist.length === 0) {
-                    for (var j = 0; j < course.lecture[0].exercises.length; j++) {
-                        exerciseslist.push(<MenuItem value={j} key={j} primaryText={course.lectures[0].exercises[j].title} onClick={this.handleClickOnMenu} />);
-						//exerciseids.push(course.lectures[0].exercises[j].id);
+                    for (var j = 0; j < coucourseJSON.lectures[0].exercises.length; j++) {
+                        exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lectures[0].exercises[j].title} onClick={this.handleClickOnMenu} />);
+						exerciseids.push(courseJSON.lectures[0].exercises[j].id);
                     }
                 }
+                this.setState({
+
+                });
             }.bind(this),
             error: function (error) {
 
@@ -84,7 +87,7 @@ class NavBar extends React.Component {
 		
 
          $.ajax({
-            url: "http://localhost:8181/exercise",
+            url: "https://192.168.99.100:8081/api/exercise",
             dataType: 'json',
             method: 'GET',
             data: {
@@ -109,11 +112,11 @@ class NavBar extends React.Component {
         }
         for (var j = 0; j < courseJSON.lecture[value].exercises.length; j++) {
             exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lecture[value].exercises[j].title} />);
-			//exerciseids.push(courseJSON.lecture[value].exercises[j].id);
+			exerciseids.push(courseJSON.lecture[value].exercises[j].id);
         }
 
         this.setState({ dropdown: value });
-		//this.setState({ selectedlectureid: lectureids[value]});
+	    this.setState({ selectedlectureid: lectureids[value]});
     }
 
     onClick(e) {
@@ -123,7 +126,7 @@ class NavBar extends React.Component {
         }
         else {
             $.ajax({
-                url: "http://localhost:8181/logout",
+                url: "https://192.168.99.100:8081/api/logout",
                 dataType: 'json',
                 method: 'POST',
                 xhrFields: {
@@ -133,7 +136,7 @@ class NavBar extends React.Component {
                     browserHistory.push('/');
                 }.bind(this),
                 error: function (error) {
-                    alert(error.responseText);
+                    browserHistory.push('/');
                 }
             });
         }

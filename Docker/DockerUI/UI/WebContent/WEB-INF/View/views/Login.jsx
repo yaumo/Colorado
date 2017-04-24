@@ -74,7 +74,7 @@ class Content extends React.Component {
     var obj = "username=" + username + "&password=" + password;
 
 
-    fetch('https://192.168.99.100:8081/api/login', {
+    fetch('https://192.168.99.100:8081/api/', {
       method: 'POST',
       credentials: 'same-origin',
       headers: {

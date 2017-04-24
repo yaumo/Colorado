@@ -93,12 +93,14 @@ class ExercisesTab extends React.Component {
     }
 
     handleCreateExercise(e) {
-        var title = $("#title")[0].value.toString();
-        var description = $("#description")[0].value.toString();
-        var language = $("#language").text();
-        var youtube = $("#youtube")[0].value.toString();
+        var title = $("#title")[0].value.toString().trim();
+        var description = $("#description")[0].value.toString().trim();
+        var language = $("#language").text().trim();
+        var youtube = $("#youtube")[0].value.toString().trim();
         var patternSolution = escape(this.state.solutionPattern);
         var template = escape(this.state.template);
+        var inputArray = "["+$("#inputArray")[0].value.toString()+"]";
+        var entryMethod = $("#entryMethod")[0].value.toString().trim();
 
         if ((title || description) == "") {
             this.setState({
@@ -106,12 +108,12 @@ class ExercisesTab extends React.Component {
                 dialog: "Please fill in a title and a description"
             });
         }
-       /* else if ((input1Value || input2Value) == "") {
+       else if ((inputArray || entryMethod) == "") {
             this.setState({
                 opendialog: true,
-                dialog: "Please fill in at least two testcases"
+                dialog: "Please fill testcases and entryMethod"
             });
-        }*/
+        }
         else if (patternSolution == "") {
             this.setState({
                 opendialog: true,
@@ -120,7 +122,7 @@ class ExercisesTab extends React.Component {
         }
         else {
             $.ajax({
-                url: "http://localhost:8181/exercise",
+                url: "https:192.168.99.100:8081/api/exercise",
                 dataType: 'json',
                 method: 'POST',
                 xhrFields: {
@@ -132,12 +134,14 @@ class ExercisesTab extends React.Component {
                     "language": language,
                     "patternSolution": patternSolution,
                     "template": template,
-                    "youtube": youtube
+                    "videoLink": youtube,
+                    "input": inputArray,
+                    "entryMethod": entryMethod
                 }),
                 success: function (response) {
                     this.setState({
                         opendialog: true,
-                        dialog: "Exercise successfully created"
+                        dialog: response.message.toString()
                     });
                     //setStates to ''
                 }.bind(this),
@@ -235,57 +239,25 @@ class ExercisesTab extends React.Component {
                         <Paper zDepth={2} className="paper" width="100%">
                             <table className="paper" style={{ width: "100%", verticalAlign: "top" }}>
                                 <tbody>
-                                    <tr>
-										<td style={{ width: "50%"}}>
-                                            Type:
-										</td>
-										<td style={{ width: "50%"}}>
-											Value:
-										</td>
-									</tr>
 									<tr>
-										<td style={{ width: "50%"}}>
-                                            <DropDownMenu className="language" id="case1Type" value={this.state.selectedCase1Type} onChange={this.handleChangeCase1Type}>
-                                                <MenuItem value={1} primaryText="String" />
-                                                <MenuItem value={2} primaryText="int" />
-                                                <MenuItem value={3} primaryText="boolean" />
-                                                <MenuItem value={4} primaryText="long" />
-                                            </DropDownMenu>
-                                        </td>
-                                        <td style={{ width: "50%"}}>
+										<td style={{ width: "45%"}}>
                                             <TextField
-                                                id="case2"
-                                                floatingLabelText="Case 1: Input"
-                                                fullWidth={true}
+                                                id="entryMethod"
+                                                floatingLabelText="Name of the entry-method by Java"
+                                                fullWidth={false}
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
                                             />
                                         </td>
-                                    </tr>
-                                   <tr>
-										<td style={{ width: "50%"}}>
-                                            Type:
-										</td>
-										<td style={{ width: "50%"}}>
-											Value:
-										</td>
-									</tr>
-									<tr>
-										<td style={{ width: "50%"}}>
-                                            <DropDownMenu className="language" id="case2Type" value={this.state.selectedCase2Type} onChange={this.handleChangeCase2Type}>
-                                                <MenuItem value={1} primaryText="String" />
-                                                <MenuItem value={2} primaryText="int" />
-                                                <MenuItem value={3} primaryText="boolean" />
-                                                <MenuItem value={4} primaryText="long" />
-                                            </DropDownMenu>
-                                        </td>
-                                        <td style={{ width: "50%"}}>
+                                        
+                                        <td style={{ width: "48%"}}>
                                             <TextField
-                                                id="case2"
-                                                floatingLabelText="Case 2: Input"
+                                                id="inputArray"
+                                                floatingLabelText="Test-Inputdata"
                                                 fullWidth={true}
                                                 underlineFocusStyle={{ 'borderColor': '#bd051f' }}
                                                 floatingLabelFocusStyle={{ 'color': '#bd051f' }}
+                                                hintText='"input1", "input2", "input3"' 
                                             />
                                         </td>
                                     </tr>

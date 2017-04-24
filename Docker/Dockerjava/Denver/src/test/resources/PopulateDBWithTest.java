@@ -29,10 +29,10 @@ import com.colorado.denver.services.persistence.HibernateSession;
 import com.colorado.denver.services.user.UserService;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = PopulateDBWithTestData.class)
-public class PopulateDBWithTestData {
+@SpringBootTest(classes = PopulateDBWithTest.class)
+public class PopulateDBWithTest {
 
-	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PopulateDBWithTestData.class);
+	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PopulateDBWithTest.class);
 	private HibernateController hibCtrl = HibernateGeneralTools.getHibernateController();
 
 	@Before
@@ -127,7 +127,7 @@ public class PopulateDBWithTestData {
 		hibCtrl.mergeEntity(lecture2);
 		hibCtrl.mergeEntity(lecture3);
 		hibCtrl.mergeEntity(lecture4);
-		hibCtrl.mergeEntity(system);
+		//hibCtrl.mergeEntity(system);
 
 	}
 
