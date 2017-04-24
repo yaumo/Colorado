@@ -24,7 +24,8 @@ import com.google.gson.GsonBuilder;
 public class LectureController extends ObjectOperationController {
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LectureController.class);
 
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Lecture.LECTURE, method = RequestMethod.POST)
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + DenverConstants.DOCENT + DenverConstants.FORWARD_SLASH
+			+ Lecture.LECTURE, method = RequestMethod.POST)
 	public Lecture handleLecturePostRequest() {
 
 		String jsonString = GenericTools.getRequestBody();
@@ -54,7 +55,8 @@ public class LectureController extends ObjectOperationController {
 		return entity;
 	}
 
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Lecture.LECTURE, method = RequestMethod.PATCH)
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + DenverConstants.DOCENT + DenverConstants.FORWARD_SLASH
+			+ Lecture.LECTURE, method = RequestMethod.PATCH)
 	public Lecture handleLecturePatchRequest() {
 
 		String jsonString = GenericTools.getRequestBody();

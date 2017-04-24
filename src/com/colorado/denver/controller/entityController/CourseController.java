@@ -23,7 +23,7 @@ import com.google.gson.GsonBuilder;
 @RestController
 public class CourseController extends ObjectOperationController {
 
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Course.COURSE, method = RequestMethod.POST)
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + DenverConstants.DOCENT + DenverConstants.FORWARD_SLASH + Course.COURSE, method = RequestMethod.POST)
 	@ResponseBody
 	public Course handleCoursePostRequest() {
 
@@ -42,7 +42,8 @@ public class CourseController extends ObjectOperationController {
 		return (Course) super.doDatabaseOperation(entity, DenverConstants.POST);
 	}
 
-	@RequestMapping(value = DenverConstants.FORWARD_SLASH + Course.COURSE, method = RequestMethod.PATCH)
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + DenverConstants.DOCENT + DenverConstants.FORWARD_SLASH
+			+ Course.COURSE, method = RequestMethod.PATCH)
 	@ResponseBody
 	public Course handleCoursePatchRequest() {
 
@@ -72,7 +73,7 @@ public class CourseController extends ObjectOperationController {
 		}
 	}
 
-	@RequestMapping(value = "/courses", method = RequestMethod.GET)
+	@RequestMapping(value = DenverConstants.FORWARD_SLASH + DenverConstants.DOCENT + "/courses", method = RequestMethod.GET)
 	public List<Course> getAllCourses() {
 		if (UserService.isCurrentUserDocent()) {
 			return CourseService.getAllCourses();
