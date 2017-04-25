@@ -219,7 +219,7 @@ app.all("/api/**", function(req, res) {
 
 const httpsServer = https.createServer(options,app); 
 
-const PORT = process.env.PORT || 8081
+const PORT = process.env.PORT || 80
 httpsServer.listen(PORT, () => {
     console.log('SEC Server running on port ' + PORT);
 });
