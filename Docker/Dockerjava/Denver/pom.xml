@@ -6,19 +6,16 @@
 	<groupId>com.colorado</groupId>
 	<artifactId>denver</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
 
 	<name>denver</name>
 	<description>Education WebApp for Java and JavaScript development</description>
-
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.2.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
 	
-
+	<parent>
+  		<groupId>org.springframework.boot</groupId>
+   		<artifactId>spring-boot-starter-parent</artifactId>
+  		<version>1.5.2.RELEASE</version>
+   		<relativePath/> <!-- lookup parent from repository -->
+   	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -186,7 +183,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-		<plugin>
+					<plugin>
    		 <groupId>org.apache.maven.plugins</groupId>
     	<artifactId>maven-surefire-plugin</artifactId>
     		<configuration>

@@ -87,7 +87,7 @@ class Content extends React.Component {
 
   componentDidMount() {
     $.ajax({
-      url: "https://192.168.99.100:8081/api/user",
+      url: "http://localhost:8181/user",
       dataType: 'json',
       method: 'GET',
       xhrFields: {
@@ -135,7 +135,7 @@ class Content extends React.Component {
     }
     else {
       $.ajax({
-        url: "https://192.168.99.100:8081/api/updatePassword",
+        url: "http://localhost:8181/updatePassword",
         dataType: 'json',
         method: 'POST',
         xhrFields: {

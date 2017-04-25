@@ -16,9 +16,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.colorado.denver.services.persistence.HibernateSession;
 import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.GenericTools;
-import com.colorado.denver.tools.Tools;
-
-import ch.qos.logback.classic.Level;
 
 /*
  * Keep this class clean! only main method and temporary experiments!
@@ -45,7 +42,7 @@ public class DenverApplication extends SpringBootServletInitializer {
 			GenericTools gt = new GenericTools();
 			gt.setApplicationContext(ctx);
 			UserService.authorizeSystemuser();
-			Tools.setLoggingLevel(Level.DEBUG);
+			// Tools.setLoggingLevel(Level.DEBUG);
 			LOGGER.info("Successfully obtained system user Token. DB and security should be in healthy state");
 
 		} catch (Exception e) {

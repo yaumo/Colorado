@@ -166,6 +166,13 @@ public class HibernateController {
 		Transaction tx = null;
 		// BaseEntity<?> toUpdate = getEntity(entity.getId());
 		// toUpdate = Updater.updater(toUpdate, entity);
+		
+		if (entity instanceof EducationEntity && entity.getClass() != EducationEntity.class && entity.getId() == null) {
+			// AssignableFrom doesn't work somehow...
+			LOGGER.info("Setting creation information on EducationEntity" + entity.getClass().getSimpleName());
+			setCreationInformation((EducationEntity) entity);
+		}
+		
 		BaseEntity<?> returnEnt = null;
 		try {
 			tx = session.beginTransaction();

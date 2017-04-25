@@ -88,7 +88,7 @@ class Content extends React.Component {
 
   componentDidMount() {
     /*$.ajax({
-      url: "https://192.168.99.100:8081/api/registration",
+      url: "http://localhost:8181/registration",
       dataType: 'json',
       method: 'GET',
       success: function (courses) {
@@ -115,7 +115,7 @@ class Content extends React.Component {
     var obj = "username=" + username + "&password=" + password;
 
 
-    fetch('https://192.168.99.100:8081/api/login', {
+    fetch('http://localhost:8181/login', {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
@@ -190,12 +190,12 @@ class Content extends React.Component {
     else {
 
       $.ajax({
-        url: "https://192.168.99.100:8081/api/registration",
+        url: "http://localhost:8181/registration",
         dataType: 'json',
         method: 'POST',
-        xhrFields: {
-                withCredentials: true
-            },
+        xhrFields:{
+          withCredentials: true
+        },
         data: JSON.stringify({
           "firstName": firstName,
           "lastName": lastName,

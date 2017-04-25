@@ -17,6 +17,7 @@ import Menu from 'material-ui/Menu';
 import Avatar from 'material-ui/Avatar';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
+import ActionHome from 'material-ui/svg-icons/navigation/refresh';
 
 var lecture = '';
 var exercise = '';
@@ -25,14 +26,14 @@ var coursesJSON;
 var allUsersJSON;
 var solutionsJSON;
 var solutionJSON;
-const courselist = [];
-const lecturelist = [];
-const exerciselist = [];
+var courselist = [];
+var lecturelist = [];
+var exerciselist = [];
 const userlist = [];
 const overviewlist = [];
-const lectureids = [];
-const courseids = [];
-const exerciseids = [];
+var lectureids = [];
+var courseids = [];
+var exerciseids = [];
 
 
 
@@ -58,7 +59,9 @@ class OverviewTab extends React.Component {
 			userlist: [],
 			dialog: [],
 			overviewlist: [],
-			allUsers: ''
+			allUsers: '',
+			code: '',
+			language: 'javascript'
 		};
 		this.handleChangeLecture = this.handleChangeLecture.bind(this);
 		this.handleChangeCourse = this.handleChangeCourse.bind(this);
@@ -68,11 +71,12 @@ class OverviewTab extends React.Component {
 		this.handleClickSearch = this.handleClickSearch.bind(this);
 		this.handleOpenDialog = this.handleOpenDialog.bind(this);
 		this.handleCloseDialog = this.handleCloseDialog.bind(this);
+		this.handleRefresh = this.handleRefresh.bind(this);
 	}
 
 	componentDidMount() {
 		$.ajax({
-			url: "https://192.168.99.100:8081/api/docent/courses",
+			url: "http://localhost:8181/docent/courses",
 			dataType: 'json',
 			method: 'GET',
 			xhrFields: {
@@ -187,13 +191,70 @@ class OverviewTab extends React.Component {
 		this.setState({ opendialog: false });
 	}
 
+	handleRefresh(){
+
+		courselist = [];
+		courseids = [];
+		lecturelist = [];
+		lectureids = [];
+		exerciselist = [];
+		exerciseids = [];
+
+
+		$.ajax({
+			url: "http://localhost:8181/docent/courses",
+			dataType: 'json',
+			method: 'GET',
+			xhrFields: {
+				withCredentials: true
+			},
+			success: function (courses) {
+				coursesJSON = courses;
+				if (courselist.length === 0) {
+					for (var i = 0; i < coursesJSON.length; i++) {
+						courselist.push(<MenuItem value={i} key={i} primaryText={coursesJSON[i].title} />);
+						courseids.push(coursesJSON[i].id);
+						this.setState({ selectedcourseid: courseids[0] });
+					}
+				}
+				if (lecturelist.length === 0) {
+					lecturelist.push(<MenuItem value={0} key={0} primaryText={'All Lectures'} />);
+					lectureids.push('');
+					for (var j = 1; j <= coursesJSON[0].lectures.length; j++) {
+						lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[j - 1].title} />);
+						lectureids.push(coursesJSON[0].lectures[j - 1].id);
+						this.setState({ selectedlectureid: lectureids[0] });
+					}
+				}
+				if (exerciselist.length === 0) {
+					exerciselist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
+					if (coursesJSON[0].lectures[0]) {
+						if (coursesJSON[0].lectures[0].exercises) {
+							for (var j = 1; j <= coursesJSON[0].lectures[0].exercises.length; j++) {
+								exerciselist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[0].lectures[0].exercises[1 - j].title} />);
+							}
+						}
+					}
+					exerciseids.push('');
+					this.setState({ selectedexerciseid: exerciseids[0] });
+				}
+				this.setState({ courselist: courselist });
+				this.setState({ lecturelist: lecturelist });
+				this.setState({ exerciselist: exerciselist });
+				this.setState({ selectedLecture: 0 });
+				this.setState({ selectedExercise: 0 });
+				this.setState({ disabledDropDownExercise: true });
+			}.bind(this)
+		});
+	}
+
 	handleClickViewCode(event, index, value) {
 		var lectureID = this.state.selectedlectureid;
 		var exerciseID = this.state.selectedexerciseid;
 		var userID = event.currentTarget.parentElement.parentElement.cells[4].innerText;
 
 		$.ajax({
-			url: "https://192.168.99.100:8081/api/docent/solution",
+			url: "http://localhost:8181/docent/solution",
 			dataType: 'json',
 			method: 'GET',
 			xhrFields: {
@@ -207,11 +268,13 @@ class OverviewTab extends React.Component {
 				solutionJSON = solution;
 				//lecture = event.currentTarget.parentElement.parentElement.cells[1].innerText;
 				//exercise = event.currentTarget.parentElement.parentElement.cells[2].innerText;
-				name = event.currentTarget.parentElement.parentElement.cells[0].innerText;
-
+				name = this.state.exerciselist[value];
+				var codeSolution = solutionJSON.code;
+				var languageSolution = solutionJSON.language;
 				this.setState({
-					open: true
-					//code noch changen
+					open: true,
+					language: languageSolution,
+					code: codeSolution
 				});
 
 			}.bind(this)
@@ -242,7 +305,7 @@ class OverviewTab extends React.Component {
 		}
 		else {
 			$.ajax({
-				url: "https://192.168.99.100:8081/api/docent/solutions",
+				url: "http://localhost:8181/docent/solutions",
 				dataType: 'json',
 				method: 'GET',
 				xhrFields: {
@@ -294,6 +357,9 @@ class OverviewTab extends React.Component {
 
 											<IconButton onClick={this.handleClickSearch}>
 												<ActionSearch />
+											</IconButton>
+											<IconButton tooltip="Refreseh" onClick={this.handleRefresh}>
+												<ActionHome />
 											</IconButton>
 										</TableHeaderColumn>
 									</TableRow>
@@ -373,7 +439,7 @@ class OverviewTab extends React.Component {
 											</tbody>
 										</table>
 										<Paper zDepth={4}>
-											<EditorAce mode='javascript' />
+											<EditorAce mode={this.state.language} value={this.state.code} disabled={true} />
 										</Paper>
 									</CardText>
 									<CardActions className="footer">
