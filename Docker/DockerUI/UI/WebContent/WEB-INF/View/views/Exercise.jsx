@@ -143,9 +143,6 @@ export class Exercise extends React.Component {
             },
             success: function (currentExercise) {
                 currentExerciseJSON = currentExercise;
-                var solutionTest = currentExerciseJSON.patternSolution.substring(1, currentExerciseJSON.patternSolution.length);
-                solutionTest = encodeURI(solutionTest);
-                solutionTest = decodeURI(solutionTest);
                 if(currentExerciseJSON.language==='Java'){
                     this.setState({languageformatted: 'java'});
                 }
@@ -157,7 +154,6 @@ export class Exercise extends React.Component {
                     description: currentExerciseJSON.description,
                     language: currentExerciseJSON.language,
                     youtube: currentExerciseJSON.videolink,
-                    solution: solutionTest,
                     exerciseJSON: currentExerciseJSON
                 });
                 $.ajax({
@@ -168,7 +164,7 @@ export class Exercise extends React.Component {
                         withCredentials: true
                     },
                     data: {
-                        "id": currentExerciseJSON.id
+                        "exeId": currentExerciseJSON.id
                     },
                     success: function (solution) {
                         solutionJSON = solution;
@@ -217,7 +213,7 @@ export class Exercise extends React.Component {
             $.ajax({
                 url: "https://192.168.99.100:8081/api/logout",
                 dataType: 'json',
-                method: 'PATCH',
+                method: 'POST',
                 xhrFields: {
                     withCredentials: true
                 },
@@ -243,22 +239,23 @@ export class Exercise extends React.Component {
         var solutionCode = this.state.solution;
         var exerciseJSON = this.state.exerciseJSON;
         var id = exerciseJSON.id;
+        var solId = solutionJSON.id;
 
         $.ajax({
             url: "https://192.168.99.100:8081/api/solution",
             dataType: 'json',
-            method: 'POST',
+            method: 'PATCH',
             xhrFields: {
                 withCredentials: true
             },
             data: JSON.stringify({
-                "id": id,
+                "id": solId,
                 "solution": solutionCode
             }),
             success: function (response) {
                 this.setState({
                     opendialog: true,
-                    dialog: "Your solution is not correct"
+                    dialog: "Your solution is correct"
                     //response.message.toString()
                 });
                 //setStates to ''

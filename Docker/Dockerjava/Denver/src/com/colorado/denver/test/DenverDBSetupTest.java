@@ -37,7 +37,7 @@ public class DenverDBSetupTest {
 
 	private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DenverDBSetupTest.class);
 
-		@Before
+	@Before
 	public void before() {
 		// Using hibernate config file!
 		boolean useUpdate = false;

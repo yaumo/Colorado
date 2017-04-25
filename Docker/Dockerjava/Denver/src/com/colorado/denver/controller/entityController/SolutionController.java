@@ -39,22 +39,24 @@ public class SolutionController extends ObjectOperationController {
 		Gson gson = gb.create();
 
 		Solution entity = gson.fromJson(jsonString, Solution.class);
-		if (!ExerciseService.dueDateReached(entity)) {
-			try {
-				entity.setCorrect(false); // init with false. Otherwise the value might be set from the frontend in another update
-				entity.setExercise(ExerciseService.getExerciseForSolution(entity));
-				SolutionExecutor solex = new SolutionExecutor(entity);
 
-				entity = solex.execute();
+		// due to bug disable due date reached
+		// if (!ExerciseService.dueDateReached(entity)) {
+		try {
+			entity.setCorrect(false); // init with false. Otherwise the value might be set from the frontend in another update
+			entity.setExercise(ExerciseService.getExerciseForSolution(entity));
+			SolutionExecutor solex = new SolutionExecutor(entity);
 
-			} catch (Exception e) {
-				LOGGER.error("Executing Solution failed! : " + entity.getId());
-				LOGGER.error("Executing Ecercise failed with code: " + entity.getCode());
-				e.printStackTrace();
-			}
-		} else {
-			return getSolutionForUser(entity.getId());
+			entity = solex.execute();
+
+		} catch (Exception e) {
+			LOGGER.error("Executing Solution failed! : " + entity.getId());
+			LOGGER.error("Executing Ecercise failed with code: " + entity.getCode());
+			e.printStackTrace();
 		}
+		// } else {
+		// return getSolutionForUser(entity.getId());
+		// }
 
 		try {
 			super.checkAccess(Solution.SOLUTION, DenverConstants.PATCH);
