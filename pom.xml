@@ -6,7 +6,6 @@
 	<groupId>com.colorado</groupId>
 	<artifactId>denver</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
 
 	<name>denver</name>
 	<description>Education WebApp for Java and JavaScript development</description>
@@ -17,7 +16,7 @@
   		<version>1.5.2.RELEASE</version>
    		<relativePath/> <!-- lookup parent from repository -->
    	</parent>
- 	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

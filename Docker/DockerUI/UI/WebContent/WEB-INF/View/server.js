@@ -9,15 +9,16 @@ import restInterfaceServer from './restInterfaceServer.js'
 
 var httpProxy = require('http-proxy');
 //var apiProxy = httpProxy.createProxyServer();
-var apiProxy = httpProxy.createProxyServer({
+var apiProxy = httpProxy.createProxyServer();
+/*{
   ssl: {
     key: fs.readFileSync('ssl/backend/backend-key.pem', 'utf8'),
     cert: fs.readFileSync('ssl/backend/backend-crt.pem', 'utf8')
   },
   //target: 'https://localhost:9010',
   secure: false // Depends on your needs, could be false.
-});
-var serverOne = 'https://backend:8443';
+} */
+var serverOne = 'http://backend:8080';
 
 var FileStore = require('session-file-store')(session);
 

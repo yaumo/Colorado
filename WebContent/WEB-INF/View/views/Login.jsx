@@ -193,9 +193,9 @@ class Content extends React.Component {
         url: "http://localhost:8181/registration",
         dataType: 'json',
         method: 'POST',
-        xhrFields: {
-                withCredentials: true
-            },
+        xhrFields:{
+          withCredentials: true
+        },
         data: JSON.stringify({
           "firstName": firstName,
           "lastName": lastName,
