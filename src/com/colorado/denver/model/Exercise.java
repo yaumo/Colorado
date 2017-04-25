@@ -33,6 +33,7 @@ public class Exercise extends EducationEntity {
 	public static final String CODE = "code";
 	public static final String PATTERN_SOLUTION = "patternSolution";
 	public static final String TEMPLATE = "template";
+	public static final String VIDEO_LINK = "videoLink";
 	public static final String ANSWER = "answer";
 	public static final String HAS_BEEN_MODIFIED = "hasBeenModified";
 	public static final String ENTRY_METHOD = "entryMethod";
@@ -81,6 +82,7 @@ public class Exercise extends EducationEntity {
 		this.deadline = deadline;
 	}
 
+	@Column(name = Exercise.VIDEO_LINK, columnDefinition = "TEXT")
 	public String getVideoLink() {
 		return videoLink;
 	}
@@ -118,6 +120,7 @@ public class Exercise extends EducationEntity {
 		this.input = input;
 	}
 
+	@Column(name = Exercise.ANSWER, columnDefinition = "TEXT")
 	public String getAnswer() {
 		return answer;
 	}
@@ -159,6 +162,7 @@ public class Exercise extends EducationEntity {
 		this.entryMethod = entryMethod;
 	}
 
+	@Column(name = Exercise.MESSAGE, columnDefinition = "TEXT")
 	public String getMessage() {
 		return message;
 	}
