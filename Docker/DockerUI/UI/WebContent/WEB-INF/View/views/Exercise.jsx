@@ -217,7 +217,7 @@ export class Exercise extends React.Component {
             $.ajax({
                 url: "https://192.168.99.100:8081/api/logout",
                 dataType: 'json',
-                method: 'POST',
+                method: 'PATCH',
                 xhrFields: {
                     withCredentials: true
                 },

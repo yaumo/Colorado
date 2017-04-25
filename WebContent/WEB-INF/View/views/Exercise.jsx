@@ -247,7 +247,7 @@ export class Exercise extends React.Component {
         $.ajax({
             url: "http://localhost:8181/solution",
             dataType: 'json',
-            method: 'POST',
+            method: 'PATCH',
             xhrFields: {
                 withCredentials: true
             },
