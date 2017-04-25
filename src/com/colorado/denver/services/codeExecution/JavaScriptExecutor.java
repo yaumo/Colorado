@@ -15,7 +15,7 @@ import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 public interface JavaScriptExecutor {
 	final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(JavaExecutor.class);
 
-	public default String executeJavaScript(String[] excInput, String code) {
+	public default String executeJavaScript(String[] excInput, String code, String entryM) {
 		String result = "";
 		try {
 			LOGGER.info("Starting...JS execution");
@@ -24,7 +24,7 @@ public interface JavaScriptExecutor {
 			JSObject object = (JSObject) nashorn.eval(code);
 
 			Object[] inputObj = Converter.convertForJavaScriptInput(excInput);
-			result = object.call(null, inputObj).toString();
+			result = object.call(entryM, inputObj).toString();
 			LOGGER.info("Finished...");
 			System.out.println("Result of JavaScript Calc is: " + result);
 		} catch (ScriptException e) {
