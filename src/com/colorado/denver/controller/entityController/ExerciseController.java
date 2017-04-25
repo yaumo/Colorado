@@ -40,8 +40,11 @@ public class ExerciseController extends ObjectOperationController {
 		Exercise entity = gson.fromJson(jsonString, Exercise.class);
 		try {
 			super.checkAccess(Exercise.EXERCISE, DenverConstants.POST);
-
+System.out.println("String before unescape: " + entity.getPatternSolution());
 			entity.setPatternSolution(Tools.unescape_string((entity.getPatternSolution())));
+
+System.out.println("--------");
+System.out.println("String AFTER unescape: " + entity.getPatternSolution());
 			ExerciseExecutor excExcutor = new ExerciseExecutor(entity);
 			entity = excExcutor.execute();
 			entity.setAnswer(entity.getAnswer());

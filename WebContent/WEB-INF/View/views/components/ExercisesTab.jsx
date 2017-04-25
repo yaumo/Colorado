@@ -93,12 +93,34 @@ class ExercisesTab extends React.Component {
     }
 
     handleCreateExercise(e) {
+        var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+            escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+            meta = { // table of character substitutions
+                '\b': '\\b',
+                '\t': '\\t',
+                '\n': '\\n',
+                '\f': '\\f',
+                '\r': '\\r',
+                '"': '\\"',
+                '\\': '\\\\'
+            };
+
+        function json_quote(string) {
+            escapable.lastIndex = 0;
+            return escapable.test(string) ? '"' + string.replace(escapable, function (a) {
+                var c = meta[a];
+                return typeof c === 'string' ? c :
+                    '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+            }) + '"' : '"' + string + '"';
+        }
+
+
         var title = $("#title")[0].value.toString().trim();
         var description = $("#description")[0].value.toString().trim();
         var language = $("#language").text().trim();
         var youtube = $("#youtube")[0].value.toString().trim();
-        var patternSolution = escape(this.state.solutionPattern);
-        var template = escape(this.state.template);
+        var patternSolution = json_quote(this.state.solutionPattern);
+        var template = json_quote(this.state.template);
         var inputArray = [];
         inputArray.push($("#inputArray")[0].value.toString());
         var entryMethod = $("#entryMethod")[0].value.toString().trim();
@@ -129,6 +151,7 @@ class ExercisesTab extends React.Component {
                 xhrFields: {
                     withCredentials: true
                 },
+                crossDomain: true,
                 data: JSON.stringify({
                     "title": title,
                     "description": description,
