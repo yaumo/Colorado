@@ -30,6 +30,7 @@ class ExercisesTab extends React.Component {
             case1Type: 1,
             case2Type: 1,
             language: 'javascript',
+            languageformatted: '',
             template: '',
             solutionpattern: ''
         };

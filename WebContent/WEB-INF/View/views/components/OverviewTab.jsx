@@ -343,7 +343,7 @@ class OverviewTab extends React.Component {
 							<Table selectable={false}>
 								<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 									<TableRow>
-										<TableHeaderColumn colSpan="6" style={{ textAlign: 'center', background: "#d1d1d1" }}>
+										<TableHeaderColumn colSpan="3" style={{ textAlign: 'center', background: "#d1d1d1" }}>
 											<DropDownMenu value={this.state.selectedCourse} onChange={this.handleChangeCourse} ref={'DropDownCourse'}>
 												{this.state.courselist}
 											</DropDownMenu>
@@ -367,9 +367,9 @@ class OverviewTab extends React.Component {
 										<TableHeaderColumn>Name</TableHeaderColumn>
 										<TableHeaderColumn>Status</TableHeaderColumn>
 										<TableHeaderColumn>View Code</TableHeaderColumn>
-										<TableHeaderColumn >exerciseID</TableHeaderColumn>
-										<TableHeaderColumn >userID</TableHeaderColumn>
-										<TableHeaderColumn >lectureID</TableHeaderColumn>
+										<TableHeaderColumn className="hidden">exerciseID</TableHeaderColumn>
+										<TableHeaderColumn className="hidden">userID</TableHeaderColumn>
+										<TableHeaderColumn className="hidden">lectureID</TableHeaderColumn>
 									</TableRow>
 								</TableHeader>
 								<TableBody displayRowCheckbox={false} style={{ background: "#d1d1d1" }}>
@@ -382,9 +382,9 @@ class OverviewTab extends React.Component {
 													<ActionCode />
 												</IconButton>
 											</TableRowColumn>
-											<TableRowColumn >{this.state.selectedexerciseid}</TableRowColumn>
-											<TableRowColumn >{row.id}</TableRowColumn>
-											<TableRowColumn >{this.state.selectedlectureid}</TableRowColumn>
+											<TableRowColumn className="hidden">{this.state.selectedexerciseid}</TableRowColumn>
+											<TableRowColumn className="hidden">{row.id}</TableRowColumn>
+											<TableRowColumn className="hidden">{this.state.selectedlectureid}</TableRowColumn>
 										</TableRow>
 									))}
 								</TableBody>
