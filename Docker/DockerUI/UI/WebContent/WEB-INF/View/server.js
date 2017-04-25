@@ -3,7 +3,6 @@ import fs from 'fs'
 import path from 'path'
 import express from 'express'
 import session from 'express-session'
-import bodyParser from 'body-parser'
 import compression from 'compression'
 import restInterfaceServer from './restInterfaceServer.js'
 
@@ -42,10 +41,6 @@ const session_options = {
 };
 
 app.use(session({store: new FileStore(session_options), secret: 'b386464b-351e-4732-a439-e00c1324eb0c', saveUninitialized: false, resave: true}));
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-
 let sess;
 
 /*const users = [
