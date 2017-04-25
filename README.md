@@ -50,3 +50,7 @@ server {
 - execute: dos2unix entrypoint.sh
 - Naviagte to /Docker
 - execute: docker-compose up --build
+- type: https://192.168.99.100 in browser
+- Login: 
+- Docent: username: system  password: password
+- Student: username: Peter Student C1  password: password
