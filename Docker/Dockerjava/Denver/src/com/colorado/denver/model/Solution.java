@@ -105,6 +105,7 @@ public class Solution extends EducationEntity {
 		this.result = answer;
 	}
 
+	@Column(name = Solution.MESSAGE, columnDefinition = "TEXT")
 	public String getMessage() {
 		return message;
 	}

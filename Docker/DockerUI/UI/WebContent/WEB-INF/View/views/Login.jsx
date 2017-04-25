@@ -193,9 +193,9 @@ class Content extends React.Component {
         url: "https://192.168.99.100:8081/api/registration",
         dataType: 'json',
         method: 'POST',
-        xhrFields: {
-                withCredentials: true
-            },
+        xhrFields:{
+          withCredentials: true
+        },
         data: JSON.stringify({
           "firstName": firstName,
           "lastName": lastName,
