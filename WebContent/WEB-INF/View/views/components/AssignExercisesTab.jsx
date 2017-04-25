@@ -232,9 +232,17 @@ class AssignExercisesTab extends React.Component {
                 data: data,
                 success: function (response) {
                     this.setState({ selection: [] });
+                    this.setState({
+                        opendialog: true,
+                        dialog: "Successfully assigned"
+                    });
                 }.bind(this),
                 error: function (error) {
                     this.setState({ selection: [] });
+                    this.setState({
+                        opendialog: true,
+                        dialog: "An error has occurred. Please make sure that you are logged in and have the permission to create new exercises."
+                    });
                 }.bind(this)
             });
         }

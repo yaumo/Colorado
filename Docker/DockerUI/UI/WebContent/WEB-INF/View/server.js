@@ -3,22 +3,21 @@ import fs from 'fs'
 import path from 'path'
 import express from 'express'
 import session from 'express-session'
-import bodyParser from 'body-parser'
 import compression from 'compression'
 import restInterfaceServer from './restInterfaceServer.js'
 
 var httpProxy = require('http-proxy');
 //var apiProxy = httpProxy.createProxyServer();
-var apiProxy = httpProxy.createProxyServer();
-/*{
+var apiProxy = httpProxy.createProxyServer(
+{
   ssl: {
     key: fs.readFileSync('ssl/backend/backend-key.pem', 'utf8'),
     cert: fs.readFileSync('ssl/backend/backend-crt.pem', 'utf8')
   },
   //target: 'https://localhost:9010',
   secure: false // Depends on your needs, could be false.
-} */
-var serverOne = 'http://backend:8080';
+}); 
+var serverOne = 'https://backend:8443';
 
 var FileStore = require('session-file-store')(session);
 
@@ -42,10 +41,6 @@ const session_options = {
 };
 
 app.use(session({store: new FileStore(session_options), secret: 'b386464b-351e-4732-a439-e00c1324eb0c', saveUninitialized: false, resave: true}));
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-
 let sess;
 
 /*const users = [
