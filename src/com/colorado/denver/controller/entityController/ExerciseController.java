@@ -1,5 +1,6 @@
 package com.colorado.denver.controller.entityController;
 
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 
+import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.model.Exercise;
 import com.colorado.denver.services.ExerciseService;
 import com.colorado.denver.services.codeExecution.ExerciseExecutor;
@@ -40,11 +42,11 @@ public class ExerciseController extends ObjectOperationController {
 		Exercise entity = gson.fromJson(jsonString, Exercise.class);
 		try {
 			super.checkAccess(Exercise.EXERCISE, DenverConstants.POST);
-System.out.println("String before unescape: " + entity.getPatternSolution());
+			System.out.println("String before unescape: " + entity.getPatternSolution());
 			entity.setPatternSolution(Tools.unescape_string((entity.getPatternSolution())));
 
-System.out.println("--------");
-System.out.println("String AFTER unescape: " + entity.getPatternSolution());
+			System.out.println("--------");
+			System.out.println("String AFTER unescape: " + entity.getPatternSolution());
 			ExerciseExecutor excExcutor = new ExerciseExecutor(entity);
 			entity = excExcutor.execute();
 			entity.setAnswer(entity.getAnswer());
@@ -68,8 +70,9 @@ System.out.println("String AFTER unescape: " + entity.getPatternSolution());
 
 	@RequestMapping(value = "/exercise", method = RequestMethod.GET)
 	public Exercise getExerciseForUser(@RequestParam(value = "exeId", required = true) String exeId) {
-		Set<Exercise> exercises = ExerciseService.getAllExercisesForUser(UserService.getCurrentUser().getId());
-		for (Exercise exercise : exercises) {
+		HibernateController hibCtrl = new HibernateController();
+		List<Exercise> list = (List<Exercise>) (List<?>) hibCtrl.getEntityList(Exercise.class);
+		for (Exercise exercise : list) {
 			if (exercise.getId().equals(exeId))
 				return exercise;
 		}
