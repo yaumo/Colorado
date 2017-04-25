@@ -107,7 +107,7 @@ class AssignExercisesTab extends React.Component {
         }
         lecturelist.push(<MenuItem value={0} key={0} primaryText={'Select a Lecture'} />);
         lectureids.push('');
-        for (var j = 1; j < coursesJSON[value].lectures.length; j++) {
+        for (var j = 1; j <= coursesJSON[value].lectures.length; j++) {
             lecturelist.push(<MenuItem value={j} key={j} primaryText={coursesJSON[value].lectures[j - 1].title} />);
             lectureids.push(coursesJSON[value].lectures[j - 1].id);
         }
@@ -133,6 +133,22 @@ class AssignExercisesTab extends React.Component {
         lecturelist = [];
         courseids = [];
         lectureids = [];
+
+        $.ajax({
+            url: "http://localhost:8181/docent/exercises",
+            dataType: 'json',
+            method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (exercises) {
+                for (var i = 0; i < exercises.length; i++) {
+                    var d = new Date(exercises[i].creationDate);
+                    exercises[i].creationDate = d.toDateString();
+                }
+                this.setState({ exercisesTableData: exercises });
+            }.bind(this)
+        });
 
 
         $.ajax({
