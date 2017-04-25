@@ -2,6 +2,7 @@ import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
+import Menu from 'material-ui/Menu';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
@@ -44,7 +45,7 @@ class NavBar extends React.Component {
             selectedexerciseid: ''
         };
         this.handleChange = this.handleChange.bind(this);
-        this.handleClickOnMenu = this.handleClickOnMenu.bind(this);
+        //this.handleClickOnMenu = this.handleClickOnMenu.bind(this);
         this.onClick = this.onClick.bind(this);
     }
 
@@ -67,14 +68,15 @@ class NavBar extends React.Component {
                 }
                 if (exerciseslist.length === 0) {
                     for (var j = 0; j < courseJSON.lectures[0].exercises.length; j++) {
-                        exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lectures[0].exercises[j].title} onClick={this.handleClickOnMenu} />);
+                        exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lectures[0].exercises[j].title} onClick={this.handleClickOnMenu.bind(this, j)} />);
                         exerciseids.push(courseJSON.lectures[0].exercises[j].id);
                     }
                 }
                 this.setState({
                     selectedexerciseid: exerciseids[0]
                 });
-                handleClick(0);
+                
+                //handleClickOnMenu(0);
             }.bind(this),
             error: function (error) {
 
@@ -95,7 +97,7 @@ class NavBar extends React.Component {
                 withCredentials: true
             },
             data: {
-                "exerciseID": exerciseID
+                "exeId": exerciseID
             },
             success: function (currentExercise) {
                 currentExerciseJSON = currentExercise;
@@ -116,7 +118,7 @@ class NavBar extends React.Component {
             exerciseids.pop();
         }
         for (var j = 0; j < courseJSON.lectures[value].exercises.length; j++) {
-            exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lecture[value].exercises[j].title} />);
+            exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lectures[value].exercises[j].title} onTouchTap={this.handleClickOnMenu.bind(this, j)} />);
             exerciseids.push(courseJSON.lectures[value].exercises[j].id);
         }
 
@@ -177,6 +179,7 @@ class NavBar extends React.Component {
                         <Drawer
                             id="drawer"
                             docked={true}
+                            onItemTouchTap={this.handleClickOnMenu}
                             open={this.state.open}
                             onRequestChange={(open) => this.setState({ open })}
                             containerStyle={{ 'position': 'fixed', 'margin': '0', 'top': '64px', 'height': 'calc(100% - 64px)', 'backgroundColor': '#959595', 'background': '-webkit-linear-gradient(#bbbbbb, #959595)' }}
@@ -185,7 +188,7 @@ class NavBar extends React.Component {
                                 {lecturelist}
                             </DropDownMenu>
                             <Divider />
-                            {exerciseslist}
+                                {exerciseslist}
 
                         </Drawer>
                     </div>
