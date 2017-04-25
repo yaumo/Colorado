@@ -35,7 +35,7 @@ public class SolutionExecutor implements JavaExecutor, JavaScriptExecutor {
 			}
 		} else {
 			LOGGER.info("Executing JavaScriptx");
-			answer = executeJavaScript(excInput, code);
+			answer = executeJavaScript(excInput, code, entryMethod);
 		}
 
 		if (sol.getExercise().getAnswer().equals(answer)) {
