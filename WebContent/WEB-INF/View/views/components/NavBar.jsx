@@ -17,7 +17,9 @@ import { browserHistory } from 'react-router';
 import Avatar from 'material-ui/Avatar';
 
 const lecturelist = [];
+const lectureids = [];
 const exerciseslist = [];
+const exerciseids = [];
 var data;
 var courseJSON;
 var currentExerciseJSON;
@@ -37,17 +39,19 @@ class NavBar extends React.Component {
         this.state = {
             open: true,
             value: 1,
-            dropdown: 0
+            dropdown: 0,
+            selectedlectureid: '',
+            selectedexerciseid: ''
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleClickOnMenu = this.handleClickOnMenu.bind(this);
+        this.onClick = this.onClick.bind(this);
     }
 
     componentDidMount() {
         $.ajax({
             url: "http://localhost:8181/course",
             ddataType: 'json',
-			jsonp: 'callback',
             method: 'GET',
             xhrFields: {
                 withCredentials: true
@@ -55,15 +59,22 @@ class NavBar extends React.Component {
             success: function (course) {
                 courseJSON = course;
                 if (lecturelist.length === 0) {
-                    for (var i = 0; i < course.lecture.length; i++) {
-                        lecturelist.push(<MenuItem value={i} key={i} primaryText={course.lectures[i].title} />);
+                    for (var i = 0; i < courseJSON.lectures.length; i++) {
+                        lecturelist.push(<MenuItem value={i} key={i} primaryText={courseJSON.lectures[i].title} />);
+                        lectureids.push(courseJSON.lectures[i].id);
                     }
+                    this.setState({ selectedlectureid: lectureids[0] });
                 }
                 if (exerciseslist.length === 0) {
-                    for (var j = 0; j < data.lecture[0].exercises.length; j++) {
-                        exerciseslist.push(<MenuItem value={j} key={j} primaryText={course.lectures[0].exercises[j].title} onClick={this.handleClickOnMenu} />);
+                    for (var j = 0; j < courseJSON.lectures[0].exercises.length; j++) {
+                        exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lectures[0].exercises[j].title} onClick={this.handleClickOnMenu} />);
+                        exerciseids.push(courseJSON.lectures[0].exercises[j].id);
                     }
                 }
+                this.setState({
+                    selectedexerciseid: exerciseids[0]
+                });
+                handleClick(0);
             }.bind(this),
             error: function (error) {
 
@@ -71,19 +82,24 @@ class NavBar extends React.Component {
         });
     }
 
-    handleClickOnMenu(event){
-        var exerciseID = '';
+    handleClickOnMenu(value) {
+        var exerciseID = exerciseids[value];
         //exerciseID auslesen!
 
-         $.ajax({
+
+        $.ajax({
             url: "http://localhost:8181/exercise",
             dataType: 'json',
             method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
             data: {
                 "exerciseID": exerciseID
             },
             success: function (currentExercise) {
                 currentExerciseJSON = currentExercise;
+                this.props.setExerciseJSON(currentExerciseJSON);
                 //Daten aus der Component müssen in Component Exercise 
             }.bind(this),
             error: function (error) {
@@ -97,12 +113,15 @@ class NavBar extends React.Component {
         var count = exerciseslist.length;
         for (var i = 0; i < count; i++) {
             exerciseslist.pop();
+            exerciseids.pop();
         }
-        for (var j = 0; j < data.lecture[value].exercises.length; j++) {
-            exerciseslist.push(<MenuItem value={j} key={j} primaryText={data.lecture[value].exercises[j].exercise_title} />);
+        for (var j = 0; j < courseJSON.lectures[value].exercises.length; j++) {
+            exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lecture[value].exercises[j].title} />);
+            exerciseids.push(courseJSON.lectures[value].exercises[j].id);
         }
 
         this.setState({ dropdown: value });
+        this.setState({ selectedlectureid: lectureids[value] });
     }
 
     onClick(e) {
@@ -110,7 +129,22 @@ class NavBar extends React.Component {
         if (e.target.textContent == "Settings") {
             browserHistory.push('/user');
         }
-        else browserHistory.push('/');
+        else {
+            $.ajax({
+                url: "http://localhost:8181/logout",
+                dataType: 'json',
+                method: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    browserHistory.push('/');
+                }.bind(this),
+                error: function (error) {
+                    browserHistory.push('/');
+                }
+            });
+        }
     }
 
 

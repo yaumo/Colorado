@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+    postgres:
+     image: "postgres:9.4"
+     ports:
+      - "5432:5432"
+     environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=Denver
+      
+    backend:
+     build: ./Dockerjava
+     links:
+      - postgres
+    #  ports:
+    #  - "8080:8080"
+     depends_on:
+      - postgres
+    #postgresql: 
+     #   build: ./Dockerpostgres
+      #  ports:
+       #     - "5432:5432"
+    ui:
+        build: ./DockerUI/UI/WebContent/WEB-INF/View
+        links:
+         - backend
+        ports:
+             - "8081:8081"
+ 

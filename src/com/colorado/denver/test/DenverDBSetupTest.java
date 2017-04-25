@@ -26,9 +26,9 @@ import com.colorado.denver.controller.HibernateController;
 import com.colorado.denver.controller.entityController.PrivilegeController;
 import com.colorado.denver.model.Privilege;
 import com.colorado.denver.model.User;
-import com.colorado.denver.services.UserService;
 import com.colorado.denver.services.persistence.HibernateGeneralTools;
-import com.colorado.denver.services.persistence.SessionTools;
+import com.colorado.denver.services.persistence.HibernateSession;
+import com.colorado.denver.services.user.UserService;
 import com.colorado.denver.tools.DenverConstants;
 
 @RunWith(SpringRunner.class)
@@ -43,7 +43,7 @@ public class DenverDBSetupTest {
 		boolean useUpdate = false;
 		LOGGER.info("Creating session factory..");
 		dropAllSequences();
-		SessionTools.createSessionFactory(useUpdate);
+		HibernateSession.createSessionFactory(useUpdate);
 		LOGGER.info("Done Creating session factory.");
 
 	}
@@ -62,7 +62,7 @@ public class DenverDBSetupTest {
 
 	@After
 	public void after() {
-		SessionTools.sessionFactory.close();
+		HibernateSession.sessionFactory.close();
 
 	}
 
@@ -89,7 +89,7 @@ public class DenverDBSetupTest {
 
 	private Privilege createPrivilege(String name) {
 		LOGGER.info(
-				"Creating new Privilege in Database CREATE! If you try to create roles during 'update' YOU'LL FUCK EVERYTHING UP");
+				"Creating new roles in Database CREATE! If you try to create roles during 'update' YOU'LL FUCK EVERYTHING UP");
 		LOGGER.info("Database Update mode not supported. (DIY)");
 		Privilege role = new Privilege();
 		role.setPrivilegeName(name);
@@ -124,7 +124,7 @@ public class DenverDBSetupTest {
 		systemUser.setPrivileges(systemPrivileges);
 
 		hibCtrl.addEntity(systemUser);
-		hibCtrl.updateEntity(systemPrivilege, systemPrivilege.getHibId());
+		hibCtrl.updateEntity(systemPrivilege, systemPrivilege.getId());
 		LOGGER.info("Sucessful systemuser Save(Database)");
 		UsernamePasswordAuthenticationToken returnedToken = UserService.authorizeSystemuser();
 		User returnedU = UserService.getUserByLoginName(returnedToken.getPrincipal().toString());
@@ -158,7 +158,7 @@ public class DenverDBSetupTest {
 		try {
 
 			connection = DriverManager.getConnection(
-					"jdbc:postgresql://localhost/Denver", "postgres", "password");
+					"jdbc:postgresql://postgres:5432/Denver", "postgres", "password");
 
 		} catch (SQLException e) {
 
@@ -171,7 +171,7 @@ public class DenverDBSetupTest {
 		if (connection != null) {
 			try {
 				Statement stmt = connection.createStatement();
-				String sql = "drop sequence if exists course_sequence;drop sequence if exists exercise_sequence;drop sequence if exists lecture_sequence;drop sequence if exists role_sequence;drop sequence if exists solution_sequence;drop sequence if exists user_sequence;";
+				String sql = "drop sequence if exists course_sequence;drop sequence if exists exercise_sequence;drop sequence if exists lecture_sequence;drop sequence if exists privilege_sequence;drop sequence if exists solution_sequence;drop sequence if exists user_sequence;";
 				stmt.executeUpdate(sql);
 				if (connection != null)
 					connection.close();

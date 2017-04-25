@@ -73,7 +73,8 @@ class Content extends React.Component {
       oldPassword: '',
       newPassword: '',
       repeatPassword: '',
-      mail: ''
+      username: '',
+      userId: ''
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -90,14 +91,15 @@ class Content extends React.Component {
       dataType: 'json',
       method: 'GET',
       xhrFields: {
-        withCredentials: true
-      },
+                withCredentials: true
+            },
       success: function (currentUser) {
         currentUserJSON = currentUser;
         this.setState({
-          firstname: currentUserJSON.username,
-          lastname: currentUserJSON.username,
-          mail: currentUserJSON.mail
+          userId: currentUserJSON.id,
+          firstname: currentUserJSON.firstName,
+          lastname: currentUserJSON.lastName,
+          username: currentUserJSON.username
         })
       }.bind(this),
       error: function (error) {
@@ -133,24 +135,33 @@ class Content extends React.Component {
     }
     else {
       $.ajax({
-        url: "http://localhost:8181/user",
+        url: "http://localhost:8181/updatePassword",
         dataType: 'json',
-        method: 'PATCH',
+        method: 'POST',
         xhrFields: {
-          withCredentials: true
-        },
+                withCredentials: true
+            },
         data: JSON.stringify({
-          "password": this.state.oldPassword,
-          "newPassword": this.state.newPassword
+          "oldpw": this.state.oldPassword,
+          "newpw": this.state.newPassword
         }),
         success: function (response) {
-          this.setState({
-            opendialog: true,
-            dialog: "Password successfully changed",
-            newPassword: '',
-            repeatPassword: '',
-            oldPassword: ''
-          });
+          if (response === true) {
+            this.setState({
+              opendialog: true,
+              dialog: "Password successfully changed",
+              newPassword: '',
+              repeatPassword: '',
+              oldPassword: ''
+            });
+          }
+          else {
+            this.setState({
+              opendialog: true,
+              dialog: "Your old password is incorrect. Please try again.",
+              oldPassword: ''
+            });
+          }
         }.bind(this),
         error: function (error) {
           this.setState({
@@ -195,6 +206,14 @@ class Content extends React.Component {
             <CardText className="loginbody">
               <div>
                 <TextField
+                  floatingLabelText="userId"
+                  type='text'
+                  id="userId"
+                  disabled={true}
+                  fullWidth={true}
+                  value={this.state.userId}
+                />
+                <TextField
                   floatingLabelText="First Name"
                   type='text'
                   id="firstName"
@@ -213,12 +232,12 @@ class Content extends React.Component {
                 />
                 <br />
                 <TextField
-                  floatingLabelText="eMail"
+                  floatingLabelText="username"
                   type='text'
-                  id="mail"
+                  id="username"
                   disabled={true}
                   fullWidth={true}
-                  value={this.state.mail}
+                  value={this.state.username}
                 />
                 <br />
                 <TextField
