@@ -52,7 +52,7 @@ export class Exercise extends React.Component {
         });
 
         $.ajax({
-            url: "http://localhost:8181/solution",
+            url: "https://192.168.99.100:8081/api/solution",
             dataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -95,7 +95,7 @@ export class Exercise extends React.Component {
         var exerciseJSON = this.getState().exerciseJSON;
 
         $.ajax({
-            url: "http://localhost:8181/solution",
+            url: "https://192.168.99.100:8081/api/solution",
             dataType: 'json',
             method: 'POST',
             xhrFields: {

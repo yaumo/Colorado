@@ -44,7 +44,7 @@ class DocentBar extends React.Component {
         }
         else {
             $.ajax({
-                url: "http://localhost:8181/logout",
+                url: "https://192.168.99.100:8081/api/logout",
                 dataType: 'json',
                 method: 'POST',
                 xhrFields: {
