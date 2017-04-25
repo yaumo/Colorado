@@ -4,7 +4,6 @@ import path from 'path'
 import express from 'express'
 import session from 'express-session'
 import compression from 'compression'
-import restInterfaceServer from './restInterfaceServer.js'
 
 var httpProxy = require('http-proxy');
 //var apiProxy = httpProxy.createProxyServer();
