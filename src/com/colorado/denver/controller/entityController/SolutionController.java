@@ -65,7 +65,7 @@ public class SolutionController extends ObjectOperationController {
 	}
 
 	@RequestMapping(value = "/solution", method = RequestMethod.GET)
-	public Solution getSolutionForUser(@RequestParam(value = "exerId", required = true) String exerId) {
+	public Solution getSolutionForUser(@RequestParam(value = "exeId", required = true) String exerId) {
 		User usr = UserService.getCurrentUser();
 		Set<Solution> sols = usr.getSolutions();
 		for (Solution solution : sols) {
