@@ -38,11 +38,7 @@ class NavBar extends React.Component {
     constructor() {
         super();
         this.state = {
-            open: true,
-            value: 1,
-            dropdown: 0,
-            selectedlectureid: '',
-            selectedexerciseid: ''
+
         };
         this.handleChange = this.handleChange.bind(this);
         //this.handleClickOnMenu = this.handleClickOnMenu.bind(this);

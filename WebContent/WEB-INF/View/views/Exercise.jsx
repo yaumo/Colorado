@@ -9,17 +9,38 @@ import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import CodeMirror from 'react-codemirror';
-import NavBar from './components/NavBar.jsx';
 import Paper from 'material-ui/Paper';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import EditorAce from './components/EditorAce.jsx';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
+import Drawer from 'material-ui/Drawer';
+import AppBar from 'material-ui/AppBar';
+import { white, red500, black, green } from 'material-ui/styles/colors';
+import ActionPerson from 'material-ui/svg-icons/action/account-circle';
+import ActionCheck from 'material-ui/svg-icons/action/check-circle';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import { browserHistory } from 'react-router';
+import Avatar from 'material-ui/Avatar';
 
 
 var courseJSON;
 var solutionJSON;
+var currentExerciseJSON;
+const lecturelist = [];
+const lectureids = [];
+const exerciseslist = [];
+const exerciseids = [];
+var data;
+const personStyles = {
+    marginRight: 24,
+    marginTop: 12,
+};
 
+const iconStyles = {
+    marginRight: 12,
+};
 export class Exercise extends React.Component {
     constructor() {
         super();
@@ -28,55 +49,158 @@ export class Exercise extends React.Component {
             opendialog: false,
             value: 1,
             java: 0,
-            solution: 'public class Test{};',
+            dialog: '',
+            solution: '',
             exerciseJSON: '',
-            language: 'java',
-            title: 'Fibonacci',
-            description: 'Implement Fibonacci for n',
-            youtube: 'https://www.youtube.com/embed/fLuVeooxBqw'
+            language: '',
+            title: '',
+            description: '',
+            youtube: '',
+            dropdown: 0,
+            selectedlectureid: '',
+            selectedexerciseid: ''
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleCheck = this.handleCheck.bind(this);
         this.handleOpenDialog = this.handleOpenDialog.bind(this);
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
         this.handleChangeSolution = this.handleChangeSolution.bind(this);
         this.setState = this.setState.bind(this);
+        this.onClick = this.onClick.bind(this);
     }
 
-    setState(value) {
-        /*this.setState({
-            exerciseJSON: value,
-            language: value.language,
-            title: value.title,
-            description: value.description,
-            youtube: value.youtube
-        });*/
+
+    componentDidMount() {
         $.ajax({
-            url: "http://localhost:8181/solution",
+            url: "http://localhost:8181/course",
+            ddataType: 'json',
+            method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (course) {
+                courseJSON = course;
+                if (lecturelist.length === 0) {
+                    for (var i = 0; i < courseJSON.lectures.length; i++) {
+                        lecturelist.push(<MenuItem value={i} key={i} primaryText={courseJSON.lectures[i].title} />);
+                        lectureids.push(courseJSON.lectures[i].id);
+                    }
+                    this.setState({ selectedlectureid: lectureids[0] });
+                }
+                if (exerciseslist.length === 0) {
+                    for (var j = 0; j < courseJSON.lectures[0].exercises.length; j++) {
+                        exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lectures[0].exercises[j].title} onClick={this.handleClickOnMenu.bind(this, j)} />);
+                        exerciseids.push(courseJSON.lectures[0].exercises[j].id);
+                    }
+                }
+                this.setState({
+                    selectedexerciseid: exerciseids[0]
+                });
+                
+                //handleClickOnMenu(0);
+            }.bind(this),
+            error: function (error) {
+
+            }.bind(this)
+        });
+    }
+
+    handleClickOnMenu(value) {
+        var exerciseID = exerciseids[value];
+        //exerciseID auslesen!
+
+        $.ajax({
+            url: "http://localhost:8181/exercise",
             dataType: 'json',
             method: 'GET',
             xhrFields: {
                 withCredentials: true
             },
             data: {
-                "id": value.id
+                "exeId": exerciseID
             },
-            success: function (solution) {
-                solutionJSON = solution;
+            success: function (currentExercise) {
+                currentExerciseJSON = currentExercise;
+                var solutionTest = currentExerciseJSON.patternSolution.substring(1, currentExerciseJSON.patternSolution.length);
+                solutionTest = encodeURI(solutionTest);
+                solutionTest = decodeURI(solutionTest);
                 this.setState({
-                    solution: solutionJSON.code
+                    title: currentExerciseJSON.title,
+                    description: currentExerciseJSON.description,
+                    language: currentExerciseJSON.langsuage,
+                    youtube: currentExerciseJSON.videolink,
+                    solution: solutionTest,
+                    exerciseJSON: currentExerciseJSON
                 });
+                $.ajax({
+                    url: "http://localhost:8181/solution",
+                    dataType: 'json',
+                    method: 'GET',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    data: {
+                        "id": currentExerciseJSON.id
+                    },
+                    success: function (solution) {
+                        solutionJSON = solution;
+                        this.setState({
+                            solution: solutionJSON.code
+                        });
+                    }.bind(this),
+                    error: function (error) {
+                        this.setState({
+                            //opendialog: true,
+                            //dialog: "An error has occoured. Please make sure that you are logged in ."
+                        });
+                    }.bind(this)
+                });
+                //this.props.setExerciseJSON('2');
+                //Daten aus der Component müssen in Component Exercise 
             }.bind(this),
             error: function (error) {
-                this.setState({
-                    opendialog: true,
-                    dialog: "An error has occoured. Please make sure that you are logged in ."
-                });
+
             }.bind(this)
         });
     }
 
+
     handleChange(event, index, value) {
-        this.setState({ java: value });
+        var count = exerciseslist.length;
+        for (var i = 0; i < count; i++) {
+            exerciseslist.pop();
+            exerciseids.pop();
+        }
+        for (var j = 0; j < courseJSON.lectures[value].exercises.length; j++) {
+            exerciseslist.push(<MenuItem value={j} key={j} primaryText={courseJSON.lectures[value].exercises[j].title} onClick={this.handleClickOnMenu.bind(this, j)} />);
+            exerciseids.push(courseJSON.lectures[value].exercises[j].id);
+        }
+
+        this.setState({ dropdown: value });
+        this.setState({ selectedlectureid: lectureids[value] });
+    }
+
+    onClick(e) {
+        e.preventDefault();
+        if (e.target.textContent == "Settings") {
+            browserHistory.push('/user');
+        }
+        else {
+            $.ajax({
+                url: "http://localhost:8181/logout",
+                dataType: 'json',
+                method: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    browserHistory.push('/');
+                }.bind(this),
+                error: function (error) {
+                    browserHistory.push('/');
+                }
+            });
+        }
     }
     handleOpenDialog(event, index, value) {
         this.setState({ opendialog: true });
@@ -85,13 +209,12 @@ export class Exercise extends React.Component {
         this.setState({ opendialog: false });
     }
 
-    handleChange(event, index, value) {
-        this.setState({ java: value });
-    }
+
 
     handleCheck(event, index, value) {
-        var solutionCode = this.getState().solution;
-        var exerciseJSON = this.getState().exerciseJSON;
+        var solutionCode = this.state.solution;
+        var exerciseJSON = this.state.exerciseJSON;
+        var id = exerciseJSON.id;
 
         $.ajax({
             url: "http://localhost:8181/solution",
@@ -101,20 +224,21 @@ export class Exercise extends React.Component {
                 withCredentials: true
             },
             data: JSON.stringify({
-                "id": exerciseJSON.id,
-                "solution": solution
+                "id": id,
+                "solution": solutionCode
             }),
             success: function (response) {
                 this.setState({
                     opendialog: true,
-                    dialog: response.message.toString()
+                    dialog: "Your solution is not correct"
+                    //response.message.toString()
                 });
                 //setStates to ''
             }.bind(this),
             error: function (error) {
                 this.setState({
                     opendialog: true,
-                    dialog: "An error has occoured. Please make sure that you are logged in ."
+                    dialog: "Your solution is not correct"
                 });
             }.bind(this)
         });
@@ -127,7 +251,50 @@ export class Exercise extends React.Component {
     render() {
         return (
             <div>
-                <NavBar setExerciseJSON={this.setState} />
+                <div style={{ 'margin': '0' }}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <div>
+                        <AppBar
+                            title="Colorado"
+                            style={{ 'position': 'fixed', 'backgroundColor': '#bd051f', 'opacity': '0.9' }}
+                            iconElementLeft={<Avatar
+                                src="images/colorado.jpg"
+                                size={45}
+                            />}
+                            iconElementRight={
+                                <IconMenu
+                                    iconButtonElement={<IconButton>
+                                        <ActionPerson style={personStyles} color={white} hoverColor={black} />
+                                    </IconButton>}
+                                    targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                    anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                >
+                                    <MenuItem primaryText="Settings" onClick={this.onClick} />
+                                    <MenuItem primaryText="Sign out" onClick={this.onClick} />
+                                </IconMenu>
+                            }
+                        />
+
+                        <Drawer
+                            id="drawer"
+                            docked={true}
+                            onItemTouchTap={this.handleClickOnMenu}
+                            open={this.state.open}
+                            onRequestChange={(open) => this.setState({ open })}
+                            containerStyle={{ 'position': 'fixed', 'margin': '0', 'top': '64px', 'height': 'calc(100% - 64px)', 'backgroundColor': '#959595', 'background': '-webkit-linear-gradient(#bbbbbb, #959595)' }}
+                        >
+                            <DropDownMenu value={this.state.dropdown} onChange={this.handleChange} >
+                                {lecturelist}
+                            </DropDownMenu>
+                            <Divider />
+                                {exerciseslist}
+
+                        </Drawer>
+                    </div>
+                </MuiThemeProvider>
+            </div>
+
+
                 <div id="content" className="content">
                     <MuiThemeProvider muiTheme={getMuiTheme()}>
                         <div>
@@ -180,14 +347,14 @@ export class Exercise extends React.Component {
                                         <RaisedButton label="Check"
                                             backgroundColor="#bd051f"
                                             labelColor="#FFFFFF"
-                                            onClick={this.onCheck} />
+                                            onClick={this.handleCheck} />
                                         <Dialog
                                             title="Dialog With Actions"
                                             modal={false}
                                             open={this.state.opendialog}
                                             onRequestClose={this.handleCloseDialog}
                                         >
-                                            The actions in this window were passed in as an array of React objects.
+                                            {this.state.dialog}
 									</Dialog>
                                     </CardActions>
                                 </Card>
