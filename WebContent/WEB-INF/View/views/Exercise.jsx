@@ -53,6 +53,7 @@ export class Exercise extends React.Component {
             solution: '',
             exerciseJSON: '',
             language: '',
+            languageformatted: '',
             title: '',
             description: '',
             youtube: '',
@@ -109,6 +110,27 @@ export class Exercise extends React.Component {
         var exerciseID = exerciseids[value];
         //exerciseID auslesen!
 
+        var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+            escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+            meta = { // table of character substitutions
+                '\\b': '\b',
+                '\\t': '\t',
+                '\\n': '\n',
+                '\\f': '\f',
+                '\\r': '\r',
+                '\\"': '"',
+                '\\\\': '\\'
+            };
+
+        function json_quote(string) {
+            escapable.lastIndex = 0;
+            return escapable.test(string) ? '' + string.replace(escapable, function (a) {
+                var c = meta[a];
+                return typeof c === 'string' ? c :
+                    '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+            }) + '' : '' + string + '';
+        }
+
         $.ajax({
             url: "http://localhost:8181/exercise",
             dataType: 'json',
@@ -124,10 +146,16 @@ export class Exercise extends React.Component {
                 var solutionTest = currentExerciseJSON.patternSolution.substring(1, currentExerciseJSON.patternSolution.length);
                 solutionTest = encodeURI(solutionTest);
                 solutionTest = decodeURI(solutionTest);
+                if(currentExerciseJSON.language==='Java'){
+                    this.setState({languageformatted: 'java'});
+                }
+                else if(currentExerciseJSON.language==='JavaScript'){
+                    this.setState({languageformatted: 'javascript'});
+                }
                 this.setState({
                     title: currentExerciseJSON.title,
                     description: currentExerciseJSON.description,
-                    language: currentExerciseJSON.langsuage,
+                    language: currentExerciseJSON.language,
                     youtube: currentExerciseJSON.videolink,
                     solution: solutionTest,
                     exerciseJSON: currentExerciseJSON
@@ -340,7 +368,7 @@ export class Exercise extends React.Component {
                                         />
 
                                         <Paper zDepth={4}>
-                                            <EditorAce value={this.state.solution} handleChange={this.handleChangeSolution} mode={this.state.language} />
+                                            <EditorAce value={this.state.solution} handleChange={this.handleChangeSolution} mode={this.state.languageformatted} />
                                         </Paper>
                                     </CardText>
                                     <CardActions className="footer">
