@@ -88,7 +88,6 @@ class NavBar extends React.Component {
         var exerciseID = exerciseids[value];
         //exerciseID auslesen!
 
-
         $.ajax({
             url: "http://localhost:8181/exercise",
             dataType: 'json',
@@ -101,7 +100,7 @@ class NavBar extends React.Component {
             },
             success: function (currentExercise) {
                 currentExerciseJSON = currentExercise;
-                this.props.setExerciseJSON(currentExerciseJSON);
+                //this.props.setExerciseJSON('2');
                 //Daten aus der Component müssen in Component Exercise 
             }.bind(this),
             error: function (error) {

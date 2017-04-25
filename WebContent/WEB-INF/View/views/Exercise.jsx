@@ -28,12 +28,12 @@ export class Exercise extends React.Component {
             opendialog: false,
             value: 1,
             java: 0,
-            solution: '',
+            solution: 'public class Test{};',
             exerciseJSON: '',
-            language: '',
-            title: '',
-            description: 'Please select an exercise',
-            youtube: ''
+            language: 'java',
+            title: 'Fibonacci',
+            description: 'Implement Fibonacci for n',
+            youtube: 'https://www.youtube.com/embed/fLuVeooxBqw'
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleOpenDialog = this.handleOpenDialog.bind(this);
@@ -43,14 +43,13 @@ export class Exercise extends React.Component {
     }
 
     setState(value) {
-        this.setState({
+        /*this.setState({
             exerciseJSON: value,
             language: value.language,
             title: value.title,
             description: value.description,
             youtube: value.youtube
-        });
-
+        });*/
         $.ajax({
             url: "http://localhost:8181/solution",
             dataType: 'json',
@@ -59,7 +58,7 @@ export class Exercise extends React.Component {
                 withCredentials: true
             },
             data: {
-                "id": exerciseJSON.id
+                "id": value.id
             },
             success: function (solution) {
                 solutionJSON = solution;
