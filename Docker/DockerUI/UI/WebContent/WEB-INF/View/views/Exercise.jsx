@@ -73,7 +73,7 @@ export class Exercise extends React.Component {
 
     componentDidMount() {
         $.ajax({
-            url: "https:/192.168.99.100:8081/api/course",
+            url: "https://192.168.99.100:8081/api/course",
             ddataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -132,7 +132,7 @@ export class Exercise extends React.Component {
         }
 
         $.ajax({
-            url: "https:/192.168.99.100:8081/api/exercise",
+            url: "https://192.168.99.100:8081/api/exercise",
             dataType: 'json',
             method: 'GET',
             xhrFields: {
@@ -161,7 +161,7 @@ export class Exercise extends React.Component {
                     exerciseJSON: currentExerciseJSON
                 });
                 $.ajax({
-                    url: "https:/192.168.99.100:8081/api/solution",
+                    url: "https://192.168.99.100:8081/api/solution",
                     dataType: 'json',
                     method: 'GET',
                     xhrFields: {
@@ -215,7 +215,7 @@ export class Exercise extends React.Component {
         }
         else {
             $.ajax({
-                url: "https:/192.168.99.100:8081/api/logout",
+                url: "https://192.168.99.100:8081/api/logout",
                 dataType: 'json',
                 method: 'POST',
                 xhrFields: {
@@ -245,7 +245,7 @@ export class Exercise extends React.Component {
         var id = exerciseJSON.id;
 
         $.ajax({
-            url: "https:/192.168.99.100:8081/api/solution",
+            url: "https://192.168.99.100:8081/api/solution",
             dataType: 'json',
             method: 'POST',
             xhrFields: {
