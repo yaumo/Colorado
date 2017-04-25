@@ -30,6 +30,7 @@ public class ExerciseService {
 			String id = usr.getId();
 			LOGGER.info("Owner id is: " + id);
 			List<Exercise> exercisesList = (List<Exercise>) (List<?>) hibCtrl.getEntityList(Exercise.class);
+
 			for (Exercise exercise : exercisesList) {
 				LOGGER.info("Exercis owner id is: " + exercise.getOwner().getId());
 				if (exercise.getOwner().getId().equals(id)) {

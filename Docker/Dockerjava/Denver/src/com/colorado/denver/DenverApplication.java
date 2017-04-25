@@ -56,16 +56,4 @@ public class DenverApplication extends SpringBootServletInitializer {
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(DenverApplication.class);
 	}
-
-	// useless shit?
-	// @Bean
-	// public WebMvcConfigurer corsConfigurer() {
-	// return new WebMvcConfigurerAdapter() {
-	// @Override
-	// public void addCorsMappings(CorsRegistry registry) {
-	// registry.addMapping("/**").allowedOrigins("http://localhost:8080", "http://localhost:8081");
-	// }
-	// };
-	// }
-
 }

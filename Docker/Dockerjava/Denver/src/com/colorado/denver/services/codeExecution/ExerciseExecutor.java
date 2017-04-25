@@ -30,7 +30,7 @@ public class ExerciseExecutor implements JavaExecutor, JavaScriptExecutor {
 			}
 		} else {
 			LOGGER.info("Executing JavaScript with code: " + code);
-			answer = executeJavaScript(excInput, code);
+			answer = executeJavaScript(excInput, code, entryMethod);
 			if (answer.startsWith(DenverConstants.EXC_THROWN)) {
 				message = answer;
 			}
